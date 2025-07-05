@@ -1,6 +1,6 @@
 /* =================================================================
-   FINÁLNA VERZIA STYLE.CSS (v. 4.0)
-   - Zosynchronizované s finálnym HTML
+   FINÁLNA VERZIA STYLE.CSS (v. 5.0)
+   - Obsahuje VŠETKY úpravy vrátane pulzujúcich efektov
    ================================================================= */
 
 /* ===== GLOBALNE STYLY A PREMENNE ===== */
@@ -26,12 +26,15 @@ html {
     font-size: 16px;
 }
 
+/* NOVÝ, OPRAVENÝ KÓD */
 body {
     font-family: var(--font-family);
     background-color: var(--slate-900);
     color: var(--slate-300);
     background-image: linear-gradient(to bottom right, var(--slate-900), #0c1c3f, #301742);
-    overflow-x: hidden;
+    overflow-x: hidden;   /* Toto ostáva, bráni pohybu do strán */
+    overflow-y: auto;     /* TOTO PRE ISTOTU PRIDÁVAME - explicitne povoľuje zvislé scrollovanie */
+    /* Riadok 'position: relative;' SME ÚPLNE ODSTRÁNILI, lebo spôsoboval konflikt */
 }
 
 .container {
@@ -41,8 +44,10 @@ body {
 }
 
 section {
-    padding: 5rem 0;
+    padding: 7rem 0; /* Zväčšené medzery medzi sekciami */
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 h1, h2, h3 {
@@ -64,20 +69,49 @@ p {
 }
 
 
-/* ===== BACKGROUND SHAPES ===== */
+/* ===== BACKGROUND SHAPES & PARTICLES ===== */
 .background-shapes {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     overflow: hidden;
+    pointer-events: none;
 }
-.shape { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; }
+.shape { 
+    position: absolute; 
+    border-radius: 50%; 
+    filter: blur(100px); 
+    opacity: 0.15;
+    animation: pulse-opacity 8s ease-in-out infinite alternate;
+}
 .shape1 { width: 350px; height: 350px; background-color: var(--cyan); top: -100px; right: -100px; }
-.shape2 { width: 350px; height: 350px; background-color: var(--purple); bottom: -100px; left: -100px; }
-.shape3 { width: 400px; height: 400px; background-color: #3b82f6; bottom: 25%; right: 25%; opacity: 0.1; }
+.shape2 { width: 350px; height: 350px; background-color: var(--purple); bottom: -100px; left: -100px; animation-delay: -2s; }
+.shape3 { width: 400px; height: 400px; background-color: #3b82f6; bottom: 25%; right: 25%; opacity: 0.1; animation-delay: -4s; }
+
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+.ping-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--cyan);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+    animation-name: ping;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
 
 
 /* ===== HEADER ===== */
@@ -112,16 +146,34 @@ p {
 .hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; }
 .hero-description { font-size: 1.25rem; margin-bottom: 2.5rem; }
 .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.pulse-text { animation: pulse-opacity 2.5s ease-in-out infinite; }
 
 
 /* ===== GENERAL SECTION STYLES ===== */
-.section-title { font-size: 2.5rem; margin-top: 3rem; margin-bottom: 2rem; }
-.section-subtitle { font-size: 1.2rem; margin-bottom: 2rem; }
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem; /* Zväčšená medzera pod nadpisom */
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--cyan), var(--purple));
+    border-radius: 2px;
+}
+.section-subtitle { font-size: 1.2rem; margin-bottom: 4rem; }
 
 
 /* ===== GRIDS (SERVICES, PROCESS, CASE STUDY) ===== */
 .services-grid, .process-grid, .case-study-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; }
+.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
 .card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); border-color: rgba(34, 211, 238, 0.4); }
 .card h3 { font-size: 1.25rem; margin-bottom: 1rem; }
 .red-text { color: #ef4444; } .blue-text { color: #3b82f6; } .green-text { color: #22c55e; }
@@ -130,7 +182,7 @@ p {
 .process-step h3 { font-size: 1.25rem; margin-bottom: 1rem; }
 
 
-/* ===== ABOUT SECTION ===== */
+/* ===== ABOUT & OSTATNÉ SECTIONS ===== */
 .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
 .about-image img { width: 100%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
 .about-text h3 { font-size: 1.75rem; }
@@ -138,59 +190,38 @@ p {
 .about-text p { max-width: none; margin-bottom: 1rem; }
 .about-text strong { color: var(--cyan); font-weight: 700; }
 
-
-/* ===== CONTACT FORM ===== */
-.contact-form {
-    max-width: 700px;
-    margin: 2rem auto 0 auto;
-    padding: 2.5rem;
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(34, 211, 238, 0.2);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+.ostatne-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
 }
-.input-group {
-    display: flex;
-    flex-direction: column;
+.ostatne-grid .card {
     text-align: left;
 }
-.input-group label {
-    margin-bottom: 0.5rem;
-    color: var(--slate-300);
-    font-size: 0.9rem;
-    font-weight: 500;
+.ostatne-grid .card p {
+    max-width: none;
 }
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 1rem;
-    background: var(--slate-900);
-    border: 1px solid rgba(34, 211, 238, 0.3);
-    border-radius: 8px;
-    color: var(--white);
-    font-size: 1rem;
-    font-family: var(--font-family);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-    color: var(--slate-400);
-    opacity: 0.8;
-}
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    border-color: var(--cyan);
-    box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
-}
-.contact-form button {
-    width: 100%;
-    margin-top: 1rem;
-}
+
+
+/* ===== CONTACT FORM ===== */
+.contact-form { max-width: 700px; margin: 2rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; gap: 1.5rem; }
+.input-group { display: flex; flex-direction: column; text-align: left; }
+.input-group label { margin-bottom: 0.5rem; color: var(--slate-300); font-size: 0.9rem; font-weight: 500; }
+.contact-form input, .contact-form textarea { width: 100%; padding: 1rem; background: var(--slate-900); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 8px; color: var(--white); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.3s, box-shadow 0.3s; }
+.contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--slate-400); opacity: 0.8; }
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+.contact-form button { width: 100%; margin-top: 1rem; }
+
+
+/* ===== ŠTÝLY PRE PODSTRÁNKY (HUGO, OZOBOT) ===== */
+.subpage-hero { padding-top: 4rem; padding-bottom: 4rem; }
+.subpage-content { text-align: left; max-width: 800px; padding-bottom: 5rem; }
+.subpage-content h2 { font-size: 2.2rem; margin-top: 3rem; margin-bottom: 1.5rem; }
+.subpage-content p, .subpage-content li { font-size: 1.1rem; color: var(--slate-300); margin-bottom: 1rem; max-width: none; }
+.subpage-content ul { list-style-position: inside; padding-left: 1rem; }
+.subpage-content ul li::marker { color: var(--cyan); }
+.subpage-cta { text-align: center; margin-top: 4rem; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; }
+.subpage-cta h2 { margin-top: 0; }
 
 
 /* ===== FOOTER ===== */
@@ -203,86 +234,30 @@ p {
 .copyright p { color: var(--slate-400); font-size: 0.9rem; }
 
 
-/* ===== ANIMATIONS ===== */
+/* ===== DYNAMICKÉ EFEKTY A ANIMÁCIE ===== */
+/* Animácia pre zjavenie pri scrollovaní */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ===== OSTATNÉ SECTION ===== */
-.ostatne-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    text-align: left; /* Zarovnanie textu v kartách doľava */
-}
+/* Skrytie/zobrazenie sekcie Ostatné */
+#ostatne { display: none; }
+#ostatne.active { display: block; animation: fadeIn 0.7s ease-in-out; }
 
-.ostatne-grid .card p {
-    max-width: none; /* Odstránenie obmedzenia šírky pre text v kartách */
-}
-
-/* ===== ŠTÝLY PRE PODSTRÁNKY (HUGO, OZOBOT) ===== */
-.subpage-hero {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-}
-.subpage-content {
-    text-align: left;
-    max-width: 800px; /* Užší obsah pre lepšiu čitateľnosť */
-    padding-bottom: 5rem;
-}
-.subpage-content h2 {
-    font-size: 2.2rem;
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-}
-.subpage-content p, .subpage-content li {
-    font-size: 1.1rem;
-    color: var(--slate-300);
-    margin-bottom: 1rem;
-    max-width: none;
-}
-.subpage-content ul {
-    list-style-position: inside;
-    padding-left: 1rem;
-}
-.subpage-content ul li::marker {
-    color: var(--cyan);
-}
-.subpage-cta {
-    text-align: center;
-    margin-top: 4rem;
-    padding: 2.5rem;
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(34, 211, 238, 0.2);
-    border-radius: 16px;
-}
-.subpage-cta h2 {
-    margin-top: 0;
-}
-
-/* ===== SKRYTIE A ZOBRAZENIE SEKCIÍ ===== */
-
-/* Toto pravidlo na začiatku skryje sekciu 'Ostatné' */
-#ostatne {
-  display: none;
-}
-
-/* Túto triedu pridá JavaScript, aby sa sekcia zobrazila s pekným efektom */
-#ostatne.active {
-  display: block;
-  animation: fadeIn 0.7s ease-in-out;
-}
-
-/* Jednoduchá animácia pre plynulé zjavenie */
+/* Definície animácií (Keyframes) */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@keyframes ping {
+  0% { transform: scale(0.2); opacity: 0.8; }
+  80% { opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
 
 /* ===== RESPONZIVITA (do 768px) ===== */
 @media (max-width: 768px) {

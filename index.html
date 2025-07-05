@@ -14,6 +14,13 @@
 </head>
 <body>
 
+    <div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
+        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
+        <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
+        <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
+    </div>
     <div class="background-shapes">
         <div class="shape shape1"></div>
         <div class="shape shape2"></div>
@@ -22,17 +29,18 @@
 
     <header class="main-header">
         <nav class="container">
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <div class="logo-icon">U</div>
                 <span>Unoneto</span>
             </a>
-      <ul class="nav-links">
-    <li><a href="#services">Služby</a></li>
-    <li><a href="#process">Proces</a></li>
-    <li><a href="#case-study">Príklad</a></li>
-    <li><a href="#about">O nás</a></li>
-    <li><a href="#ostatne" id="toggle-ostatne">Ostatné</a></li> <li><a href="#contact" class="btn btn-primary">Kontakt</a></li>
-</ul>
+            <ul class="nav-links">
+                <li><a href="#services">Služby</a></li>
+                <li><a href="#process">Proces</a></li>
+                <li><a href="#case-study">Príklad</a></li>
+                <li><a href="#about">O nás</a></li>
+                <li><a href="#ostatne" id="toggle-ostatne">Ostatné</a></li>
+                <li><a href="#contact" class="btn btn-primary">Kontakt</a></li>
+            </ul>
         </nav>
     </header>
 
@@ -42,8 +50,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
                 <span>Poháňané AI technológiou</span>
             </div>
-            <h1 class="hero-title">Vrátime vašej firme<br><span class="gradient-text">desiatky hodín</span> mesačne</h1>
-            <p class="hero-description">Zbavíme vás únavných a repetitívnych procesov. Váš tím získa čas a energiu na prácu, ktorá skutočne prináša zisk.</p>
+            <h1 class="hero-title">Vrátime vašej firme<br><span class="gradient-text pulse-text">desiatky hodín</span> mesačne</h1>
+            <p class="hero-description">Analyzujeme a automatizujeme vaše repetitívne procesy pomocou najmodernejších AI technológií, aby sa váš tím mohol venovať práci, ktorá skutočne prináša rast.</p>
             <div class="hero-buttons">
                 <a href="#contact" class="btn btn-primary btn-large">Získajte analýzu zdarma</a>
                 <a href="#process" class="btn btn-secondary btn-large">Zistite, ako to funguje</a>
@@ -56,19 +64,19 @@
             <div class="services-grid">
                 <div class="card">
                      <h3>AI Automatizácia Procesov</h3>
-                     <p>Premeňte hodiny manuálnej práce na minúty automatizovanej efektivity a sledujte, ako vaša ziskovosť rastie.</p>
+                     <p>Odstránime monotónnu manuálnu prácu a nahradíme ju inteligentnými automatizovanými riešeniami.</p>
                 </div>
                 <div class="card">
                      <h3>Efektívna Generácia Leadov</h3>
-                     <p>Dodáme vám zoznamy firiem pripravených nakupovať. Sústreďte sa len na uzatváranie obchodov, nie na hľadanie.</p>
+                     <p>Pomocou AI identifikujeme a dodáme vám zoznamy kvalitných kontaktov pripravených na oslovenie.</p>
                 </div>
                 <div class="card">
                      <h3>Školenia Zamestnancov</h3>
-                     <p>Vybavte svoj tím zručnosťami, ktoré okamžite pretavia na ušetrený čas a merateľne lepšie výsledky.</p>
+                     <p>Zvýšime digitálne zručnosti vášho tímu prostredníctvom praktických workshopov zameraných na moderné nástroje.</p>
                 </div>
                 <div class="card">
                      <h3>Skupinové Workshopy</h3>
-                     <p>Ideálne riešenie pre organizácie, ktoré chcú plošne a nákladovo efektívne zvýšiť digitálnu gramotnosť.</p>
+                     <p>Ponúkame balíky školení pre firmy a školy, ktoré chcú posunúť efektivitu celého tímu.</p>
                 </div>
             </div>
         </section>
@@ -95,7 +103,7 @@
         </section>
 
         <section id="case-study" class="container reveal">
-             <h2 class="section-title">Príklad z praxe: Ako sme účtovnej firme vrátili 40+ hodín každý mesiac</h2>
+             <h2 class="section-title">Príklad z praxe</h2>
              <div class="case-study-grid">
                 <div class="card">
                     <h3 class="red-text">Výzva</h3>
@@ -114,47 +122,43 @@
 
         <section id="about" class="container reveal">
              <h2 class="section-title">O nás</h2>
-             <p class="section-subtitle">Pozrite sa, kto stojí za Unoneto</p>
              <div class="about-grid">
                 <div class="about-image">
-                    <img src="https://github.com/Matusbenco/Unoneto_website/blob/main/1701295455694%20(1).jpg?raw=true" alt="Bc. Matúš Benčo">
+                     <img src="https://github.com/Matusbenco/Unoneto_website/blob/main/1701295455694%20(1).jpg?raw=true" alt="Bc. Matúš Benčo">
                 </div>
                 <div class="about-text">
                     <h3>Bc. Matúš Benčo</h3>
-                    <p class="founder-title">Tvorca projektu</p>
+                    <p class="founder-title">Zakladateľ a CEO Unoneto</p>
                     <p>Ahojte! Volám sa Matúš Benčo a už vyše 15 rokov sa pohybujem v prvej línii biznisu. Prešiel som si rôznymi odvetviami, no jedna kľúčová myšlienka mi vždy ostala: <strong>Čas je to najcennejšie, čo vaša firma má</strong>, a jeho neefektívne využitie je dnes neprijateľný luxus.</p>
                     <p>V Unoneto meníme teóriu na hmatateľné výsledky. Sme tu, aby sme vám ukázali, ako môže vaša firma výrazne znížiť prevádzkové náklady, dramaticky zefektívniť prácu a otvoriť si dvere k novým obchodným príležitostiam.</p>
                 </div>
              </div>
         </section>
 
-<section id="ostatne" class="container reveal">
-    <h2 class="section-title">Ostatné služby a projekty</h2>
-    <p class="section-subtitle">Okrem automatizácie sa venujeme aj inovatívnym projektom pre samosprávy a vzdelávanie.</p>
-    
-    <div class="ostatne-grid">
-        <div class="card">
-            <h3 style="margin-bottom: 1.5rem;">Plánovanie obecného rozhlasu s hlasmi umelej inteligencie</h3>
-            <p>V spolupráci s HUGOtech prinášame modernizáciu obecného rozhlasu. Tento systém nahrádza zastarané amplióny a umožňuje samosprávam okamžite informovať občanov prostredníctvom mobilnej aplikácie, SMS a emailov. Využíva umelú inteligenciu na prevod textu na reč pre automatické hlásenia, čím šetrí čas a zvyšuje efektivitu komunikácie.</p>
-            <div style="margin-top: 2rem;">
-                <a href="hugo.html" class="btn btn-secondary">Zistiť viac o HUGO</a>
+        <section id="ostatne" class="container">
+            <h2 class="section-title">Ostatné Služby a Projekty</h2>
+            <p class="section-subtitle">Okrem automatizácie sa venujeme aj inovatívnym projektom pre samosprávy a vzdelávanie.</p>
+            <div class="ostatne-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">Informačný systém HUGO</h3>
+                    <p>V spolupráci s HUGOtech prinášame modernizáciu obecného rozhlasu. Tento systém nahrádza zastarané amplióny a umožňuje samosprávam okamžite informovať občanov prostredníctvom mobilnej aplikácie, SMS a emailov. Využíva umelú inteligenciu na prevod textu na reč pre automatické hlásenia, čím šetrí čas a zvyšuje efektivitu komunikácie.</p>
+                    <div style="margin-top: 2rem;">
+                        <a href="hugo.html" class="btn btn-secondary">Zistiť viac o HUGO</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">Programovateľné roboty Ozobot pre školy</h3>
+                    <p>Ponárame deti do sveta programovania zábavnou a interaktívnou formou. Ozoboty spájajú digitálny svet s tým fyzickým, čo deti nesmierne baví. Ukazujeme, že programovanie nie je zložité a zvládne ho naozaj každé dieťa. Pre školy ponúkame kompletné konzultácie, workshopy a pomáhame s výberom vhodných robotov.</p>
+                     <div style="margin-top: 2rem;">
+                        <a href="ozobot.html" class="btn btn-secondary">Prečítať viac o Ozobotoch</a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-bottom: 1.5rem;">Programovateľné roboty Ozobot pre školy</h3>
-            <p>Ponárame deti do sveta programovania zábavnou a interaktívnou formou. Ozoboty spájajú digitálny svet s tým fyzickým, čo deti nesmierne baví. Ukazujeme, že programovanie nie je zložité a zvládne ho naozaj každé dieťa. Pre školy ponúkame kompletné konzultácie, workshopy a pomáhame s výberom vhodných robotov.</p>
-             <div style="margin-top: 2rem;">
-                <a href="ozobot.html" class="btn btn-secondary">Prečítať viac o Ozobotoch</a>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section id="contact" class="container reveal">
             <h2 class="section-title">Pripravení na rast?</h2>
             <p class="section-subtitle">Nechajte nás bezplatne a nezáväzne analyzovať vaše procesy. Ukážeme vám, kde sa skrýva váš potenciál na úsporu času a peňazí.</p>
-
             <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
                 <div class="input-group">
                     <label for="full-name">Vaše meno</label>
@@ -177,7 +181,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                     <a href="#" class="logo">
+                     <a href="index.html" class="logo">
                         <div class="logo-icon">U</div>
                         <span>Unoneto</span>
                     </a>
