@@ -278,3 +278,62 @@ p {
     .footer-grid { text-align: center; }
     .footer-col .logo { justify-content: center; }
 }
+/* ===== ŠTÝLY PRE MOBILNÚ NAVIGÁCIU ===== */
+#hamburger-btn {
+    display: none; /* Skryté na desktope */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 20; /* Musí byť nad ostatnými prvkami */
+}
+
+.hamburger-bar {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--white);
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+}
+
+/* ===== RESPONZIVITA PRE MENU (do 768px) ===== */
+@media (max-width: 768px) {
+    #hamburger-btn {
+        display: flex; /* Zobrazené na mobile */
+    }
+
+    .nav-links {
+        display: flex; /* Zmeníme z `none` na `flex` */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        position: fixed;
+        top: 0;
+        right: -100%; /* Štandardne skryté mimo obrazovky */
+        width: 100%;
+        height: 100vh;
+        background: var(--slate-900);
+        transition: right 0.4s ease-in-out;
+        z-index: 15;
+    }
+
+    .nav-links.active {
+        right: 0; /* Po kliknutí sa vysunie do obrazovky */
+    }
+
+    .nav-links li {
+        text-align: center;
+    }
+
+    /* Skrytie tlačidla v menu, keď je v mobilnom zobrazení */
+    .nav-links .btn {
+        display: block !important; 
+    }
+}
