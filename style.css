@@ -507,3 +507,19 @@ p {
   margin-top: 2rem;      /* Extra veľká horná medzera, upravte podľa potreby */
   margin-bottom: 2rem;   /* Väčšia spodná medzera, upravte podľa potreby */
 }
+
+/* ===== ŠTÝLY PRE OBRÁZOK V SEKCII (BANNER) ===== */
+.section-image-container {
+    margin-bottom: 4rem; /* Medzera pod obrázkom, nad nadpisom */
+    text-align: center;
+}
+
+.section-image-container img {
+    /* Toto je kľúčová časť pre responzívny banner: */
+    max-width: 300px;  /* Maximálna šírka obrázka na veľkých obrazovkách. Môžete zmeniť. */
+    width: 100%;       /* Na mobiloch a menších zariadeniach sa šírka prispôsobí na 100% rodiča. */
+    height: auto;      /* Výška sa prispôsobí automaticky, aby sa obrázok nedeformoval. */
+    
+    border-radius: 14px; /* Zaoblené rohy */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25); /* Tieň */
+}
