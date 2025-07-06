@@ -1,9 +1,8 @@
 /* =================================================================
-   FINÁLNY A KOMPLETNÝ JAVASCRIPT KÓD (v. 3.0)
-   - Kombinuje všetky funkcie vrátane mobilného menu
+   FINÁLNY A KOMPLETNÝ JAVASCRIPT KÓD (v. 4.0)
+   - Opravuje zatváranie mobilného menu po kliknutí
    ================================================================= */
 
-// Spustíme celý skript až vtedy, keď je celá HTML štruktúra stránky pripravená
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- ČASŤ 1: Animácie prvkov pri scrollovaní (Scroll Reveal) ---
@@ -37,16 +36,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- ČASŤ 3: Funkčnosť mobilného menu ---
+    // --- ČASŤ 3: Funkčnosť mobilného menu (vylepšená verzia) ---
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const navMenu = document.getElementById('nav-menu');
 
     if (hamburgerBtn && navMenu) {
+        // Funkcia na otvorenie/zatvorenie menu
         hamburgerBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
-            // Zmena aria-expanded pre prístupnosť
             const isExpanded = hamburgerBtn.getAttribute('aria-expanded') === 'true';
             hamburgerBtn.setAttribute('aria-expanded', !isExpanded);
+        });
+
+        // NOVÁ ČASŤ: Sledovanie kliknutí na odkazy v menu
+        // Získame všetky odkazy (<li>) vnútri menu
+        const navLinks = navMenu.querySelectorAll('li');
+
+        // Pre každý odkaz pridáme poslucháča
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // Ak je menu otvorené, zatvoríme ho
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
         });
     }
 
