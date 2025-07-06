@@ -337,3 +337,173 @@ p {
         display: block !important; 
     }
 }
+
+/* ===== ŠTÝLY PRE NOVÚ SECCIU BLOG ===== */
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    /* Pridáme align-items, aby sa položky v riadku natiahli na rovnakú výšku */
+    align-items: stretch;
+}
+
+.article-card {
+    background: rgba(30, 41, 59, 0.5); /* Pozadie z .card pre konzistenciu */
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 12px;
+    text-align: left;
+    display: flex; /* KĽÚČOVÁ VLASTNOSŤ: Zapne Flexbox pre kartu */
+    flex-direction: column; /* Uloží obsah karty pod seba (obrázok, text) */
+    overflow: hidden; /* Zabezpečí, že obsah nepretečie cez zaoblené rohy */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(34, 211, 238, 0.4);
+}
+
+.article-image {
+    width: 100%;
+    height: 200px; /* NASTAVÍME PEVNÚ VÝŠKU PRE VŠETKY OBRÁZKY */
+    object-fit: cover; /* Zabezpečí, že obrázok vyplní priestor bez deformácie */
+}
+
+.article-card-content {
+    padding: 1.5rem;
+    display: flex; /* Zapneme Flexbox aj tu, pre zarovnanie obsahu */
+    flex-direction: column;
+    flex-grow: 1; /* KĽÚČOVÁ VLASTNOSŤ: Táto časť sa natiahne a vyplní voľné miesto */
+}
+
+.article-meta {
+    font-size: 0.875rem;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+}
+
+.article-card-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.article-excerpt {
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* KĽÚČOVÁ VLASTNOSŤ: Posunie tlačidlo úplne na spodok karty */
+    color: var(--slate-400); /* Zjemníme farbu textu pre lepší kontrast */
+}
+
+.article-card .btn {
+    align-self: flex-start; /* Zarovná tlačidlo doľava */
+}
+
+/* ===== ŠTÝLY PRE STRÁNKU SAMOTNÉHO ČLÁNKU ===== */
+.article-page {
+    max-width: 800px;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.article-header h1 {
+    font-size: 2.8rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.featured-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.article-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.article-content h2 {
+    font-size: 1.8rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--cyan);
+    padding-bottom: 0.5rem;
+}
+
+.article-content h3 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-content ul {
+    list-style-position: inside;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.article-content blockquote {
+    border-left: 4px solid var(--purple);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--slate-300);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Pomer strán 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 2rem 0;
+    border-radius: 12px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 3rem;
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+.featured-image {
+    width: 100%;             /* Obrázok bude široký ako stĺpec s článkom */
+    height: auto;            /* Výška sa prispôsobí automaticky, aby sa nedeformoval pomer strán */
+    max-height: 400px;       /* Nastavíme maximálnu výšku, aby nebol obrázok príliš dominantný. Môžete zmeniť podľa potreby. */
+    object-fit: cover;       /* Zabezpečí, že obrázok pekne vyplní priestor bez deformácie, aj keby mal iný pomer strán. Časť obrázka môže orezať. */
+    border-radius: 8px;      /* (Voliteľné) Zjemní rohy obrázka, aby ladil s dizajnom. */
+    margin-bottom: 2rem;     /* (Voliteľné) Vytvorí medzeru medzi obrázkom a textom článku pod ním. */
+}
+
+/* ---- Špeciálna medzera pre konkrétny nadpis ---- */
+
+.extra-medzery {
+  margin-top: 2rem;      /* Extra veľká horná medzera, upravte podľa potreby */
+  margin-bottom: 2rem;   /* Väčšia spodná medzera, upravte podľa potreby */
+}
