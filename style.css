@@ -185,7 +185,7 @@ p {
 
 /* ===== ABOUT & OSTATNÉ SECTIONS ===== */
 .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
-.about-image img { width: 69%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+.about-image img { width: 70%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
 .about-text h3 { font-size: 1.75rem; }
 .about-text .founder-title { color: var(--cyan); font-weight: 500; margin-bottom: 1.5rem; display: block; }
 .about-text p { max-width: none; margin-bottom: 1rem; }
@@ -522,4 +522,30 @@ p {
     
     border-radius: 14px; /* Zaoblené rohy */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25); /* Tieň */
+}
+
+/* Pomocná trieda na zobrazenie celého obrázku bez orezania */
+.img-contain {
+    object-fit: contain;
+    height: auto;
+    background-color: transparent; /* ZMENENÉ: Priehľadné pozadie */
+}
+
+/* ===== ŠTÝLY PRE KONTAJNER S OBRÁZKOM (HUGO) ===== */
+.image-showcase-container {
+    background: rgba(30, 41, 59, 0.5); /* Rovnaké pozadie ako majú karty */
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 16px; /* Rovnaké zaoblenie ako CTA box */
+    padding: 1rem; /* Vnútorný okraj, aby mal obrázok okolo seba miesto */
+    margin-top: 2rem; /* Medzera od zoznamu vyššie */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.image-showcase-container img {
+    width: 100%; /* Obrázok sa roztiahne na plnú šírku kontajnera */
+    height: auto; /* Výška sa prispôsobí, aby sa zachoval pomer strán */
+    max-height: 500px; /* Maximálna výška obrázku, môžete upraviť */
+    display: block; /* Zabezpečí správne zobrazenie a medzery */
+    margin: 0 auto; /* Vycentruje obrázok, ak by bol užší */
+    object-fit: contain; /* Zobrazí sa celý obrázok bez orezania */
 }
