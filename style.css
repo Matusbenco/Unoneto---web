@@ -260,6 +260,101 @@ p {
 }
 
 
+/* =============================================
+   ŠTÝLY PRE BANNER SLIDER (SPLIDE.JS)
+   ============================================= */
+
+/* UPRAVENÝ KÓD PRE UŽŠÍ BANNER */
+#banner-slider {
+    max-width: 900px; /* ZMENENÉ - banner bude o cca 40% užší */
+    margin: 0 auto 4rem auto;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.splide__track {
+    max-height: 400px; /* TOTO JE NOVÉ - Nastavuje maximálnu výšku. Hodnotu môžete meniť. */
+}
+
+.splide__slide {
+    position: relative; /* Potrebné pre pozíciovanie nadpisu */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--slate-900);
+}
+
+/* UPRAVENÝ KÓD PRE OBRÁZOK */
+.splide__slide img {
+    width: 100%;
+    height: 400px;  /* Nastavíme rovnakú výšku ako má .splide__track */
+    display: block;
+    opacity: 0.6;
+    object-fit: cover; /* TOTO JE KĽÚČOVÁ VLASTNOSŤ */
+    object-position: center; /* Zabezpečí, že sa oreže zo stredu */
+}
+
+/* Štýl pre nadpis na banneri */
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    text-align: center;
+    color: var(--white);
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+}
+
+.slide-caption h2 {
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.slide-caption p {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    color: var(--slate-300);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+
+/* Vlastný dizajn pre šípky */
+.splide__arrow {
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(5px);
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.splide__arrow:hover {
+    opacity: 1;
+}
+
+.splide__arrow svg {
+    fill: var(--cyan);
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+/* Vlastný dizajn pre bodky (pagináciu) */
+.splide__pagination__page {
+    background: rgba(255, 255, 255, 0.3);
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    transition: background 0.3s;
+}
+
+.splide__pagination__page.is-active {
+    background: var(--cyan);
+    transform: scale(1.2);
+}
+
 /* ===== RESPONZIVITA (do 768px) ===== */
 @media (max-width: 768px) {
     .hero-title { font-size: 2.5rem; }
@@ -301,6 +396,9 @@ p {
     position: relative;
     transform-origin: 1px;
 }
+
+
+
 
 /* ===== RESPONZIVITA PRE MENU (do 768px) ===== */
 @media (max-width: 768px) {
