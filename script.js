@@ -1,9 +1,8 @@
 /* =================================================================
-   FINÁLNY A KOMPLETNÝ JAVASCRIPT KÓD (v. 3.0)
-   - Opravuje duplicitu a spája všetky funkcie
+   FINÁLNY A KOMPLETNÝ JAVASCRIPT KÓD (v. 3.1)
+   - Pridaný autoplay pre banner
    ================================================================= */
 
-// Spustíme celý skript až vtedy, keď je celá HTML štruktúra stránky pripravená
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- ČASŤ 1: Animácie prvkov pri scrollovaní (Scroll Reveal) ---
@@ -45,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
         new Splide('#banner-slider', {
             type       : 'loop',
             perPage    : 1,
-            autoplay   : true,
-            interval   : 5000,
-            pauseOnHover: true,
             arrows     : true,
             pagination : true,
+            autoplay   : true,      // Automatické posúvanie je zapnuté
+            interval   : 5000,      // Interval 5 sekúnd
+            pauseOnHover: true,     // Pauza pri prejdení myšou
         }).mount();
     }
     
