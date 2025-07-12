@@ -1,303 +1,242 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-M7PHXS87');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Automatizácia procesov pre firmy | Unoneto</title>
-    <meta name="description" content="Pomáhame malým a stredným podnikom rásť prostredníctvom AI automatizácie, zvyšovania efektivity a inteligentných riešení.">
-    
-    <link rel="stylesheet" href="style.css">
-
-
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.png" type="image/png">
-    <link rel="shortcut icon" href="favicon.png" type="image/png">
+    <title>CarBox - Váš partner pre bezstarostnú jazdu</title>
+    <meta name="description" content="Profesionálne autoservisné služby v Čani. Autoservis, pneuservis, geometria a lakovňa.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        html { scroll-behavior: smooth; }
+        .highlight-on-hover { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
+        .highlight-on-hover:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
+        .mobile-menu { display: none; position: fixed; top: 80px; left: 0; right: 0; background-color: white; padding: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 900; transform: translateY(-100%); transition: transform 0.3s ease-in-out; border-bottom: 1px solid #e5e7eb; }
+        .mobile-menu.menu-open { display: block; transform: translateY(0); }
+        .mobile-menu-item { display: block; padding: 0.75rem 0.5rem; font-size: 1.1rem; color: #374151; border-bottom: 1px solid #e5e7eb; }
+        .mobile-menu-item:hover { background-color: #f3f4f6; }
+        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; }
+        .modal-content { position: relative; background-color: #ffffff; padding: 2rem; border-radius: 0.5rem; width: 90%; max-width: 500px; z-index: 1001; animation: slideIn 0.3s ease-out; }
+        .modal-close-button { position: absolute; top: 10px; right: 15px; font-size: 2rem; line-height: 1; color: #9ca3af; cursor: pointer; transition: color 0.2s; }
+        .modal-close-button:hover { color: #1f2937; }
+        .modal-visible { display: flex; }
+        @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/6871267e3cd275190ba1724f/1ivsvsnl2';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
 </head>
-
-<body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M7PHXS87"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-    <div class="particle-container">
-        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
-        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
-        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
-        <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
-        <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
-    </div>
-    <div class="background-shapes">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-        <div class="shape shape3"></div>
-    </div>
-
-<header class="main-header">
-        <nav class="container">
-            <a href="index.html" class="logo">
-                <div class="logo-icon">U</div>
-                <span>Unoneto</span>
-            </a>
-            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-            </button>
-            <ul class="nav-links" id="nav-menu">
-                <li><a href="#services">Služby</a></li>
-                <li><a href="#process">Náš proces</a></li>
-               
-                
-                <li><a href="#ostatne" id="toggle-ostatne">Projekty</a></li>
- <li><a href="blog.html">Blog</a></li>
-                <li><a href="#contact" class="btn btn-primary">Nezáväzná analýza</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section class="hero container reveal">
-            <div class="pill">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
-                <span>Riešenia postavené na AI</span>
-            </div>
-            <h1 class="hero-title">Vrátime vašej firme<br><span class="gradient-text pulse-text">desiatky hodín</span> mesačne</h1>
-            <p class="hero-description">Prestaňte plytvať časom a peniazmi. Analyzujeme a automatizujeme vaše repetitívne procesy, aby sa Váš tím mohol venovať práci, ktorá prináša zisk.</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn btn-primary btn-large">Chcem bezplatnú analýzu</a>
-                <a href="#case-study" class="btn btn-secondary btn-large">Pozrieť si výsledky</a>
-            </div>
-        </section>
-
-        <section id="services" class="container reveal">
-
-<div id="banner-slider" class="splide" aria-label="Ukážky projektov">
-    <div class="splide__track">
-        <ul class="splide__list">
-            <li class="splide__slide">
-                <img src="image_0588b6.webp" alt="Banner 1">
-                <div class="slide-caption">
-                    <h2>Automatizácia procesov v praxi</h2>
-                    <p>Prepojíme vaše nástroje do jedného fungujúceho celku.</p>
-                </div>
-            </li>
-            <li class="splide__slide">
-                <img src="image_057cde.jpg" alt="Banner 2">
-                <div class="slide-caption">
-                    <h2>Inteligentné riešenia na mieru</h2>
-                    <p>Analyzujeme a navrhneme systém presne pre vás.</p>
-                </div>
-            </li>
-            <li class="splide__slide">
-                <img src="unoneto_p1.webp" alt="Banner 3">
-                 <div class="slide-caption">
-                    <h2>Váš rast, poháňaný AI</h2>
-<p>Pre jednotlivcov, malé, stredné aj veľké firmy</p>
-                </div>
-</li>
-            <li class="splide__slide">
-                <img src="make1.jpg" alt="Banner 4">
-                <div class="slide-caption">
-                    <h2>Nájdeme riešenie aj pre Vás</h2>
-                    <p>Tak aby ste z toho mali radosť</p>
-                </div>
- </li>
-            <li class="splide__slide">
-                <img src="hugo_banner.webp" alt="Banner 5">
-                <div class="slide-caption">
-                    <h2>AI rozhlas a systém pre samosprávy</h2>
-                    <p>Nový rozmer rozhlasu a prenášania informácií občanom</p>
-                </div>
- </li>
-            <li class="splide__slide">
-                <img src="ozobot_banner.webp" alt="Banner 6">
-                <div class="slide-caption">
-                    <h2>Ideálna hračka pre deti</h2>
-                    <p>Deti sa zabavia a naučia sa základy programovania</p>
-                </div>
-                     </li>
-        </ul>
-    </div>
-</div>
-
-            <h2 class="section-title">Čo presne pre Vás urobíme?</h2>
-            <p class="section-subtitle">Neriešime abstraktné pojmy. Riešime konkrétne problémy, ktoré brzdia Váš biznis.</p>
-            <div class="services-grid">
-                <div class="card">
-                     <h3>AI Automatizácia procesov</h3>
-                     <p>Odstránime monotónnu manuálnu prácu a nahradíme ju inteligentnými automatizovanými riešeniami. Ušetríme Vám 5-15 hodín týždenne a znížime chybovosť na nulu.</p>
-                </div>
-                <div class="card">
-                     <h3>Efektívne generovanie leadov</h3>
-                     <p>Pomocou AI identifikujeme a dodáme Vám zoznamy kvalitných kontaktov pripravených na oslovenie.</p>
-                </div>
-                <div class="card">
-                     <h3>Školenia</h3>
-                     <p>Zaškolíme jednotlivcov alebo celý tím, aby efektívne využívali moderné nástroje. Cieľom je zefektívniť a skrátiť čas potrebný na realizáciu ich práce.</p>
-                </div>
-                <div class="card">
-                     <h3>Firemné workshopy na mieru</h3>
-                     <p>Pripravíme komplexný školiaci program, ktorý zabezpečí systematické posilnenie digitálnych zručností a kompetencií vašich zamestnancov. Získajú tak praktické zručnosti pre efektívne využívanie moderných technológií.</p>
-                </div>
-
-<div class="card">
-                     <h3>Tvorba webovej stránky</h3>
-                     <p>Vytvoríme pre vás modernú a rýchlu webstránku, ktorá vás bude nielen profesionálne reprezentovať, ale aj efektívne získavať nových klientov. Kompletná stránka, bez mesačných poplatkov, už od 199 €.</p>
-                </div>
-                <div class="card">
-                     <h3>Granty a projektové žiadosti</h3>
-                     <p>Zabezpečujeme kompletné spracovanie Vášho projektu – od úvodnej administratívy až po finálne podanie. Tým výrazne zvyšujeme vaše šance na úspech.</p>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="process" class="container reveal">
-            <h2 class="section-title">Od problému k merateľným výsledkom</h2>
-            <div class="process-grid">
-                 <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Analýza a Konzultácia</h3>
-                    <p>Žiadne odhady. Spoločne identifikujeme procesy, ktoré vás najviac brzdia a majú najväčší potenciál na úsporu.</p>
-                 </div>
-                 <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Návrh a Implementácia</h3>
-                    <p>Vytvoríme riešenie na mieru – či už je to automatizačný skript, AI model alebo praktický školiaci plán pre Váš tím.</p>
-                 </div>
-                 <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Výsledky a Podpora</h3>
-                    <p>Zaškolíme Váš tím, aby nové riešenia využíval na 100%. Merateľné výsledky uvidíte už v prvých týždňoch.</p>
-                 </div>
-            </div>
-        </section>
-
-        <section id="case-study" class="container reveal">
-             <h2 class="section-title">Neverte sľubom, verte výsledkom z praxe</h2>
-             <div class="case-study-grid">
-                 <div class="card">
-                     <h3 class="red-text">VÝZVA</h3>
-                     <p><strong>Utopení vo faktúrach:</strong> Stavebná firma trávila 20+ hodín mesačne manuálnym prepisovaním dát z desiatok faktúr.</p>
-                 </div>
-                 <div class="card">
-                     <h3 class="blue-text">NAŠE RIEŠENIE</h3>
-                     <p>Nasadenie AI nástroja na automatické vyčítanie dát (OCR) a ich priamy export do účtovného softvéru klienta.</p>
-                 </div>
-                 <div class="card">
-                     <h3 class="green-text">VÝSLEDOK</h3>
-                     <p><strong>95% úspora času</strong> na spracovanie faktúr, nulová chybovosť a <strong>návratnosť investície do 2 mesiacov.</strong></p>
-                 </div>
-             </div>
-        </section>
-
-        <section id="about" class="container reveal">
-             <h2 class="section-title">Váš partner pre rast, nie len ďalší dodávateľ</h2>
-             <div class="about-grid">
-                 <div class="about-image">
-                    <img src="https://raw.githubusercontent.com/Matusbenco/Unoneto---web/refs/heads/main/1701295455694%20(1).jpg?raw=true" alt="Matúš Benčo - Tvorca projektu Unoneto">
-                 </div>
-                 <div class="about-text">
-                     <h3>Matúš Benčo</h3>
-                     <p class="founder-title">Tvorca projektu</p>
-                     <p>Po 15 rokoch v biznise viem, že najväčším nepriateľom zisku je neefektivita. Každá minúta, ktorú vaši ľudia strávia repetitívnou prácou, sú peniaze, ktoré ste mohli investovať do rastu.</p>
-                     <p>Preto som založil Unoneto. Nie sme len dodávatelia technológií. Sme partneri, ktorí sa ponoria do vašich procesov a nájdu skryté príležitosti. <strong>Váš úspech a merateľné výsledky sú našou jedinou metrikou.</strong></p>
-                 </div>
-             </div>
-        </section>
-
-        <section id="ostatne" class="container">
-            <h2 class="section-title">Inovatívne projekty pre komunity a vzdelávanie</h2>
-            <p class="section-subtitle">Naše know-how v oblasti technológií a efektivity aplikujeme aj v projektoch s celospoločenským prínosom.</p>
-            <div class="ostatne-grid">
-                <div class="card">
-                    <h3 style="margin-bottom: 1.5rem;">Informačný systém HUGO pre samosprávy</h3>
-                    <p>V Prinášame modernizáciu obecného rozhlasu. Ponúkame informačný systém s automatizovanou rozhlasovou ústredňou, ktorý umožňuje samosprávam plánovať hlásenia odkiaľkoľvek, zdielať hlásenia na webovej stránke, alebo v aplikácií. Systém využíva umelú inteligenciu na prevod textu na reč, čím sa šetrí čas a zvyšuje efektivitu komunikácie.</p>
-                    <div style="margin-top: 2rem;">
-                        <a href="hugo.html" class="btn btn-secondary">Zistiť viac o HUGO</a>
+<body class="bg-white">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html">
+                    <img src="carbox_logo_t.png" alt="CarBox Logo" class="h-16 w-auto"/>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-red-600 transition-colors py-2">Služby</button>
+                        <div class="absolute left-0 mt-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                            <div class="py-1">
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600" href="autoservis.html">Autoservis</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600" href="pneuservis.html">Pneuservis</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600" href="geometria.html">Geometria</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600" href="lakovna.html">Lakovňa</a>
+                            </div>
+                        </div>
                     </div>
+                    <a class="text-gray-700 hover:text-red-600 transition-colors py-2" href="blog.html">Blog</a>
+                    <a class="text-gray-700 hover:text-red-600 transition-colors py-2" href="cennik.html">Cenník</a>
+                    <a class="text-gray-700 hover:text-red-600 transition-colors py-2" href="#contact">Kontakt</a>
+                    <button id="open-booking-modal-desktop" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-6 py-2 bg-red-600 hover:bg-red-700 text-white">Objednať sa</button>
                 </div>
-                <div class="card">
-                    <h3 style="margin-bottom: 1.5rem;">Programovateľné roboty Ozobot pre školy</h3>
-                    <p>Ponárame deti do sveta programovania zábavnou a interaktívnou formou. Ozoboty spájajú digitálny svet s tým fyzickým, čo deti nesmierne baví. Ukazujeme, že programovanie nie je zložité a zvládne ho naozaj každé dieťa. Pre školy ponúkame kompletné konzultácie, workshopy a pomáhame s výberom vhodných robotov.</p>
-                     <div style="margin-top: 2rem;">
-                        <a href="ozobot.html" class="btn btn-secondary">Prečítať viac o Ozobotoch</a>
-                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="container reveal">
-            <h2 class="section-title">Pripravení začať šetriť čas a peniaze?</h2>
-            <p class="section-subtitle">Vyplňte formulár a do 24 hodín sa vám ozveme s návrhom termínu pre bezplatnú konzultáciu.</p>
-            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
-                <div class="input-group">
-                    <label for="full-name">Vaše meno</label>
-                    <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
-                </div>
-<div class="input-group">
-                    <label for="phone-number">Telefónne číslo (nepovinné)</label>
-                    <input type="tel" id="phone-number" name="telefon" placeholder="napr. 0905 123 456">
-                </div>
-                <div class="input-group">
-                    <label for="email-address">Váš email</label>
-                    <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@firma.sk" required>
-                </div>
-                <div class="input-group">
-                    <label for="message">Stručná správa</label>
-                    <textarea id="message" name="message" placeholder="Ktoré procesy vás vo firme najviac brzdia? Kde cítite najväčší priestor na zlepšenie? (Nie je nutné vypísať)" rows="6" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-large">Chcem bezplatnú analýzu a návrh riešenia</button>
-            </form>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                     <a href="index.html" class="logo">
-                         <div class="logo-icon">U</div>
-                         <span>Unoneto</span>
-                     </a>
-                    <p>Váš rast, poháňaný výsledkami.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Kontakt</h4>
-                    <p>Matúš Benčo</p>
-                    <p><a href="tel:+421905351100">+421 905 351 100</a></p>
-                    <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
-                </div>
-                <div class="footer-col">
-                    <h4>Rýchle odkazy</h4>
-                    <a href="#services">Čo robíme</a>
-                    <a href="#case-study">Naše výsledky</a>
-                    <a href="#about">Kto sme</a>
-                    <a href="#contact">Bezplatná analýza</a>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
+                <button id="mobile-menu-button" class="md:hidden p-2 text-gray-700 hover:text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+                </button>
             </div>
         </div>
-  
+    </nav>
+    <div id="mobile-menu" class="mobile-menu">
+        <a href="autoservis.html" class="mobile-menu-item">Autoservis</a>
+        <a href="pneuservis.html" class="mobile-menu-item">Pneuservis</a>
+        <a href="geometria.html" class="mobile-menu-item">Geometria</a>
+        <a href="lakovna.html" class="mobile-menu-item">Lakovňa</a>
+        <a href="#" class="mobile-menu-item">Blog</a>
+        <a href="#" class="mobile-menu-item">Cenník</a>
+        <a href="#contact" class="mobile-menu-item">Kontakt</a>
+        <button id="open-booking-modal-mobile" class="w-full mt-4 text-white bg-red-600 hover:bg-red-700 py-3 rounded-lg font-semibold">Objednať sa</button>
+    </div>
+    <main>
+        <section class="relative h-[40rem] overflow-hidden group">
+            <div class="swiper hero-swiper h-full">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide relative">
+                        <img src="https://images.pexels.com/photos/12185933/pexels-photo-12185933.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Moderný autoservis" class="w-full h-full object-cover"/>
+                        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                        <div class="absolute inset-0 z-10 flex items-center justify-center text-white text-center">
+                            <div class="max-w-4xl px-4"><h1 class="text-5xl md:text-6xl font-bold mb-6">CarBox Servis</h1><p class="text-xl md:text-2xl mb-8">Váš partner pre bezstarostnú jazdu.</p></div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide relative">
+                        <img src="https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Detail motora auta" class="w-full h-full object-cover"/>
+                        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                        <div class="absolute inset-0 z-10 flex items-center justify-center text-white text-center">
+                            <div class="max-w-4xl px-4"><h1 class="text-5xl md:text-6xl font-bold mb-6">Komplexná starostlivosť</h1><p class="text-xl md:text-2xl mb-8">Od diagnostiky po finálnu opravu.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-button-next text-white opacity-50 group-hover:opacity-100 transition-opacity"></div>
+            <div class="swiper-button-prev text-white opacity-50 group-hover:opacity-100 transition-opacity"></div>
+        </section>
+        <section class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16"><h2 class="text-4xl font-bold mb-6 text-gray-800">Prečo si vybrať CarBox?</h2></div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center p-6 bg-white rounded-lg shadow-md highlight-on-hover"><div class="flex justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 text-red-600"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></div><h3 class="text-xl font-semibold mb-3 text-gray-800">Komplexné služby</h3><p class="text-gray-600">Všetko pod jednou strechou</p></div>
+                    <div class="text-center p-6 bg-white rounded-lg shadow-md highlight-on-hover"><div class="flex justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 text-red-600"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg></div><h3 class="text-xl font-semibold mb-3 text-gray-800">Moderné vybavenie</h3><p class="text-gray-600">Najnovšie technológie</p></div>
+                    <div class="text-center p-6 bg-white rounded-lg shadow-md highlight-on-hover"><div class="flex justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 text-red-600"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg></div><h3 class="text-xl font-semibold mb-3 text-gray-800">Náhradné vozidlo</h3><p class="text-gray-600">Zostaňte mobilní</p></div>
+                    <div class="text-center p-6 bg-white rounded-lg shadow-md highlight-on-hover"><div class="flex justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 text-red-600"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg></div><h3 class="text-xl font-semibold mb-3 text-gray-800">Záruka kvality</h3><p class="text-gray-600">Práca certifikovaných mechanikov</p></div>
+                </div>
+            </div>
+        </section>
+        <section id="nase-sluzby" class="py-20 bg-white">
+             <div class="container mx-auto px-4">
+                <div class="text-center mb-16"><h2 class="text-4xl font-bold mb-6 text-gray-800">Naše služby</h2></div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <a href="autoservis.html" class="highlight-on-hover"><div class="rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-100 hover:border-red-600 h-full flex flex-col"><div class="flex flex-col space-y-1.5 p-6 text-center"><h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-center gap-2 text-gray-800"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-red-600"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>Autoservis</h3></div><div class="p-6 pt-0 flex-grow"><p class="text-gray-600 text-center">Komplexné opravy motorov, prevodoviek a brzd.</p></div></div></a>
+                    <a href="pneuservis.html" class="highlight-on-hover"><div class="rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-100 hover:border-red-600 h-full flex flex-col"><div class="flex flex-col space-y-1.5 p-6 text-center"><h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-center gap-2 text-gray-800"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-red-600"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>Pneuservis</h3></div><div class="p-6 pt-0 flex-grow"><p class="text-gray-600 text-center">Prezutie, vyváženie a predaj pneumatík.</p></div></div></a>
+                    <a href="geometria.html" class="highlight-on-hover"><div class="rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-100 hover:border-red-600 h-full flex flex-col"><div class="flex flex-col space-y-1.5 p-6 text-center"><h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-center gap-2 text-gray-800"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-red-600"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>Geometria</h3></div><div class="p-6 pt-0 flex-grow"><p class="text-gray-600 text-center">Presné nastavenie geometrie pre optimálnu jazdu.</p></div></div></a>
+                    <a href="lakovna.html" class="highlight-on-hover"><div class="rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-100 hover:border-red-600 h-full flex flex-col"><div class="flex flex-col space-y-1.5 p-6 text-center"><h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-center gap-2 text-gray-800"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-red-600"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>Lakovňa</h3></div><div class="p-6 pt-0 flex-grow"><p class="text-gray-600 text-center">Profesionálne lakovanie a oprava škrabancov.</p></div></div></a>
+                </div>
+            </div>
+        </section>
+        <section class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6 text-gray-800">O nás</h2>
+                        <p class="text-lg text-gray-600 mb-6">CarBox je rodinná firma s viac ako 15-ročnými skúsenosťami v automotive priemysle. Naša vášeň pre automobily a záväzok k dokonalosti nás robí jedinečnými na trhu.</p>
+                        <p class="text-lg text-gray-600 mb-8">Náš tím certifikovaných mechanikov využíva najmodernejšie vybavenie a originálne náhradné diely, aby sme zabezpečili najvyššiu kvalitu služieb.</p>
+                    </div>
+                    <div><img src="https://images.pexels.com/photos/14908955/pexels-photo-14908955.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Náš tím" class="rounded-lg shadow-lg w-full h-auto"/></div>
+                </div>
+            </div>
+        </section>
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16"><h2 class="text-4xl font-bold mb-6 text-gray-800">Čo hovoria naši zákazníci</h2></div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="rounded-lg border border-gray-200 p-6 bg-gray-50 highlight-on-hover"><div class="p-6 pt-0"><div class="mb-4"><div class="flex text-yellow-400">★★★★★</div></div><p class="text-gray-600 mb-4">"Vynikajúci prístup a profesionálna práca.Určite odporúčam."</p><p class="font-semibold text-gray-800">Peter Novák</p></div></div>
+                    <div class="rounded-lg border border-gray-200 p-6 bg-gray-50 highlight-on-hover"><div class="p-6 pt-0"><div class="mb-4"><div class="flex text-yellow-400">★★★★★</div></div><p class="text-gray-600 mb-4">"Rýchla diagnostika a férové ceny. Konečne som našla autoservis, ktorému môžem dôverovať."</p><p class="font-semibold text-gray-800">Mária Svobodová</p></div></div>
+                    <div class="rounded-lg border border-gray-200 p-6 bg-gray-50 highlight-on-hover"><div class="p-6 pt-0"><div class="mb-4"><div class="flex text-yellow-400">★★★★★</div></div><p class="text-gray-600 mb-4">"Perfektné vybavenie a odborný personál. Kávička výborna, atmosféra, auto tip top vyservisované a vyzerá fantasticky!"</p><p class="font-semibold text-gray-800">Tomáš Krejčí</p></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="contact" class="bg-gray-800 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10"><h2 class="text-4xl font-bold text-white">Kontaktujte nás</h2></div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="rounded-lg p-6 bg-gray-700">
+                    <form action="https://formspree.io/f/mqalzkbl" method="POST" class="space-y-4">
+                        <div><label class="block text-sm font-medium text-gray-300 mb-2">Meno <span class="text-red-500">*</span></label><input type="text" name="name" class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-800 text-white" required=""/></div>
+                        <div><label class="block text-sm font-medium text-gray-300 mb-2">Email <span class="text-red-500">*</span></label><input type="email" name="email" class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-800 text-white" required=""/></div>
 
-</footer>
+ <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Telefón (nepovinné):</label>
+        <input type="tel" name="telefon" class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-800 text-white" placeholder="+421 9xx xxx xxx">
+    </div>                        
+<div><label class="block text-sm font-medium text-gray-300 mb-2">Správa <span class="text-red-500">*</span></label><textarea name="message" rows="4" class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-800 text-white" required=""></textarea></div>
+                        <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 w-full bg-red-600 hover:bg-red-700 text-white">Odoslať správu</button>
+                    </form>
+                </div>
+                <div class="space-y-8">
+                    <div class="p-6 bg-gray-700 rounded-lg">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-red-600"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg><div><p class="font-semibold text-white">Adresa</p><p class="text-gray-300">Železničná 173/2, 044 14 Čaňa</p></div></div>
+                            <div class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-red-600"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><div><p class="font-semibold text-white">Telefón</p><p class="text-gray-300">+421 905 351 100</p></div></div>
+                            <div class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-red-600"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><div><p class="font-semibold text-white">Email</p><p class="text-gray-300">Info@carbox.top</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mx-auto px-4 mt-16">
+                <h3 class="text-3xl font-bold text-white text-center mb-10">Kde nás nájdete?</h3>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="rounded-lg overflow-hidden shadow-xl h-full">
+                       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5276.497395149656!2d21.31049034837718!3d48.605082629602336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473f21b8215a8135%3A0x1ecbb5781061afde!2sCarbox!5e0!3m2!1ssk!2ssk!4v1752354998651!5m2!1ssk!2ssk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-red-600 mt-1"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold text-white">CarBox Autoservis</h4>
+                                <p class="text-lg text-gray-300">Železničná 173/2, 044 14 Čaňa</p>
+                                <a href="https://maps.app.goo.gl/1KKk12352NVm3Q6H6" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 text-red-500 hover:text-red-400 transition-colors">
+                                    Spustiť navigáciu &rarr;
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-gray-700">
+                            <p class="text-lg text-gray-300">
+                                Tešíme sa na každú vašu návštevu! Zastavte sa u nás – či už na rýchlu konzultáciu alebo plánovaný servis. 
+                                Kým sa my perfektne postaráme o vaše auto, vy si môžete v pokoji vychutnať kávu, ktorú u nás máte zadarmo. 
+                                Vaša spokojnosť a bezpečnosť sú našou prioritou.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+         <div class="border-t border-gray-600 mt-16 pt-8">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+        <p class="mb-2 md:mb-0">&copy; 2025 CarBox. Všetky práva vyhradené.</p>
 
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+        <p>
+            Vytvoril: Matúš Benčo  - 
+            <a href="https://unoneto.eu" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Unoneto.eu</a>
+        </p>
+    </div>
+</div>
+    </footer>
+    <div id="booking-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-button">&times;</span>
+            <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">Objednajte sa na servis</h2>
+            <p class="text-center text-gray-600 mb-6">Vyplňte formulár a my sa vám čo najskôr ozveme.</p>
+           <form action="https://formspree.io/f/mqalzkbl" method="POST" class="space-y-4">
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Váš email:</label>
+        <input type="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+    </div>
 
-<script src="script.js"></script>
-</body>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Telefón (nepovinné):</label>
+        <input type="tel" name="telefon" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="+421 9xx xxx xxx">
+    </div>
 
-
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Vaša správa (ŠPZ, typ vozidla, požadovaná služba):</label>
+        <textarea name="message" required rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"></textarea>
+    </div>
+    <div>
+        <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">Odoslať objednávku</button>
+    </div>
+</form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
