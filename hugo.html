@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -10,7 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informačný systém HUGO | Unoneto</title>
     <meta name="description" content="Modernizácia obecného rozhlasu pomocou AI. Informujte občanov efektívne cez mobilnú aplikáciu, SMS a emaily.">
+    
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -26,15 +29,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <header class="main-header">
         <nav class="container">
-            <a href="index.html" class="logo"> <div class="logo-icon">U</div>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">U</div>
                 <span>Unoneto</span>
             </a>
-            <ul class="nav-links">
+            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <ul class="nav-links" id="nav-menu">
                 <li><a href="index.html#services">Služby</a></li>
-                <li><a href="index.html#process">Proces</a></li>
-                <li><a href="index.html#about">O nás</a></li>
-                <li><a href="index.html#ostatne">Ostatné</a></li>
- <li><a href="blog.html">Blog</a></li>
+                <li><a href="index.html#process">Náš proces</a></li>
+                <li><a href="index.html#produkty">Produkty</a></li>
+                <li><a href="blog.html">Blog</a></li>
                 <li><a href="index.html#contact" class="btn btn-primary">Kontakt</a></li>
             </ul>
         </nav>
@@ -45,22 +53,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <h1 class="hero-title">Informačný systém<br><span class="gradient-text">HUGO</span></h1>
             <p class="hero-description">Moderné, rýchle a cielené informovanie občanov pre mestá a obce 21. storočia.</p>
         </section>
-
+<section class="image-feature-section container">
+    <div class="image-container">
+        <img src="hugo.webp" alt="Hlavný vizuál informačného systému HUGO">
+    </div>
+</section>
         <section class="container subpage-content">
             <h2>Čo je HUGO a ako funguje?</h2>
             <p>HUGO je revolučný informačný systém, ktorý nahrádza zastaraný obecný rozhlas. Namiesto nespoľahlivých a zle počuteľných ampliónov umožňuje samosprávam posielať dôležité oznamy priamo do mobilných telefónov občanov. Systém funguje na princípe mobilnej aplikácie, no dokáže doručiť správy aj formou SMS alebo emailu, čím zasiahne všetky vekové kategórie.</p>
             
+            <div id="gallery-slider" class="splide" aria-label="Galéria produktu HUGO">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide"><img src="hugo1.webp" alt="Ukážka informačného systému HUGO 1"></li>
+                        <li class="splide__slide"><img src="hugo2.webp" alt="Ukážka informačného systému HUGO 2"></li>
+                        <li class="splide__slide"><img src="hugo3.webp" alt="Ukážka informačného systému HUGO 3"></li>
+                        <li class="splide__slide"><img src="hugo4.webp" alt="Ukážka informačného systému HUGO 4"></li>
+                        <li class="splide__slide"><img src="hugo5.webp" alt="Ukážka informačného systému HUGO 5"></li>
+                        <li class="splide__slide"><img src="hugo6.webp" alt="Ukážka informačného systému HUGO 6"></li>
+                    </ul>
+                </div>
+            </div>
+
             <h2>Hlavné výhody</h2>
             <p>Vďaka využitiu umelej inteligencie dokáže HUGO automaticky previesť písaný text na profesionálne znejúce hlasové hlásenie. Starosta alebo poverený pracovník tak môže v priebehu pár sekúnd vytvoriť a odoslať oznam z počítača alebo mobilu.</p>
             <ul>
-                <li><strong>Okamžité doručenie:</strong> Hlásenia sú doručené v reálnom čase, bez meškania.</li>
+                <li><strong>Efektívnejšie hlásenia:</strong> Hlásenia na zvolený dátum ačas, bez meškania.</li>
                 <li><strong>Cielené informovanie:</strong> Možnosť posielať správy len vybraným uliciam alebo častiam obce.</li>
-                <li><strong>Úspora nákladov:</strong> Odpadá nákladná a zložitá údržba stĺpov s ampliónmi.</li>
-                <li><strong>Archív hlásení:</strong> Občania si môžu všetky hlásenia vypočuť spätne v mobilnej aplikácii.</li>
-
-<div class="image-showcase-container">
-                <img src="hugo.webp" alt="Ukážka informačného systému HUGO v mobile">
-            </div>
+                <li><strong>Hlásenia online:</strong>Hlásenie si občania vypočujú kedykoľvek na Vašej webovej stránke</li>
+                <li><strong>Nemusíte ani rozprávať:</strong>Hlásenie si dáte prečítať umelou inteligenciou./li>
+                <li><strong>Jednoduché používanie:</strong>Všetko zvládnete nastaviť do 1 minúty./li>
             </ul>
 
             <div class="subpage-cta">
@@ -73,9 +95,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <footer class="main-footer">
         <div class="container">
-            </div>
+             </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="script.js"></script>
-</body>
+
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    </body>
 </html>
