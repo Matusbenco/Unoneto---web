@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M7PHXS87');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tvorba webstránok na mieru | Unoneto</title>
-    <meta name="description" content="Získajte moderný prezentačný web na mieru s kompletným nastavením SEO, hostingom a bez mesačných poplatkov.">
+    <meta name="description" content="Získajte modernú prezentačnú webstránku na mieru s kompletným nastavením SEO, hostingom a bez mesačných poplatkov.">
+    
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M7PHXS87"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="background-shapes">
         <div class="shape shape1"></div>
@@ -19,78 +29,90 @@
 
     <header class="main-header">
         <nav class="container">
-            <a href="/" class="logo">
+            <a href="index.html" class="logo">
                 <div class="logo-icon">U</div>
                 <span>Unoneto</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="/#services">Služby</a></li>
-                <li><a href="/#process">Proces</a></li>
-                <li><a href="/#about">O nás</a></li>
-                <li><a href="/#ostatne" id="toggle-ostatne">Ostatné</a></li>
-                <li><a href="/#contact" class="btn btn-primary">Kontakt</a></li>
-            </ul>
-             <button id="hamburger-btn" aria-label="Otvoriť menu">
-                <div class="hamburger-bar"></div>
-                <div class="hamburger-bar"></div>
-                <div class="hamburger-bar"></div>
+            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
             </button>
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="index.html#services">Služby</a></li>
+                <li><a href="index.html#process">Náš proces</a></li>
+                <li><a href="index.html#produkty">Produkty</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="index.html#contact" class="btn btn-primary">Kontakt</a></li>
+            </ul>
         </nav>
     </header>
 
     <main>
         <section class="subpage-hero container">
-            <h1 class="hero-title">Váš nový web<br><span class="gradient-text">bez starostí a kompromisov</span></h1>
-            <p class="hero-description">Vytvoríme vám modernú a rýchlu prezentačnú webstránku, ktorá nielen skvele vyzerá, ale je aj pripravená prinášať výsledky.</p>
+            <h1 class="hero-title">Vaša nová webstránka,<br><span class="gradient-text">ktorá predáva</span></h1>
+            <p class="hero-description">Vytvoríme vám modernú a rýchlu prezentačnú stránku, ktorá bude vašou najlepšou online vizitkou a efektívnym nástrojom na získavanie klientov.</p>
         </section>
 
-        <section class="container subpage-content">
-            <h2>Čo všetko získate v balíku za 490,-€?</h2>
-            <p>Naša filozofia je jednoduchá – poskytnúť vám kompletné riešenie bez skrytých poplatkov a technického žargónu. Toto všetko je súčasťou ceny:</p>
+        <section class="subpage-cta" style="border-width: 2px; border-color: var(--cyan); background: rgba(30, 41, 59, 0.9);">
+            <h2>Letná Akcia: Kompletný web za polovicu!</h2>
+            <p style="font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">
+                <span style="text-decoration: line-through; opacity: 0.6;">Pôvodná cena: 590€</span> 
+                <strong class="gradient-text" style="font-size: 2rem; display: block; margin-top: 0.5rem;">Teraz len za 290€</strong>
+            </p>
+            <p style="max-width: 600px; margin: 1.5rem auto;">
+                Získajte plne funkčnú prezentačnú webstránku so všetkým, čo potrebujete na úspešný štart online. Ponuka platí len do konca augusta.
+            </p>
             
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <h3>Dizajn na mieru</h3>
-                    <p>Žiadne šablóny. Vytvoríme unikátny dizajn, ktorý odzrkadlí charakter vašej značky a osloví vašich zákazníkov.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Plná responzivita</h3>
-                    <p>Vaša stránka bude vyzerať perfektne na všetkých zariadeniach – od mobilov a tabletov až po veľké monitory.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Základné SEO nastavenie</h3>
-                    <p>Postaráme sa o technické SEO, aby vás vyhľadávače ako Google ľahšie našli a správne zaindexovali.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Prepojenie nástrojov</h3>
-                    <p>Integrujeme všetko potrebné: kontaktný formulár, prepojenie na sociálne siete, live chat alebo rezervačný systém.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Nasadenie a hosting</h3>
-                    <p>Stránku kompletne nasadíme na rýchly a bezpečný hosting, ktorý máte na prvý rok úplne zadarmo.</p>
-                </div>
-                 <div class="feature-item">
-                    <h3>Férová cena</h3>
-                    <p>Jednorazová platba 490,-€. Žiadne povinné mesačné poplatky za správu webu.</p>
-                </div>
+            <div style="text-align: left; max-width: 500px; margin: 2rem auto 0 auto; display: flex; flex-direction: column; gap: 0.75rem;">
+                 <p style="font-size: 1.1rem; color: white; margin:0; padding-left:1rem; border-left: 3px solid var(--cyan);">✓ Kompletný moderný dizajn na mieru</p>
+                 <p style="font-size: 1.1rem; color: white; margin:0; padding-left:1rem; border-left: 3px solid var(--cyan);">✓ Kontaktný formulár a live chat</p>
+                 <p style="font-size: 1.1rem; color: white; margin:0; padding-left:1rem; border-left: 3px solid var(--cyan);">✓ Základné technické SEO nastavenie</p>
+                 <p style="font-size: 1.1rem; color: white; margin:0; padding-left:1rem; border-left: 3px solid var(--cyan);">✓ 100% funkčnosť na mobiloch aj počítačoch</p>
             </div>
 
-            <div class="subpage-cta">
-                <h2>Transparentné náklady</h2>
-                <p>Jediným ďalším nákladom je registrácia domény a emailu, ktorú vieme kompletne zariadiť v cene od 8 do 20€ na rok. Hosting máte od nás na prvý rok zadarmo.</p>
+            <a href="index.html#contact" class="btn btn-primary btn-large" style="margin-top: 2.5rem;">Využiť akciu a získať web</a>
+        </section>
+
+        <section class="container subpage-content" style="padding-top: 5rem;">
+            <h2>Prečo je kvalitná webstránka kľúčová?</h2>
+            <p>V digitálnej dobe je vaša webstránka často prvým kontaktom, ktorý má zákazník s vašou firmou. Je to vaša 24/7 otvorená pobočka. Preto nestačí, aby len "nejako vyzerala". Musí byť rýchla, prehľadná, dôveryhodná a musí návštevníka presvedčiť, aby vás kontaktoval. My vám presne takú stránku vytvoríme – bez kompromisov a skrytých poplatkov.</p>
+
+            <div id="testimonials" class="testimonial-section" style="padding: 0; background: none; border: none; margin-top: 5rem;">
+                <h2 class="section-title" style="margin-top:0; font-size: 2rem;">Presvedčte sa na výsledkoch</h2>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon">”</div>
+                    <p class="testimonial-text">
+                        "S výslednou webstránkou od Unoneto sme maximálne spokojní. Komunikácia bola na profesionálnej úrovni, dodržali termíny a výsledok prekonal naše očakávania. Návštevnosť stránky a počet dopytov nám odvtedy viditeľne stúpol."
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>Konateľ, CARBOX</strong>
+                        <a href="https://carbox.top/" target="_blank" rel="noopener noreferrer" class="testimonial-link">carbox.top</a>
+                    </div>
+                </div>
             </div>
             
-             <div class="subpage-cta">
-                <h2>Máte záujem o moderný web?</h2>
-                <p>Nechajte si vytvoriť stránku, ktorá bude vašou najlepšou online vizitkou.</p>
-                <a href="/#contact" class="btn btn-primary btn-large">Chcem nezáväznú ponuku</a>
-            </div>
         </section>
     </main>
     
     <footer class="main-footer">
-         </footer>
+        <div class="container">
+            </div>
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="script.js"></script>
+
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
 </body>
 </html>
