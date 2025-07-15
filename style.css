@@ -902,3 +902,116 @@ p {
 #tawk-chat-widget-container {
     z-index: 1010 !important;
 }
+/* ===================================================
+   NOVÉ VYLEPŠENÉ MOBILNÉ MENU A RESPONZIVITA
+   =================================================== */
+
+/* Základné štýly pre hamburger tlačidlo */
+#hamburger-btn {
+    display: none; /* Na desktope je skryté */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1005; /* Musí byť na najvyššej vrstve */
+    position: relative;
+}
+.hamburger-bar {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--white);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    transform-origin: center;
+}
+
+/* Animácia hamburgera na "X" pri otvorenom menu */
+#hamburger-btn.active .hamburger-bar:nth-child(1) {
+    transform: translateY(0.625rem) rotate(45deg);
+}
+#hamburger-btn.active .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+#hamburger-btn.active .hamburger-bar:nth-child(3) {
+    transform: translateY(-0.625rem) rotate(-45deg);
+}
+
+/* Všeobecné responzívne pravidlá a mobilné menu */
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.5rem; }
+    .main-header nav .btn-primary { display: none; }
+
+    /* Zobrazíme hamburger na mobiloch */
+    #hamburger-btn {
+        display: flex;
+    }
+
+    /* Štýly pre samotné menu */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem; /* Zväčšená medzera medzi položkami */
+        position: fixed;
+        top: 0;
+        left: -100%; /* Začína skryté vľavo */
+        width: 100%;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.98); /* Tmavé pozadie s jemnou priehľadnosťou */
+        backdrop-filter: blur(10px);
+        transition: left 0.4s ease-in-out;
+        z-index: 1004; /* Pod hamburgerom, ale nad obsahom */
+    }
+
+    .nav-links.active {
+        left: 0; /* Po kliknutí sa vysunie do obrazovky */
+    }
+
+    .nav-links li {
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInMenuItem 0.4s ease forwards;
+    }
+
+    /* Postupná animácia položiek v menu */
+    .nav-links.active li:nth-child(1) { animation-delay: 0.15s; }
+    .nav-links.active li:nth-child(2) { animation-delay: 0.25s; }
+    .nav-links.active li:nth-child(3) { animation-delay: 0.35s; }
+    .nav-links.active li:nth-child(4) { animation-delay: 0.45s; }
+    .nav-links.active li:nth-child(5) { animation-delay: 0.55s; }
+
+
+    @keyframes fadeInMenuItem {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .nav-links a {
+        font-size: 1.5rem; /* Zväčšené písmo pre lepšiu čitateľnosť */
+        font-weight: 500;
+        color: var(--slate-300);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: var(--cyan);
+    }
+    
+    /* Zvýraznenie tlačidla v menu */
+    .nav-links .btn {
+        display: inline-flex !important;
+        padding: 1rem 2.5rem;
+        font-size: 1.6rem;
+    }
+}
