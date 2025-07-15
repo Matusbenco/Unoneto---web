@@ -26,15 +26,17 @@ html {
     font-size: 16px;
 }
 
-/* NOVÝ, OPRAVENÝ KÓD */
+/* ===== OPRAVA PRE MOBILNÉ ZOBRAZENIE A SCROLLOVANIE ===== */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Toto je kľúčové pravidlo, ktoré zabráni scrollu do strán */
+}
+
 body {
     font-family: var(--font-family);
     background-color: var(--slate-900);
     color: var(--slate-300);
     background-image: linear-gradient(to bottom right, var(--slate-900), #0c1c3f, #301742);
-    overflow-x: hidden;   /* Toto ostáva, bráni pohybu do strán */
-    overflow-y: auto;     /* TOTO PRE ISTOTU PRIDÁVAME - explicitne povoľuje zvislé scrollovanie */
-    /* Riadok 'position: relative;' SME ÚPLNE ODSTRÁNILI, lebo spôsoboval konflikt */
 }
 
 .container {
@@ -725,11 +727,11 @@ p {
 
 .image-feature-section {
     padding-top: 0; /* Zrušíme hornú medzeru, aby bola sekcia bližšie k nadpisu */
-    padding-bottom: 5rem; /* Upravíme spodnú medzeru podľa potreby */
+    padding-bottom: 4rem; /* Upravíme spodnú medzeru podľa potreby */
 }
 
 .image-feature-section .image-container {
-    max-width: 700px; /* Môžete upraviť podľa potreby, napr. rovnaká šírka ako galéria */
+    max-width: 400px; /* Môžete upraviť podľa potreby, napr. rovnaká šírka ako galéria */
     margin: 0 auto; /* Vycentruje kontajner s obrázkom */
     border-radius: 16px;
     overflow: hidden; /* Zaistí, že obrázok nepretečie cez zaoblené rohy */
@@ -893,4 +895,27 @@ p {
     display: block;
     width: 100%;
     height: auto;
+}
+/* =========================================================
+   FINÁLNE OPRAVY PRE MOBILNÚ VERZIU
+   ========================================================= */
+
+/* Oprava pre nefunkčné tlačidlo "X" na promo lište */
+.close-promo-btn {
+    z-index: 1002; /* Zvýši vrstvu tlačidla, aby bolo klikateľné */
+}
+
+/* Pre istotu zaistíme, aby bol Tawk.to chat vždy navrchu */
+#tawk-chat-widget-container {
+    z-index: 1010 !important;
+}
+
+/* =========================================================
+   OPRAVA PRE ZOBRAZENIE TAWK.TO CHATU NA MOBILE
+   ========================================================= */
+
+
+/* Zaistí, aby bol Tawk.to chat vždy na najvyššej vrstve */
+#tawk-chat-widget-container {
+    z-index: 1010 !important;
 }

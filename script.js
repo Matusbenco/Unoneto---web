@@ -1,4 +1,25 @@
+/* =================================================================
+   FINÁLNA KONSOLIDOVANÁ VERZIA SCRIPT.JS
+   - Obsahuje všetky funkcie vrátane promo panelu
+   ================================================================= */
 document.addEventListener('DOMContentLoaded', function() {
+
+    // --- Logika pre Promo Banner ---
+    const promoBanner = document.getElementById('promo-banner');
+    const closePromoBtn = document.getElementById('close-promo');
+
+    if (promoBanner && closePromoBtn) {
+        // Skontroluje, či bol banner už zatvorený v tejto session
+        if (sessionStorage.getItem('promoBannerClosed') === 'true') {
+            promoBanner.style.display = 'none'; // Skryje banner úplne, ak už bol zatvorený
+        }
+
+        closePromoBtn.addEventListener('click', () => {
+            promoBanner.classList.add('hidden');
+            // Uloží informáciu o zatvorení, aby sa banner nezobrazil znova
+            sessionStorage.setItem('promoBannerClosed', 'true');
+        });
+    }
 
     // --- Animácie prvkov pri scrollovaní ---
     const revealElements = document.querySelectorAll('.reveal');
@@ -52,12 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
     lightbox.classList.add('lightbox');
     document.body.appendChild(lightbox);
 
-    // OPRAVA: Hľadá obrázky v OBOCH slideroch (banner aj galéria)
+    // Hľadá obrázky v OBOCH slideroch (banner aj galéria)
     const clickableImages = document.querySelectorAll('#banner-slider .splide__slide img, #gallery-slider .splide__slide img');
     
     clickableImages.forEach(image => {
         image.addEventListener('click', e => {
-            e.preventDefault(); // Zabraňuje nežiaducim akciám
+            e.preventDefault();
             lightbox.classList.add('show');
             
             const img = document.createElement('img');
@@ -67,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
             closeBtn.classList.add('close-lightbox');
             closeBtn.innerHTML = '&times;';
 
-            // Vymaže predchádzajúci obsah a vloží nový
             while (lightbox.firstChild) {
                 lightbox.removeChild(lightbox.firstChild);
             }
@@ -76,15 +96,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // OPRAVA: Správna logika pre zatvorenie lightboxu
+    // Logika pre zatvorenie lightboxu
     lightbox.addEventListener('click', e => {
-        // Zatvorí sa, ak klikneme na pozadie ALEBO na tlačidlo "X"
         if (e.target === e.currentTarget || e.target.classList.contains('close-lightbox')) {
             lightbox.classList.remove('show');
         }
     });
 
-    // Zatváranie pomocou klávesy Escape
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && lightbox.classList.contains('show')) {
             lightbox.classList.remove('show');
