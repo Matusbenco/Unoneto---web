@@ -1015,3 +1015,47 @@ p {
         font-size: 1.6rem;
     }
 }
+
+/* ===== ŠTÝLY PRE IKONY SOCIÁLNYCH SIETÍ (Zmenšená verzia) ===== */
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Mierne zmenšená medzera medzi ikonami */
+    margin-top: 1rem;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;  /* ZMENŠENÉ */
+    height: 36px; /* ZMENŠENÉ */
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.social-icons a:hover {
+    background-color: var(--cyan);
+    transform: translateY(-3px);
+}
+
+.social-icons svg {
+    width: 18px;  /* ZMENŠENÉ */
+    height: 18px; /* ZMENŠENÉ */
+    fill: var(--slate-300); /* Farba ikony */
+}
+
+.social-icons a:hover svg {
+    fill: var(--slate-900); /* Farba ikony pri prejdení myšou */
+}
+
+/* Úprava pre mobilné zobrazenie pätičky */
+@media (max-width: 768px) {
+    .footer-grid {
+        text-align: center;
+    }
+    .footer-col .logo, .social-icons {
+        justify-content: center;
+    }
+}
