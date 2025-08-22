@@ -1058,4 +1058,68 @@ p {
     .footer-col .logo, .social-icons {
         justify-content: center;
     }
+/* ===== OPRAVA PRE VEĽKOSŤ OBRÁZKOV V GALÉRII ===== */
+.splide__slide img {
+    width: 100%; /* Zabezpečí, že obrázok vyplní celú šírku svojho kontajnera */
+    height: 220px; /* Pevná výška pre všetky obrázky, aby boli jednotné */
+    object-fit: cover; /* Dôležité pre to, aby obrázok vyplnil priestor bez deformácie (oreže sa, ak je to potrebné) */
+    border-radius: 10px;
+    display: block;
+}}
+/* =================================================================
+   FINÁLNA OPRAVA PRE VEXION PODSTRÁNKU
+   ================================================================= */
+
+/* Zmenšenie medzier pre textové a obrázkové sekcie */
+.presentation-section {
+    padding: 1rem 0; /* Malé odsadenie hore a dole */
+}
+
+.presentation-text-section {
+    padding: 2rem 0 1rem 0; /* O niečo väčšia medzera hore, menšia dole */
+}
+
+/* Odstránenie veľkých okrajov z nadpisov a odsekov */
+.presentation-text-section .section-title,
+.presentation-text-section .section-subtitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* FINÁLNA OPRAVA: Zaoblenie rohov pre VŠETKY obrázky v hlavnom obsahu */
+main.main-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px !important; /* !important zabezpečí, že sa pravidlo naozaj použije */
+    display: block;
+    margin: 0 auto;
+}
+
+/* =================================================================
+   FINÁLNA OPRAVA PRE VEXION PODSTRÁNKU
+   ================================================================= */
+
+/* Zmenšenie medzier pre textové a obrázkové sekcie */
+.presentation-section {
+    padding: 1rem 0;
+}
+
+.presentation-text-section {
+    padding: 2rem 0 1rem 0;
+}
+
+/* Odstránenie veľkých okrajov z nadpisov a odsekov */
+.presentation-text-section .section-title,
+.presentation-text-section .section-subtitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* FINÁLNA OPRAVA: Zaoblenie rohov pre VŠETKY obrázky v hlavnom obsahu */
+main.main-content img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 15px !important;
+    display: block;
+    margin: 1rem auto !important; /* Aj tu pre istotu zmenšujeme medzeru */
 }

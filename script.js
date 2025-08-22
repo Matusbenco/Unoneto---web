@@ -1,25 +1,7 @@
 /* =================================================================
-   FINÁLNA KONSOLIDOVANÁ VERZIA SCRIPT.JS
-   - Obsahuje všetky funkcie vrátane promo panelu
+   FINÁLNA KONSOLIDOVANÁ VERZIA SCRIPT.JS - OPRAVENÁ
    ================================================================= */
 document.addEventListener('DOMContentLoaded', function() {
-
-    // --- Logika pre Promo Banner ---
-    const promoBanner = document.getElementById('promo-banner');
-    const closePromoBtn = document.getElementById('close-promo');
-
-    if (promoBanner && closePromoBtn) {
-        // Skontroluje, či bol banner už zatvorený v tejto session
-        if (sessionStorage.getItem('promoBannerClosed') === 'true') {
-            promoBanner.style.display = 'none'; // Skryje banner úplne, ak už bol zatvorený
-        }
-
-        closePromoBtn.addEventListener('click', () => {
-            promoBanner.classList.add('hidden');
-            // Uloží informáciu o zatvorení, aby sa banner nezobrazil znova
-            sessionStorage.setItem('promoBannerClosed', 'true');
-        });
-    }
 
     // --- Animácie prvkov pri scrollovaní ---
     const revealElements = document.querySelectorAll('.reveal');
@@ -32,91 +14,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }, { threshold: 0.1 });
-        revealElements.forEach(element => {
-            observer.observe(element);
-        });
+        revealElements.forEach(element => { observer.observe(element); });
     }
 
     // --- Banner Slider na hlavnej stránke (index.html) ---
-    const bannerSlider = document.getElementById('banner-slider');
-    if (bannerSlider) {
+    if (document.getElementById('banner-slider')) {
         new Splide('#banner-slider', {
-            type: 'loop',
-            perPage: 1,
-            arrows: true,
-            pagination: true,
-            autoplay: true,
-            interval: 5000,
-            pauseOnHover: true,
+            type: 'loop', perPage: 1, autoplay: true, interval: 5000,
         }).mount();
     }
     
-    // --- Galéria na podstránkach (napr. hugo.html) ---
-    const gallerySlider = document.getElementById('gallery-slider');
-    if (gallerySlider) {
-        new Splide('#gallery-slider', {
-            type        : 'loop',
-            perPage     : 1,
-            gap         : '1rem',
-            arrows      : true,
-            pagination  : true,
-            autoplay    : true,
-            interval    : 3000,
-            pauseOnHover: true,
-            resetProgress: false,
+    // --- Galéria na podstránke HUGO (hugo.html) ---
+    if (document.getElementById('hugo-gallery-slider')) {
+        new Splide('#hugo-gallery-slider', {
+            type: 'loop', perPage: 3, gap: '1.5rem', autoplay: true,
+            breakpoints: { 1024: { perPage: 2 }, 767: { perPage: 1 } }
         }).mount();
     }
 
-    // --- Funkcionalita Lightboxu (zväčšenie obrázku po kliknutí) ---
-    const lightbox = document.createElement('div');
-    lightbox.id = 'lightbox';
-    lightbox.classList.add('lightbox');
-    document.body.appendChild(lightbox);
+    // --- Slidery na podstránke VEXION (vexion.html) ---
+    if (document.getElementById('how-it-works-slider')) {
+        new Splide('#how-it-works-slider', {
+            type: 'fade', rewind: true, perPage: 1, autoplay: true, interval: 4000,
+        }).mount();
+    }
+    if (document.getElementById('card-types-slider')) {
+        new Splide('#card-types-slider', {
+            type: 'loop', perPage: 3, gap: '2rem', autoplay: true, interval: 3500,
+            breakpoints: { 1024: { perPage: 2 }, 768: { perPage: 1 } }
+        }).mount();
+    }
 
-    // Hľadá obrázky v OBOCH slideroch (banner aj galéria)
-    const clickableImages = document.querySelectorAll('#banner-slider .splide__slide img, #gallery-slider .splide__slide img');
-    
-    clickableImages.forEach(image => {
-        image.addEventListener('click', e => {
-            e.preventDefault();
-            lightbox.classList.add('show');
-            
-            const img = document.createElement('img');
-            img.src = image.src;
-            
-            const closeBtn = document.createElement('span');
-            closeBtn.classList.add('close-lightbox');
-            closeBtn.innerHTML = '&times;';
-
-            while (lightbox.firstChild) {
-                lightbox.removeChild(lightbox.firstChild);
-            }
-            lightbox.appendChild(img);
-            lightbox.appendChild(closeBtn);
-        });
-    });
-
-    // Logika pre zatvorenie lightboxu
-    lightbox.addEventListener('click', e => {
-        if (e.target === e.currentTarget || e.target.classList.contains('close-lightbox')) {
-            lightbox.classList.remove('show');
+    // --- OPRAVENÉ: Slidery pre 5 typov VEXION kariet ---
+    const initVexionGallery = (selector) => {
+        const sliderElement = document.querySelector(selector);
+        if (sliderElement) {
+            new Splide(sliderElement, {
+                type: 'loop',
+                perPage: 3,
+                gap: '1rem',
+                autoplay: true,
+                interval: 3000,
+                pauseOnHover: true,
+                breakpoints: {
+                    1024: { perPage: 2 },
+                    767: { perPage: 1 }
+                }
+            }).mount();
         }
-    });
+    };
 
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && lightbox.classList.contains('show')) {
-            lightbox.classList.remove('show');
-        }
-    });
+    // Inicializujeme každý slider zvlášť
+    initVexionGallery('#gallery-peciatky');
+    initVexionGallery('#gallery-odmeny');
+    // initVexionGallery('#gallery-zlavy'); // odkomentuj, keď pridáš galériu do HTML
+    // initVexionGallery('#gallery-kupony'); // odkomentuj, keď pridáš galériu do HTML
+    // initVexionGallery('#gallery-permanentky'); // odkomentuj, keď pridáš galériu do HTML
 
     // --- Hamburger Menu pre mobily ---
     const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.querySelector('.nav-links');
+    const navLinks = document.getElementById('nav-menu');
     if (hamburgerBtn && navLinks) {
         hamburgerBtn.addEventListener('click', function() {
             navLinks.classList.toggle('active');
             hamburgerBtn.classList.toggle('active');
         });
     }
-
-});
+}); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY
