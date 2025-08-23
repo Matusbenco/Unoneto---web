@@ -24,20 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }).mount();
     }
     
-   // --- Galéria na podstránke HUGO (hugo.html) ---
-    const hugoGallery = document.getElementById('hugo-gallery-slider');
-    if (hugoGallery) {
-        new Splide('#hugo-gallery-slider', {
-            type: 'loop',
-            perPage: 3,
-            gap: '1.5rem',
-            autoplay: true,
-            breakpoints: {
-                1024: { perPage: 2 },
-                767: { perPage: 1 }
-            }
-        }).mount();
-    }
+ // --- Galéria na podstránke HUGO (hugo.html) ---
+if (document.getElementById('gallery-slider')) {
+    new Splide('#gallery-slider', {
+        type: 'loop', perPage: 3, gap: '1.5rem', autoplay: true,
+        breakpoints: { 1024: { perPage: 2 }, 767: { perPage: 1 } }
+    }).mount();
+}
 
     // --- Slidery na podstránke VEXION (vexion.html) ---
     if (document.getElementById('how-it-works-slider')) {
@@ -49,20 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         new Splide('#card-types-slider', {
             type: 'loop', perPage: 3, gap: '2rem', autoplay: true, interval: 3500,
             breakpoints: { 1024: { perPage: 2 }, 768: { perPage: 1 } }
-        }).mount();
-    }
-  // --- Galéria na podstránke Ozobot (ozobot.html) ---
-    const ozobotGallery = document.getElementById('ozobot-gallery-slider');
-    if (ozobotGallery) {
-        new Splide('#ozobot-gallery-slider', {
-            type: 'loop',
-            perPage: 3,
-            gap: '1.5rem',
-            autoplay: true,
-            breakpoints: {
-                1024: { perPage: 2 },
-                767: { perPage: 1 }
-            }
         }).mount();
     }
 
