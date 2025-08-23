@@ -97,4 +97,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+// --- Logika pre rozbaľovacie menu na mobile ---
+    const nasaPonukaToggleMobile = document.getElementById('nasa-ponuka-toggle');
+    const dropdownMenuMobile = document.querySelector('.dropdown-menu');
+
+    if (nasaPonukaToggleMobile && dropdownMenuMobile) {
+        nasaPonukaToggleMobile.addEventListener('click', function(e) {
+            // Zabraňuje zatvoreniu menu pri kliknutí na hlavný odkaz, ak je menu už otvorené
+            if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
+                e.preventDefault();
+                
+                // Zistíme, či je menu aktuálne zobrazené
+                const isDisplayed = dropdownMenuMobile.style.display === 'flex';
+                
+                // Zmeníme stav zobrazenia
+                dropdownMenuMobile.style.display = isDisplayed ? 'none' : 'flex';
+            }
+        });
+    }
 }); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY

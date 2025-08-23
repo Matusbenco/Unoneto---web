@@ -1192,3 +1192,28 @@ main.main-content img {
         padding: 0;
     }
 }
+/* =========================================================
+   FINÁLNA OPRAVA PRE MOBILNÉ DROPDOWN MENU
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .nav-links.active .dropdown-menu {
+        /* Pridá medzery a priestor okolo položiek */
+        padding: 0.5rem 0;
+        margin-top: 1rem;
+        background: rgba(30, 41, 59, 0.7);
+        border-radius: 8px;
+        border-top: 1px solid rgba(34, 211, 238, 0.2);
+    }
+
+    .nav-links.active .dropdown-menu li {
+        padding: 0.25rem 0; /* Malé medzery medzi položkami */
+    }
+
+    .nav-links.active .dropdown-menu a {
+        white-space: normal; /* Umožní zalomenie textu do viacerých riadkov */
+        line-height: 1.4;    /* Zlepší čitateľnosť, ak je text v dvoch riadkoch */
+        padding: 0.5rem 1.5rem; /* Upraví odsadenie pre lepšie zobrazenie */
+        font-size: 1.1rem;   /* Mierne zmenší písmo, aby sa text lepšie vošiel */
+    }
+}
