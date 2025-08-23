@@ -80,4 +80,21 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburgerBtn.classList.toggle('active');
         });
     }
+// --- Logika pre rozbaľovacie menu ---
+    const nasaPonukaToggle = document.getElementById('nasa-ponuka-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+
+    if (nasaPonukaToggle && dropdownMenu) {
+        nasaPonukaToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!nasaPonukaToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    }
 }); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY

@@ -1123,3 +1123,72 @@ main.main-content img {
     display: block;
     margin: 1rem auto !important; /* Aj tu pre istotu zmenšujeme medzeru */
 }
+
+/* ===== ŠTÝLY PRE ROZBAĽOVACIE MENU (DROPDOWN) ===== */
+
+.has-dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none; /* Skryté, kým sa naň neklikne */
+    list-style: none;
+    padding: 1rem 0;
+    margin-top: 10px;
+    background: var(--slate-900);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 250px;
+}
+
+.dropdown-menu li {
+    padding: 0 1rem;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    color: var(--slate-300);
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgba(34, 211, 238, 0.1);
+    color: var(--cyan);
+}
+
+/* Zobrazenie menu pri hover alebo active */
+.has-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Responzivita pre mobilné zobrazenie dropdown menu */
+@media (max-width: 768px) {
+    .nav-links .has-dropdown .dropdown-menu {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        display: none;
+        width: 100%;
+        background: none;
+        border: none;
+        box-shadow: none;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    .nav-links.active .dropdown-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+    }
+}
