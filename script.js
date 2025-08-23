@@ -115,4 +115,15 @@ if (document.getElementById('gallery-slider')) {
             }
         });
     }
+   // --- Galéria na podstránke OZOBOT (ozobot.html) ---
+if (document.getElementById('ozobot-gallery-slider')) {
+    new Splide('#ozobot-gallery-slider', {
+        type: 'loop',      // Typ animácie
+        perPage: 1,        // Zobrazí vždy len 1 obrázok
+        gap: '1.5rem',     // Medzera medzi obrázkami
+        autoplay: true,    // Automatické posúvanie
+        arrows: false      // Skryje šípky, keďže je obrázok len jeden
+    }).mount();
+}
 }); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY
+
