@@ -832,7 +832,7 @@ p {
     visibility: hidden;
 }
 .promo-banner p {
-    margin: 0;
+    margin: 1;
     font-size: 0.95rem;
     font-weight: 500;
     white-space: nowrap;
@@ -1216,4 +1216,5 @@ main.main-content img {
         padding: 0.5rem 1.5rem; /* Upraví odsadenie pre lepšie zobrazenie */
         font-size: 1.1rem;   /* Mierne zmenší písmo, aby sa text lepšie vošiel */
     }
+
 }
