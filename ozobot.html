@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -11,27 +11,35 @@
     <title>Programovateľné roboty Ozobot pre školy | Unoneto</title>
     <meta name="description" content="Ponúkame konzultácie a workshopy pre školy zamerané na výučbu programovania pomocou zábavných robotov Ozobot.">
     
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
 </head>
 <body>
+
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M7PHXS87"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
+    <div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
+        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
+        <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
+        <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
+    </div>
     <div class="background-shapes">
         <div class="shape shape1"></div>
         <div class="shape shape2"></div>
     </div>
 
-    
 <header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
-                <div class="logo-icon">U</div>
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
                 <span>Unoneto</span>
             </a>
             <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
@@ -45,65 +53,91 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
         <ul class="dropdown-menu">
             <li><a href="weby.html">Prezentačné weby</a></li>
-            <li><a href="eshopy">E-shopy na mieru</a></li>
-            <li><a href="automatizacia">AI Automatizácia procesov</a></li>
-            <li><a href="vexion">Vernostný systém VEXION</a></li>
-            <li><a href="skolenia">Školenia</a></li>
-            <li><a href="marketing">Marketingové služby</a></li>
-            <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-            <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
+            <li><a href="eshopy.html">E-shopy na mieru</a></li>
+            <li><a href="automatizacia.html">AI Automatizácia procesov</a></li>
+            <li><a href="vexion.html">Vernostný systém VEXION</a></li>
+            <li><a href="skolenia.html">Školenia</a></li>
+            <li><a href="marketing.html">Marketingové služby</a></li>
+            <li><a href="hugo.html">Informačný systém HUGO pre samosprávy</a></li>
+            <li><a href="ozobot.html">Programovateľné roboty Ozobot</a></li>
         </ul>
     </li>
     <li><a href="blog.html">Blog</a></li>
-    <li><a href="#contact" class="btn btn-primary">Nezáväzná analýza</a></li>
+    <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Rezervovať konzultáciu</a></li>
 </ul>
-
-
-
         </nav>
     </header>
 
-    <main>
-        <section class="subpage-hero container">
+    <main class="main-content">
+        <section class="subpage-hero container reveal">
             <h1 class="hero-title">Roboty <span class="gradient-text">Ozobot</span><br>pre školy</h1>
             <p class="hero-description">Zábavná a interaktívna cesta k programovaniu pre každé dieťa.</p>
         </section>
 
-        <section class="image-feature-section container">
-            <div class="image-container">
-                <img src="/ozobot_banner.webp" alt="Roboty Ozobot pripravené na programovanie">
+        <section class="container subpage-content reveal">
+            <div class="two-column-layout">
+                <div class="column-image">
+                    <img src="ozobot_banner.webp" alt="Roboty Ozobot pripravené na programovanie">
+                </div>
+                <div class="column-text">
+                    <h2 style="text-align: left; margin: 0 0 1.5rem 0;">Prečo sú Ozoboty ideálne pre školy?</h2>
+                    <p style="margin: 0;">V dnešnej dobe je kľúčové, aby sa deti učili nielen používať technológie, ale aj rozumieť tomu, ako fungujú. Ozoboty sú navrhnuté presne na tento účel. Vďaka svojej jednoduchosti a hravosti dokážu nadchnúť pre programovanie aj úplných začiatočníkov a okamžite ukážu, ako kód ožíva v reálnom svete.</p>
+                </div>
             </div>
         </section>
 
-        <section class="container subpage-content">
-            <h2>Prečo sú Ozoboty ideálne pre školy?</h2>
-            <p>V dnešnej digitálnej dobe je kľúčové, aby sa deti učili nielen používať technológie, ale aj rozumieť tomu, ako fungujú. Ozoboty sú navrhnuté presne na tento účel. Vďaka svojej jednoduchosti a hravosti dokážu nadchnúť pre programovanie aj úplných začiatočníkov. Deti sa neučia len suchú teóriu – okamžite vidia, ako ich kód ožíva v reálnom, fyzickom svete, čo ich nesmierne motivuje a teší.</p>
-            
-            <h2>Zábava, ktorá vzdeláva</h2>
-            <p>Programovanie Ozobotov je navrhnuté tak, aby ho zvládol naozaj každý. Deti môžu začať kreslením farebných kódov na papier (fixkami) a postupne prejsť k blokovému programovaniu v intuitívnom grafickom prostredí OzoBlockly, ktoré pripomína skladanie puzzle. Tento plynulý prechod zaručuje, že sa nikto nestratí a každý zažije pocit úspechu, keď sa mu podarí robota naprogramovať.</p>
+        <section class="container subpage-content reveal">
+            <h2 class="section-title">Zábava, ktorá vzdeláva</h2>
+            <p>Programovanie Ozobotov je navrhnuté tak, aby ho zvládol naozaj každý. Deti môžu začať kreslením farebných kódov na papier (fixkami) a postupne prejsť k blokovému programovaniu v intuitívnom grafickom prostredí OzoBlockly, ktoré pripomína skladanie puzzle. Tento plynulý prechod zaručuje, že sa nikto nestratí a každý zažije pocit úspechu.</p>
 
-           <div id="ozobot-gallery-slider" class="splide" aria-label="Galéria robotov Ozobot">
+            <div id="ozobot-gallery-slider" class="splide" aria-label="Galéria robotov Ozobot" style="margin-top: 3rem; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
                 <div class="splide__track">
                     <ul class="splide__list">
                         <li class="splide__slide"><img src="/ozobot_1.webp" alt="Detail robota Ozobot"></li>
                         <li class="splide__slide"><img src="/ozobot2.jpg" alt="Ukážka workshopu s technológiami"></li>
-                        </ul>
+                    </ul>
                 </div>
             </div>
+        </section>
 
-            <h2>Čo ponúkame?</h2>
+        <section class="container subpage-content reveal">
+            <h2 class="section-title">Čo ponúkame v rámci spolupráce?</h2>
             <p>Našim cieľom je pomôcť školám efektívne integrovať moderné technológie do výučby. Nejde nám len o predaj produktov, ale o poskytnutie komplexného riešenia.</p>
-            <ul>
-                <li><strong>Konzultácie pre školy:</strong> Pomôžeme vám vybrať najvhodnejšie roboty a príslušenstvo podľa vašich potrieb a rozpočtu.</li>
-                <li><strong>Workshopy a školenia:</strong> Organizujeme praktické workshopy pre učiteľov aj priamo pre žiakov, kde si všetko vyskúšajú v praxi.</li>
-                <li><strong>Zabezpečenie techniky:</strong> V prípade záujmu vieme zabezpečiť nákup a dodanie Ozobotov a potrebného vybavenia.</li>
-            </ul>
-
-            <div class="subpage-cta">
-                <h2>Obohaťte svoju výučbu o Ozoboty!</h2>
-                <p>Radi vám predstavíme možnosti a ukážeme, aký prínos môžu mať pre vašich žiakov.</p>
-                <a href="/#contact" class="btn btn-primary btn-large">Mám záujem o konzultáciu</a>
+            
+            <div class="services-grid" style="margin-top: 3rem;">
+                <div class="card">
+                    <h3>Konzultácie pre školy</h3>
+                    <p>Pomôžeme vám vybrať najvhodnejšie roboty a príslušenstvo podľa vašich potrieb a rozpočtu.</p>
+                </div>
+                <div class="card">
+                    <h3>Workshopy a školenia</h3>
+                    <p>Organizujeme praktické workshopy pre učiteľov aj priamo pre žiakov, kde si všetko vyskúšajú v praxi.</p>
+                </div>
+                <div class="card">
+                    <h3>Zabezpečenie techniky</h3>
+                    <p>V prípade záujmu vieme zabezpečiť nákup a dodanie Ozobotov a všetkého potrebného vybavenia.</p>
+                </div>
             </div>
+        </section>
+
+        <section id="contact-subpage" class="container reveal">
+            <h2 class="section-title">Obohaťte svoju výučbu o Ozoboty!</h2>
+            <p class="section-subtitle">Radi vám predstavíme možnosti a ukážeme, aký prínos môžu mať Ozoboty pre vašich žiakov.</p>
+            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
+                <div class="input-group">
+                    <label for="full-name">Vaše meno a názov školy</label>
+                    <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny, ZŠ Bidovce" required>
+                </div>
+                <div class="input-group">
+                    <label for="email-address">Váš email</label>
+                    <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@skola.sk" required>
+                </div>
+                <div class="input-group">
+                    <label for="message">Správa</label>
+                    <textarea id="message" name="message" placeholder="Napíšte nám, o čo máte záujem (konzultácia, workshop, nákup...)" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-large">Mám záujem o konzultáciu</button>
+            </form>
         </section>
     </main>
     
@@ -112,7 +146,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            <div class="footer-grid">
     <div class="footer-col">
          <a href="/" class="logo">
-             <div class="logo-icon">U</div>
+             <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
              <span>Unoneto</span>
          </a>
         <p>Váš rast, poháňaný výsledkami.</p>
@@ -132,7 +166,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="/#services">Čo robíme</a>
         <a href="/#case-study">Naše výsledky</a>
         <a href="/#about">Kto sme</a>
-        <a href="/#contact">Bezplatná analýza</a>
+        <a href="#contact-subpage">Napíšte nám</a>
     </div>
 
     <div class="footer-col">
@@ -174,5 +208,3 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 </html>
-
-
