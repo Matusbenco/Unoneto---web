@@ -1,7 +1,6 @@
 /* =================================================================
-   FINÁLNA KONSOLIDOVANÁ VERZIA STYLE.CSS (v. 8.0)
-   - Oprava prekrytia tlačidla v promo lište.
-   - Zmenšenie medzier v mobilnom menu.
+   FINÁLNA VERZIA STYLE.CSS (v. 5.0)
+   - Obsahuje VŠETKY úpravy vrátane pulzujúcich efektov
    ================================================================= */
 
 /* ===== GLOBALNE STYLY A PREMENNE ===== */
@@ -27,9 +26,10 @@ html {
     font-size: 16px;
 }
 
+/* ===== OPRAVA PRE MOBILNÉ ZOBRAZENIE A SCROLLOVANIE ===== */
 html, body {
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Toto je kľúčové pravidlo, ktoré zabráni scrollu do strán */
 }
 
 body {
@@ -46,7 +46,7 @@ body {
 }
 
 section {
-    padding: 7rem 0;
+    padding: 7rem 0; /* Zväčšené medzery medzi sekciami */
     text-align: center;
     position: relative;
     z-index: 2;
@@ -70,52 +70,53 @@ p {
     color: transparent;
 }
 
-/* ===== PROMO BANNER ===== */
-.promo-banner {
-    position: sticky;
+
+/* ===== BACKGROUND SHAPES & PARTICLES ===== */
+.background-shapes {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(to right, var(--cyan), var(--purple));
-    color: white;
-    padding: 0.75rem 1.5rem;
-    z-index: 1001;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.25rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
 }
-.promo-banner p {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-align: center;
-    /* OPRAVA: Odstránili sme white-space: nowrap; aby sa text mohol zalomiť */
+.shape { 
+    position: absolute; 
+    border-radius: 50%; 
+    filter: blur(100px); 
+    opacity: 0.15;
+    animation: pulse-opacity 8s ease-in-out infinite alternate;
 }
-.promo-banner .btn-small {
-    padding: 6px 14px;
-    font-size: 0.9rem;
-    background: white;
-    color: var(--slate-900);
-    border: none;
-    flex-shrink: 0; 
-}
-
-
-/* ===== BACKGROUND EFEKTY ===== */
-.background-shapes {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none;
-}
-.shape { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; animation: pulse-opacity 8s ease-in-out infinite alternate; }
 .shape1 { width: 350px; height: 350px; background-color: var(--cyan); top: -100px; right: -100px; }
 .shape2 { width: 350px; height: 350px; background-color: var(--purple); bottom: -100px; left: -100px; animation-delay: -2s; }
 .shape3 { width: 400px; height: 400px; background-color: #3b82f6; bottom: 25%; right: 25%; opacity: 0.1; animation-delay: -4s; }
-.particle-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; }
-.ping-particle { position: absolute; width: 6px; height: 6px; background-color: var(--cyan); border-radius: 50%; opacity: 0; box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan); animation-name: ping; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+.ping-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--cyan);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+    animation-name: ping;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
 
 
-/* ===== HEADER A NAVIGÁCIA ===== */
+/* ===== HEADER ===== */
 .main-header {
     position: sticky; top: 0; z-index: 10;
     background: rgba(15, 23, 42, 0.8);
@@ -130,14 +131,1007 @@ p {
 .nav-links a { text-decoration: none; color: var(--slate-300); transition: color 0.3s; }
 .nav-links a:hover { color: var(--cyan); }
 
-/* ===== DROPDOWN MENU (Desktop) ===== */
-.has-dropdown { position: relative; }
+
+/* ===== BUTTONS ===== */
+.btn { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+.btn-primary { background: linear-gradient(to right, var(--cyan), var(--purple)); color: var(--white); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 211, 238, 0.35); }
+.btn-secondary { background: transparent; color: var(--cyan); border: 1px solid rgba(34, 211, 238, 0.5); }
+.btn-secondary:hover { background: rgba(34, 211, 238, 0.1); }
+.btn-large { padding: 16px 32px; font-size: 1.1rem; }
+
+
+/* ===== HERO SECTION ===== */
+.hero { padding-top: 6rem; padding-bottom: 6rem; }
+.pill { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(to right, rgba(34,211,238,0.1), rgba(168,85,247,0.1)); border: 1px solid rgba(34,211,238,0.3); padding: 10px 20px; border-radius: 99px; color: var(--cyan); margin-bottom: 2rem; }
+.pill svg { width: 20px; height: 20px; }
+.hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; }
+.hero-description { font-size: 1.25rem; margin-bottom: 2.5rem; }
+.hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.pulse-text { animation: pulse-opacity 2.5s ease-in-out infinite; }
+
+
+/* ===== GENERAL SECTION STYLES ===== */
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem; /* Zväčšená medzera pod nadpisom */
+ margin-top: 2rem;     /* Pridali sme 2rem medzeru NAD nadpisom */
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--cyan), var(--purple));
+    border-radius: 2px;
+}
+.section-subtitle { font-size: 1.2rem; margin-bottom: 4rem; }
+
+
+/* ===== GRIDS (SERVICES, PROCESS, CASE STUDY) ===== */
+.services-grid, .process-grid, .case-study-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); border-color: rgba(34, 211, 238, 0.4); }
+.card h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+.red-text { color: #ef4444; } .blue-text { color: #3b82f6; } .green-text { color: #22c55e; }
+.process-step { text-align: center; }
+.step-number { width: 64px; height: 64px; background: linear-gradient(to bottom right, var(--cyan), var(--purple)); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.5rem auto; font-size: 2rem; font-weight: 700; color: var(--white); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25); }
+.process-step h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+
+
+/* ===== ABOUT & OSTATNÉ SECTIONS ===== */
+.about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
+.about-image img { width: 70%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+.about-text h3 { font-size: 1.75rem; }
+.about-text .founder-title { color: var(--cyan); font-weight: 500; margin-bottom: 1.5rem; display: block; }
+.about-text p { max-width: none; margin-bottom: 1rem; }
+.about-text strong { color: var(--cyan); font-weight: 700; }
+
+.ostatne-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+.ostatne-grid .card {
+    text-align: left;
+}
+.ostatne-grid .card p {
+    max-width: none;
+}
+
+
+/* ===== CONTACT FORM ===== */
+.contact-form { max-width: 700px; margin: 2rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; gap: 1.5rem; }
+.input-group { display: flex; flex-direction: column; text-align: left; }
+.input-group label { margin-bottom: 0.5rem; color: var(--slate-300); font-size: 0.9rem; font-weight: 500; }
+.contact-form input, .contact-form textarea { width: 100%; padding: 1rem; background: var(--slate-900); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 8px; color: var(--white); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.3s, box-shadow 0.3s; }
+.contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--slate-400); opacity: 0.8; }
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+.contact-form button { width: 100%; margin-top: 1rem; }
+
+
+/* ===== ŠTÝLY PRE PODSTRÁNKY (HUGO, OZOBOT) ===== */
+.subpage-hero { padding-top: 4rem; padding-bottom: 4rem; }
+.subpage-content { text-align: left; max-width: 800px; padding-bottom: 5rem; }
+.subpage-content h2 { font-size: 2.2rem; margin-top: 3rem; margin-bottom: 1.5rem; }
+.subpage-content p, .subpage-content li { font-size: 1.1rem; color: var(--slate-300); margin-bottom: 1rem; max-width: none; }
+.subpage-content ul { list-style-position: inside; padding-left: 1rem; }
+.subpage-content ul li::marker { color: var(--cyan); }
+.subpage-cta { text-align: center; margin-top: 4rem; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; }
+.subpage-cta h2 { margin-top: 0; }
+
+
+/* ===== FOOTER ===== */
+.main-footer { background: rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(34, 211, 238, 0.2); padding: 4rem 0; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left; }
+.footer-col h4 { font-size: 1.2rem; margin-bottom: 1.5rem; }
+.footer-col a, .footer-col p { color: var(--slate-400); text-decoration: none; display: block; margin-bottom: 0.75rem; }
+.footer-col a:hover { color: var(--cyan); }
+.copyright { border-top: 1px solid rgba(34, 211, 238, 0.1); margin-top: 3rem; padding-top: 3rem; text-align: center; }
+.copyright p { color: var(--slate-400); font-size: 0.9rem; }
+
+
+/* ===== DYNAMICKÉ EFEKTY A ANIMÁCIE ===== */
+/* Animácia pre zjavenie pri scrollovaní */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Skrytie/zobrazenie sekcie Ostatné */
+#ostatne { display: none; }
+#ostatne.active { display: block; animation: fadeIn 0.7s ease-in-out; }
+
+/* Definície animácií (Keyframes) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@keyframes ping {
+  0% { transform: scale(0.2); opacity: 0.8; }
+  80% { opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+
+/* =============================================
+   ŠTÝLY PRE BANNER SLIDER (SPLIDE.JS)
+   ============================================= */
+
+/* UPRAVENÝ KÓD PRE UŽŠÍ BANNER */
+#banner-slider {
+    max-width: 900px; /* ZMENENÉ - banner bude o cca 40% užší */
+    margin: 0 auto 4rem auto;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.splide__track {
+    max-height: 400px; /* TOTO JE NOVÉ - Nastavuje maximálnu výšku. Hodnotu môžete meniť. */
+}
+
+.splide__slide {
+    position: relative; /* Potrebné pre pozíciovanie nadpisu */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--slate-900);
+}
+
+/* UPRAVENÝ KÓD PRE OBRÁZOK */
+.splide__slide img {
+    width: 100%;
+    height: 400px;  /* Nastavíme rovnakú výšku ako má .splide__track */
+    display: block;
+    opacity: 0.6;
+    object-fit: cover; /* TOTO JE KĽÚČOVÁ VLASTNOSŤ */
+    object-position: center; /* Zabezpečí, že sa oreže zo stredu */
+}
+
+/* Štýl pre nadpis na banneri */
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    text-align: center;
+    color: var(--white);
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+}
+
+.slide-caption h2 {
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.slide-caption p {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    color: var(--slate-300);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+
+/* Vlastný dizajn pre šípky */
+.splide__arrow {
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(5px);
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.splide__arrow:hover {
+    opacity: 1;
+}
+
+.splide__arrow svg {
+    fill: var(--cyan);
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+/* Vlastný dizajn pre bodky (pagináciu) */
+.splide__pagination__page {
+    background: rgba(255, 255, 255, 0.3);
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    transition: background 0.3s;
+}
+
+.splide__pagination__page.is-active {
+    background: var(--cyan);
+    transform: scale(1.2);
+}
+
+/* ===== RESPONZIVITA (do 768px) ===== */
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.5rem; }
+    .hero-description { font-size: 1.1rem; }
+    .section-title { font-size: 2rem; }
+
+    .nav-links { display: none; }
+    .main-header nav .btn { display: none; }
+    
+    .about-grid { grid-template-columns: 1fr; text-align: center; }
+    .about-image { max-width: 300px; margin: 0 auto; }
+    .about-text { text-align: center; }
+    
+    .contact-form { padding: 1.5rem; }
+
+    .footer-grid { text-align: center; }
+    .footer-col .logo { justify-content: center; }
+}
+/* ===== ŠTÝLY PRE MOBILNÚ NAVIGÁCIU ===== */
+#hamburger-btn {
+    display: none; /* Skryté na desktope */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 20; /* Musí byť nad ostatnými prvkami */
+}
+
+.hamburger-bar {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--white);
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+}
+
+
+
+
+/* ===== RESPONZIVITA PRE MENU (do 768px) ===== */
+@media (max-width: 768px) {
+    #hamburger-btn {
+        display: flex; /* Zobrazené na mobile */
+    }
+
+    .nav-links {
+        display: flex; /* Zmeníme z `none` na `flex` */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        position: fixed;
+        top: 0;
+        right: -100%; /* Štandardne skryté mimo obrazovky */
+        width: 100%;
+        height: 100vh;
+        background: var(--slate-900);
+        transition: right 0.4s ease-in-out;
+        z-index: 15;
+    }
+
+    .nav-links.active {
+        right: 0; /* Po kliknutí sa vysunie do obrazovky */
+    }
+
+    .nav-links li {
+        text-align: center;
+    }
+
+    /* Skrytie tlačidla v menu, keď je v mobilnom zobrazení */
+    .nav-links .btn {
+        display: block !important; 
+    }
+}
+
+/* ===== ŠTÝLY PRE NOVÚ SECCIU BLOG ===== */
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    /* Pridáme align-items, aby sa položky v riadku natiahli na rovnakú výšku */
+    align-items: stretch;
+}
+
+.article-card {
+    background: rgba(30, 41, 59, 0.5); /* Pozadie z .card pre konzistenciu */
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 12px;
+    text-align: left;
+    display: flex; /* KĽÚČOVÁ VLASTNOSŤ: Zapne Flexbox pre kartu */
+    flex-direction: column; /* Uloží obsah karty pod seba (obrázok, text) */
+    overflow: hidden; /* Zabezpečí, že obsah nepretečie cez zaoblené rohy */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(34, 211, 238, 0.4);
+}
+
+.article-image {
+    width: 100%;
+    height: 200px; /* NASTAVÍME PEVNÚ VÝŠKU PRE VŠETKY OBRÁZKY */
+    object-fit: cover; /* Zabezpečí, že obrázok vyplní priestor bez deformácie */
+}
+
+.article-card-content {
+    padding: 1.5rem;
+    display: flex; /* Zapneme Flexbox aj tu, pre zarovnanie obsahu */
+    flex-direction: column;
+    flex-grow: 1; /* KĽÚČOVÁ VLASTNOSŤ: Táto časť sa natiahne a vyplní voľné miesto */
+}
+
+.article-meta {
+    font-size: 0.875rem;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+}
+
+.article-card-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.article-excerpt {
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* KĽÚČOVÁ VLASTNOSŤ: Posunie tlačidlo úplne na spodok karty */
+    color: var(--slate-400); /* Zjemníme farbu textu pre lepší kontrast */
+}
+
+.article-card .btn {
+    align-self: flex-start; /* Zarovná tlačidlo doľava */
+}
+
+/* ===== ŠTÝLY PRE STRÁNKU SAMOTNÉHO ČLÁNKU ===== */
+.article-page {
+    max-width: 800px;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.article-header h1 {
+    font-size: 2.8rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.featured-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.article-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.article-content h2 {
+    font-size: 1.8rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--cyan);
+    padding-bottom: 0.5rem;
+}
+
+.article-content h3 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-content ul {
+    list-style-position: inside;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.article-content blockquote {
+    border-left: 4px solid var(--purple);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--slate-300);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Pomer strán 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 2rem 0;
+    border-radius: 12px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 3rem;
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+.featured-image {
+    width: 100%;             /* Obrázok bude široký ako stĺpec s článkom */
+    height: auto;            /* Výška sa prispôsobí automaticky, aby sa nedeformoval pomer strán */
+    max-height: 400px;       /* Nastavíme maximálnu výšku, aby nebol obrázok príliš dominantný. Môžete zmeniť podľa potreby. */
+    object-fit: cover;       /* Zabezpečí, že obrázok pekne vyplní priestor bez deformácie, aj keby mal iný pomer strán. Časť obrázka môže orezať. */
+    border-radius: 8px;      /* (Voliteľné) Zjemní rohy obrázka, aby ladil s dizajnom. */
+    margin-bottom: 2rem;     /* (Voliteľné) Vytvorí medzeru medzi obrázkom a textom článku pod ním. */
+}
+
+/* ---- Špeciálna medzera pre konkrétny nadpis ---- */
+
+.extra-medzery {
+  margin-top: 2rem;      /* Extra veľká horná medzera, upravte podľa potreby */
+  margin-bottom: 2rem;   /* Väčšia spodná medzera, upravte podľa potreby */
+}
+
+/* ===== ŠTÝLY PRE OBRÁZOK V SEKCII (BANNER) ===== */
+.section-image-container {
+    margin-bottom: 4rem; /* Medzera pod obrázkom, nad nadpisom */
+    text-align: center;
+}
+
+.section-image-container img {
+    /* Toto je kľúčová časť pre responzívny banner: */
+    max-width: 300px;  /* Maximálna šírka obrázka na veľkých obrazovkách. Môžete zmeniť. */
+    width: 100%;       /* Na mobiloch a menších zariadeniach sa šírka prispôsobí na 100% rodiča. */
+    height: auto;      /* Výška sa prispôsobí automaticky, aby sa obrázok nedeformoval. */
+    
+    border-radius: 14px; /* Zaoblené rohy */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25); /* Tieň */
+}
+
+/* Pomocná trieda na zobrazenie celého obrázku bez orezania */
+.img-contain {
+    object-fit: contain;
+    height: auto;
+    background-color: transparent; /* ZMENENÉ: Priehľadné pozadie */
+}
+
+/* ===== ŠTÝLY PRE KONTAJNER S OBRÁZKOM (HUGO) ===== */
+.image-showcase-container {
+    background: rgba(30, 41, 59, 0.5); /* Rovnaké pozadie ako majú karty */
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 16px; /* Rovnaké zaoblenie ako CTA box */
+    padding: 1rem; /* Vnútorný okraj, aby mal obrázok okolo seba miesto */
+    margin-top: 2rem; /* Medzera od zoznamu vyššie */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.image-showcase-container img {
+    width: 100%; /* Obrázok sa roztiahne na plnú šírku kontajnera */
+    height: auto; /* Výška sa prispôsobí, aby sa zachoval pomer strán */
+    max-height: 500px; /* Maximálna výška obrázku, môžete upraviť */
+    display: block; /* Zabezpečí správne zobrazenie a medzery */
+    margin: 0 auto; /* Vycentruje obrázok, ak by bol užší */
+    object-fit: contain; /* Zobrazí sa celý obrázok bez orezania */
+}
+
+
+/* ===== ŠTÝLY PRE GALÉRIU NA PODSTRÁNKACH ===== */
+#hugo-gallery-slider, #ozobot-gallery-slider {
+    max-width: 900px;
+    margin: 3rem auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+/* Štýl pre rámček, v ktorom je obrázok */
+#gallery-slider .splide__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 500px; /* Zvýšime výšku pre široký obrázok */
+    background-color: rgba(15, 23, 42, 0.7); /* Tmavé pozadie pre prázdne miesto */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Štýl pre samotný obrázok */
+#gallery-slider .splide__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* KĽÚČOVÁ ZMENA: Zobrazí celý obrázok bez orezania */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#gallery-slider .splide__slide img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== LIGHTBOX (ZVÄČŠENIE OBRÁZKU) ===== */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lightbox.show { display: flex; }
+.lightbox img {
+    max-width: 90%;
+    max-height: 85%;
+    object-fit: contain; /* Zobrazí celý obrázok v lightboxe */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border-radius: 8px;
+}
+.lightbox .close-lightbox {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3rem;
+    line-height: 1;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.close-lightbox:hover { transform: scale(1.2); }
+/* ===== ŠTÝLY PRE NOVÚ SECCIU S FIXNÝM OBRÁZKOM ===== */
+
+.image-feature-section {
+    padding-top: 0; /* Zrušíme hornú medzeru, aby bola sekcia bližšie k nadpisu */
+    padding-bottom: 4rem; /* Upravíme spodnú medzeru podľa potreby */
+}
+
+.image-feature-section .image-container {
+    max-width: 400px; /* Môžete upraviť podľa potreby, napr. rovnaká šírka ako galéria */
+    margin: 0 auto; /* Vycentruje kontajner s obrázkom */
+    border-radius: 16px;
+    overflow: hidden; /* Zaistí, že obrázok nepretečie cez zaoblené rohy */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    line-height: 0; /* Odstráni prípadnú nechcenú medzeru pod obrázkom */
+}
+
+.image-feature-section .image-container img {
+    display: block;
+    width: 100%; /* Obrázok sa prispôsobí šírke kontajnera */
+    height: auto; /* Výška sa prispôsobí automaticky */
+}
+
+/* ===== ŠTÝLY PRE SECCIU S REFERENCIAMI ===== */
+
+.testimonial-section {
+    background-color: rgba(30, 41, 59, 0.3); /* Jemné odlíšenie pozadia */
+    border-top: 1px solid rgba(34, 211, 238, 0.1);
+    border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+.testimonial-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    padding: 2.5rem 3rem 3rem 3rem;
+    border-radius: 16px;
+    position: relative;
+    text-align: center;
+}
+
+.testimonial-quote-icon {
+    font-size: 8rem;
+    font-family: serif;
+    font-weight: 900;
+    color: var(--cyan);
+    opacity: 0.1;
+    position: absolute;
+    top: 0.5rem;
+    left: 2rem;
+    line-height: 1;
+    z-index: 1;
+}
+
+.testimonial-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--slate-300);
+    margin-bottom: 2rem;
+    position: relative; /* Aby bol text nad ikonou úvodzoviek */
+    z-index: 2;
+}
+
+.testimonial-author {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.testimonial-author strong {
+    display: block;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+}
+
+.testimonial-link {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: text-decoration 0.3s;
+}
+
+.testimonial-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   DOPLNKOVÉ OPRAVY (Promo Banner a Medzery)
+   ========================================================= */
+
+.promo-banner {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, var(--cyan), var(--purple));
+    color: white;
+    padding: 0.75rem 1.5rem; /* Zmenšený padding */
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.promo-banner.hidden {
+    transform: translateY(-100%);
+    visibility: hidden;
+}
+.promo-banner p {
+    margin: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    text-align: center;
+}
+.promo-banner .btn-small {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    background: white;
+    color: var(--slate-900);
+    border: none;
+    flex-shrink: 0; 
+}
+
+.close-promo-btn:hover { opacity: 1; }
+@media (max-width: 820px) {
+    .promo-banner {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    .promo-banner p { white-space: normal; }
+    .close-promo-btn { top: 0.5rem; right: 0.5rem; }
+}
+
+/* ===== OPRAVA 2: Zmenšenie medzier okolo obrázka na podstránke ===== */
+.subpage-hero {
+    padding-bottom: 2rem;
+}
+.image-feature-section {
+    padding-top: 0;
+    padding-bottom: 3rem;
+}
+.image-feature-section .image-container {
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    line-height: 0;
+}
+.image-feature-section .image-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+/* =========================================================
+   FINÁLNE OPRAVY PRE MOBILNÚ VERZIU
+   ========================================================= */
+
+/* Oprava pre nefunkčné tlačidlo "X" na promo lište */
+.close-promo-btn {
+    z-index: 1002; /* Zvýši vrstvu tlačidla, aby bolo klikateľné */
+}
+
+/* Pre istotu zaistíme, aby bol Tawk.to chat vždy navrchu */
+#tawk-chat-widget-container {
+    z-index: 1010 !important;
+}
+
+/* =========================================================
+   OPRAVA PRE ZOBRAZENIE TAWK.TO CHATU NA MOBILE
+   ========================================================= */
+
+
+/* Zaistí, aby bol Tawk.to chat vždy na najvyššej vrstve */
+#tawk-chat-widget-container {
+    z-index: 1010 !important;
+}
+/* ===================================================
+   NOVÉ VYLEPŠENÉ MOBILNÉ MENU A RESPONZIVITA
+   =================================================== */
+
+/* Základné štýly pre hamburger tlačidlo */
+#hamburger-btn {
+    display: none; /* Na desktope je skryté */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1005; /* Musí byť na najvyššej vrstve */
+    position: relative;
+}
+.hamburger-bar {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--white);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    transform-origin: center;
+}
+
+/* Animácia hamburgera na "X" pri otvorenom menu */
+#hamburger-btn.active .hamburger-bar:nth-child(1) {
+    transform: translateY(0.625rem) rotate(45deg);
+}
+#hamburger-btn.active .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+#hamburger-btn.active .hamburger-bar:nth-child(3) {
+    transform: translateY(-0.625rem) rotate(-45deg);
+}
+
+/* Všeobecné responzívne pravidlá a mobilné menu */
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.5rem; }
+    .main-header nav .btn-primary { display: none; }
+
+    /* Zobrazíme hamburger na mobiloch */
+    #hamburger-btn {
+        display: flex;
+    }
+
+    /* Štýly pre samotné menu */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem; /* Zväčšená medzera medzi položkami */
+        position: fixed;
+        top: 0;
+        left: -100%; /* Začína skryté vľavo */
+        width: 100%;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.98); /* Tmavé pozadie s jemnou priehľadnosťou */
+        backdrop-filter: blur(10px);
+        transition: left 0.4s ease-in-out;
+        z-index: 1004; /* Pod hamburgerom, ale nad obsahom */
+    }
+
+    .nav-links.active {
+        left: 0; /* Po kliknutí sa vysunie do obrazovky */
+    }
+
+    .nav-links li {
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInMenuItem 0.4s ease forwards;
+    }
+
+    /* Postupná animácia položiek v menu */
+    .nav-links.active li:nth-child(1) { animation-delay: 0.15s; }
+    .nav-links.active li:nth-child(2) { animation-delay: 0.25s; }
+    .nav-links.active li:nth-child(3) { animation-delay: 0.35s; }
+    .nav-links.active li:nth-child(4) { animation-delay: 0.45s; }
+    .nav-links.active li:nth-child(5) { animation-delay: 0.55s; }
+
+
+    @keyframes fadeInMenuItem {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .nav-links a {
+        font-size: 1.5rem; /* Zväčšené písmo pre lepšiu čitateľnosť */
+        font-weight: 500;
+        color: var(--slate-300);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: var(--cyan);
+    }
+    
+    /* Zvýraznenie tlačidla v menu */
+    .nav-links .btn {
+        display: inline-flex !important;
+        padding: 1rem 2.5rem;
+        font-size: 1.6rem;
+    }
+}
+
+/* ===== ŠTÝLY PRE IKONY SOCIÁLNYCH SIETÍ (Zmenšená verzia) ===== */
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Mierne zmenšená medzera medzi ikonami */
+    margin-top: 1rem;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;  /* ZMENŠENÉ */
+    height: 36px; /* ZMENŠENÉ */
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.social-icons a:hover {
+    background-color: var(--cyan);
+    transform: translateY(-3px);
+}
+
+.social-icons svg {
+    width: 18px;  /* ZMENŠENÉ */
+    height: 18px; /* ZMENŠENÉ */
+    fill: var(--slate-300); /* Farba ikony */
+}
+
+.social-icons a:hover svg {
+    fill: var(--slate-900); /* Farba ikony pri prejdení myšou */
+}
+
+/* Úprava pre mobilné zobrazenie pätičky */
+@media (max-width: 768px) {
+    .footer-grid {
+        text-align: center;
+    }
+    .footer-col .logo, .social-icons {
+        justify-content: center;
+    }
+/* ===== OPRAVA PRE VEĽKOSŤ OBRÁZKOV V GALÉRII ===== */
+.splide__slide img {
+    width: 100%; /* Zabezpečí, že obrázok vyplní celú šírku svojho kontajnera */
+    height: 220px; /* Pevná výška pre všetky obrázky, aby boli jednotné */
+    object-fit: cover; /* Dôležité pre to, aby obrázok vyplnil priestor bez deformácie (oreže sa, ak je to potrebné) */
+    border-radius: 10px;
+    display: block;
+}}
+/* =================================================================
+   FINÁLNA OPRAVA PRE VEXION PODSTRÁNKU
+   ================================================================= */
+
+/* Zmenšenie medzier pre textové a obrázkové sekcie */
+.presentation-section {
+    padding: 1rem 0; /* Malé odsadenie hore a dole */
+}
+
+.presentation-text-section {
+    padding: 2rem 0 1rem 0; /* O niečo väčšia medzera hore, menšia dole */
+}
+
+/* Odstránenie veľkých okrajov z nadpisov a odsekov */
+.presentation-text-section .section-title,
+.presentation-text-section .section-subtitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* FINÁLNA OPRAVA: Zaoblenie rohov pre VŠETKY obrázky v hlavnom obsahu */
+main.main-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px !important; /* !important zabezpečí, že sa pravidlo naozaj použije */
+    display: block;
+    margin: 0 auto;
+}
+
+/* =================================================================
+   FINÁLNA OPRAVA PRE VEXION PODSTRÁNKU
+   ================================================================= */
+
+/* Zmenšenie medzier pre textové a obrázkové sekcie */
+.presentation-section {
+    padding: 1rem 0;
+}
+
+.presentation-text-section {
+    padding: 2rem 0 1rem 0;
+}
+
+/* Odstránenie veľkých okrajov z nadpisov a odsekov */
+.presentation-text-section .section-title,
+.presentation-text-section .section-subtitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* FINÁLNA OPRAVA: Zaoblenie rohov pre VŠETKY obrázky v hlavnom obsahu */
+main.main-content img {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 15px !important;
+    display: block;
+    margin: 1rem auto !important; /* Aj tu pre istotu zmenšujeme medzeru */
+}
+
+/* ===== ŠTÝLY PRE ROZBAĽOVACIE MENU (DROPDOWN) ===== */
+
+.has-dropdown {
+    position: relative;
+}
+
 .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    display: none;
+    display: none; /* Skryté, kým sa naň neklikne */
     list-style: none;
     padding: 1rem 0;
     margin-top: 10px;
@@ -148,241 +1142,74 @@ p {
     z-index: 1000;
     min-width: 250px;
 }
-.dropdown-menu li { padding: 0 1rem; }
-.dropdown-menu a { display: block; padding: 0.5rem 1rem; white-space: nowrap; color: var(--slate-300); transition: background-color 0.3s; }
-.dropdown-menu a:hover { background-color: rgba(34, 211, 238, 0.1); color: var(--cyan); }
-.has-dropdown:hover .dropdown-menu { display: block; }
 
-/* ===== TLAČIDLÁ ===== */
-.btn { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
-.btn-primary { background: linear-gradient(to right, var(--cyan), var(--purple)); color: var(--white); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 211, 238, 0.35); }
-.btn-secondary { background: transparent; color: var(--cyan); border: 1px solid rgba(34, 211, 238, 0.5); }
-.btn-secondary:hover { background: rgba(34, 211, 238, 0.1); }
-.btn-large { padding: 16px 32px; font-size: 1.1rem; }
-
-
-/* ===== HERO SEKCIA ===== */
-.hero { padding-top: 6rem; padding-bottom: 6rem; }
-.pill { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(to right, rgba(34,211,238,0.1), rgba(168,85,247,0.1)); border: 1px solid rgba(34,211,238,0.3); padding: 10px 20px; border-radius: 99px; color: var(--cyan); margin-bottom: 2rem; }
-.pill svg { width: 20px; height: 20px; }
-.hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; }
-.hero-description { font-size: 1.25rem; margin-bottom: 2.5rem; }
-.hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-.pulse-text { animation: pulse-opacity 2.5s ease-in-out infinite; }
-
-
-/* ===== VŠEOBECNÉ ŠTÝLY PRE SEKCIE ===== */
-.section-title { font-size: 2.5rem; margin-bottom: 3rem; margin-top: 2rem; position: relative; display: inline-block; padding-bottom: 1rem; }
-.section-title::after { content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 2px; }
-.section-subtitle { font-size: 1.2rem; margin-bottom: 4rem; }
-
-
-/* ===== MRIEŽKY (Služby, Proces, Prípadová štúdia) ===== */
-.services-grid, .process-grid, .case-study-grid, .blog-grid, .ostatne-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); border-color: rgba(34, 211, 238, 0.4); }
-.card h3 { font-size: 1.25rem; margin-bottom: 1rem; }
-.red-text { color: #ef4444; } .blue-text { color: #3b82f6; } .green-text { color: #22c55e; }
-.process-step { text-align: center; }
-.step-number { width: 64px; height: 64px; background: linear-gradient(to bottom right, var(--cyan), var(--purple)); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.5rem auto; font-size: 2rem; font-weight: 700; color: var(--white); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25); }
-.process-step h3 { font-size: 1.25rem; margin-bottom: 1rem; }
-
-
-/* ===== O NÁS SEKCIA ===== */
-.about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
-.about-image img { width: 70%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-.about-text h3 { font-size: 1.75rem; }
-.about-text .founder-title { color: var(--cyan); font-weight: 500; margin-bottom: 1.5rem; display: block; }
-.about-text p { max-width: none; margin-bottom: 1rem; }
-.about-text strong { color: var(--cyan); font-weight: 700; }
-
-/* ===== REFERENCIE ===== */
-.testimonial-section { background-color: rgba(30, 41, 59, 0.3); border-top: 1px solid rgba(34, 211, 238, 0.1); border-bottom: 1px solid rgba(34, 211, 238, 0.1); }
-.testimonial-card { max-width: 800px; margin: 0 auto; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2.5rem 3rem 3rem 3rem; border-radius: 16px; position: relative; text-align: center; }
-.testimonial-quote-icon { font-size: 8rem; font-family: serif; font-weight: 900; color: var(--cyan); opacity: 0.1; position: absolute; top: 0.5rem; left: 2rem; line-height: 1; z-index: 1; }
-.testimonial-text { font-size: 1.2rem; font-style: italic; color: var(--slate-300); margin-bottom: 2rem; position: relative; z-index: 2; }
-.testimonial-author { font-size: 1rem; font-weight: 500; }
-.testimonial-author strong { display: block; color: var(--white); margin-bottom: 0.25rem; }
-.testimonial-link { color: var(--cyan); text-decoration: none; font-size: 0.9rem; transition: text-decoration 0.3s; }
-.testimonial-link:hover { text-decoration: underline; }
-
-/* ===== KONTAKTNÝ FORMULÁR ===== */
-.contact-form { max-width: 700px; margin: 2rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; gap: 1.5rem; }
-.input-group { display: flex; flex-direction: column; text-align: left; }
-.input-group label { margin-bottom: 0.5rem; color: var(--slate-300); font-size: 0.9rem; font-weight: 500; }
-.contact-form input, .contact-form textarea { width: 100%; padding: 1rem; background: var(--slate-900); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 8px; color: var(--white); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.3s, box-shadow 0.3s; }
-.contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--slate-400); opacity: 0.8; }
-.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
-.contact-form button { width: 100%; margin-top: 1rem; }
-
-
-/* ===== PÄTIČKA (FOOTER) ===== */
-.main-footer { background: rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(34, 211, 238, 0.2); padding: 4rem 0; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left; }
-.footer-col h4 { font-size: 1.2rem; margin-bottom: 1.5rem; }
-.footer-col a, .footer-col p { color: var(--slate-400); text-decoration: none; display: block; margin-bottom: 0.75rem; }
-.footer-col a:hover { color: var(--cyan); }
-.copyright { border-top: 1px solid rgba(34, 211, 238, 0.1); margin-top: 3rem; padding-top: 3rem; text-align: center; }
-.copyright p { color: var(--slate-400); font-size: 0.9rem; }
-.social-icons { display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; }
-.social-icons a { display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; background-color: rgba(255, 255, 255, 0.1); border-radius: 50%; transition: background-color 0.3s, transform 0.3s; }
-.social-icons a:hover { background-color: var(--cyan); transform: translateY(-3px); }
-.social-icons svg { width: 18px; height: 18px; fill: var(--slate-300); }
-.social-icons a:hover svg { fill: var(--slate-900); }
-
-
-/* ===== SLIDER (SPLIDE.JS) ===== */
-.splide__track { max-height: 400px; }
-.splide__slide { position: relative; display: flex; justify-content: center; align-items: center; background-color: var(--slate-900); }
-.splide__slide img { width: 100%; height: 400px; display: block; opacity: 0.6; object-fit: cover; object-position: center; }
-.slide-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; text-align: center; color: var(--white); background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent); }
-.slide-caption h2 { font-size: 2rem; margin: 0; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-.slide-caption p { font-size: 1.1rem; margin-top: 0.5rem; color: var(--slate-300); text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-.splide__arrow { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); width: 3rem; height: 3rem; opacity: 0.7; transition: opacity 0.3s; }
-.splide__arrow:hover { opacity: 1; }
-.splide__arrow svg { fill: var(--cyan); width: 1.2rem; height: 1.2rem; }
-.splide__pagination__page { background: rgba(255, 255, 255, 0.3); width: 10px; height: 10px; margin: 0 5px; transition: background 0.3s; }
-.splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
-#banner-slider { max-width: 900px; margin: 0 auto 4rem auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); overflow: hidden; }
-
-/* ===== ANIMÁCIE A EFEKTY ===== */
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse-opacity { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-@keyframes ping { 0% { transform: scale(0.2); opacity: 0.8; } 80% { opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-@keyframes fadeInMenuItem { to { opacity: 1; transform: translateY(0); } }
-
-
-/* ===== ŠPECIÁLNE PRAVIDLÁ PRE PODSTRÁNKY ===== */
-main.main-content img {
-    max-width: 100% !important;
-    height: auto !important;
-    border-radius: 15px !important;
-    display: block;
-    margin: 1rem auto !important;
+.dropdown-menu li {
+    padding: 0 1rem;
 }
 
-/* =================================================================
-   RESPONZÍVNE ŠTÝLY (Zariadenia do 768px)
-   ================================================================= */
+.dropdown-menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    color: var(--slate-300);
+    transition: background-color 0.3s;
+}
 
+.dropdown-menu a:hover {
+    background-color: rgba(34, 211, 238, 0.1);
+    color: var(--cyan);
+}
+
+/* Zobrazenie menu pri hover alebo active */
+.has-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Responzivita pre mobilné zobrazenie dropdown menu */
 @media (max-width: 768px) {
-    
-    /* ===== VŠEOBECNÉ ÚPRAVY ===== */
-    .hero-title { font-size: 2.5rem; }
-    .hero-description { font-size: 1.1rem; }
-    .section-title { font-size: 2rem; }
-    .promo-banner { flex-direction: column; padding: 1rem; gap: 0.75rem; }
-    .promo-banner p { white-space: normal; }
-    
-    /* ===== HLAVIČKA A MOBILNÉ MENU ===== */
-    .main-header nav .btn-primary { display: none; }
-
-    #hamburger-btn {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 2rem;
-        height: 2rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 1005;
-        position: relative;
-    }
-    .hamburger-bar {
-        width: 2rem;
-        height: 0.25rem;
-        background: var(--white);
-        border-radius: 10px;
-        transition: all 0.3s ease-in-out;
-        transform-origin: center;
-    }
-    #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(0.625rem) rotate(45deg); }
-    #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
-    #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-0.625rem) rotate(-45deg); }
-
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 8rem;
-        align-items: center;
-        gap: 1rem; /* ZMENA: Zmenšená medzera pre kompaktnejší vzhľad */
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100vh;
-        background: rgba(15, 23, 42, 0.98);
-        backdrop-filter: blur(10px);
-        transition: left 0.4s ease-in-out;
-        z-index: 1004;
-    }
-    .nav-links.active { left: 0; }
-    .nav-links li { text-align: center; opacity: 0; transform: translateY(20px); animation: fadeInMenuItem 0.4s ease forwards; }
-    .nav-links a { font-size: 1.5rem; font-weight: 500; color: var(--slate-300); text-decoration: none; padding: 0.5rem 1rem; transition: color 0.3s; }
-    .nav-links a:hover { color: var(--cyan); }
-    .nav-links .btn { display: inline-flex !important; padding: 1rem 2.5rem; font-size: 1.6rem; }
-
-    /* Animácia pre hlavné položky menu */
-    .nav-links.active li:nth-child(1) { animation-delay: 0.15s; }
-    .nav-links.active li:nth-child(2) { animation-delay: 0.25s; }
-    .nav-links.active li:nth-child(3) { animation-delay: 0.35s; }
-    
-    /* ===== MOBILNÉ DROPDOWN MENU ===== */
     .nav-links .has-dropdown .dropdown-menu {
         position: relative;
-        top: auto; left: auto; transform: none; display: none; width: 100%;
-        background: none; border: none; box-shadow: none; text-align: center; margin-top: 0;
+        top: auto;
+        left: auto;
+        transform: none;
+        display: none;
+        width: 100%;
+        background: none;
+        border: none;
+        box-shadow: none;
+        text-align: center;
+        margin-top: 0;
     }
+
     .nav-links.active .dropdown-menu {
         display: flex;
         flex-direction: column;
         gap: 0;
+        padding: 0;
+    }
+}
+/* =========================================================
+   FINÁLNA OPRAVA PRE MOBILNÉ DROPDOWN MENU
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .nav-links.active .dropdown-menu {
+        /* Pridá medzery a priestor okolo položiek */
         padding: 0.5rem 0;
         margin-top: 1rem;
         background: rgba(30, 41, 59, 0.7);
         border-radius: 8px;
         border-top: 1px solid rgba(34, 211, 238, 0.2);
     }
-    .nav-links.active .dropdown-menu li { padding: 0.25rem 0; }
-    .nav-links.active .dropdown-menu a {
-        white-space: normal;
-        line-height: 1.4;
-        padding: 0.5rem 1.5rem;
-        font-size: 1.1rem;
-    }
-    /* Animácia pre položky v dropdown menu */
+
     .nav-links.active .dropdown-menu li {
-        opacity: 0;
-        transform: translateY(15px);
-        animation: fadeInMenuItem 0.4s ease forwards;
+        padding: 0.25rem 0; /* Malé medzery medzi položkami */
     }
-    .nav-links.active .dropdown-menu li:nth-child(1) { animation-delay: 0.1s; }
-    .nav-links.active .dropdown-menu li:nth-child(2) { animation-delay: 0.15s; }
-    .nav-links.active .dropdown-menu li:nth-child(3) { animation-delay: 0.2s; }
-    .nav-links.active .dropdown-menu li:nth-child(4) { animation-delay: 0.25s; }
-    .nav-links.active .dropdown-menu li:nth-child(5) { animation-delay: 0.3s; }
-    .nav-links.active .dropdown-menu li:nth-child(6) { animation-delay: 0.35s; }
-    .nav-links.active .dropdown-menu li:nth-child(7) { animation-delay: 0.4s; }
-    .nav-links.active .dropdown-menu li:nth-child(8) { animation-delay: 0.45s; }
 
-    /* ===== OSTATNÉ SEKCIE ===== */
-    .about-grid { grid-template-columns: 1fr; text-align: center; }
-    .about-image { max-width: 300px; margin: 0 auto; }
-    .about-text { text-align: center; }
-    .contact-form { padding: 1.5rem; }
-    .footer-grid { text-align: center; }
-    .footer-col .logo, .social-icons { justify-content: center; }
-
-    /* Galéria v mobilnom zobrazení */
-    .splide__slide img {
-        height: 220px;
-        object-fit: cover;
-        border-radius: 10px;
+    .nav-links.active .dropdown-menu a {
+        white-space: normal; /* Umožní zalomenie textu do viacerých riadkov */
+        line-height: 1.4;    /* Zlepší čitateľnosť, ak je text v dvoch riadkoch */
+        padding: 0.5rem 1.5rem; /* Upraví odsadenie pre lepšie zobrazenie */
+        font-size: 1.1rem;   /* Mierne zmenší písmo, aby sa text lepšie vošiel */
     }
 }
