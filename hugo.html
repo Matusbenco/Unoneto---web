@@ -17,14 +17,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
 </head>
 <body>
 
 <div id="promo-banner" class="promo-banner">
     <p>
-        <strong>AKCIA:</strong> Prezenčná webstránka so SEO nastavením len za <strong>290€</strong>! Platí do konca augusta.
+        <strong>AKCIA:</strong> Prezenčná webstránka so SEO nastavením len za <strong>290€</strong>! Predlžená akcia do konca septembra 2025!
     </p>
-    <a href="/weby" class="btn btn-secondary btn-small">Zistiť viac</a>
+    <a href="/weby.html" class="btn btn-secondary btn-small">Zistiť viac</a>
 </div>
 
 
@@ -47,7 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
-                <div class="logo-icon">U</div>
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
                 <span>Unoneto</span>
             </a>
             <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
@@ -61,38 +62,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
         <ul class="dropdown-menu">
             <li><a href="weby.html">Prezentačné weby</a></li>
-            <li><a href="eshopy">E-shopy na mieru</a></li>
-            <li><a href="automatizacia">AI Automatizácia procesov</a></li>
-            <li><a href="vexion">Vernostný systém VEXION</a></li>
-            <li><a href="skolenia">Školenia</a></li>
-            <li><a href="marketing">Marketingové služby</a></li>
-            <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-            <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
+            <li><a href="eshopy.html">E-shopy na mieru</a></li>
+            <li><a href="automatizacia.html">AI Automatizácia procesov</a></li>
+            <li><a href="vexion.html">Vernostný systém VEXION</a></li>
+            <li><a href="skolenia.html">Školenia</a></li>
+            <li><a href="marketing.html">Marketingové služby</a></li>
+            <li><a href="hugo.html">Informačný systém HUGO pre samosprávy</a></li>
+            <li><a href="ozobot.html">Programovateľné roboty Ozobot</a></li>
         </ul>
     </li>
     <li><a href="blog.html">Blog</a></li>
-    <li><a href="#contact" class="btn btn-primary">Nezáväzná analýza</a></li>
+    <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Rezervovať konzultáciu</a></li>
 </ul>
-
-
-
         </nav>
     </header>
-    <main>
-        <section class="subpage-hero container">
+
+    <main class="main-content">
+        <section class="subpage-hero container reveal">
             <h1 class="hero-title">Informačný systém<br><span class="gradient-text">HUGO</span></h1>
             <p class="hero-description">Moderné, rýchle a cielené informovanie občanov pre mestá a obce 21. storočia.</p>
         </section>
-<section class="image-feature-section container">
-    <div class="image-container">
-        <img src="hugo.webp" alt="Hlavný vizuál informačného systému HUGO">
-    </div>
-</section>
-        <section class="container subpage-content">
-            <h2>Čo je HUGO a ako funguje?</h2>
-            <p>HUGO je revolučný informačný systém, ktorý nahrádza zastaraný obecný rozhlas. Namiesto nespoľahlivých a zle počuteľných ampliónov umožňuje samosprávam posielať dôležité oznamy priamo do mobilných telefónov občanov. Systém funguje na princípe mobilnej aplikácie, no dokáže doručiť správy aj formou SMS alebo emailu, čím zasiahne všetky vekové kategórie.</p>
+        
+        <section class="container subpage-content reveal">
+            <div class="two-column-layout">
+                <div class="column-image">
+                    <img src="hugo.webp" alt="Hlavný vizuál informačného systému HUGO">
+                </div>
+                <div class="column-text">
+                    <h2 style="text-align: left; margin: 0 0 1.5rem 0;">Čo je HUGO a ako funguje?</h2>
+                    <p style="margin: 0;">HUGO je revolučný informačný systém, ktorý nahrádza zastaraný obecný rozhlas. Namiesto nespoľahlivých a zle počuteľných ampliónov umožňuje samosprávam posielať dôležité oznamy priamo do mobilných telefónov občanov. Systém funguje na princípe mobilnej aplikácie, no dokáže doručiť správy aj formou SMS alebo emailu, čím zasiahne všetky vekové kategórie.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container subpage-content reveal">
+            <h2 class="section-title">Hlavné výhody systému HUGO</h2>
+            <p>Vďaka využitiu umelej inteligencie dokáže HUGO automaticky previesť písaný text na profesionálne znejúce hlasové hlásenie. Starosta alebo poverený pracovník tak môže v priebehu pár sekúnd vytvoriť a odoslať oznam z počítača alebo mobilu.</p>
             
-            <div id="gallery-slider" class="splide" aria-label="Galéria produktu HUGO">
+            <div class="features-grid" style="margin-top: 3rem;">
+                <div class="card feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Cielené informovanie</h3>
+                    <p>Možnosť posielať správy len vybraným uliciam alebo častiam obce.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Hlásenia online</h3>
+                    <p>Občania si môžu hlásenie vypočuť kedykoľvek na webovej stránke obce.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Hlasová syntéza</h3>
+                    <p>Nemusíte nič nahrávať. Hlásenie za vás prečíta umelá inteligencia.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Jednoduché používanie</h3>
+                    <p>Vytvorenie a naplánovanie nového hlásenia zvládnete do jednej minúty.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="container subpage-content reveal">
+             <h2 class="section-title">Galéria</h2>
+             <div id="gallery-slider" class="splide" aria-label="Galéria produktu HUGO" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
                 <div class="splide__track">
                     <ul class="splide__list">
                         <li class="splide__slide"><img src="hugo1.webp" alt="Ukážka informačného systému HUGO 1"></li>
@@ -104,22 +137,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </ul>
                 </div>
             </div>
+        </section>
 
-            <h2>Hlavné výhody</h2>
-            <p>Vďaka využitiu umelej inteligencie dokáže HUGO automaticky previesť písaný text na profesionálne znejúce hlasové hlásenie. Starosta alebo poverený pracovník tak môže v priebehu pár sekúnd vytvoriť a odoslať oznam z počítača alebo mobilu.</p>
-            <ul>
-                <li><strong>Efektívnejšie hlásenia:</strong> Hlásenia na zvolený dátum ačas, bez meškania.</li>
-                <li><strong>Cielené informovanie:</strong> Možnosť posielať správy len vybraným uliciam alebo častiam obce.</li>
-                <li><strong>Hlásenia online:</strong>Hlásenie si občania vypočujú kedykoľvek na Vašej webovej stránke</li>
-                <li><strong>Nemusíte ani rozprávať:</strong>Hlásenie si dáte prečítať umelou inteligenciou./li>
-                <li><strong>Jednoduché používanie:</strong>Všetko zvládnete nastaviť do 1 minúty./li>
-            </ul>
-
-            <div class="subpage-cta">
-                <h2>Máte záujem o modernizáciu vášho rozhlasu?</h2>
-                <p>Radi vám systém predstavíme a pripravíme ponuku na mieru pre vašu obec alebo mesto.</p>
-                <a href="index.html#contact" class="btn btn-primary btn-large">Dohodnúť si konzultáciu</a>
-            </div>
+        <section id="contact-subpage" class="container reveal">
+            <h2 class="section-title">Máte záujem o modernizáciu rozhlasu?</h2>
+            <p class="section-subtitle">Radi vám systém predstavíme a pripravíme ponuku na mieru pre vašu obec alebo mesto.</p>
+            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
+                <div class="input-group">
+                    <label for="full-name">Kontaktná osoba</label>
+                    <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
+                </div>
+                <div class="input-group">
+                    <label for="email-address">Váš email</label>
+                    <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@obec.sk" required>
+                </div>
+                <div class="input-group">
+                    <label for="message">Názov obce/mesta a vaša správa</label>
+                    <textarea id="message" name="message" placeholder="Napíšte nám názov vašej obce/mesta a prípadné doplňujúce otázky..." rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-large">Dohodnúť si konzultáciu</button>
+            </form>
         </section>
     </main>
     
@@ -128,7 +165,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            <div class="footer-grid">
     <div class="footer-col">
          <a href="/" class="logo">
-             <div class="logo-icon">U</div>
+             <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
              <span>Unoneto</span>
          </a>
         <p>Váš rast, poháňaný výsledkami.</p>
@@ -148,7 +185,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="/#services">Čo robíme</a>
         <a href="/#case-study">Naše výsledky</a>
         <a href="/#about">Kto sme</a>
-        <a href="/#contact">Bezplatná analýza</a>
+        <a href="#contact-subpage">Napíšte nám</a>
     </div>
 
     <div class="footer-col">
@@ -188,6 +225,4 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 </body>
-
 </html>
-
