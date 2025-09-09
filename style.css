@@ -566,3 +566,12 @@ main.main-content img {
         margin-bottom: 1rem;
     }
 }
+/* =================================================================
+   ŠTÝL PRE NOVÉ LOGO V HLAVIČKE A PÄTIČKE
+   ================================================================= */
+
+.logo-icon-img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
