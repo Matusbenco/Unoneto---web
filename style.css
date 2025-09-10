@@ -1,7 +1,7 @@
 /* =================================================================
-   FINÁLNA KONSOLIDOVANÁ VERZIA STYLE.CSS (v. 8.0)
-   - Oprava prekrytia tlačidla v promo lište.
-   - Zmenšenie medzier v mobilnom menu.
+   FINÁLNA KONSOLIDOVANÁ VERZIA STYLE.CSS (v. 11.0)
+   - Finálna verzia po strategickej úprave hlavnej stránky.
+   - Oprava medzery v sekcii "O nás".
    ================================================================= */
 
 /* ===== GLOBALNE STYLY A PREMENNE ===== */
@@ -46,7 +46,7 @@ body {
 }
 
 section {
-    padding: 7rem 0;
+    padding: 6rem 0;
     text-align: center;
     position: relative;
     z-index: 2;
@@ -91,7 +91,6 @@ p {
     font-size: 0.95rem;
     font-weight: 500;
     text-align: center;
-    /* OPRAVA: Odstránili sme white-space: nowrap; aby sa text mohol zalomiť */
 }
 .promo-banner .btn-small {
     padding: 6px 14px;
@@ -125,12 +124,10 @@ p {
 }
 .main-header nav { display: flex; justify-content: space-between; align-items: center; }
 .logo { display: flex; align-items: center; text-decoration: none; color: var(--white); font-size: 1.5rem; font-weight: 700; }
-.logo-icon { width: 32px; height: 32px; background: linear-gradient(to bottom right, var(--cyan), var(--purple)); border-radius: 8px; display: grid; place-items: center; margin-right: 10px; font-weight: 900; }
+.logo-icon-img { width: 32px; height: 32px; margin-right: 10px; }
 .nav-links { display: flex; align-items: center; list-style: none; gap: 2rem; }
 .nav-links a { text-decoration: none; color: var(--slate-300); transition: color 0.3s; }
 .nav-links a:hover { color: var(--cyan); }
-
-/* ===== DROPDOWN MENU (Desktop) ===== */
 .has-dropdown { position: relative; }
 .dropdown-menu {
     position: absolute;
@@ -172,40 +169,20 @@ p {
 .pulse-text { animation: pulse-opacity 2.5s ease-in-out infinite; }
 
 
-/* ===== VŠEOBECNÉ ŠTÝLY PRE SEKCIE ===== */
+/* ===== VŠEOBECNÉ ŠTÝLY PRE SEKCIE A KOMPONENTY ===== */
 .section-title { font-size: 2.5rem; margin-bottom: 3rem; margin-top: 2rem; position: relative; display: inline-block; padding-bottom: 1rem; }
 .section-title::after { content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 2px; }
-.section-subtitle { font-size: 1.2rem; margin-bottom: 4rem; }
-
-
-/* ===== MRIEŽKY (Služby, Proces, Prípadová štúdia) ===== */
-.services-grid, .process-grid, .case-study-grid, .blog-grid, .ostatne-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.section-subtitle { font-size: 1.2rem; margin-bottom: 4rem; max-width: 800px; }
+.services-grid, .process-grid, .case-study-grid, .blog-grid, .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px); transition: transform 0.3s, box-shadow 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; position: relative; z-index: 3; }
 .card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); border-color: rgba(34, 211, 238, 0.4); }
 .card h3 { font-size: 1.25rem; margin-bottom: 1rem; }
-.red-text { color: #ef4444; } .blue-text { color: #3b82f6; } .green-text { color: #22c55e; }
-.process-step { text-align: center; }
+.card img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem; margin-bottom: 1.5rem; }
+.process-grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.process-step { text-align: center; position: relative; z-index: 3; }
 .step-number { width: 64px; height: 64px; background: linear-gradient(to bottom right, var(--cyan), var(--purple)); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.5rem auto; font-size: 2rem; font-weight: 700; color: var(--white); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25); }
 .process-step h3 { font-size: 1.25rem; margin-bottom: 1rem; }
 
-
-/* ===== O NÁS SEKCIA ===== */
-.about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
-.about-image img { width: 70%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-.about-text h3 { font-size: 1.75rem; }
-.about-text .founder-title { color: var(--cyan); font-weight: 500; margin-bottom: 1.5rem; display: block; }
-.about-text p { max-width: none; margin-bottom: 1rem; }
-.about-text strong { color: var(--cyan); font-weight: 700; }
-
-/* ===== REFERENCIE ===== */
-.testimonial-section { background-color: rgba(30, 41, 59, 0.3); border-top: 1px solid rgba(34, 211, 238, 0.1); border-bottom: 1px solid rgba(34, 211, 238, 0.1); }
-.testimonial-card { max-width: 800px; margin: 0 auto; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); padding: 2.5rem 3rem 3rem 3rem; border-radius: 16px; position: relative; text-align: center; }
-.testimonial-quote-icon { font-size: 8rem; font-family: serif; font-weight: 900; color: var(--cyan); opacity: 0.1; position: absolute; top: 0.5rem; left: 2rem; line-height: 1; z-index: 1; }
-.testimonial-text { font-size: 1.2rem; font-style: italic; color: var(--slate-300); margin-bottom: 2rem; position: relative; z-index: 2; }
-.testimonial-author { font-size: 1rem; font-weight: 500; }
-.testimonial-author strong { display: block; color: var(--white); margin-bottom: 0.25rem; }
-.testimonial-link { color: var(--cyan); text-decoration: none; font-size: 0.9rem; transition: text-decoration 0.3s; }
-.testimonial-link:hover { text-decoration: underline; }
 
 /* ===== KONTAKTNÝ FORMULÁR ===== */
 .contact-form { max-width: 700px; margin: 2rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; gap: 1.5rem; }
@@ -233,6 +210,7 @@ p {
 
 
 /* ===== SLIDER (SPLIDE.JS) ===== */
+#banner-slider { max-width: 900px; margin: 0 auto 4rem auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); overflow: hidden; }
 .splide__track { max-height: 400px; }
 .splide__slide { position: relative; display: flex; justify-content: center; align-items: center; background-color: var(--slate-900); }
 .splide__slide img { width: 100%; height: 400px; display: block; opacity: 0.6; object-fit: cover; object-position: center; }
@@ -244,9 +222,9 @@ p {
 .splide__arrow svg { fill: var(--cyan); width: 1.2rem; height: 1.2rem; }
 .splide__pagination__page { background: rgba(255, 255, 255, 0.3); width: 10px; height: 10px; margin: 0 5px; transition: background 0.3s; }
 .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
-#banner-slider { max-width: 900px; margin: 0 auto 4rem auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); overflow: hidden; }
 
-/* ===== ANIMÁCIE A EFEKTY ===== */
+
+/* ===== ANIMÁCIE ===== */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -255,113 +233,71 @@ p {
 @keyframes fadeInMenuItem { to { opacity: 1; transform: translateY(0); } }
 
 
-/* ===== ŠPECIÁLNE PRAVIDLÁ PRE PODSTRÁNKY ===== */
-main.main-content img {
-    max-width: 100% !important;
-    height: auto !important;
-    border-radius: 15px !important;
-    display: block;
-    margin: 1rem auto !important;
-}
+/* =================================================================
+   ŠTÝLY PRE PODSTRÁNKY (ZJEDNOTENÝ BLOK)
+   ================================================================= */
+
+/* --- Všeobecné štýly --- */
+.main-content { background-color: var(--slate-900); }
+.subpage-hero { padding-top: 5rem; padding-bottom: 5rem; border-bottom: 1px solid rgba(34, 211, 238, 0.1); }
+.subpage-content { padding-top: 5rem; padding-bottom: 5rem; text-align: left; }
+.subpage-content h2 { text-align: center; margin-bottom: 2rem; }
+.subpage-content p { max-width: 800px; margin-left: auto; margin-right: auto; margin-bottom: 2rem; }
+.subpage-cta { margin-top: 5rem; padding: 3rem; text-align: center; background: linear-gradient(to right, rgba(34,211,238,0.05), rgba(168,85,247,0.05)); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; }
+.subpage-cta h2 { font-size: 2rem; }
+.subpage-cta p { margin-bottom: 2rem; }
+.feature-card { text-align: center; }
+.feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; text-align: left; }
+.about-text h3 { font-size: 1.75rem; margin-bottom: 1.5rem; }
+.about-image img { width: 70%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+.offer-box { padding: 3rem 2.5rem; border: 2px solid var(--cyan); background: rgba(30, 41, 59, 0.9); border-radius: 16px; margin-top: 2rem; text-align: center; }
+.offer-box h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+.offer-price { margin-bottom: 1.5rem; }
+.original-price { text-decoration: line-through; opacity: 0.6; font-size: 1.5rem; }
+.current-price { display: block; font-size: 2.25rem; margin-top: 0.5rem; }
+.offer-list { text-align: left; max-width: 800px; margin: 2rem auto 0 auto; display: flex; flex-direction: column; gap: 1rem; list-style: none; padding-left: 0; }
+.offer-list li { font-size: 1.1rem; color: white; padding-left: 2rem; position: relative; }
+.offer-list li::before { content: '✓'; color: var(--cyan); position: absolute; left: 0; top: 0; font-weight: 700; }
+.subpage-content .testimonial-section { padding: 0; background: none; border: none; margin-top: 5rem; }
+.subpage-content .testimonial-section .section-title { margin-top: 0; font-size: 2rem; }
+.two-column-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin: 4rem 0; }
+.two-column-layout--reversed .column-text { order: 2; }
+.column-image img { width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.steps-container { display: flex; flex-direction: column; gap: 4rem; }
+.step { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.step-image { width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.step-content { position: relative; padding-left: 4rem; }
+.step-number { position: absolute; left: 0; top: 0; font-size: 2.5rem; font-weight: 900; color: var(--cyan); opacity: 0.2; line-height: 1; }
+.step-content h3 { font-size: 1.75rem; margin-bottom: 1rem; }
+
 
 /* =================================================================
    RESPONZÍVNE ŠTÝLY (Zariadenia do 768px)
    ================================================================= */
-
 @media (max-width: 768px) {
-    
-    /* ===== VŠEOBECNÉ ÚPRAVY ===== */
     .hero-title { font-size: 2.5rem; }
     .hero-description { font-size: 1.1rem; }
     .section-title { font-size: 2rem; }
     .promo-banner { flex-direction: column; padding: 1rem; gap: 0.75rem; }
-    .promo-banner p { white-space: normal; }
-    
-    /* ===== HLAVIČKA A MOBILNÉ MENU ===== */
-    .main-header nav .btn-primary { display: none; }
-
-    #hamburger-btn {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 2rem;
-        height: 2rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 1005;
-        position: relative;
-    }
-    .hamburger-bar {
-        width: 2rem;
-        height: 0.25rem;
-        background: var(--white);
-        border-radius: 10px;
-        transition: all 0.3s ease-in-out;
-        transform-origin: center;
-    }
+    #hamburger-btn { display: flex; flex-direction: column; justify-content: space-around; width: 2rem; height: 2rem; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1005; position: relative; }
+    .hamburger-bar { width: 2rem; height: 0.25rem; background: var(--white); border-radius: 10px; transition: all 0.3s ease-in-out; transform-origin: center; }
     #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(0.625rem) rotate(45deg); }
     #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
     #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-0.625rem) rotate(-45deg); }
-
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 8rem;
-        align-items: center;
-        gap: 1rem; /* ZMENA: Zmenšená medzera pre kompaktnejší vzhľad */
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100vh;
-        background: rgba(15, 23, 42, 0.98);
-        backdrop-filter: blur(10px);
-        transition: left 0.4s ease-in-out;
-        z-index: 1004;
-    }
+    .nav-links { display: flex; flex-direction: column; justify-content: flex-start; padding-top: 8rem; align-items: center; gap: 1rem; position: fixed; top: 0; left: -100%; width: 100%; height: 100vh; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(10px); transition: left 0.4s ease-in-out; z-index: 1004; }
     .nav-links.active { left: 0; }
     .nav-links li { text-align: center; opacity: 0; transform: translateY(20px); animation: fadeInMenuItem 0.4s ease forwards; }
-    .nav-links a { font-size: 1.5rem; font-weight: 500; color: var(--slate-300); text-decoration: none; padding: 0.5rem 1rem; transition: color 0.3s; }
-    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a { font-size: 1.5rem; font-weight: 500; }
     .nav-links .btn { display: inline-flex !important; padding: 1rem 2.5rem; font-size: 1.6rem; }
-
-    /* Animácia pre hlavné položky menu */
     .nav-links.active li:nth-child(1) { animation-delay: 0.15s; }
     .nav-links.active li:nth-child(2) { animation-delay: 0.25s; }
     .nav-links.active li:nth-child(3) { animation-delay: 0.35s; }
-    
-    /* ===== MOBILNÉ DROPDOWN MENU ===== */
-    .nav-links .has-dropdown .dropdown-menu {
-        position: relative;
-        top: auto; left: auto; transform: none; display: none; width: 100%;
-        background: none; border: none; box-shadow: none; text-align: center; margin-top: 0;
-    }
-    .nav-links.active .dropdown-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        padding: 0.5rem 0;
-        margin-top: 1rem;
-        background: rgba(30, 41, 59, 0.7);
-        border-radius: 8px;
-        border-top: 1px solid rgba(34, 211, 238, 0.2);
-    }
+    .nav-links .has-dropdown .dropdown-menu { position: relative; top: auto; left: auto; transform: none; display: none; width: 100%; background: none; border: none; box-shadow: none; text-align: center; margin-top: 0; }
+    .nav-links.active .dropdown-menu { display: flex; flex-direction: column; gap: 0; padding: 0.5rem 0; margin-top: 1rem; background: rgba(30, 41, 59, 0.7); border-radius: 8px; border-top: 1px solid rgba(34, 211, 238, 0.2); }
     .nav-links.active .dropdown-menu li { padding: 0.25rem 0; }
-    .nav-links.active .dropdown-menu a {
-        white-space: normal;
-        line-height: 1.4;
-        padding: 0.5rem 1.5rem;
-        font-size: 1.1rem;
-    }
-    /* Animácia pre položky v dropdown menu */
-    .nav-links.active .dropdown-menu li {
-        opacity: 0;
-        transform: translateY(15px);
-        animation: fadeInMenuItem 0.4s ease forwards;
-    }
+    .nav-links.active .dropdown-menu a { white-space: normal; line-height: 1.4; padding: 0.5rem 1.5rem; font-size: 1.1rem; }
+    .nav-links.active .dropdown-menu li { opacity: 0; transform: translateY(15px); animation: fadeInMenuItem 0.4s ease forwards; }
     .nav-links.active .dropdown-menu li:nth-child(1) { animation-delay: 0.1s; }
     .nav-links.active .dropdown-menu li:nth-child(2) { animation-delay: 0.15s; }
     .nav-links.active .dropdown-menu li:nth-child(3) { animation-delay: 0.2s; }
@@ -370,208 +306,19 @@ main.main-content img {
     .nav-links.active .dropdown-menu li:nth-child(6) { animation-delay: 0.35s; }
     .nav-links.active .dropdown-menu li:nth-child(7) { animation-delay: 0.4s; }
     .nav-links.active .dropdown-menu li:nth-child(8) { animation-delay: 0.45s; }
-
-    /* ===== OSTATNÉ SEKCIE ===== */
+    .footer-grid { text-align: center; }
+    .footer-col .logo, .social-icons { justify-content: center; }
+    .splide__slide img { height: 220px; object-fit: cover; border-radius: 10px; }
     .about-grid { grid-template-columns: 1fr; text-align: center; }
     .about-image { max-width: 300px; margin: 0 auto; }
     .about-text { text-align: center; }
     .contact-form { padding: 1.5rem; }
-    .footer-grid { text-align: center; }
-    .footer-col .logo, .social-icons { justify-content: center; }
-
-    /* Galéria v mobilnom zobrazení */
-    .splide__slide img {
-        height: 220px;
-        object-fit: cover;
-        border-radius: 10px;
-    }}
-
-/* =================================================================
-   ŠTÝLY PRE PODSTRÁNKU "PREZENTAČNÉ WEBY"
-   ================================================================= */
-
-/* Hlavný box s akciovou ponukou */
-.offer-box {
-    padding: 3rem 2.5rem;
-    border: 2px solid var(--cyan);
-    background: rgba(30, 41, 59, 0.9);
-    border-radius: 16px;
-    margin-top: 2rem;
-    text-align: center;
-}
-
-.offer-box h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-/* Štýly pre zobrazenie ceny */
-.offer-price {
-    margin-bottom: 1.5rem;
-}
-
-.original-price {
-    text-decoration: line-through;
-    opacity: 0.6;
-    font-size: 1.5rem;
-}
-
-.current-price {
-    display: block;
-    font-size: 2.25rem;
-    margin-top: 0.5rem;
-}
-
-.offer-box > p {
-    max-width: 600px;
-    margin: 1.5rem auto;
-}
-
-/* Zoznam výhod v ponuke (nahrádza pôvodné <p> tagy) */
-.offer-list {
-    text-align: left;
-    max-width: 500px;
-    margin: 2rem auto 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    list-style: none; /* Odstráni pôvodné odrážky */
-    padding-left: 0;
-}
-
-.offer-list li {
-    font-size: 1.1rem;
-    color: white;
-    padding-left: 2rem; /* Priestor pre našu "fajku" */
-    position: relative;
-}
-
-/* Pridanie "fajky" pred každú položku zoznamu */
-.offer-list li::before {
-    content: '✓';
-    color: var(--cyan);
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-weight: 700;
-}
-
-/* Úprava vnorených testimonialov na podstránkach */
-.subpage-content .testimonial-section {
-    padding: 0;
-    background: none;
-    border: none;
-    margin-top: 5rem;
-}
-.subpage-content .testimonial-section .section-title {
-    margin-top: 0;
-    font-size: 2rem;
-}
-/* =================================================================
-   FINÁLNE ŠTÝLY PRE PODSTRÁNKU "VEXION"
-   ================================================================= */
-
-/* --- Layout pre sekcie s obrázkom a textom --- */
-.two-column-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
-    margin: 4rem 0;
-}
-
-.two-column-layout--reversed .column-text {
-    order: 2;
-}
-
-.column-image img {
-    width: 100%;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-/* --- Sekcia "Ako to funguje" v krokoch --- */
-.steps-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-}
-
-.step {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
-}
-
-.step-image {
-    width: 100%;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.step-content {
-    position: relative;
-    padding-left: 4rem;
-}
-
-.step-number {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--cyan);
-    opacity: 0.2;
-    line-height: 1;
-}
-
-.step-content h3 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-}
-
-/* --- Obrázky v kartách (napr. typy kariet) --- */
-.card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-
-/* --- Responzivita pre Vexion prvky --- */
-@media (max-width: 768px) {
-    .two-column-layout {
-        grid-template-columns: 1fr;
-    }
-    .two-column-layout--reversed .column-text {
-        order: initial;
-    }
-    .column-image {
-        order: -1;
-    }
-
-    .step {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    .step-content {
-        padding-left: 0;
-        text-align: center;
-    }
-    .step-number {
-        position: relative;
-        margin-bottom: 1rem;
-    }
-}
-/* =================================================================
-   ŠTÝL PRE NOVÉ LOGO V HLAVIČKE A PÄTIČKE
-   ================================================================= */
-
-.logo-icon-img {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
+    .process-grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    @media (min-width: 1024px) { .process-grid-4 { grid-template-columns: repeat(4, 1fr); } }
+    .two-column-layout { grid-template-columns: 1fr; }
+    .two-column-layout--reversed .column-text { order: initial; }
+    .column-image { order: -1; }
+    .step { grid-template-columns: 1fr; gap: 2rem; }
+    .step-content { padding-left: 0; text-align: center; }
+    .step-number { position: relative; margin-bottom: 1rem; }
 }
