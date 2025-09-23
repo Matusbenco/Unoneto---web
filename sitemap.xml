@@ -3,19 +3,11 @@
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
+             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://unoneto.eu/</loc>
   <lastmod>2025-09-22T17:06:15+00:00</lastmod>
   <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/weby.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/weby</loc>
@@ -63,60 +55,19 @@
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://unoneto.eu/vexion.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/blog.html</loc>
+  <loc>https://unoneto.eu/clanok-clenske-karty</loc>
   <lastmod>2025-09-22T17:06:15+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
-  <loc>https://unoneto.eu/eshopy.html</loc>
+  <loc>https://unoneto.eu/AI_agenti_v_2025</loc>
   <lastmod>2025-09-22T17:06:15+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
-  <loc>https://unoneto.eu/automatizacia.html</loc>
+  <loc>https://unoneto.eu/tipy_na_ai_nastroje</loc>
   <lastmod>2025-09-22T17:06:15+00:00</lastmod>
   <priority>0.64</priority>
 </url>
-<url>
-  <loc>https://unoneto.eu/skolenia.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/marketing.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/hugo.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/ozobot.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/clanok-clenske-karty.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/AI_agenti_v_2025.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/tipy_na_ai_nastroje.html</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-
 
 </urlset>
