@@ -606,3 +606,154 @@ p {
     padding: 0 1rem 1.5rem 1rem;
     color: var(--slate-300);
 }
+
+/* =================================================================
+   Štýly pre obrázok na stránke velky-tyzden.html (vycentrovaný v kontajneri)
+   ================================================================= */
+.image-section-container {
+    margin-top: 3rem;   /* Odsadenie od hornej sekcie */
+    margin-bottom: 3rem; /* Odsadenie od dolnej sekcie */
+    text-align: center; /* Zabezpečí centrovanie obrázka */
+}
+
+.centered-content-image {
+    max-width: 100%; /* Obrázok nepresiahne šírku kontajnera */
+    height: auto;    /* Zachová proporcie a nebude orezaný */
+    display: block;  /* Odstráni medzeru pod obrázkom */
+    margin: 0 auto;  /* Explicitne vycentruje obrázok vo vnútri image-section-container */
+    border-radius: 8px; /* Jemné zaoblenie rohov, pre vizuálny súlad */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Jemný tieň */
+}
+
+/* Responzívne úpravy pre obrázok */
+@media (max-width: 768px) {
+    .image-section-container {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+/* =================================================================
+   Styling pre bočný banner (Desktop verzia)
+   ================================================================= */
+.side-banner {
+    position: fixed; /* Fixná pozícia na obrazovke */
+    top: 50%; /* Vertikálne centrovanie */
+    right: 0; /* Prilepí ho k pravému okraju */
+    transform: translateY(-50%) translateX(0); /* Jemné posunutie pre presné centrovanie */
+    width: 200px; /* Šírka bannera */
+    background-color: #fff; /* Farba pozadia */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Jemný tieň */
+    border-radius: 8px 0 0 8px; /* Zaoblené rohy naľavo, ostré napravo */
+    overflow: hidden; /* Skryje prebytočný obsah, napr. presahujúci obrázok */
+    z-index: 1000; /* Zabezpečí, že bude nad ostatným obsahom */
+    transition: transform 0.3s ease-in-out; /* Animácia pre zobrazenie/skrytie */
+    display: flex; /* Flexbox pre usporiadanie obsahu */
+    flex-direction: column; /* Usporiadanie vertikálne */
+    align-items: center; /* Centrovanie obsahu horizontálne */
+    padding: 10px; /* Vnútorné odsadenie */
+}
+
+/* Skrytie bannera na začiatku, alebo ak je zatvorený */
+.side-banner.hidden {
+    transform: translateY(-50%) translateX(100%); /* Posunie ho mimo obrazovku doprava */
+}
+
+/* Obsah odkazu */
+.side-banner .banner-link-content {
+    text-decoration: none; /* Odstránenie podčiarknutia z odkazu */
+    color: inherit; /* Zdedí farbu textu */
+    display: flex; /* Flexbox pre obrázok a text */
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; /* Medzera medzi obrázkom a textom */
+    flex-grow: 1; /* Daj priestor odkazu (užitočné pre mobil) */
+}
+
+.side-banner img {
+    max-width: 100%; /* Obrázok sa prispôsobí šírke bannera */
+    height: auto;
+    display: block; /* Odstráni medzeru pod obrázkom */
+    border-radius: 4px; /* Jemné zaoblenie rohov obrázku */
+}
+
+.side-banner .banner-text {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 1.3;
+    color: #333; /* Tmavšia farba textu */
+    margin-top: 5px; /* Odsadenie textu od obrázku */
+}
+
+.side-banner .banner-text span {
+    display: block; /* Každý span na novom riadku */
+}
+
+/* Tlačidlo na zatvorenie */
+.side-banner .close-banner {
+    position: absolute; /* Pre desktop */
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #888;
+    line-height: 1; /* Zabezpečí správnu výšku tlačidla */
+    padding: 0; /* Odstráni vnútorné odsadenie */
+}
+
+.side-banner .close-banner:hover {
+    color: #333;
+}
+
+/* =================================================================
+   Responzívne úpravy pre bočný banner (pre menšie obrazovky / mobily)
+   Banner sa presunie na spodok, roztiahne sa na šírku
+   ================================================================= */
+@media (max-width: 768px) {
+    .side-banner {
+        width: 100%; /* Roztiahne sa na celú šírku obrazovky */
+        right: 0; /* Prilepí ho k pravému okraju */
+        top: auto; /* Zruší vertikálne centrovanie */
+        bottom: 0; /* Prilepí ho k spodnému okraju */
+        transform: translateY(0) translateX(0); /* Zruší všetky transformácie pre zobrazenie */
+        border-radius: 8px 8px 0 0; /* Zaoblené rohy hore, ostré dole */
+        padding: 10px;
+        flex-direction: row; /* Obsah (odkaz s obrázkom/textom a tlačidlo) bude vedľa seba */
+        justify-content: space-between; /* Rozmiestnenie obsahu */
+        align-items: center; /* Vertikálne centrovanie obsahu */
+        gap: 10px; /* Medzera medzi prvkami */
+    }
+
+    .side-banner.hidden {
+        transform: translateY(100%); /* Posunie ho úplne dole, mimo obrazovky */
+    }
+
+    .side-banner .banner-link-content {
+        flex-direction: row; /* Prepojený obsah odkazu bude vedľa seba */
+        text-align: left; /* Text bude zarovnaný doľava */
+        gap: 10px; /* Medzera medzi obrázkom a textom v odkaze */
+    }
+
+    .side-banner img {
+        max-width: 60px; /* Menší obrázok na mobiloch */
+        height: auto;
+    }
+
+    .side-banner .banner-text {
+        flex-grow: 1; /* Text zaberie zvyšné miesto */
+        text-align: left; /* Text zarovnaný doľava */
+        font-size: 1em;
+        margin-top: 0; /* Odstránime horné odsadenie, ktoré bolo pre desktop */
+    }
+
+    .side-banner .close-banner {
+        position: static; /* Umiestni tlačidlo v rámci flexboxu */
+        font-size: 1.5em;
+        margin-left: 10px; /* Odsadenie od textu */
+        padding: 5px; /* Pridaj padding pre lepšiu klikateľnosť */
+        border-radius: 4px;
+        background-color: rgba(0,0,0,0.05); /* Jemné pozadie */
+    }
+}

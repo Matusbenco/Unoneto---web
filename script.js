@@ -125,5 +125,22 @@ if (document.getElementById('ozobot-gallery-slider')) {
         arrows: false      // Skryje šípky, keďže je obrázok len jeden
     }).mount();
 }
+
+// --- Logika pre bočný banner "Veľký týždeň malých firiem" ---
+    const banner = document.getElementById('velky-tyzden-banner');
+    const closeButton = banner ? banner.querySelector('.close-banner') : null;
+
+    if (banner && closeButton) {
+        // Zobraz banner vždy po načítaní stránky
+        banner.classList.remove('hidden'); // Odstráň triedu 'hidden' hneď po načítaní
+
+        // Pridaj event listener na tlačidlo zatvorenia
+        closeButton.addEventListener('click', () => {
+            banner.classList.add('hidden'); // Pridaj triedu pre skrytie
+            // *** ODSTRÁNENÝ RIADOK: localStorage.setItem('velkyTyzdenBannerClosed', 'true'); ***
+            // Teraz sa stav zatvorenia NEBUDE ukladať
+        });
+    }
+
 }); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY
 
