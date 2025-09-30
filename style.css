@@ -336,15 +336,13 @@ p {
 /* Hlavný obrázok článku */
 .article-featured-image {
     width: 100%;
-    max-width: 550px; /* Zmenšená maximálna šírka na 550px */
-    height: 300px; /* Pevná výška pre lepší vizuál */
-    object-fit: contain; /* Zmení správanie obrázku: zobrazí celý obrázok v rámci rozmerov */
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
     display: block;
     margin: 0 auto 3rem auto;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    padding: 1rem; /* Pridáme padding, ak je pozadie tmavé a obrázok svetlý */
-    background-color: var(--white); /* Biela plocha okolo obrázku */
 }
 
 /* Štýly pre nadpisy vnútri článku */
