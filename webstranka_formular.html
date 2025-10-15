@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    <!-- End Google Tag Manager -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulár pre vytvorenie cenovej kalkulácie webstránky | Unoneto</title>
+    <meta name="description" content="Vyplňte formulár a my vám pripravíme cenovú ponuku webstránky presne na mieru vašim potrebám.">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
+        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
+    </div>
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <header class="main-header">
+        <nav class="container">
+            <a href="/" class="logo">
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                <span>Unoneto</span>
+            </a>
+            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+            
+            <ul class="nav-links" id="nav-menu">
+                <li class="has-dropdown">
+                    <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Prezentačné weby</a></li>
+                        <li><a href="eshopy">E-shopy na mieru</a></li>
+                        <li><a href="automatizacia">AI Automatizácia procesov</a></li>
+                        <li><a href="vexion">Vernostný systém VEXION</a></li>
+                        <li><a href="skolenia">Školenia</a></li>
+                        <li><a href="marketing">Marketingové služby</a></li>
+                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
+                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Rezervovať konzultáciu</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="subpage-hero container reveal">
+            <h1 class="hero-title">Objednávka <span class="gradient-text">webstránky</span></h1>
+            <p class="hero-description">Vyplňte formulár a my vám pripravíme cenovú ponuku presne na mieru</p>
+        </section>
+
+        <section class="container reveal">
+            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="order-form-wrapper">
+                
+                <!-- SEKCIA 1: ZÁKLADNÉ INFORMÁCIE -->
+                <div class="form-section" data-section="basic">
+                    <button type="button" class="form-section-header" data-toggle="basic">
+                        <div class="section-header-content">
+                            <span class="section-title-text">1. Základné informácie</span>
+                            <span class="section-badge badge-required">Povinné</span>
+                        </div>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="basic">
+                        <div class="input-group">
+                            <label for="name">Meno a priezvisko *</label>
+                            <input type="text" id="name" name="name" required placeholder="Ján Novák">
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required placeholder="jan@example.com">
+                            </div>
+                            <div class="input-group">
+                                <label for="phone">Telefón</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+421 XXX XXX XXX">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="company">Názov firmy / Projekt</label>
+                            <input type="text" id="company" name="company" placeholder="Moja firma s.r.o.">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="webType">Typ webu</label>
+                            <select id="webType" name="webType">
+                                <option value="">Vyberte typ webu</option>
+                                <option value="presentation">Prezentačná stránka</option>
+                                <option value="portfolio">Portfólio</option>
+                                <option value="blog">Blog / Magazín</option>
+                                <option value="business">Firemný web</option>
+                                <option value="landing">Landing page</option>
+                                <option value="other">Iné</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKCIA 2: OBSAH A MATERIÁLY -->
+                <div class="form-section" data-section="content">
+                    <button type="button" class="form-section-header" data-toggle="content">
+                        <span class="section-title-text">2. Obsah a materiály</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="content">
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hasLogo" value="ano">
+                            <div class="checkbox-content">
+                                <strong>Mám vlastné logo</strong>
+                                <span class="checkbox-sublabel">Poskytnete logo v PNG, SVG alebo JPG formáte</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hasPhotos" value="ano">
+                            <div class="checkbox-content">
+                                <strong>Mám vlastné fotografie</strong>
+                                <span class="checkbox-sublabel">Fotky produktov, priestorov, tímu...</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hasTexts" value="ano">
+                            <div class="checkbox-content">
+                                <strong>Mám pripravené texty</strong>
+                                <span class="checkbox-sublabel">Texty o firme, službách, produktoch...</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="needsCopywriting" value="ano">
+                            <div class="checkbox-content">
+                                <strong>Potrebujem pomoc s písaním textov</strong>
+                                <span class="checkbox-sublabel">Copywriting služby - cena individuálne podľa požiadaviek</span>
+                            </div>
+                        </label>
+
+                        <div class="input-group" style="margin-top: 2rem;">
+                            <label>Aké podstránky potrebujete?</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Domov" checked disabled>
+                                    <span>Domov</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="O nás">
+                                    <span>O nás</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Služby">
+                                    <span>Služby</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Produkty">
+                                    <span>Produkty</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Cenník">
+                                    <span>Cenník</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Referencie">
+                                    <span>Referencie</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Blog/Články">
+                                    <span>Blog/Články</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Galéria">
+                                    <span>Galéria</span>
+                                </label>
+                                <label class="checkbox-label-simple">
+                                    <input type="checkbox" name="pages" value="Kontakt" checked disabled>
+                                    <span>Kontakt</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKCIA 3: FUNKCIONALITY -->
+                <div class="form-section" data-section="features">
+                    <button type="button" class="form-section-header" data-toggle="features">
+                        <span class="section-title-text">3. Funkcionality a doplnky</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="features">
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Kontaktný formulár" checked>
+                            <div class="checkbox-content">
+                                <strong>Kontaktný formulár</strong>
+                                <span class="checkbox-sublabel">Napojenie na email cez Formspree (zdarma) - v cene</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Online chat">
+                            <div class="checkbox-content">
+                                <strong>Online chat / Messenger</strong>
+                                <span class="checkbox-sublabel">Facebook Messenger alebo WhatsApp widget</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Mapa Google Maps">
+                            <div class="checkbox-content">
+                                <strong>Mapa s polohou</strong>
+                                <span class="checkbox-sublabel">Google Maps integrácia</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Foto galéria">
+                            <div class="checkbox-content">
+                                <strong>Foto galéria</strong>
+                                <span class="checkbox-sublabel">Lightbox galéria pre obrázky</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Video prezentácia">
+                            <div class="checkbox-content">
+                                <strong>Video prezentácia</strong>
+                                <span class="checkbox-sublabel">YouTube/Vimeo embed</span>
+                            </div>
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Rezervačný systém">
+                            <div class="checkbox-content">
+                                <strong>Rezervačný systém</strong>
+                                <span class="checkbox-sublabel">Online objednávky/rezervácie (+50€)</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="Sociálne siete widget">
+                            <div class="checkbox-content">
+                                <strong>Sociálne siete widget</strong>
+                                <span class="checkbox-sublabel">Instagram feed, Facebook posts...</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SEKCIA 4: DOMÉNA A EMAIL -->
+                <div class="form-section" data-section="domain">
+                    <button type="button" class="form-section-header" data-toggle="domain">
+                        <span class="section-title-text">4. Doména a Email</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="domain">
+                        
+                        <div class="input-group">
+                            <label>Doména (.sk, .com, .eu...)</label>
+                            
+                            <label class="radio-label">
+                                <input type="radio" name="domainOption" value="own">
+                                <div class="radio-content">
+                                    <strong>Mám vlastnú doménu</strong>
+                                    <span class="radio-sublabel">Poskytnete prihlasovacie údaje</span>
+                                </div>
+                            </label>
+
+                            <label class="radio-label">
+                                <input type="radio" name="domainOption" value="buy_self">
+                                <div class="radio-content">
+                                    <strong>Zakúpim si sám/sama</strong>
+                                    <span class="radio-sublabel">Pošlem návod na registráciu</span>
+                                    <span class="price-tag">5-50€/rok podľa domény</span>
+                                </div>
+                            </label>
+
+                            <label class="radio-label radio-recommended">
+                                <input type="radio" name="domainOption" value="package">
+                                <div class="radio-content">
+                                    <div class="radio-title-row">
+                                        <strong>Balík: Sprostredkovanie + Nastavenie</strong>
+                                        <span class="badge-recommended">Odporúčané</span>
+                                    </div>
+                                    <span class="radio-sublabel">Kompletný servis - registrácia cez váš účet + technické nastavenie</span>
+                                    <span class="price-tag price-highlight">+20€ jednorazovo (prvý rok)</span>
+                                    <span class="radio-sublabel-small">Potom ~20€/rok priamo poskytovateľovi</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="input-group" id="domainNameGroup" style="display: none; margin-top: 1.5rem;">
+                            <label for="domainName">Preferovaný názov domény</label>
+                            <input type="text" id="domainName" name="domainName" placeholder="moja-firma.sk">
+                        </div>
+
+                        <div class="input-group" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(34, 211, 238, 0.2);">
+                            <label>Profesionálny email @vasa-domena.sk</label>
+                            
+                            <label class="radio-label">
+                                <input type="radio" name="emailOption" value="none">
+                                <div class="radio-content">
+                                    <strong>Nepotrebujem (zostávam pri Gmail/iný)</strong>
+                                </div>
+                            </label>
+
+                            <label class="radio-label">
+                                <input type="radio" name="emailOption" value="buy_self">
+                                <div class="radio-content">
+                                    <strong>Zakúpim si sám/sama</strong>
+                                    <span class="radio-sublabel">Pošlem návod</span>
+                                    <span class="price-tag">~15€/rok (5 schránok)</span>
+                                </div>
+                            </label>
+
+                            <label class="radio-label radio-recommended">
+                                <input type="radio" name="emailOption" value="package">
+                                <div class="radio-content">
+                                    <div class="radio-title-row">
+                                        <strong>Balík: Sprostredkovanie + Nastavenie</strong>
+                                        <span class="badge-recommended">Odporúčané</span>
+                                    </div>
+                                    <span class="radio-sublabel">5x profesionálny email + kompletné nastavenie</span>
+                                    <span class="price-tag price-highlight">Zahrnuté v balíku domény (+20€)</span>
+                                    <span class="radio-sublabel-small">Potom ~15€/rok priamo poskytovateľovi</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="input-group" id="emailCountGroup" style="display: none; margin-top: 1.5rem;">
+                            <label for="emailCount">Koľko emailových adries potrebujete?</label>
+                            <div class="email-count-info">
+                                <p>Príklad: info@, objednavky@, kontakt@, podpora@, sales@</p>
+                            </div>
+                            <div class="number-input-wrapper">
+                                <input type="number" id="emailCount" name="emailCount" min="1" max="10" value="5">
+                                <span>schránok (max 10)</span>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="margin-top: 2rem;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <div>
+                                <strong>Hosting webu ZDARMA</strong>
+                                <p>Váš web pôjde na profesionálny GitHub Pages hosting bez ročných poplatkov</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKCIA 5: SEO A MARKETING -->
+                <div class="form-section" data-section="seo">
+                    <button type="button" class="form-section-header" data-toggle="seo">
+                        <span class="section-title-text">5. SEO a Marketing nástroje</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="seo">
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="SEO optimalizácia" checked>
+                            <div class="checkbox-content">
+                                <strong>SEO optimalizácia (základná)</strong>
+                                <span class="checkbox-sublabel">Meta tagy, popisky, nadpisy - v cene</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="Google Analytics" checked>
+                            <div class="checkbox-content">
+                                <strong>Google Analytics</strong>
+                                <span class="checkbox-sublabel">Sledovanie návštevnosti - v cene</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="Google Search Console" checked>
+                            <div class="checkbox-content">
+                                <strong>Google Search Console</strong>
+                                <span class="checkbox-sublabel">Indexácia v Google - v cene</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="Google Tag Manager">
+                            <div class="checkbox-content">
+                                <strong>Google Tag Manager</strong>
+                                <span class="checkbox-sublabel">Pokročilé sledovanie a remarketing</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="Sitemap + Robots" checked>
+                            <div class="checkbox-content">
+                                <strong>Sitemap.xml + Robots.txt</strong>
+                                <span class="checkbox-sublabel">Pre lepšiu indexáciu - v cene</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="seo" value="Schema.org">
+                            <div class="checkbox-content">
+                                <strong>Schema.org štruktúrované dáta</strong>
+                                <span class="checkbox-sublabel">Rich snippets v Google (+30€)</span>
+                            </div>
+                        </label>                      
+                    </div>
+                </div>
+
+                <!-- SEKCIA 6: JAZYKY -->
+                <div class="form-section" data-section="languages">
+                    <button type="button" class="form-section-header" data-toggle="languages">
+                        <span class="section-title-text">6. Jazykové mutácie</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="languages">
+                        
+                        <div class="info-box info-box-blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <div>
+                                <strong>Slovenčina (základná verzia)</strong>
+                                <p>Cena: 290€</p>
+                            </div>
+                        </div>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="languages" value="Nemčina">
+                            <div class="checkbox-content">
+                                <strong>+ Nemecká verzia</strong>
+                                <span class="checkbox-sublabel">Kompletný web v nemčine + prepínač jazykov (+170€)</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="languages" value="Angličtina">
+                            <div class="checkbox-content">
+                                <strong>+ Anglická verzia</strong>
+                                <span class="checkbox-sublabel">Kompletný web v angličtine + prepínač jazykov (+140€)</span>
+                            </div>
+                        </label>
+
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="languages" value="Maďarčina">
+                            <div class="checkbox-content">
+                                <strong>+ Maďarská verzia</strong>
+                                <span class="checkbox-sublabel">Kompletný web v maďarčine + prepínač jazykov (+200€)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SEKCIA 7: PODPORA -->
+                <div class="form-section" data-section="support">
+                    <button type="button" class="form-section-header" data-toggle="support">
+                        <span class="section-title-text">7. Podpora a údržba po spustení</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="support">
+                        
+                        <label class="radio-label">
+                            <input type="radio" name="support" value="Nepotrebujem">
+                            <div class="radio-content">
+                                <strong>Nepotrebujem</strong>
+                                <span class="radio-sublabel">Budem si web spravovať sám/sama</span>
+                            </div>
+                        </label>
+
+                        <label class="radio-label">
+                            <input type="radio" name="support" value="Hodinová sadzba">
+                            <div class="radio-content">
+                                <strong>Hodinová sadzba</strong>
+                                <span class="radio-sublabel">Úpravy a zmeny podľa potreby</span>
+                                <span class="price-tag">40€/hodina</span>
+                            </div>
+                        </label>
+
+                        <label class="radio-label">
+                            <input type="radio" name="support" value="Mesačný paušál">
+                            <div class="radio-content">
+                                <strong>Mesačný paušál</strong>
+                                <span class="radio-sublabel">Priebežná starostlivosť a menšie úpravy</span>
+                                <span class="price-tag">Cena dohodou (podľa rozsahu)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- POZNÁMKY -->
+                <div class="form-section" data-section="notes">
+                    <button type="button" class="form-section-header" data-toggle="notes">
+                        <span class="section-title-text">8. Doplňujúce informácie</span>
+                        <svg class="chevron-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="form-section-content" data-content="notes">
+                        <div class="input-group">
+                            <label for="notes">Doplňujúce informácie alebo špeciálne požiadavky</label>
+                            <textarea id="notes" name="notes" rows="6" placeholder="Napríklad: potrebujem web do 2 týždňov, chcem tmavé farby, potrebujem integráciu s existujúcim systémom..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        Odoslať nezáväznú objednávku
+                    </button>
+                    <p class="form-submit-note">Po odoslaní vám pripravím cenovú ponuku do 24 hodín</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+           <div class="footer-grid">
+			<div class="footer-col">
+				 <a href="/" class="logo">
+					 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+					 <span>Unoneto</span>
+				 </a>
+				<p>Váš rast, poháňaný výsledkami.</p>
+			</div>
+                
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>Unoneto s. r. o.</p>
+                    <p>IČO: 55530966</p>
+                    <p>DIČ: 2122015522</p>
+                    <p><a href="tel:+421905351100">+421 905 351 100</a></p>
+                    <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Rýchle odkazy</h4>
+                    <a href="/#services">Čo robíme</a>
+                    <a href="/#case-study">Naše výsledky</a>
+                    <a href="/#about">Kto sme</a>
+                    <a href="weby">Webstránky</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Sledujte nás</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
