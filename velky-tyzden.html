@@ -1,26 +1,740 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veľký týždeň malých firiem: Exkluzívna ponuka | Unoneto</title>
-    <meta name="description" content="Zapojili sme sa do Veľkého týždňa malých firiem! Získajte Štartovací balík pre váš web s Profi vylepšením zadarmo. Platí od 10. do 16. novembra 2025.">
-    
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.png" type="image/png">
-    <link rel="shortcut icon" href="favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, var(--slate-900), #0c1c3f, #301742);
+            color: var(--slate-300);
+            min-height: 100vh;
+        }
+
+        /* Background Effects */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ping-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--cyan);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+            animation: ping 4s ease-in-out infinite;
+        }
+
+        @keyframes ping {
+            0% { transform: scale(0.2); opacity: 0.8; }
+            80% { opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+        }
+
+        .shape1 {
+            width: 350px;
+            height: 350px;
+            background-color: var(--cyan);
+            top: -100px;
+            right: -100px;
+        }
+
+        .shape2 {
+            width: 350px;
+            height: 350px;
+            background-color: var(--purple);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .shape3 {
+            width: 400px;
+            height: 400px;
+            background-color: #3b82f6;
+            bottom: 25%;
+            right: 25%;
+            opacity: 0.1;
+        }
+
+        /* Header */
+        .main-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+            padding: 1rem 0;
+        }
+
+        .main-header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon-img {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--slate-300);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+        }
+
+        #hamburger-btn {
+            display: none;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 211, 238, 0.35);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Countdown Timer */
+        .countdown-section {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(220,38,38,0.1) 100%);
+            border: 2px solid rgba(239,68,68,0.4);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(239,68,68,0.2);
+        }
+
+        .countdown-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fca5a5;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            font-size: 0.9rem;
+            color: var(--slate-300);
+            margin-top: 0.25rem;
+        }
+
+        .countdown-separator {
+            font-size: 3rem;
+            color: var(--white);
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        /* Price Comparison */
+        .offer-section {
+            margin: 4rem 0;
+        }
+
+        .offer-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(to right, rgba(34,211,238,0.2), rgba(168,85,247,0.2));
+            border: 1px solid var(--cyan);
+            border-radius: 999px;
+            margin-bottom: 1.5rem;
+        }
+
+        .offer-badge-text {
+            color: var(--cyan);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .offer-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .offer-subtitle {
+            font-size: 1.2rem;
+            color: var(--slate-300);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .price-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .price-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(34, 211, 238, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card-special {
+            border-color: var(--cyan);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+            background: linear-gradient(135deg, rgba(34,211,238,0.05) 0%, rgba(168,85,247,0.05) 100%);
+        }
+
+        .price-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--slate-300);
+        }
+
+        .price-badge-special {
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            color: var(--white);
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--white);
+            margin: 1rem 0;
+        }
+
+        .price-strikethrough {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .price-savings {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 8px 16px;
+            background: rgba(34, 211, 238, 0.2);
+            border-radius: 20px;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: rgba(30, 41, 59, 0.7);
+            border: 2px solid var(--cyan);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
+            border: 2px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.2);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            stroke: var(--white);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .feature-description {
+            color: var(--slate-300);
+            line-height: 1.6;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .feature-value {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(34, 211, 238, 0.2);
+            color: var(--cyan);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .included-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 4px 12px;
+            background: rgba(34, 211, 238, 0.2);
+            border-radius: 12px;
+            color: var(--cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Why Section */
+        .why-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 3rem 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .why-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .why-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--slate-300);
+        }
+
+        .why-text strong {
+            color: var(--white);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin: 4rem 0;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .cta-subtitle {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 2px solid rgba(34, 211, 238, 0.3);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cta-card-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-card-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--white);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .cta-card h3 {
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .cta-card p {
+            color: var(--slate-300);
+            line-height: 1.6;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 8px;
+            color: var(--cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: rgba(34, 211, 238, 0.2);
+            border-color: var(--cyan);
+        }
+
+        .warning-box {
+            padding: 1.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .warning-text {
+            margin: 0;
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .main-footer {
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(34, 211, 238, 0.2);
+            padding: 4rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: left;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .footer-col a,
+        .footer-col p {
+            color: var(--slate-400);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a:hover {
+            color: var(--cyan);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(34, 211, 238, 0.1);
+            margin-top: 3rem;
+            padding-top: 3rem;
+            text-align: center;
+        }
+
+        .copyright p {
+            color: var(--slate-400);
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--cyan);
+            transform: translateY(-3px);
+        }
+
+        .social-icons svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--slate-300);
+        }
+
+        .social-icons a:hover svg {
+            fill: var(--slate-900);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .offer-title {
+                font-size: 2rem;
+            }
+
+            .price-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .countdown-number {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            #hamburger-btn {
+                display: block;
+            }
+
+            .footer-grid {
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="particle-container">
         <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
         <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
@@ -33,146 +747,301 @@
         <div class="shape shape2"></div>
         <div class="shape shape3"></div>
     </div>
+
     <header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
                 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
                 <span>Unoneto</span>
             </a>
-            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
+            <button id="hamburger-btn" aria-label="Toggle navigation">
+                <span>☰</span>
             </button>
             <ul class="nav-links" id="nav-menu">
-                <li class="has-dropdown">
-                    <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="weby">Prezentačné weby</a></li>
-                        <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="automatizacia">AI Automatizácia procesov</a></li>
-                        <li><a href="raynetcrm">RAYNET CRM</a></li>
-                        <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
-                        <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
-                    </ul>
-                </li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Dohodnúť si konzultáciu</a></li>
+                <li><a href="/">Domov</a></li>
+                <li><a href="/weby">Webstránky</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Rezervovať konzultáciu</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="main-content">
-        <section class="subpage-hero container reveal">
-            <h1 class="hero-title">Unoneto oslavuje <span class="gradient-text">Veľký týždeň malých firiem!</span></h1>
-            <p class="hero-description">Sme hrdí, že môžeme byť súčasťou iniciatívy, ktorá podporuje srdce slovenskej ekonomiky. Ako odmenu pre Vás sme si pripravili exkluzívnu ponuku, ktorá posunie Váš online biznis na novú úroveň.</p>
-        </section>
-
-        <section class="container image-section-container reveal">
-            <img src="velkytyzden.jpg" alt="Grafika pre Veľký týždeň malých firiem - akcia Unoneto" class="centered-content-image">
-        </section>
-
-
-        <section class="container subpage-content">
-            <div class="article-body reveal">
-                <h2>Prečo sme sa zapojili? Pretože Vaša misia je naša misia.</h2>
-                <p>Veľký týždeň malých firiem je oslavou odvahy, inovácie a tvrdej práce podnikateľov a živnostníkov. My v Unoneto sme vznikli presne s tým istým cieľom: pomáhať malým a stredným firmám rásť a prosperovať v digitálnom svete. Chápeme Vaše výzvy – od obmedzených rozpočtov až po nedostatok času. Preto prinášame riešenia, ktoré sú nielen technologicky vyspelé, ale hlavne efektívne a cenovo dostupné.</p>
-                
-                <h2 class="section-title">Naša exkluzívna ponuka</h2>
-                <p style="text-align: center; margin-top: -3rem; margin-bottom: 2rem;">Platí len od 10. do 16. novembra 2025</p>
-
-                <div class="offer-box">
-                    <h3>Štartovací balík s Profi vylepšením ZADARMO!</h3>
-                    <p>Objednajte si náš najobľúbenejší Štartovací balík za zvýhodnenú cenu 290 € a my Vám k nemu pridáme dve funkcie z nášho Profi balíka úplne zadarmo! Sami si vyberiete, ktoré sa Vám hodia najviac.</p>
-                    <h4 style="margin-top: 2rem;">Vyberte si 2 z týchto 3 prémiových funkcií:</h4>
-                    <ul class="offer-list">
-                        <li><strong>Online chat s návštevníkmi:</strong> Komunikujte so zákazníkmi v reálnom čase priamo na Vašom webe a premeňte viac návštev na objednávky.</li>
-                        <li><strong>Integrácia Google Maps:</strong> Uľahčite zákazníkom cestu k Vám. Ideálne pre kamenné prevádzky, reštaurácie alebo kancelárie.</li>
-                        <li><strong>Integrácia online kalendára:</strong> Umožnite klientom rezervovať si termín konzultácie, služby či stretnutia priamo cez Váš web.</li>
-                        <li><strong>Niečo iné?</strong> Odkonzultujeme a poskytneme bonus , ktorý Vám bude dávať najväčší zmysel. </li>
-                    </ul>
-                    <p style="font-weight: bold; margin-top: 2rem;">Získate tak pridanú hodnotu a funkcie v hodnote viac ako 150 €, ktoré Vášmu webu dodajú profesionálny a interaktívny rozmer.</p>
-                </div>
-
-                <h2 class="section-title">Čo všetko získate v základnom Štartovacom balíku?</h2>
-                <p>Náš Štartovací balík je navrhnutý ako plnohodnotné riešenie pre Vašu profesionálnu online prezentáciu. Obsahuje všetko, čo na úspešný štart potrebujete:</p>
-                <ul class="features-list">
-                    <li>✅ Plnohodnotná profesionálna webstránka </li>
-                    <li>✅ Originálny a moderný dizajn na mieru</li>
-                    <li>✅ Kontaktný formulár pre jednoduchú komunikáciu so zákazníkmi</li>
-                    <li>✅ Základné technické SEO nastavenie, aby Vás Google našiel</li>
-                    <li>✅ 100% funkčnosť na mobiloch, tabletoch a počítačoch</li>
-                    <li>✅ Žiadne mesačné poplatky za prevádzku webu</li>
-                </ul>
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1 class="hero-title">Unoneto oslavuje <span class="gradient-text">Veľký týždeň malých firiem!</span></h1>
+                <p class="hero-description">Sme hrdí, že môžeme byť súčasťou iniciatívy, ktorá podporuje srdce slovenskej ekonomiky. Ako odmenu pre vás sme si pripravili exkluzívnu ponuku, ktorá posunie váš online biznis na novú úroveň.</p>
             </div>
-        </section>
 
-        <section id="contact-subpage" class="container reveal">
-            <h2 class="section-title">Využite túto jedinečnú príležitosť!</h2>
-            <p class="section-subtitle">Ponuka platí len pre objednávky prijaté v týždni od 10. do 16. novembra 2025. Nečakajte, kým Vás predbehne konkurencia.</p>
-            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
-                <div class="input-group">
-                    <label for="full-name">Vaše meno</label>
-                    <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
+            <!-- Countdown Timer -->
+            <div class="countdown-section">
+                <p class="countdown-label">Akcia končí o:</p>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="days">0</div>
+                        <div class="countdown-unit">DNÍ</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="hours">0</div>
+                        <div class="countdown-unit">HODÍN</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="minutes">0</div>
+                        <div class="countdown-unit">MINÚT</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="seconds">0</div>
+                        <div class="countdown-unit">SEKÚND</div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="email-address">Váš email</label>
-                    <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@firma.sk" required>
+                <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--slate-300); text-align: center;">Ponuka platí len do <strong style="color: var(--white);">30. novembra 2025, 23:59</strong></p>
+            </div>
+
+            <!-- Offer Section -->
+            <div class="offer-section" style="text-align: center;">
+                <div class="offer-badge">
+                    <span class="offer-badge-text">🎁 Exkluzívna ponuka</span>
                 </div>
-                <div class="input-group">
-                    <label for="message">Správa (nezabudnite spomenúť heslo "Veľký týždeň")</label>
-                    <textarea id="message" name="message" placeholder="Mám záujem o akciu Veľký týždeň a chcel by som si vybrať tieto 2 funkcie zdarma: ..." rows="6" required></textarea>
+                <h2 class="offer-title">PROFI balík za cenu <span class="gradient-text">Štartovacieho!</span></h2>
+                <p class="offer-subtitle">Získajte kompletný PROFI balík so VŠETKÝMI 3 prémiovými funkciami len za <strong style="color: var(--white);">290€</strong> namiesto 480€</p>
+
+                <!-- Price Comparison -->
+                <div class="price-comparison">
+                    <div class="price-card">
+                        <div class="price-badge">Bežná cena</div>
+                        <div style="margin: 1rem 0; font-size: 1.2rem; font-weight: 600;">PROFI balík</div>
+                        <div class="price-amount price-strikethrough">480€</div>
+                        <div style="margin: 1.5rem 0; color: var(--slate-400); font-size: 0.9rem;">
+                            <div>✓ Štartovací balík</div>
+                            <div>✓ Online chat (75€)</div>
+                            <div>✓ Google Maps (50€)</div>
+                            <div>✓ Online kalendár (75€)</div>
+                        </div>
+                        <div style="height: 2px; background: rgba(34, 211, 238, 0.2); margin: 1.5rem 0;"></div>
+                        <div style="color: var(--slate-400); font-size: 0.9rem;">Normálna cena</div>
+                    </div>
+
+                    <div class="price-card price-card-special">
+                        <div class="price-badge price-badge-special">🔥 Veľký týždeň</div>
+                        <div style="margin: 1rem 0; font-size: 1.2rem; font-weight: 700; color: var(--cyan);">PROFI balík - UPGRADE ZDARMA!</div>
+                        <div class="price-amount" style="background: linear-gradient(to right, var(--cyan), var(--purple)); -webkit-background-clip: text; background-clip: text; color: transparent;">290€</div>
+                        <div style="margin: 1.5rem 0; color: var(--white); font-size: 0.95rem; font-weight: 500;">
+                            <div>✓ Kompletný Štartovací balík</div>
+                            <div style="color: var(--cyan); font-weight: 700;">✓ Online chat <span class="included-badge">ZDARMA</span></div>
+                            <div style="color: var(--cyan); font-weight: 700;">✓ Google Maps <span class="included-badge">ZDARMA</span></div>
+                            <div style="color: var(--cyan); font-weight: 700;">✓ Online kalendár <span class="included-badge">ZDARMA</span></div>
+                        </div>
+                        <div style="height: 2px; background: linear-gradient(to right, var(--cyan), var(--purple)); margin: 1.5rem 0;"></div>
+                        <div class="price-savings">Ušetríte 190€!</div>
+                        <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--slate-400);">= Plná hodnota Profi balíka za Štartovací cenu</div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-large">Odoslať dopyt</button>
-            </form>
-        </section>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section">
+                <h3 class="features-title">✨ Všetky PROFI funkcie v cene:</h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg class="feature-icon" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-title">Online chat s návštevníkmi</div>
+                        <div class="feature-description">Komunikujte so zákazníkmi v reálnom čase priamo na vašom webe. Premeňte viac návštev na objednávky pomocou okamžitej komunikácie.</div>
+                        <div class="feature-value">Hodnota: 75€ → ZDARMA</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg class="feature-icon" viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="feature-title">Integrácia Google Maps</div>
+                        <div class="feature-description">Uľahčite zákazníkom cestu k vám. Ideálne pre kamenné prevádzky, reštaurácie, kancelárie alebo showroomy.</div>
+                        <div class="feature-value">Hodnota: 50€ → ZDARMA</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg class="feature-icon" viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-title">Integrácia online kalendára</div>
+                        <div class="feature-description">Umožnite klientom rezervovať si termín konzultácie, služby či stretnutia priamo cez váš web. Automatizujte plánovanie.</div>
+                        <div class="feature-value">Hodnota: 75€ → ZDARMA</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border-radius: 12px; text-align: center;">
+                    <h4 style="color: var(--white); font-size: 1.3rem; margin-bottom: 1rem;">🎯 Plus všetko zo Štartovacieho balíka:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; color: var(--slate-300); font-size: 0.95rem;">
+                        <div>✓ Až 5 podstránok</div>
+                        <div>✓ Originálny dizajn na mieru</div>
+                        <div>✓ Kontaktný formulár</div>
+                        <div>✓ Základné technické SEO</div>
+                        <div>✓ 100% funkčnosť na mobiloch</div>
+                        <div>✓ Žiadne mesačné poplatky</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Section -->
+            <div class="why-section">
+                <h2 class="why-title">💙 Prečo sme sa zapojili?</h2>
+                <p class="why-text">
+                    <strong>Veľký týždeň malých firiem je oslavou odvahy slovenských podnikateľov.</strong> My v Unoneto sme vznikli s rovnakým cieľom: pomáhať malým firmám rásť v digitálnom svete. Chápeme vaše výzvy - obmedzené rozpočty, nedostatok času. Preto prinášame riešenia, ktoré sú efektívne a cenovo dostupné.
+                </p>
+                <p style="font-size: 1rem; margin-top: 1.5rem; color: var(--slate-400);">
+                    Táto akcia je naše poďakovanie za dôveru a podpora pre vašu digitálnu transformáciu. 🚀
+                </p>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2 class="cta-title">Získajte túto exkluzívnu ponuku!</h2>
+                <p class="cta-subtitle">Stačí vyplniť jednoduchý formulár. Ozveme sa vám do 24 hodín s komplétnym návrhom.</p>
+
+                <div class="cta-grid">
+                    <div class="cta-card">
+                        <div class="cta-card-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Detailný objednávkový formulár</h3>
+                        <p>Vyplňte formulár s vašimi požiadavkami a my vám pripravíme presnú ponuku</p>
+                        <a href="webstranka_formular" class="btn btn-primary">Vyplniť formulár</a>
+                    </div>
+
+                    <div class="cta-card">
+                        <div class="cta-card-icon">
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Rýchly kontakt</h3>
+                        <p>Zavolajte nám alebo napíšte email. Dohodneme všetko za pár minút.</p>
+                        <div class="contact-links">
+                            <a href="tel:+421905351100" class="contact-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                +421 905 351 100
+                            </a>
+                            <a href="mailto:info@unoneto.eu?subject=Veľký týždeň - Mám záujem o PROFI balík" class="contact-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                info@unoneto.eu
+                            </a>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--slate-400);">Nezabudnite spomenúť heslo: <strong style="color: var(--white);">"Veľký týždeň"</strong></p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <p class="warning-text">⏰ Ponuka platí len do 30. novembra 2025. Počet miest je limitovaný!</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="main-footer">
         <div class="container">
-           <div class="footer-grid">
-			<div class="footer-col">
-				 <a href="/" class="logo">
-					 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
-					 <span>Unoneto</span>
-				 </a>
-				<p>Váš rast, poháňaný výsledkami.</p>
-			</div>
-			
-			<div class="footer-col">
-				<h4>Kontakt</h4>
-				<p>Unoneto s. r. o.</p>
-					 <p>IČO: 55530966</p>
-				<p>DIČ: 2122015522</p>
-				<p><a href="tel:+421905351100">+421 905 351 100</a></p>
-				<p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
-			</div>
-			
-			<div class="footer-col">
-				<h4>Rýchle odkazy</h4>
-				<a href="/#services">Naše riešenia</a>
-				<a href="/#process">Náš proces</a>
-				<a href="/#about">Kto sme</a>
-				<a href="/#contact" onclick="window.location.href='/#contact';">Kontakt</a>
-			</div>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="/" class="logo">
+                        <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                        <span>Unoneto</span>
+                    </a>
+                    <p>Váš rast, poháňaný výsledkami.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>Unoneto s. r. o.</p>
+                    <p>IČO: 55530966</p>
+                    <p>DIČ: 2122015522</p>
+                    <p><a href="tel:+421905351100">+421 905 351 100</a></p>
+                    <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Rýchle odkazy</h4>
+                    <a href="/#services">Čo robíme</a>
+                    <a href="/#case-study">Naše výsledky</a>
+                    <a href="/#about">Kto sme</a>
+                    <a href="/weby">Webstránky</a>
+                </div>
 
-			<div class="footer-col">
-				<h4>Sledujte nás</h4>
-				<div class="social-icons">
-					<a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg></a>
-					<a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
-					<a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
-				</div>
-			</div>
-		</div>
+                <div class="footer-col">
+                    <h4>Sledujte nás</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="copyright">
                 <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Countdown Timer
+        const endDate = new Date('November 30, 2025 23:59:59').getTime();
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
