@@ -141,6 +141,55 @@ if (document.getElementById('ozobot-gallery-slider')) {
             // Teraz sa stav zatvorenia NEBUDE ukladať
         });
     }
+// =================================================================
+// LOGIKA PRE OBJEDNÁVKOVÝ FORMULÁR (webstranka_formular.html)
+// =================================================================
 
-}); // <-- VŠETKO MUSÍ BYŤ VNÚTRI TEJTO ZÁTVORKY
+// --- Rozbaľovanie/zabaľovanie sekcií ---
+const formSectionHeaders = document.querySelectorAll('.form-section-header');
+if (formSectionHeaders.length > 0) {
+    // Otvor prvú sekciu automaticky
+    const firstSection = document.querySelector('.form-section[data-section="basic"]');
+    if (firstSection) {
+        firstSection.classList.add('open');
+    }
 
+    formSectionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const section = this.closest('.form-section');
+            section.classList.toggle('open');
+        });
+    });
+}
+
+// --- Zobrazenie inputu pre názov domény ---
+    const domainOptions = document.querySelectorAll('input[name="domainOption"]');
+    const domainNameGroup = document.getElementById('domainNameGroup');
+    if (domainOptions.length > 0 && domainNameGroup) {
+        domainOptions.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'buy_self' || this.value === 'package') {
+                    domainNameGroup.style.display = 'block';
+                } else {
+                    domainNameGroup.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // --- Zobrazenie počtu emailov ---
+    const emailOptions = document.querySelectorAll('input[name="emailOption"]');
+    const emailCountGroup = document.getElementById('emailCountGroup');
+    if (emailOptions.length > 0 && emailCountGroup) {
+        emailOptions.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'buy_self' || this.value === 'package') {
+                    emailCountGroup.style.display = 'block';
+                } else {
+                    emailCountGroup.style.display = 'none';
+                }
+            });
+        });
+    }
+
+});
