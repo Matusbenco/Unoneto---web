@@ -3,71 +3,170 @@
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
 <url>
   <loc>https://unoneto.eu/</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>https://unoneto.eu/velky-tyzden</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://unoneto.eu/weby</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/eshopy</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/automatizacia</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/raynetcrm</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/digitalnypodpis</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/vexion</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/skolenia</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://unoneto.eu/marketing</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/hugo</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/ozobot</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/blog</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://unoneto.eu/clanok-clenske-karty</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <loc>https://unoneto.eu/raynet</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/blog.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
-  <loc>https://unoneto.eu/AI_agenti_v_2025</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <loc>https://unoneto.eu/webstranka_formular</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/skolenia</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/marketing</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/weby.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/velky-tyzden.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/clanok-clenske-karty.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/digisign.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/digisign</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/clanok-clenske-karty</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/AI_agenti_v_2025.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
   <loc>https://unoneto.eu/tipy_na_ai_nastroje</loc>
-  <lastmod>2025-09-22T17:06:15+00:00</lastmod>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
   <priority>0.64</priority>
 </url>
+<url>
+  <loc>https://unoneto.eu/tipy_na_ai_nastroje.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/eshopy.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/automatizacia.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/vexion.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/skolenia.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/marketing.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/hugo.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://unoneto.eu/ozobot.html</loc>
+  <lastmod>2025-10-15T13:53:18+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
 
 </urlset>
