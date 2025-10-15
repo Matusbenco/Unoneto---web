@@ -33,7 +33,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="/velky-tyzden" target="_blank" rel="noopener noreferrer" class="banner-link-content">
         <img src="velkytyzden.svg" alt="Akcia Veľký týždeň - nepremeškajte!" />
         <div class="banner-text">
-            <span>🎉 (10-16.11.2025)</span>
+            <span>🎉 Do 30.11.2025</span>
             <span>Exkluzívna ponuka k veľkému týždňu malých firiem. Máte záujem už teraz? Dajte nám o tom vedieť.</span>
         </div>
     </a>
@@ -42,9 +42,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div id="promo-banner" class="promo-banner">
     <p>
-        <strong>AKCIA:</strong> Prezenčná webstránka so SEO nastavením len za <strong>290€</strong>! Predlžená akcia do konca roku 2025!
+        <strong>🎁 VEĽKÝ TÝŽDEŇ MALÝCH FIRIEM:</strong> Promo ponuka - profi webstránka <strong>za skvelú cenu</strong> - platí do 30.11.2025!
     </p>
-    <a href="/weby" class="btn btn-secondary btn-small">Zistiť viac</a>
+    <a href="/velky-tyzden" class="btn btn-secondary btn-small">Zobraziť ponuku</a>
 </div>
 
 
@@ -104,12 +104,63 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a href="#services" class="btn btn-secondary btn-large">Naše riešenia</a>
             </div>
         </section>
-
+<!-- NOVÁ SEKCIA - pridať hneď za hero -->
+<section class="container reveal" style="padding: 4rem 0; margin-bottom: 2rem;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border: 2px solid var(--cyan); border-radius: 16px; text-align: center;">
+        <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 999px; margin-bottom: 1rem;">
+            <span style="color: var(--white); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">🎉 Veľký týždeň malých firiem</span>
+        </div>
+        
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--white);">
+            PROFI balík za cenu <span class="gradient-text">Štartovacieho!</span>
+        </h2>
+        
+        <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--slate-300);">
+            Získajte kompletný PROFI balík so VŠETKÝMI 3 prémiovými funkciami (online chat, Google Maps, online kalendár) len za <strong style="color: var(--cyan);">290€</strong> namiesto 480€.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--cyan);">190€</div>
+                <div style="color: var(--slate-400);">Ušetríte</div>
+            </div>
+            <div style="font-size: 2.5rem; color: var(--slate-400); line-height: 3rem;">|</div>
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--purple);">3 funkcie</div>
+                <div style="color: var(--slate-400);">Zdarma</div>
+            </div>
+            <div style="font-size: 2.5rem; color: var(--slate-400); line-height: 3rem;">|</div>
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--cyan);" id="days-remaining">15</div>
+                <div style="color: var(--slate-400);">Dní zostáva</div>
+            </div>
+        </div>
+        
+        <a href="/velky-tyzden" class="btn btn-primary btn-large" style="font-size: 1.2rem; padding: 1rem 3rem;">
+            Získať exkluzívnu ponuku →
+        </a>
+        
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--slate-400);">
+            ⏰ Ponuka platí do 30. novembra 2025 | Počet miest limitovaný
+        </p>
+    </div>
+</section>
         <section id="services" class="container reveal">
             
             <div id="banner-slider" class="splide" aria-label="Ukážky projektov">
                 <div class="splide__track">
                     <ul class="splide__list">
+
+                        <li class="splide__slide">
+    <a href="velky-tyzden">
+        <img src="velkytyzden.jpg" alt="Veľký týždeň malých firiem - akcia">
+        <div class="slide-caption">
+            <h2>🎉 Veľký týždeň malých firiem</h2>
+            <p>PROFI web za cenu Štartovacieho! Ušetrite 190€</p>
+        </div>
+    </a>
+</li>
+
 						<li class="splide__slide">
 							<a href="raynet">
 								<img src="raynet.jpg" alt="CRM,ktorému rozumiete.">
@@ -318,7 +369,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    
+
+    <script>
+// Odpočet dní do konca Veľkého týždňa
+const endDate = new Date('November 30, 2025 23:59:59');
+const daysElement = document.getElementById('days-remaining');
+
+if (daysElement) {
+    const now = new Date();
+    const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+    daysElement.textContent = daysLeft > 0 ? daysLeft : 0;
+}
+</script>
 </body>
 
 </html>
