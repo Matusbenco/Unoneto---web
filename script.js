@@ -3,6 +3,24 @@
    ================================================================= */
 document.addEventListener('DOMContentLoaded', function() {
 
+   
+    // --- Dynamický odkaz pre LOGO (SK/EN) ---
+    const logoLink = document.querySelector('a.logo');
+    const pageLang = document.documentElement.lang; // Získa 'sk' alebo 'en' z <html lang="...">
+
+    if (logoLink) {
+        if (pageLang === 'en') {
+            logoLink.href = 'en';
+        } else if (pageLang === 'sk') {
+            logoLink.href = '/';
+        }
+        // Ak jazyk nie je ani 'sk' ani 'en', nechá pôvodný odkaz (napr. "/")
+    }
+    // --- Koniec skriptu pre logo ---
+
+
+
+
     // --- Animácie prvkov pri scrollovaní ---
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length > 0) {
@@ -115,7 +133,7 @@ if (document.getElementById('gallery-slider')) {
             }
         });
     }
-   // --- Galéria na podstránke OZOBOT (ozobot.html) ---
+ // --- Galéria na podstránke OZOBOT (ozobot.html) ---
 if (document.getElementById('ozobot-gallery-slider')) {
     new Splide('#ozobot-gallery-slider', {
         type: 'loop',      // Typ animácie
