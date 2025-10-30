@@ -144,21 +144,47 @@ if (document.getElementById('ozobot-gallery-slider')) {
     }).mount();
 }
 
-// --- Logika pre bočný banner "Veľký týždeň malých firiem" ---
+// =================================================================
+// START: UPRAVENÁ Logika pre bočný banner "Veľký týždeň malých firiem"
+// =================================================================
     const banner = document.getElementById('velky-tyzden-banner');
     const closeButton = banner ? banner.querySelector('.close-banner') : null;
+    const storageKey = 'velkyTyzdenBannerClosedCount';
+    const maxShows = 2; // Koľkokrát sa má banner zobraziť (1. zobrazenie + 2. zobrazenie)
 
     if (banner && closeButton) {
-        // Zobraz banner vždy po načítaní stránky
-        banner.classList.remove('hidden'); // Odstráň triedu 'hidden' hneď po načítaní
+        // 1. Získa aktuálny počet zatvorení z localStorage
+        let closeCount = parseInt(localStorage.getItem(storageKey) || 0);
 
-        // Pridaj event listener na tlačidlo zatvorenia
+        // 2. Skontroluje, či sa má banner zobraziť
+        if (closeCount >= maxShows) {
+            // Používateľ už banner zatvoril 2x, skryjeme ho pridaním triedy 'hidden'
+            banner.classList.add('hidden'); 
+        } else {
+            // Má sa zobraziť, odstránime triedu 'hidden' (pre prípad, že by bola pridaná)
+            banner.classList.remove('hidden');
+        }
+
+        // 3. Pridá funkciu na zatváracie tlačidlo
         closeButton.addEventListener('click', () => {
-            banner.classList.add('hidden'); // Pridaj triedu pre skrytie
-            // *** ODSTRÁNENÝ RIADOK: localStorage.setItem('velkyTyzdenBannerClosed', 'true'); ***
-            // Teraz sa stav zatvorenia NEBUDE ukladať
+            // 3a. Skryje banner
+            banner.classList.add('hidden');
+            
+            // 3b. Získa *aktuálny* počet (pre istotu, keby mal otvorených viac okien)
+            let currentCount = parseInt(localStorage.getItem(storageKey) || 0);
+            
+            // 3c. Zvýši počet
+            currentCount++;
+            
+            // 3d. Uloží nový počet späť do localStorage
+            localStorage.setItem(storageKey, currentCount);
         });
     }
+// =================================================================
+// KONIEC: UPRAVENÁ Logika pre bočný banner "Veľký týždeň malých firiem"
+// =================================================================
+
+
 // =================================================================
 // LOGIKA PRE OBJEDNÁVKOVÝ FORMULÁR (webstranka_formular.html)
 // =================================================================
@@ -277,4 +303,5 @@ if (countdownElement) {
         // 4. Spustíme Splide
         splide.mount();
     }
+    
 });
