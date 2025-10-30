@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -22,12 +25,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<div id="promo-banner" class="promo-banner">
-    <p>
-        <strong>PROMO:</strong> Presentation website with SEO setup for only <strong>€290</strong>! Offer extended until the end of September 2025!
-    </p>
-    <a href="websites" class="btn btn-secondary btn-small">Learn more</a>
-</div>
 
 <div class="particle-container">
     <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
@@ -60,18 +57,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a href="#" id="nasa-ponuka-toggle">Our Services</a>
                 <ul class="dropdown-menu">
                     <li><a href="websites">Business Websites</a></li>
-                        <li><a href="websites">Business Websites</a></li>
-                        <li><a href="ecommerce">Custom E-commerce</a></li>
-                        <li><a href="graphic-design">Graphic Design & Services</a></li>
-                        <li><a href="automation">AI Process Automation</a></li>
-                        <li><a href="raynetcrm-en">RAYNET CRM</a></li>
-                        <li><a href="digitalsignature">DigiSign - Digital Signature</a></li>
-                        <li><a href="vexion-en">VEXION Loyalty</a></li>
-                        <li><a href="hugo_en">HUGO Municipal System</a></li>
-                        <li><a href="ozobot-en">Ozobot Robots</a></li>
+                    <li><a href="ecommerce">Custom E-commerce</a></li>
+                    <li><a href="graphic-design">Graphic Design & Services</a></li>
+                    <li><a href="automation">AI Process Automation</a></li>
+                    <li><a href="raynetcrm-en">RAYNET CRM</a></li>
+                    <li><a href="digitalsignature">DigiSign - Digital Signature</a></li>
+                    <li><a href="vexion-en">VEXION Loyalty</a></li>
+                    <li><a href="hugo_en">HUGO Municipal System</a></li>
+                    <li><a href="ozobot-en">Ozobot Robots</a></li>
                 </ul>
             </li>
-            <li><a href="blog">Blog</a></li>
+            <li><a href="blog-en">Blog</a></li>
             <li class="language-switcher">
                 <a href="graficke-sluzby" class="lang-link" title="Slovenčina"><span class="fi fi-sk"></span></a>
                 <span class="lang-separator">|</span>
@@ -437,43 +433,69 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h2 class="section-title">Our Work</h2>
         <p class="section-subtitle">Portfolio of selected projects</p>
         
-        <div class="portfolio-gallery">
-            <div class="portfolio-item">
-                <img src="logo_ombradoro.webp" alt="Graphic Design - Ombra D'oro">
+        <div id="portfolio-gallery-slider" class="splide" aria-label="Our Work Gallery" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    
+                    <li class="splide__slide">
+                        <a href="logo_ombradoro.webp" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="logo_ombradoro.webp" alt="Graphic Design - Ombra D'oro" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf2.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf2.JPG" alt="Graphic Design - Project 2" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf3.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf3.JPG" alt="Graphic Design - Project 3" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf4.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf4.JPG" alt="Graphic Design - Project 4" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf5.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf5.JPG" alt="Graphic Design - Project 5" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf6.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf6.JPG" alt="Graphic Design - Project 6" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf7.jpg" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf7.jpg" alt="Graphic Design - Project 7" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf9.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf9.JPG" alt="Graphic Design - Project 9" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf8.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf8.JPG" alt="Graphic Design - Project 8" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf1.jpg" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf1.jpg" alt="Graphic Design - Project 1" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+
+                </ul>
             </div>
-            <div class="portfolio-item">
-                <img src="graf2.JPG" alt="Graphic Design - Project 2">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf3.JPG" alt="Graphic Design - Project 3">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf4.JPG" alt="Graphic Design - Project 4">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf5.JPG" alt="Graphic Design - Project 5">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf6.JPG" alt="Graphic Design - Project 6">
-            </div>
-             <div class="portfolio-item">
-                <img src="graf9.JPG" alt="Graphic Design - Project 9">
-                </div>
-                <div class="portfolio-item">
-                <img src="graf8.JPG" alt="Graphic Design - Project 8">
-                </div>
-                <div class="portfolio-item">
-                <img src="graf1.jpg" alt="Graphic Design - Project 1">
-                </div>
         </div>
         
         <div style="text-align: center; margin-top: 3rem;">
             <a href="#contact-form" class="btn btn-primary btn-large">I want a design like this</a>
         </div>
     </section>
-
-   
-
     <section id="contact-form" class="container reveal">
         <h2 class="section-title">Request a Quote</h2>
         <p class="section-subtitle">Tell us about your project, and we will prepare a no-obligation quote within 24 hours.</p>
@@ -495,49 +517,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             
             <div class="input-group">
-                <label for="service-type">Type of Service *</label>
+                <label for="service-type">Service Type *</label>
                 <select id="service-type" name="service" required style="width: 100%; padding: 0.875rem; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'Inter', sans-serif;">
                     <option value="">Select a service...</option>
-                    <optgroup label="Brand & Logo">
-                        <option value="logo-2d">Logo Design (2D)</option>
-                        <option value="logo-3d">Logo Design (3D)</option>
-                        <option value="visiting-card">Business Card Design</option>
-                        <option value="letterhead">Letterhead Design</option>
-                        <option value="company-profile">Company Profile Design</option>
-                    </optgroup>
-                    <optgroup label="Digital & Social Media">
-                        <option value="social-media">Social Media Post Design</option>
-                        <option value="instagram-highlights">Instagram Highlight Icons</option>
-                        <option value="ad-creative">Facebook/Instagram Ad Creative</option>
-                        <option value="landing-page">Landing Page Design</option>
-                        <option value="banner">Banner Design</option>
-                        <option value="presentation">Presentation Slide Design</option>
-                    </optgroup>
-                    <optgroup label="Print">
-                        <option value="flyer">Flyer Design</option>
-                        <option value="brochure">Brochure Design</option>
-                        <option value="standee">Roll-up/Standee Design</option>
-                        <option value="id-card">ID Card Design</option>
-                        <option value="menu">Menu Design</option>
-                        <option value="sticker">Sticker Design</option>
-                    </optgroup>
-                    <optgroup label="Events & Invitations">
-                        <option value="wedding-invite">Wedding/Birthday Invitation</option>
-                        <option value="invitation">Invitation Design</option>
-                        <option value="icon">Icon Design</option>
-                    </optgroup>
-                    <optgroup label="Creative & Marketing">
-                        <option value="creative">Creative Design</option>
-                        <option value="thumbnail">Thumbnail Design</option>
-                        <option value="ecommerce">E-commerce Product Photos</option>
-                        <option value="photo-edit">Photo Retouching</option>
-                    </optgroup>
-                    <optgroup label="Business Documents">
-                        <option value="resume">Resume/CV Design</option>
-                        <option value="invoice">Invoice Design</option>
-                        <option value="vector">Vector Tracing</option>
-                    </optgroup>
-                    <option value="other">Other service</option>
+                    <option value="logo">Logo Design</option>
+                    <option value="brand-identity">Brand Identity (Logo, business cards, company profile)</option>
+                    <option value="social-media">Social Media Graphics (Posts, Ads)</option>
+                    <option value="web-design">Web Design (Banners, Landing page, Presentations)</option>
+                    <option value="print-design">Print Design (Flyers, Brochures, Posters)</option>
+                    <option value="menu-design">Restaurant Menu Design</option>
+                    <option value="ad-banners">Advertising Banners (Roll-up, Online)</option>
+                    <option value="invitation-design">Invitation Design (Wedding, Corporate)</option>
+                    <option value="photo-retouching">Photo Retouching & Editing</option>
+                    <option value="vectorization">Vectorization (Converting logo/image to vectors)</option>
+                    <option value="other-service">Other Service (Please specify in message)</option>
                 </select>
             </div>
             
@@ -648,34 +641,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 <script src="script.js"></script>
-
-<script>
-// Filter functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const serviceItems = document.querySelectorAll('.service-item');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const filter = this.getAttribute('data-filter');
-            
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            serviceItems.forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                    item.style.display = 'block';
-                    setTimeout(() => item.style.opacity = '1', 10);
-                } else {
-                    item.style.opacity = '0';
-                    setTimeout(() => item.style.display = 'none', 300);
-                }
-            });
-        });
-    });
-});
-</script>
 
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -692,4 +660,3 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 </html>
-

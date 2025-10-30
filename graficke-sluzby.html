@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -413,36 +415,63 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h2 class="section-title">Naše práce</h2>
         <p class="section-subtitle">Portfólio vybraných projektov</p>
         
-        <div class="portfolio-gallery">
-            <div class="portfolio-item">
-                <img src="logo_ombradoro.webp" alt="Grafický dizajn - Ombra D'oro">
+        <div id="portfolio-gallery-slider" class="splide" aria-label="Galéria našich prác" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
+                          <div class="splide__track">
+                <ul class="splide__list">
+                    
+                    <li class="splide__slide">
+                        <a href="logo_ombradoro.webp" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="logo_ombradoro.webp" alt="Grafický dizajn - Ombra D'oro" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf2.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf2.JPG" alt="Grafický dizajn - Projekt 2" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf3.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf3.JPG" alt="Grafický dizajn - Projekt 3" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf4.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf4.JPG" alt="Grafický dizajn - Projekt 4" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf5.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf5.JPG" alt="Grafický dizajn - Projekt 5" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf6.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf6.JPG" alt="Grafický dizajn - Projekt 6" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf7.jpg" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf7.jpg" alt="Grafický dizajn - Projekt 7" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf9.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf9.JPG" alt="Grafický dizajn - Projekt 9" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf8.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf8.JPG" alt="Grafický dizajn - Projekt 8" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+                    <li class="splide__slide">
+                        <a href="graf1.jpg" class="glightbox" data-gallery="portfolio-gallery">
+                            <img src="graf1.jpg" alt="Grafický dizajn - Projekt 1" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </li>
+
+                </ul>
             </div>
-            <div class="portfolio-item">
-                <img src="graf2.JPG" alt="Grafický dizajn - Projekt 2">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf3.JPG" alt="Grafický dizajn - Projekt 3">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf4.JPG" alt="Grafický dizajn - Projekt 4">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf5.JPG" alt="Grafický dizajn - Projekt 5">
-            </div>
-            <div class="portfolio-item">
-                <img src="graf6.JPG" alt="Grafický dizajn - Projekt 6">
-            </div>
-             <div class="portfolio-item">
-                <img src="graf9.JPG" alt="Grafický dizajn - Projekt 9">
-                </div>
-                <div class="portfolio-item">
-                <img src="graf8.JPG" alt="Grafický dizajn - Projekt 8">
-                </div>
-                <div class="portfolio-item">
-                <img src="graf1.jpg" alt="Grafický dizajn - Projekt 1">
-                </div>
-                
-        </div>
         
         <div style="text-align: center; margin-top: 3rem;">
             <a href="#contact-form" class="btn btn-primary btn-large">Kontaktný formulár</a>
@@ -595,35 +624,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 <script src="script.js"></script>
-
-<script>
-// Filter functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const serviceItems = document.querySelectorAll('.service-item');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const filter = this.getAttribute('data-filter');
-            
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            serviceItems.forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                    item.style.display = 'block';
-                    setTimeout(() => item.style.opacity = '1', 10);
-                } else {
-                    item.style.opacity = '0';
-                    setTimeout(() => item.style.display = 'none', 300);
-                }
-            });
-        });
-    });
-});
-</script>
 
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

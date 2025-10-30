@@ -242,4 +242,39 @@ if (countdownElement) {
     updateCountdown();
     setInterval(updateCountdown, 1000);
 }
+// --- Galéria na podstránke GRAFICKE SLUZBY (s Lightboxom) ---
+    const portfolioSlider = document.getElementById('portfolio-gallery-slider');
+    
+    if (portfolioSlider) {
+        
+        // 1. Najprv inicializujeme Splide slider
+        const splide = new Splide('#portfolio-gallery-slider', {
+            type       : 'loop',
+            perPage    : 3,
+            gap        : '1.5rem',
+            autoplay   : true,
+            breakpoints: {
+                1024: { perPage: 2 },
+                767:  { perPage: 1 },
+            }
+        });
+
+        // 2. Počkáme, kým Splide slider "namontuje" galériu
+        splide.on('mounted', function () {
+            
+            // 3. AŽ POTOM inicializujeme GLightbox
+            // Týmto zabezpečíme, že sa načíta správne aj pre klonované slidy
+            const lightbox = GLightbox({
+                // Tento selector nájde všetky odkazy s triedou .glightbox v rámci slidera
+                selector: '#portfolio-gallery-slider .splide__slide a.glightbox', 
+                touchNavigation: true,
+                loop: true,
+                // Použijeme data-gallery atribút z HTML, aby sa neopakovali klony
+                gallery: 'portfolio-gallery' 
+            });
+        });
+
+        // 4. Spustíme Splide
+        splide.mount();
+    }
 });
