@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeden partner pre všetky technológie vo Vašej firme | Unoneto</title>
     <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate: od pokladní až po CRM a ERP. Zaistíme, aby všetko fungovalo ako jeden celok. Dohodnite si bezplatnú analýzu.">
@@ -23,20 +21,72 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="shortcut icon" href="favicon.png" type="image/png">
+
+    <style>
+        .snowflake {
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #000;
+            position: fixed;
+            top: -10%;
+            z-index: 9999;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
+            pointer-events: none; /* Aby sa dalo klikať cez vločky */
+            -webkit-animation-name: snowflakes-fall, snowflakes-shake;
+            -webkit-animation-duration: 10s, 3s;
+            -webkit-animation-timing-function: linear, ease-in-out;
+            -webkit-animation-iteration-count: infinite, infinite;
+            -webkit-animation-play-state: running, running;
+            animation-name: snowflakes-fall, snowflakes-shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            animation-play-state: running, running;
+        }
+        
+        @-webkit-keyframes snowflakes-fall { 0% { top: -10% } 100% { top: 100% } }
+        @-webkit-keyframes snowflakes-shake { 0%, 100% { -webkit-transform: translateX(0); transform: translateX(0) } 50% { -webkit-transform: translateX(80px); transform: translateX(80px) } }
+        @keyframes snowflakes-fall { 0% { top: -10% } 100% { top: 100% } }
+        @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0) } 50% { transform: translateX(80px) } }
+        
+        .snowflake:nth-of-type(0) { left: 1%; -webkit-animation-delay: 0s, 0s; animation-delay: 0s, 0s }
+        .snowflake:nth-of-type(1) { left: 10%; -webkit-animation-delay: 1s, 1s; animation-delay: 1s, 1s }
+        .snowflake:nth-of-type(2) { left: 20%; -webkit-animation-delay: 6s, .5s; animation-delay: 6s, .5s }
+        .snowflake:nth-of-type(3) { left: 30%; -webkit-animation-delay: 4s, 2s; animation-delay: 4s, 2s }
+        .snowflake:nth-of-type(4) { left: 40%; -webkit-animation-delay: 2s, 2s; animation-delay: 2s, 2s }
+        .snowflake:nth-of-type(5) { left: 50%; -webkit-animation-delay: 8s, 3s; animation-delay: 8s, 3s }
+        .snowflake:nth-of-type(6) { left: 60%; -webkit-animation-delay: 6s, 2s; animation-delay: 6s, 2s }
+        .snowflake:nth-of-type(7) { left: 70%; -webkit-animation-delay: 2.5s, 1s; animation-delay: 2.5s, 1s }
+        .snowflake:nth-of-type(8) { left: 80%; -webkit-animation-delay: 1s, 0s; animation-delay: 1s, 0s }
+        .snowflake:nth-of-type(9) { left: 90%; -webkit-animation-delay: 3s, 1.5s; animation-delay: 3s, 1.5s }
+        .snowflake:nth-of-type(10) { left: 25%; -webkit-animation-delay: 2s, 0s; animation-delay: 2s, 0s }
+        .snowflake:nth-of-type(11) { left: 65%; -webkit-animation-delay: 4s, 2.5s; animation-delay: 4s, 2.5s }
+    </style>
 </head>
 
 <body>
-<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->  
+<div class="snowflakes" aria-hidden="true">
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+</div>
 
-<div id="velky-tyzden-banner" class="side-banner">
-    <a href="/velky-tyzden" target="_blank" rel="noopener noreferrer" class="banner-link-content">
-        <img src="velkytyzden.svg" alt="Akcia Veľký týždeň - nepremeškajtе!" />
+<div id="december-banner" class="side-banner">
+    <a href="unoneto_akcia.html" class="banner-link-content">
+        <img src="december.jpg" alt="Vianočná akcia - Webstránka" />
         <div class="banner-text">
-            <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-calendar-check" style="width: 18px;"></i> Do 30.11.2025</span>
-            <span>Exkluzívna ponuka k veľkému týždňu malých firiem. Máte záujem už teraz? Dajte nám o tom vedieť.</span>
+            <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-gift" style="width: 18px; color: #22d3ee;"></i> Do 31.12.</span>
+            <span><strong>Vianočná akcia!</strong><br>Kompletný web za 290€.</span>
         </div>
     </a>
     <button class="close-banner" aria-label="Zatvoriť banner">&times;</button>
@@ -44,13 +94,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div id="promo-banner" class="promo-banner">
     <p>
-        <strong><i class="fa-solid fa-bullhorn" style="margin-right: 8px; color: #113577;"></i> VEĽKÝ TÝŽDEŇ MALÝCH FIRIEM:</strong> Promo ponuka - profi webstránka <strong>za skvelú cenu</strong> - platí do 30.11.2025!
+        <strong><i class="fa-solid fa-tree" style="margin-right: 8px; color: #22d3ee;"></i> VIANOČNÁ NÁDIELKA:</strong> Profi webstránka <strong>za 290€</strong> (namiesto 580€). Akcia platí do konca roka!
     </p>
-    <a href="/velky-tyzden" class="btn btn-secondary btn-small">Zobraziť ponuku</a>
+    <a href="unoneto_akcia.html" class="btn btn-secondary btn-small">Rozbaliť darček</a>
 </div>
-
-
-
 
     <div class="particle-container">
         <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
@@ -83,7 +130,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <ul class="dropdown-menu">
             <li><a href="weby">Prezentačné weby</a></li>
                         <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafiké služby a dizajn na mieru</a></li>
+                        <li><a href="graficke-sluzby">Grafické služby a dizajn na mieru</a></li>
                         <li><a href="automatizacia">AI Automatizácia procesov</a></li>
                         <li><a href="raynetcrm">RAYNET CRM</a></li>
                         <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
@@ -112,28 +159,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a href="#services" class="btn btn-secondary btn-large">Naše riešenia</a>
             </div>
         </section>
-<!-- NOVÁ SEKCIA - pridať hneď za hero -->
+
 <section class="container reveal" style="padding: 4rem 0; margin-bottom: 2rem;">
     <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border: 2px solid var(--cyan); border-radius: 16px; text-align: center;">
         <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 999px; margin-bottom: 1rem;">
-            <span style="color: var(--white); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-bullhorn" style="margin-right: 8px;"></i> Veľký týždeň malých firiem</span>
+            <span style="color: var(--white); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-gift" style="margin-right: 8px;"></i> Akcia December</span>
         </div>
 
         <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--white);">
-            Promo ponuka <span class="gradient-text">na novú webstránku</span>
+            Vianočná ponuka <span class="gradient-text">na novú webstránku</span>
         </h2>
 
         <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--slate-300);">
-            Získajte komplentý PROFI balík so VŠETKÝMI 3 prémiovými funkciami (online chat, Google Maps, online kalendár) len za <strong style="color: var(--cyan);">290€</strong> namiesto 480€.
+            Darujte firme darček a znížte si daňový základ. Kompletný PROFI balík so VŠETKÝMI 3 prémiovými funkciami len za <strong style="color: var(--cyan);">290€</strong> namiesto 480€.
         </p>
 
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
-             </div>
-
-        <a href="/velky-tyzden" class="btn btn-primary btn-large" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Zobraziť kompletnú ponuku</a>
+        <a href="unoneto_akcia.html" class="btn btn-primary btn-large" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Zobraziť kompletnú ponuku</a>
 
          <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--slate-400);">
-            <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Ponuka platí do 30.11.2025
+            <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Ponuka platí do 31.12.2025
         </p>
     </div>
 </section>
@@ -145,14 +189,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <ul class="splide__list">
 
                         <li class="splide__slide">
-    <a href="velky-tyzden">
-        <img src="velkytyzden.jpg" alt="Veľký týždeň malých firiem - akcia">
-        <div class="slide-caption">
-            <h2><i class="fa-solid fa-star" style="margin-right: 8px; color: #ffffff;"></i> Veľký týždeň malých firiem</h2>
-            <p>PROFI web za cenu štartovacieho! Ušetrite 190€</p>
-        </div>
-    </a>
-</li>
+                            <a href="unoneto_akcia.html">
+                                <img src="december.jpg" alt="Vianočná akcia - Web za 290€">
+                                <div class="slide-caption">
+                                    <h2><i class="fa-solid fa-star" style="margin-right: 8px; color: #ffffff;"></i> Vianočná akcia</h2>
+                                    <p>Web do nákladov ešte tento rok! Ušetrite 190€</p>
+                                </div>
+                            </a>
+                        </li>
 
 						<li class="splide__slide">
 							<a href="raynet">
@@ -178,8 +222,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <a href="weby">
                             <img src="weby1.webp" alt="Tvorba webstránky">
                             <div class="slide-caption">
-                                <h2>Promo ponuka na profi webstránku</h2>
-                                <p>50% promo zľava a bonusy naviac.</p>
+                                <h2>Moderné prezentačné weby</h2>
+                                <p>Dizajn, ktorý predáva a technológie, ktoré fungujú.</p>
                             </div>
                             </a>
                         </li>
@@ -363,18 +407,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </script>
 
     <script>
-// Odpočet dní do konca Veľkého týždňa
-const endDate = new Date('November 30, 2025 23:59:59');
-const daysElement = document.getElementById('days-remaining');
-
-if (daysElement) {
-    const now = new Date();
-    const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
-    daysElement.textContent = daysLeft > 0 ? daysLeft : 0;
-}
-</script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('december-banner');
+            const closeBtn = banner ? banner.querySelector('.close-banner') : null;
+            if(banner && closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    banner.classList.add('hidden');
+                });
+            }
+        });
+    </script>
 </body>
-
-
 </html>
-

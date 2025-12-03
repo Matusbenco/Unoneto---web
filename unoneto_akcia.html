@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akcia December: Webstránka za 290€ | Unoneto</title>
+    <meta name="description" content="Získajte profesionálnu webstránku za akciovú cenu 290€. Akcia platí do konca roka 2025.">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+    
+    <style>
+        /* Špecifické úpravy pre túto podstránku */
+        
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+
+        /* Timer Kontajner */
+        .timer-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 3rem 2rem;
+            border: 2px solid rgba(34, 211, 238, 0.3); 
+            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.6); 
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .timer-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .timer-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+
+        .timer-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--slate-300);
+            font-weight: 500;
+        }
+
+        .timer-separator {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer-footer {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: var(--slate-300);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+        }
+
+        .timer-btn-wrapper { margin-top: 2rem; }
+
+        .timer-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(to right, var(--cyan), var(--purple));
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
+            border: none;
+        }
+
+        .timer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        /* --- ŠTÝLY PRE SLIDER REFERENCIÍ --- */
+        .splide__slide {
+            padding: 1rem; /* Odsadenie medzi kartami */
+        }
+
+        .portfolio-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: block;
+            height: 100%; /* Aby boli karty rovnako vysoké */
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .portfolio-preview {
+            height: 180px;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .portfolio-preview img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .portfolio-preview span {
+            font-weight: 700;
+            color: var(--cyan);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .portfolio-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .portfolio-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-link {
+            color: var(--cyan);
+            font-size: 0.9rem;
+        }
+
+        /* Úprava šípok slidera */
+        .splide__arrow {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            opacity: 1;
+        }
+        .splide__arrow svg {
+            fill: var(--cyan);
+        }
+        .splide__arrow:hover {
+            background: var(--cyan);
+        }
+        .splide__arrow:hover svg {
+            fill: var(--slate-900);
+        }
+        .splide__pagination__page.is-active {
+            background: var(--cyan);
+        }
+
+        /* Responzivita */
+        @media (max-width: 600px) {
+            .timer-number { font-size: 2.2rem; }
+            .timer-separator { font-size: 1.8rem; margin-bottom: 1rem; }
+            .timer-block { min-width: auto; }
+            .timer-label { font-size: 0.65rem; }
+            .timer-grid { gap: 0.2rem; }
+            .timer-container { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+    </div>
+
+    <header class="main-header">
+        <nav class="container">
+            <a href="/" class="logo">
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                <span>Unoneto</span>
+            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                 <button id="hamburger-btn" aria-label="Toggle navigation">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+                 <ul class="nav-links" id="nav-menu">
+                    <li><a href="/">Domov</a></li>
+                    <li><a href="/weby">Služby</a></li>
+                    <li><a href="#contact-form" class="btn btn-primary">Mám záujem</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content container">
+        
+        <div class="hero-section">
+            <div style="display: inline-block; padding: 8px 16px; background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 50px; color: var(--cyan); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem;">
+                Decembrová akcia
+            </div>
+            
+            <h1 class="hero-title">Kompletná webstránka <br><span class="gradient-text">LEN ZA 290€</span></h1>
+            <p class="hero-description" style="font-size: 1.2rem; color: var(--slate-300); max-width: 700px; margin: 0 auto;">
+                Získajte profesionálny web za cenu štartovacieho. Znížte si daňový základ ešte tento rok a začnite rok 2026 s náskokom.
+            </p>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer-header">AKCIA KONČÍ O:</div>
+            
+            <div class="timer-grid">
+                <div class="timer-block">
+                    <div class="timer-number" id="days">0</div>
+                    <div class="timer-label">DNÍ</div>
+                </div>
+                
+                <div class="timer-separator">:</div>
+                
+                <div class="timer-block">
+                    <div class="timer-number" id="hours">0</div>
+                    <div class="timer-label">HODÍN</div>
+                </div>
+                
+                <div class="timer-separator">:</div>
+                
+                <div class="timer-block">
+                    <div class="timer-number" id="minutes">0</div>
+                    <div class="timer-label">MINÚT</div>
+                </div>
+                
+                <div class="timer-separator">:</div>
+                
+                <div class="timer-block">
+                    <div class="timer-number" id="seconds">0</div>
+                    <div class="timer-label">SEKÚND</div>
+                </div>
+            </div>
+
+            <div class="timer-footer">
+                Ponuka ceny webstránky platí len do <strong>31. decembra 2025, 23:59</strong>
+            </div>
+
+            <div class="timer-btn-wrapper">
+                <a href="webstranka_formular" class="timer-btn">Využiť ponuku</a>
+            </div>
+        </div>
+
+        <div style="max-width: 900px; margin: 5rem auto; text-align: center;">
+            <h2 class="section-title">Čo všetko získate v balíku?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; text-align: left;">
+                
+                <div class="card" style="padding: 2rem; background: rgba(30,41,59,0.5);">
+                    <h3 style="color: white; margin-bottom: 0.5rem; font-size: 1.2rem;">Web na mieru</h3>
+                    <p style="margin: 0; font-size: 0.95rem;">Žiadne šablóny. Unikátny dizajn prispôsobený vašej značke a cieľom.</p>
+                </div>
+
+                <div class="card" style="padding: 2rem; background: rgba(30,41,59,0.5);">
+                    <h3 style="color: white; margin-bottom: 0.5rem; font-size: 1.2rem;">SEO Optimalizácia</h3>
+                    <p style="margin: 0; font-size: 0.95rem;">Základné technické nastavenie, aby vás Google a zákazníci ľahko našli.</p>
+                </div>
+
+                <div class="card" style="padding: 2rem; background: rgba(30,41,59,0.5);">
+                    <h3 style="color: white; margin-bottom: 0.5rem; font-size: 1.2rem;">Plná responzivita</h3>
+                    <p style="margin: 0; font-size: 0.95rem;">Váš web bude vyzerať a fungovať perfektne na mobile, tablete aj PC.</p>
+                </div>
+
+                <div class="card" style="padding: 2rem; background: rgba(30,41,59,0.5); border-color: var(--cyan);">
+                    <h3 style="color: var(--cyan); margin-bottom: 0.5rem; font-size: 1.2rem;">BONUSY ZDARMA</h3>
+                    <p style="margin: 0; font-size: 0.95rem;">Online chat, integrácia Google Maps a Online rezervačný kalendár v cene.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <section class="container reveal" style="margin: 4rem auto;">
+            <h2 class="section-title">Naše najnovšie práce</h2>
+            <p class="section-subtitle">Pridajte sa k našim spokojným klientom</p>
+            
+            <div id="references-slider" class="splide" aria-label="Referencie">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        
+                        <li class="splide__slide">
+                            <a href="https://carbox.top" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="carbox.png" alt="CarBox Top Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>CARBOX.TOP</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">CarBox Top</h4>
+                                    <span class="portfolio-link">www.carbox.top</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.jistykrok.cz" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                    <img src="jistykrok.png" alt="Jistý Krok CZ Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>JISTÝ KROK (CZ)</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Jistý Krok CZ</h4>
+                                    <span class="portfolio-link">www.jistykrok.cz</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.istykrok.eu" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="istykrok.png" alt="Istý Krok EU Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>ISTÝ KROK (EU)</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Istý Krok EU</h4>
+                                    <span class="portfolio-link">www.istykrok.eu</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.ombradoro.sk" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="logo_ombradoro.webp" alt="Ombra Doro Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>OMBRA DORO</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Ombra Doro</h4>
+                                    <span class="portfolio-link">www.ombradoro.sk</span>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer" style="margin-top: 4rem;">
+        <div class="container copyright">
+            <p>© 2025 Unoneto | Tvorba webstránok</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+    <script>
+        // Inicializácia Slidera pre referencie
+        document.addEventListener( 'DOMContentLoaded', function() {
+            new Splide( '#references-slider', {
+                type   : 'loop',
+                perPage: 3,
+                gap    : '2rem',
+                autoplay: true,
+                interval: 3000,
+                breakpoints: {
+                    768: {
+                        perPage: 1,
+                        padding: '1rem'
+                    },
+                    1024: {
+                        perPage: 2,
+                    }
+                }
+            } ).mount();
+        });
+
+        // Odpočítavanie do 31. decembra 2025
+        const endDate = new Date('December 31, 2025 23:59:59').getTime();
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Hamburger menu script
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-menu');
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                hamburgerBtn.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>
