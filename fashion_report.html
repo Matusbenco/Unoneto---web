@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Sourcing Report 2025/26 | B2B Analysis</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* Stone-50 */
+            color: #1c1917; /* Stone-900 */
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .luxury-accent {
+            color: #78350f; /* Amber-900/Brown */
+        }
+        .bg-luxury {
+            background-color: #78350f;
+        }
+        .link-hover {
+            position: relative;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: currentColor;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .link-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .table-wrapper {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a29e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <span class="serif text-2xl font-bold tracking-wide text-stone-900">SOURCING<span class="luxury-accent">REPORT</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                    <a href="#intro" class="hover:text-stone-900 transition">Úvod</a>
+                    <a href="#italy" class="hover:text-stone-900 transition">Taliansko</a>
+                    <a href="#dach" class="hover:text-stone-900 transition">DACH</a>
+                    <a href="#aggregators" class="hover:text-stone-900 transition">Agregátory</a>
+                </div>
+                <a href="#summary-table" class="bg-stone-900 text-white px-6 py-2 rounded-sm text-sm font-medium hover:bg-stone-700 transition">
+                    Tabuľka Dodávateľov
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative bg-stone-100 overflow-hidden py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-bold tracking-[0.2em] text-stone-500 uppercase mb-4 block">Strategická Analýza 2025</span>
+            <h1 class="text-4xl md:text-6xl font-bold text-stone-900 mb-6 leading-tight">
+                Európsky dodávateľský reťazec <br>
+                <span class="serif italic luxury-accent">v digitálnej ére</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-stone-600 leading-relaxed">
+                Komplexná analýza prechodu od showroomov k digitálnym ekosystémom. Prístup k B2B portálom, XML integrácie a kontakty na kľúčových hráčov v móde.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#italy" class="px-8 py-3 border border-stone-300 text-stone-700 bg-white hover:bg-stone-50 transition rounded-sm font-medium">
+                    Talianski Giganti
+                </a>
+                <a href="#dach" class="px-8 py-3 border border-stone-300 text-stone-700 bg-white hover:bg-stone-50 transition rounded-sm font-medium">
+                    DACH Avantgarda
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="intro" class="py-16 bg-white border-b border-stone-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="serif text-3xl font-bold text-stone-900 mb-6">Manažérske zhrnutie</h2>
+            <div class="prose prose-stone text-stone-600 text-lg leading-relaxed">
+                <p class="mb-4">
+                    Európsky trh s veľkoobchodnou módou prechádza transformáciou. Kľúčom ku konkurencieschopnosti je schopnosť napojiť sa na hybridné digitálne ekosystémy – od "Pronto Moda" v Bologni až po avantgardu v Berlíne.
+                </p>
+                <p class="mb-4">
+                    Táto správa odhaľuje bifurkáciu trhu: veľké skupiny (Abraham Industries, NYKY) využívajú <strong>centralizované B2B portály</strong>, zatiaľ čo nezávislé značky (Odeeh) preferujú <strong>externé trhoviská</strong> (JOOR). Kritickú úlohu zohrávajú <strong>agregátori</strong> (Brandsdistribution), ktorí premosťujú technologickú priepasť poskytovaním XML feedov.
+                </p>
+                <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-luxury-accent mt-8">
+                    <h3 class="font-bold text-stone-900 mb-2">Kľúčové zistenie: 3 Segmenty trhu</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-sm">
+                        <li><strong>Priami výrobcovia:</strong> Statické CSV, sezónne predobjednávky.</li>
+                        <li><strong>Pronto Moda:</strong> Vysoká obrátkovosť, chránené B2B portály, často bez XML.</li>
+                        <li><strong>Agregátori:</strong> Zdroj automatizovaných XML/CSV feedov pre e-shopy.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="italy" class="py-20 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center mb-12">
+                <span class="h-px w-12 bg-luxury-accent mr-4"></span>
+                <h2 class="serif text-4xl font-bold text-stone-900">Taliansko: Pronto Moda & Giganti</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-stone-100 flex flex-col">
+                    <div class="mb-4">
+                        <span class="text-xs font-bold tracking-wider text-stone-400 uppercase">Centergross Bologna</span>
+                        <h3 class="serif text-2xl font-bold text-stone-900 mt-1">KAOS</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">
+                        Líder v "rýchlej móde". Systém "Day by Day". Priamy B2B prístup je obmedzený a vyžaduje agenta. Pre XML nutné použiť agregátora.
+                    </p>
+                    <div class="space-y-3 mt-auto">
+                        <a href="https://kaosstore.com/" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-globe mr-2"></i> Oficiálny web
+                        </a>
+                        <a href="https://fashionlabagency.com/" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-user-tie mr-2"></i> Agentúra FashionLab
+                        </a>
+                        <div class="text-xs text-red-600 font-medium text-center mt-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> XML len cez Matterhorn
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-stone-100 flex flex-col">
+                    <div class="mb-4">
+                        <span class="text-xs font-bold tracking-wider text-stone-400 uppercase">Pronto Moda</span>
+                        <h3 class="serif text-2xl font-bold text-stone-900 mt-1">HAVEONE</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">
+                        Dynamický segment s vlastným B2B portálom. Prístup podmienený autorizáciou. Manuálny výber tovaru.
+                    </p>
+                    <div class="space-y-3 mt-auto">
+                        <a href="https://b2b.haveone.it/" target="_blank" class="block w-full text-center py-2 bg-stone-900 text-white rounded text-sm hover:bg-stone-700 transition">
+                            <i class="fa-solid fa-lock mr-2"></i> B2B Registrácia
+                        </a>
+                        <a href="mailto:b2b@haveone.it" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-regular fa-envelope mr-2"></i> b2b@haveone.it
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-stone-100 flex flex-col">
+                    <div class="mb-4">
+                        <span class="text-xs font-bold tracking-wider text-stone-400 uppercase">Liviana Conti / Semicouture</span>
+                        <h3 class="serif text-2xl font-bold text-stone-900 mt-1">Abraham Industries</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">
+                        Prémiová skupina. Centralizovaný portál "Mp Style". Nutný kontakt s obchodným oddelením pre login.
+                    </p>
+                    <div class="space-y-3 mt-auto">
+                        <a href="https://b2b.abrahamindustries.it/campaign/servlet/Login" target="_blank" class="block w-full text-center py-2 bg-stone-900 text-white rounded text-sm hover:bg-stone-700 transition">
+                            <i class="fa-solid fa-key mr-2"></i> B2B Login
+                        </a>
+                        <a href="https://abrahamindustries.it/" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-building mr-2"></i> O skupine
+                        </a>
+                        <a href="https://semicouture.it/pages/contact" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-shirt mr-2"></i> Semicouture Web
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-stone-100 flex flex-col">
+                    <div class="mb-4">
+                        <span class="text-xs font-bold tracking-wider text-stone-400 uppercase">Premium</span>
+                        <h3 class="serif text-2xl font-bold text-stone-900 mt-1">Erika Cavallini</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">
+                        Špecifický registračný proces vyžadujúci referencie na iných dodávateľov. Detailný onboarding.
+                    </p>
+                    <div class="space-y-3 mt-auto">
+                        <a href="https://www.cavallini.com/account-request" target="_blank" class="block w-full text-center py-2 bg-stone-900 text-white rounded text-sm hover:bg-stone-700 transition">
+                            <i class="fa-solid fa-file-pen mr-2"></i> Žiadosť o účet
+                        </a>
+                        <a href="https://wholesale.cavallini.com/" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-lock mr-2"></i> Wholesale Login
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-stone-100 flex flex-col">
+                    <div class="mb-4">
+                        <span class="text-xs font-bold tracking-wider text-stone-400 uppercase">Modern Luxury</span>
+                        <h3 class="serif text-2xl font-bold text-stone-900 mt-1">NYKY (Momonì)</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-6 flex-grow">
+                        Moderný B2B portál s možnosťou priamej registrácie pre nových partnerov. Podpora Digital Linesheet.
+                    </p>
+                    <div class="space-y-3 mt-auto">
+                        <a href="https://b2b.nyky.it/" target="_blank" class="block w-full text-center py-2 bg-stone-900 text-white rounded text-sm hover:bg-stone-700 transition">
+                            <i class="fa-solid fa-right-to-bracket mr-2"></i> B2B Portál
+                        </a>
+                        <a href="https://www.momoni.it/" target="_blank" class="block w-full text-center py-2 border border-stone-300 rounded text-sm hover:bg-stone-50 transition">
+                            <i class="fa-solid fa-globe mr-2"></i> Momoni Web
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-stone-100 p-8 rounded-lg border border-stone-200 flex flex-col justify-center">
+                    <h3 class="serif text-xl font-bold text-stone-900 mb-4">Ďalšie značky</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="https://www.robertocollina.com/" target="_blank" class="text-stone-700 hover:text-luxury-accent font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2 text-xs"></i> Roberto Collina
+                            </a>
+                            <span class="text-xs text-stone-500 block ml-6">Kontakt: sara.mazzanti@robertocollina.it</span>
+                        </li>
+                        <li>
+                            <a href="https://world.alysi.com/" target="_blank" class="text-stone-700 hover:text-luxury-accent font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2 text-xs"></i> ALYSI
+                            </a>
+                            <span class="text-xs text-stone-500 block ml-6">Showroom only: showroom@alysi.it</span>
+                        </li>
+                        <li>
+                            <a href="https://www.tela9.com/" target="_blank" class="text-stone-700 hover:text-luxury-accent font-medium flex items-center">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2 text-xs"></i> TELA 9
+                            </a>
+                            <span class="text-xs text-stone-500 block ml-6">Výrobca kože Genesi S.r.l.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="dach" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center mb-12">
+                <span class="h-px w-12 bg-luxury-accent mr-4"></span>
+                <h2 class="serif text-4xl font-bold text-stone-900">DACH: Nemecká & Rakúska Avantgarda</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="space-y-6">
+                    <div class="border-l-4 border-stone-900 pl-6 py-2">
+                        <h3 class="serif text-2xl font-bold text-stone-900">Odeeh</h3>
+                        <p class="text-stone-600 text-sm mt-2 mb-3">Atelier tradition. Využíva platformu JOOR pre správu veľkoobchodu a export CSV dát.</p>
+                        <div class="flex gap-4">
+                            <a href="https://www.odeeh.com/" target="_blank" class="text-sm font-bold text-luxury-accent hover:underline">Webstránka</a>
+                            <a href="https://www.joor.com/" target="_blank" class="text-sm font-bold text-stone-900 hover:underline">Objednať cez JOOR</a>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-stone-400 pl-6 py-2">
+                        <h3 class="serif text-2xl font-bold text-stone-900">Sagan Vienna</h3>
+                        <p class="text-stone-600 text-sm mt-2 mb-3">Viedenský Bauhaus štýl. Zalistovaní na Orderchamp, čo zjednodušuje nákup pre menšie butiky.</p>
+                        <div class="flex gap-4">
+                            <a href="https://www.sagan-vienna.com/" target="_blank" class="text-sm font-bold text-luxury-accent hover:underline">Webstránka</a>
+                            <a href="https://www.orderchamp.com/" target="_blank" class="text-sm font-bold text-stone-900 hover:underline">Kúpiť na Orderchamp</a>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-stone-200 pl-6 py-2">
+                        <h3 class="serif text-2xl font-bold text-stone-900">William Fan</h3>
+                        <p class="text-stone-600 text-sm mt-2 mb-3">Euro-ázijská fúzia z Berlína. Priamy predaj alebo cez Faire.</p>
+                        <div class="flex gap-4">
+                            <a href="https://www.williamfan.com/" target="_blank" class="text-sm font-bold text-luxury-accent hover:underline">Webstránka</a>
+                            <a href="https://www.faire.com/" target="_blank" class="text-sm font-bold text-stone-900 hover:underline">Platforma Faire</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-8 rounded-xl">
+                    <h4 class="font-bold text-stone-900 mb-6 uppercase tracking-wider text-sm">Ďalší dizajnéri</h4>
+                    <ul class="space-y-4">
+                        <li class="flex justify-between items-center pb-4 border-b border-stone-200">
+                            <div>
+                                <span class="font-bold block">Fassbender</span>
+                                <span class="text-xs text-stone-500">Hamburg | Cirkulárna móda</span>
+                            </div>
+                            <a href="https://fashionunited.com/companies/fassbender" target="_blank" class="text-stone-400 hover:text-stone-900"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                        <li class="flex justify-between items-center pb-4 border-b border-stone-200">
+                            <div>
+                                <span class="font-bold block">KOLO Berlin</span>
+                                <span class="text-xs text-stone-500">Berlín | Udržateľný streetwear</span>
+                            </div>
+                            <a href="https://kolo.com/" target="_blank" class="text-stone-400 hover:text-stone-900"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                        <li class="flex justify-between items-center pb-4 border-b border-stone-200">
+                            <div>
+                                <span class="font-bold block">Meshit</span>
+                                <span class="text-xs text-stone-500">Viedeň | Hybridný model</span>
+                            </div>
+                            <a href="https://www.meshit.at/" target="_blank" class="text-stone-400 hover:text-stone-900"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                        <li class="flex justify-between items-center pb-4 border-b border-stone-200">
+                            <div>
+                                <span class="font-bold block">Ferrari Zöchling</span>
+                                <span class="text-xs text-stone-500">Viedeň | Umelecká móda</span>
+                            </div>
+                            <a href="https://ferrarizoechling.com/" target="_blank" class="text-stone-400 hover:text-stone-900"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold block">Artknit Studios</span>
+                                <span class="text-xs text-stone-500">DTC Model | Biella</span>
+                            </div>
+                            <a href="https://artknit-studios.com/" target="_blank" class="text-stone-400 hover:text-stone-900"><i class="fa-solid fa-link"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="aggregators" class="py-20 bg-stone-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="serif text-3xl font-bold mb-4">Riešenie pre XML automatizáciu</h2>
+            <p class="text-stone-400 max-w-2xl mx-auto mb-12">
+                Ak značka neposkytuje priamy feed, využite týchto agregátorov na premostenie technologickej priepasti.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="bg-stone-800 p-8 rounded-lg border border-stone-700 hover:border-luxury-accent transition duration-300">
+                    <h3 class="font-bold text-xl mb-2">Brandsdistribution</h3>
+                    <p class="text-stone-400 text-sm mb-6">Svetový líder. Natívne API a moduly pre Shopify/Magento. Ideálne pre KAOS a Liviana Conti.</p>
+                    <a href="https://www.brandsdistribution.com/" target="_blank" class="inline-block w-full text-center py-3 bg-luxury-accent text-white rounded font-medium hover:bg-stone-600 transition">
+                        Registrácia <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <div class="bg-stone-800 p-8 rounded-lg border border-stone-700 hover:border-luxury-accent transition duration-300">
+                    <h3 class="font-bold text-xl mb-2">Griffati</h3>
+                    <p class="text-stone-400 text-sm mb-6">Špecialista na taliansku módu. Rýchla aktualizácia skladu a dropshipping služba.</p>
+                    <a href="https://www.griffati.com/" target="_blank" class="inline-block w-full text-center py-3 bg-stone-700 text-white rounded font-medium hover:bg-stone-600 transition">
+                        Navštíviť Griffati <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <div class="bg-stone-800 p-8 rounded-lg border border-stone-700 hover:border-luxury-accent transition duration-300">
+                    <h3 class="font-bold text-xl mb-2">Matterhorn</h3>
+                    <p class="text-stone-400 text-sm mb-6">Explicitne uvádzajú XML pre značku KAOS. Optimalizované pre e-commerce.</p>
+                    <a href="https://matterhorn-wholesale.com/" target="_blank" class="inline-block w-full text-center py-3 bg-stone-700 text-white rounded font-medium hover:bg-stone-600 transition">
+                        Získať XML Feed <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="summary-table" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="serif text-3xl font-bold text-stone-900 mb-8 text-center">Konsolidovaný Prehľad Dodávateľov</h2>
+            
+            <div class="table-wrapper">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-stone-200">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-stone-500 uppercase tracking-wider">Značka</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-stone-500 uppercase tracking-wider">Priamy B2B Link</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-stone-500 uppercase tracking-wider">XML/CSV Status</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-stone-500 uppercase tracking-wider">Stratégia</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-stone-200">
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">KAOS</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://kaosstore.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">kaosstore.com <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Len cez Agregátora</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Použite Matterhorn/Brandsdistribution</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">HAVEONE</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://b2b.haveone.it/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">b2b.haveone.it <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Manuálny CSV</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Priama registrácia</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">Liviana Conti</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://b2b.abrahamindustries.it/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">b2b.abrahamindustries.it <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Manuálny CSV</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Email na Sales Managera</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">Erika Cavallini</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://wholesale.cavallini.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">wholesale.cavallini.com <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Manuálny CSV</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Formulár na webe</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">Momonì</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://b2b.nyky.it/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">b2b.nyky.it <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Manuálny CSV</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Sign Up na portáli</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">Odeeh</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://www.joor.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">Cez JOOR <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Áno (JOOR Export)</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Digitálny Showroom</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-stone-900">Sagan Vienna</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://www.orderchamp.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">Orderchamp <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Áno (Orderchamp)</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Niche Platforma</td>
+                            </tr>
+                            <tr class="bg-stone-100">
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-stone-900">Brandsdistribution</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://www.brandsdistribution.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">brandsdistribution.com <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Áno (Native API)</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Agregátor</td>
+                            </tr>
+                            <tr class="bg-stone-100">
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-stone-900">Griffati</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://www.griffati.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">griffati.com <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Áno (Native API)</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Agregátor</td>
+                            </tr>
+                            <tr class="bg-stone-100">
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-stone-900">Matterhorn</td>
+                                <td class="px-6 py-4 whitespace-nowrap"><a href="https://matterhorn-wholesale.com/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">matterhorn-wholesale.com <i class="fa-solid fa-up-right-from-square text-xs ml-1"></i></a></td>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Áno (Native API)</span></td>
+                                <td class="px-6 py-4 text-sm text-stone-500">Agregátor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-stone-900 text-white py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <span class="serif text-xl font-bold">OMBRA D'ORO<span class="text-stone-500">REPORT</span></span>
+                <p class="text-stone-500 text-sm mt-2">Strategická analýza pre slovenský B2B trh.</p>
+            </div>
+            <div class="flex space-x-6 text-sm text-stone-500">
+                <span>© Matúš Benčo</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
