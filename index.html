@@ -23,6 +23,110 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="shortcut icon" href="favicon.png" type="image/png">
 
     <style>
+    /* --- NOVÝ ŠTÝL PRE PROCES (Rovnaký ako na podstránkach) --- */
+    
+    /* 1. Mriežka */
+    .process-grid-fixed {
+        display: grid;
+        grid-template-columns: 1fr; /* Mobil: 1 stĺpec */
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    /* Tablet: 2 stĺpce */
+    @media (min-width: 700px) {
+        .process-grid-fixed {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Desktop: 4 stĺpce */
+    @media (min-width: 1200px) {
+        .process-grid-fixed {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    /* 2. Karty s animáciou */
+    .process-card-anim {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(34, 211, 238, 0.15);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        
+        /* Pripravené na animáciu (skryté) */
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+
+    /* Trieda pre spustenie animácie */
+    .process-card-anim.pop-in {
+        animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes cardPopIn {
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Hover efekt */
+    .process-card-anim:hover {
+        transform: translateY(-10px) !important;
+        border-color: var(--cyan);
+        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15);
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    /* Číslo v pozadí */
+    .process-number-bg {
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        font-size: 5rem;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.03);
+        line-height: 1;
+        pointer-events: none;
+        transition: transform 0.5s ease;
+    }
+
+    .process-card-anim:hover .process-number-bg {
+        transform: scale(1.2) rotate(-10deg);
+        color: rgba(34, 211, 238, 0.1);
+    }
+
+    /* Ikona */
+    .process-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        display: inline-block;
+    }
+
+    /* Texty */
+    .process-content h3 {
+        font-size: 1.3rem;
+        color: white;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .process-content p {
+        font-size: 0.95rem;
+        color: #cbd5e1;
+        margin: 0;
+        line-height: 1.6;
+    }
+
         .snowflake {
             color: #fff;
             font-size: 1em;
@@ -278,30 +382,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </section>
 
         <section id="process" class="container reveal">
-            <h2 class="section-title">Ako prebieha spolupráca?</h2>
-            <div class="process-grid process-grid-4">
-                 <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Analýza potrieb</h3>
-                    <p>Na úvodnej konzultácii si detailne prejdeme Vaše ciele, problémy a potreby, aby sme presne pochopili, čo potrebujete vyriešiť.</p>
-                 </div>
-                 <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Návrh riešenia</h3>
-                    <p>Navrhneme Vám ideálnu kombináciu nástrojov a systémov, ktoré budú navzájom prepojené a budú pracovať pre Vás.</p>
-                 </div>
-                 <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Realizácia a integrácia</h3>
-                    <p>Zabezpečíme kompletnú realizáciu – od tvorby webu až po prepojenie všetkých systémov do funkčného celku.</p>
-                 </div>
-                 <div class="process-step">
-                    <div class="step-number">4</div>
-                    <h3>Spustenie a podpora</h3>
-                    <p>Váš nový digitálny ekosystém spustíme do prevádzky, zaškolíme Vás a poskytneme Vám dlhodobú technickú podporu.</p>
-                 </div>
+    <h2 class="section-title">Ako prebieha spolupráca?</h2>
+    <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Jednoduchý a transparentný proces od prvej kávy až po hotové riešenie.</p>
+    
+    <div class="process-grid-fixed">
+        
+        <div class="process-card-anim" style="animation-delay: 0s;">
+            <div class="process-number-bg">01</div>
+            <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+            <div class="process-content">
+                <h3>Analýza potrieb</h3>
+                <p>Na úvodnej konzultácii preberieme vaše ciele a problémy. Pochopíme váš biznis, aby sme navrhli to najlepšie riešenie.</p>
             </div>
-        </section>
+        </div>
+
+        <div class="process-card-anim" style="animation-delay: 0.15s;">
+            <div class="process-number-bg">02</div>
+            <div class="process-icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <div class="process-content">
+                <h3>Návrh riešenia</h3>
+                <p>Pripravíme stratégiu a navrhneme ideálnu kombináciu nástrojov (web, CRM, automatizácie), ktoré budú pracovať pre vás.</p>
+            </div>
+        </div>
+
+        <div class="process-card-anim" style="animation-delay: 0.3s;">
+            <div class="process-number-bg">03</div>
+            <div class="process-icon"><i class="fa-solid fa-code"></i></div>
+            <div class="process-content">
+                <h3>Realizácia</h3>
+                <p>Zabezpečíme kompletnú realizáciu. Od dizajnu a programovania webu až po prepojenie a nastavenie všetkých systémov.</p>
+            </div>
+        </div>
+
+        <div class="process-card-anim" style="animation-delay: 0.45s;">
+            <div class="process-number-bg">04</div>
+            <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+            <div class="process-content">
+                <h3>Spustenie a podpora</h3>
+                <p>Všetko otestujeme, spustíme do ostrej prevádzky, zaškolíme vás a poskytneme dlhodobú technickú podporu.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
 		
         <section id="about" class="container reveal">
              <h2 class="section-title">Prečo firemný agent a nie len ďalší dodávateľ?</h2>
@@ -417,5 +540,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Observer pre animáciu kariet procesu
+        const observerOptions = {
+            threshold: 0.2 // Spustí sa, keď je 20% sekcie viditeľnej
+        };
+
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Nájde všetky karty v sekcii a pridá im triedu .pop-in
+                    const cards = entry.target.querySelectorAll('.process-card-anim');
+                    cards.forEach(card => card.classList.add('pop-in'));
+                    
+                    // Prestane sledovať po spustení
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const processSection = document.querySelector('#process');
+        if (processSection) {
+            processObserver.observe(processSection);
+        }
+    });
+</script>
 </body>
 </html>
