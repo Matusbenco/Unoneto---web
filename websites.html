@@ -1,39 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Website Development | Unoneto</title>
     <meta name="description" content="Get a modern, custom-built website with complete SEO setup, hosting, and no monthly fees.">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        /* --- Background & Effects --- */
+        .particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .ping-particle {
+            position: absolute; border-radius: 50%; opacity: 0.3;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            animation: particleMove infinite linear;
+        }
+        @keyframes particleMove {
+            0% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.3; }
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            padding: 10rem 0 5rem;
+            text-align: center;
+        }
+        
+        /* --- Cards & Glassmorphism --- */
+        .services-grid .card, .process-step {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .services-grid .card:hover, .process-step:hover {
+             border-color: var(--cyan);
+             box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2);
+             transform: translateY(-5px);
+        }
+        .service-icon-wrapper {
+            display: inline-flex; padding: 15px; border-radius: 50%;
+            background: rgba(34, 211, 238, 0.1); color: var(--cyan);
+            font-size: 1.5rem; margin-bottom: 1rem;
+        }
+
+        /* --- Process Grid (Fixed) --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 650px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9);
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+
+        /* --- Slider Styling --- */
+        .splide__slide { padding: 1rem; }
+        .portfolio-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s ease; display: block; text-decoration: none; height: 100%;
+        }
+        .portfolio-card:hover {
+            transform: translateY(-5px); border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .portfolio-preview {
+            height: 200px; background: #1e293b; display: flex; align-items: center; justify-content: center;
+            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .portfolio-preview img {
+            max-width: 90%; max-height: 90%; object-fit: contain;
+        }
+        .portfolio-preview span {
+            font-weight: 700; color: var(--cyan); font-size: 1.2rem; text-transform: uppercase;
+        }
+        .portfolio-info { padding: 1.5rem; text-align: center; }
+        .portfolio-title { color: white; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .portfolio-link { color: var(--cyan); font-size: 0.9rem; }
+        
+        .splide__arrow { background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); opacity: 1; }
+        .splide__arrow svg { fill: var(--cyan); }
+        .splide__arrow:hover { background: var(--cyan); }
+        .splide__arrow:hover svg { fill: var(--slate-900); }
+        .splide__pagination__page.is-active { background: var(--cyan); }
+
+        /* --- Contact Form --- */
+        .contact-form-container {
+            max-width: 700px; margin: 0 auto; padding: 3rem;
+            background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 20px; backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
+        .form-input {
+            width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white;
+            font-size: 1rem; transition: all 0.3s ease;
+        }
+        .form-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); background: rgba(15, 23, 42, 1); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+    </style>
 </head>
 
 <body>
-<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-    <div class="particle-container">
-        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
-        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
-        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
-        <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
-        <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
+<div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; width: 150px; height: 150px; animation-duration: 8s;"></div>
+        <div class="ping-particle" style="top: 60%; left: 85%; width: 100px; height: 100px; animation-duration: 6s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 30%; width: 80px; height: 80px; animation-duration: 10s; animation-delay: 2s;"></div>
     </div>
     <div class="background-shapes">
         <div class="shape shape1"></div>
@@ -41,7 +157,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="shape shape3"></div>
     </div>
 
-<header class="main-header">
+    <header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
                 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
@@ -53,11 +169,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="hamburger-bar"></span>
             </button>
           
-<ul class="nav-links" id="nav-menu">
+            <ul class="nav-links" id="nav-menu">
                 <li class="has-dropdown">
                     <a href="#" id="nasa-ponuka-toggle">Services</a>
                     <ul class="dropdown-menu">
-                        <li><a href="websites">Business Websites</a></li>
+                        <li><a href="websites" class="active">Business Websites</a></li>
                         <li><a href="ecommerce">Custom E-commerce</a></li>
                         <li><a href="graphic-design">Graphic Design & Services</a></li>
                         <li><a href="automation">AI Process Automation</a></li>
@@ -72,86 +188,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <li class="language-switcher">
                     <a href="weby" class="lang-link" title="Slovak"><span class="fi fi-sk"></span></a>
                     <span class="lang-separator">|</span>
-                    <a href="webites" class="lang-link active" title="English"><span class="fi fi-gb"></span></a>
+                    <a href="websites" class="lang-link active" title="English"><span class="fi fi-gb"></span></a>
                 </li>
-                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Book Consultation</a></li>
+                <li><a href="#contact-form" class="btn btn-primary">Book Consultation</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="main-content">
-        <section class="subpage-hero container reveal">
+        <section class="hero-section container reveal">
+            <div style="display: inline-block; padding: 8px 16px; background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 50px; color: var(--cyan); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+                Professional Web Solutions
+            </div>
             <h1 class="hero-title">Your New Website,<br><span class="gradient-text">That Brings Customers</span></h1>
             <p class="hero-description">Your website is your digital business card—the first thing customers see. We build modern, professional sites that inspire trust and bring in new customers.</p>
+            <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
+                <a href="#contact-form" class="btn btn-primary btn-large">I Want a Profi Website</a>
+            </div>
         </section>
 
- <section class="container subpage-content reveal">
-    <h2 class="section-title">Why Does Your Business Need a Website?</h2>
-    <p style="max-width: 800px; margin: 0 auto 3rem auto; font-size: 1.1rem; line-height: 1.8;">
-        <strong>Your website is your 24/7 digital storefront.</strong> Today, the first thing potential customers do is search for your business online. If they can't find you or see an outdated site, you've lost them before you had a chance.
-    </p>
-    
-    <div style="max-width: 900px; margin: 0 auto;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
-            
-            <div style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border-left: 3px solid var(--cyan); border-radius: 8px;">
-                <h3 style="color: var(--cyan); font-size: 1.1rem; margin-bottom: 0.75rem;">No Website?</h3>
-                <p style="margin: 0; color: var(--slate-300); font-size: 0.95rem;">Customers won’t find you. Competitors with websites will outrank you. You’ll lose dozens of potential clients every month.</p>
+        <section class="container reveal" style="margin-bottom: 4rem;">
+             <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; text-align: center; backdrop-filter: blur(5px);">
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Why Does Your Business Need a Website?</h2>
+                <p style="font-size: 1.1rem; color: var(--slate-300); line-height: 1.7;">
+                    <strong>Your website is your 24/7 digital storefront.</strong> Today, the first thing potential customers do is search for your business online. If they can't find you or see an outdated site, you've lost them before you had a chance.
+                </p>
+             </div>
+        </section>
+
+        <section class="container reveal" style="margin-bottom: 5rem;">
+            <div class="services-grid">
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-eye-slash"></i></div>
+                    <h3>No Website?</h3>
+                    <p>Customers won’t find you. Competitors with websites will outrank you. You’ll lose dozens of potential clients every month.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-paintbrush"></i></div>
+                    <h3>Outdated Design?</h3>
+                    <p>You look unprofessional. Customers don’t trust you and go to competitors with modern websites.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <h3>Poor SEO?</h3>
+                    <p>Google won’t find you. You’re paying for a domain, but your site isn’t working for you. It’s like a billboard in the woods.</p>
+                </div>
             </div>
-
-            <div style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border-left: 3px solid var(--cyan); border-radius: 8px;">
-                <h3 style="color: var(--cyan); font-size: 1.1rem; margin-bottom: 0.75rem;">Outdated Design?</h3>
-                <p style="margin: 0; color: var(--slate-300); font-size: 0.95rem;">You look unprofessional. Customers don’t trust you and go to competitors with modern websites.</p>
-            </div>
-
-            <div style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border-left: 3px solid var(--cyan); border-radius: 8px;">
-                <h3 style="color: var(--cyan); font-size: 1.1rem; margin-bottom: 0.75rem;">Poor SEO?</h3>
-                <p style="margin: 0; color: var(--slate-300); font-size: 0.95rem;">Google won’t find you. You’re paying for a domain, but your site isn’t working for you. It’s like a billboard in the woods.</p>
-            </div>
-
-        </div>
-
-        <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(to right, rgba(34,211,238,0.1), rgba(168,85,247,0.1)); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 12px; text-align: center;">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--white);">With a Professional Website:</h3>
-            <ul class="offer-list" style="max-width: 700px; margin: 1.5rem auto 0 auto; text-align: left;">
-                <li>Customers find you on Google 24/7</li>
-                <li>You build trust and a professional image</li>
-                <li>You attract new customers even outside business hours</li>
-                <li>You save time—your website answers common questions for you</li>
-                <li>You control how customers perceive your business</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section class="container reveal" style="padding: 4rem 0;">
-    <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border-radius: 16px; border: 1px solid rgba(34, 211, 238, 0.3);">
-        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 3rem;">Did You Know?</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
-            
-            <div>
-                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">75%</div>
-                <p style="margin: 0; color: var(--slate-300);">of people judge a company’s credibility based on website design</p>
-            </div>
-
-            <div>
-                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">93%</div>
-                <p style="margin: 0; color: var(--slate-300);">of online experiences begin with a Google search</p>
-            </div>
-
-            <div>
-                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">88%</div>
-                <p style="margin: 0; color: var(--slate-300);">of customers read online reviews before purchasing</p>
-            </div>
-
-        </div>
-
-        <p style="text-align: center; margin-top: 2.5rem; font-size: 1.1rem; color: var(--white);">
-            <strong>Your website is your first impression.</strong> Don’t lose customers just because they can’t find you online or you look unprofessional.
-        </p>
-    </div>
-</section>
+        </section>
 
         <section id="balicky" class="container reveal">
             <h2 class="section-title">Choose the Package That Fits Your Needs</h2>
@@ -172,7 +255,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li>100% mobile-friendly</li>
                         <li>No monthly fees</li>
                     </ul>
-                    <a href="#contact-subpage" class="btn btn-secondary">I'm Interested</a>
+                    <a href="#contact-form" class="btn btn-secondary">I'm Interested</a>
                 </div>
 
                 <div class="pricing-card popular">
@@ -191,7 +274,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li><b>Google Maps integration</b></li>
                         <li><b>Online calendar integration</b></li>
                     </ul>
-                    <a href="#contact-subpage" class="btn btn-primary">Choose Professional Package</a>
+                    <a href="#contact-form" class="btn btn-primary">Choose Professional Package</a>
                 </div>
 
                 <div class="pricing-card">
@@ -210,222 +293,168 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </section>
 
-        <section class="container subpage-content reveal">
-            <h2 class="section-title">From Idea to Launch in 4 Steps</h2>
-            <div class="process-grid-4">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Initial Consultation</h3>
-                    <p>We discuss your goals and requirements for free to fully understand what you need.</p>
+        <section id="process" class="container reveal">
+            <h2 class="section-title">From Idea to Launch</h2>
+            
+            <div class="process-grid-fixed">
+                <div class="process-card-anim" style="animation-delay: 0s;">
+                    <div class="process-number-bg">01</div>
+                    <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+                    <div class="process-content">
+                        <h3>Consultation & Strategy</h3>
+                        <p>We discuss your goals and requirements for free to fully understand what you need.</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Design & Development</h3>
-                    <p>We create a graphic design and, after your approval, proceed with technical implementation.</p>
+
+                <div class="process-card-anim" style="animation-delay: 0.15s;">
+                    <div class="process-number-bg">02</div>
+                    <div class="process-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+                    <div class="process-content">
+                        <h3>Design & Development</h3>
+                        <p>We create a graphic design and, after your approval, proceed with technical implementation.</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Review & Revisions</h3>
-                    <p>We present the finished website and incorporate your feedback and final adjustments.</p>
+
+                <div class="process-card-anim" style="animation-delay: 0.3s;">
+                    <div class="process-number-bg">03</div>
+                    <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="process-content">
+                        <h3>Review & Revisions</h3>
+                        <p>We present the finished website and incorporate your feedback and final adjustments.</p>
+                    </div>
                 </div>
-                <div class="process-step">
-                    <div class="step-number">4</div>
-                    <h3>Launch & Training</h3>
-                    <p>We deploy the site on your hosting, test everything, and show you how to manage it.</p>
+
+                <div class="process-card-anim" style="animation-delay: 0.45s;">
+                    <div class="process-number-bg">04</div>
+                    <div class="process-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="process-content">
+                        <h3>Launch & Training</h3>
+                        <p>We deploy the site on your hosting, test everything, and show you how to manage it.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal" style="margin-bottom: 5rem;">
+            <h2 class="section-title" style="text-align: center;">Our Recent Projects</h2>
+            <p class="section-subtitle" style="text-align: center;">Websites and e-shops we helped build</p>
+            
+            <div id="references-slider" class="splide" aria-label="Website References" style="margin-top: 3rem;">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        
+                        <li class="splide__slide">
+                            <a href="https://www.ombradoro.sk" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="ombra.png" alt="Ombra Doro" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>OMBRA DORO</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Ombra Doro</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Premium Coffee E-shop</p>
+                                    <span class="portfolio-link">www.ombradoro.sk</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <div class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="carbox.png" alt="CarBox Top" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>CARBOX.TOP</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">CarBox Top</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Auto Accessories</p>
+                                    <span class="portfolio-link">carbox.top</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="splide__slide">
+                            <div class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="jistykrok.png" alt="Jistý Krok" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>JISTÝ KROK</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Jistý Krok</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Health Footwear E-shop</p>
+                                    <span class="portfolio-link">jistykrok.cz</span>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
                 </div>
             </div>
         </section>
     
         <section class="container subpage-content reveal">
             <h2 class="section-title">Frequently Asked Questions</h2>
-            <p class="section-subtitle" style="margin-bottom: 3rem;">Answers to our clients’ most common questions and concerns</p>
-    
             <div class="faq-container">
                 <details class="faq-item">
-                    <summary class="faq-question">Why do I even need a website? I already have Facebook and Instagram.</summary>
+                    <summary class="faq-question">Why do I even need a website? I already have Facebook.</summary>
                     <div class="faq-answer">
-                        <p><strong>Your website is your digital business card that you fully control.</strong> Facebook and Instagram are great tools, but:</p>
+                        <p><strong>Your website is your digital business card that you fully control.</strong> Facebook is a great tool, but:</p>
                         <ul style="margin-top: 1rem; padding-left: 1.5rem;">
                             <li>Not all customers use social media</li>
                             <li>Your business looks more professional with your own domain</li>
                             <li>Google finds your website easier than a Facebook page</li>
-                            <li>Social platforms can change rules or block accounts anytime</li>
                             <li>You own your website—no one can take it away</li>
                         </ul>
-                        <p style="margin-top: 1rem;"><strong>Best solution:</strong> Website as the foundation + Facebook/Instagram for marketing. Together, they create a strong online presence.</p>
-                    </div>
-                </details>
-
-                <!-- PRICE & PAYMENT -->
-                <details class="faq-item">
-                    <summary class="faq-question">Why are your prices so low? Is it really a quality website?</summary>
-                    <div class="faq-answer">
-                        <p>Yes, the quality is full! We achieve low prices through modern tools and efficient processes. You don’t pay for unnecessary meetings and bureaucracy—just real work. Every website has a unique custom design with professional SEO setup.</p>
                     </div>
                 </details>
 
                 <details class="faq-item">
-                    <summary class="faq-question">Are there any additional fees included?</summary>
+                    <summary class="faq-question">Why are your prices so low?</summary>
                     <div class="faq-answer">
-                        <p>No. The listed prices are one-time for website creation. The only ongoing costs (no matter where you order) are the annual domain fee (~€20/year) and optional email (~€15/year). We can set up free hosting via GitHub Pages.</p>
+                        <p>We achieve low prices through modern tools and efficient processes. You don’t pay for unnecessary meetings and bureaucracy—just real work. Every website has a unique custom design with professional SEO setup.</p>
                     </div>
                 </details>
 
                 <details class="faq-item">
-                    <summary class="faq-question">How does payment work? Do I have to pay upfront?</summary>
+                    <summary class="faq-question">Are there any monthly fees?</summary>
                     <div class="faq-answer">
-                        <p>We offer flexible options: pay 50% deposit before work starts and 50% upon delivery, or the full amount only when the site is finished. We always agree on what suits you best.</p>
+                        <p>No. The listed prices are one-time for website creation. The only ongoing costs are the annual domain fee (~€20/year) and optional email. We can set up free hosting via GitHub Pages.</p>
                     </div>
                 </details>
 
-                <!-- TIME & PROCESS -->
-                <details class="faq-item">
-                    <summary class="faq-question">How long does it take to create a website?</summary>
-                    <div class="faq-answer">
-                        <p>The Starter package is typically delivered within 4 business days after receiving all materials. The Professional package takes up to 10 days.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">What if I don’t like the finished website?</summary>
-                    <div class="faq-answer">
-                        <p>Each package includes 2–3 revision rounds, so you can request changes. We show you the design first and only code it after your approval. We want you 100% satisfied, so don’t hesitate to share feedback.</p>
-                    </div>
-                </details>
-
-                <!-- TECHNICAL QUESTIONS -->
-                <details class="faq-item">
-                    <summary class="faq-question">What do I need to provide?</summary>
-                    <div class="faq-answer">
-                        <p>We’ll need texts, logo, photos if available, and an idea of the structure. If you don’t have texts or a logo ready, we can help create them as part of our marketing services (for an additional fee).</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">Will the website work on mobile phones?</summary>
-                    <div class="faq-answer">
-                        <p>Of course! Every website we build is fully responsive—works perfectly on phones, tablets, and computers. Over 60% of visitors come from mobile, so it’s our top priority.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">Will I be able to edit the website myself?</summary>
-                    <div class="faq-answer">
-                        <p>Yes! After handover, we train you to update text and images. If something technical breaks or you need bigger changes, we’re always available.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">What is free GitHub Pages hosting?</summary>
-                    <div class="faq-answer">
-                        <p>GitHub Pages is a professional hosting service by GitHub—completely free, fast, and reliable. Used by millions of sites worldwide. Your site will be secure (HTTPS), fast, and with no annual hosting fees.</p>
-                    </div>
-                </details>
-
-                <!-- OWNERSHIP & DEPENDENCE -->
-                <details class="faq-item">
-                    <summary class="faq-question">Will I own the website and domain?</summary>
-                    <div class="faq-answer">
-                        <p>Yes, absolutely! The domain is registered in your own account, so you’re the legal owner. We build the site for you and hand over all files. You’re not dependent on us—you can switch providers anytime.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">What if I want to change designers later?</summary>
-                    <div class="faq-answer">
-                        <p>No problem. Since the domain is in your name and you own all site files, you can switch anytime. We’ll provide everything needed and help with the transition.</p>
-                    </div>
-                </details>
-
-                <!-- SEO & VISIBILITY -->
                 <details class="faq-item">
                     <summary class="faq-question">Will customers find me on Google?</summary>
                     <div class="faq-answer">
-                        <p><strong>Yes!</strong> Today, 93% of people search for services on Google. If they don’t find you there, you don’t exist. Every site includes full SEO setup—meta tags, descriptions, structured URLs, sitemap, Google Search Console connection.</p>
-                        <p style="margin-top: 1rem;">This ensures Google finds and indexes your site. <strong>Your digital business card will be visible to thousands of potential customers.</strong> For better rankings, we recommend regular content (articles, blog) and local SEO.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">How many visitors can I expect?</summary>
-                    <div class="faq-answer">
-                        <p>It depends on your business, competition, and marketing. The website is the foundation, but traffic must be built—via Google ads, Facebook, Instagram, local SEO. We’ll help connect Google Analytics so you see exact numbers and can optimize.</p>
-                    </div>
-                </details>
-
-                <!-- MAINTENANCE & SUPPORT -->
-                <details class="faq-item">
-                    <summary class="faq-question">Do I need monthly maintenance?</summary>
-                    <div class="faq-answer">
-                        <p>No. The static websites we create don’t require regular maintenance like WordPress sites. GitHub Pages handles everything automatically. If you need changes or updates, just contact us—we charge €40/hour or offer a monthly flat rate.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">What if something breaks?</summary>
-                    <div class="faq-answer">
-                        <p>Static websites practically never break. But if something does happen, just contact us and we’ll fix it. Any technical support in the first 30 days after launch is free.</p>
-                    </div>
-                </details>
-
-                <!-- COMPARISON -->
-                <details class="faq-item">
-                    <summary class="faq-question">Why choose you over WordPress / Wix / Webnode?</summary>
-                    <div class="faq-answer">
-                        <p><strong>Wix/Webnode:</strong> You’re locked in, can’t leave, pay monthly forever, slow, poor SEO.<br>
-                        <strong>WordPress:</strong> Needs maintenance, updates, security, monthly hosting.<br>
-                        <strong>Our solution:</strong> You own everything, no monthly fees, fast, secure, professional. One-time investment.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item">
-                    <summary class="faq-question">Aren’t you too cheap? Isn’t it suspicious?</summary>
-                    <div class="faq-answer">
-                        <p>We understand your concern. Our philosophy is simple: we’d rather help 10 entrepreneurs at a fair price than 1 at an outrageous sum. Modern tools let us work efficiently. We have happy clients, references, and a transparent process. Nothing suspicious—just fair business. 🙂</p>
-                    </div>
-                </details>
-
-                <!-- ADD-ONS -->
-                <details class="faq-item">
-                    <summary class="faq-question">Do you also offer logo design and graphics?</summary>
-                    <div class="faq-answer">
-                        <p>Yes, as part of our marketing services we offer logo creation, graphic design, copywriting, and social media. We can deliver your full visual identity.</p>
+                        <p><strong>Yes!</strong> Today, 93% of people search for services on Google. Every site includes full SEO setup—meta tags, descriptions, structured URLs, sitemap, Google Search Console connection.</p>
                     </div>
                 </details>
             </div>
         </section>
 
-        <section id="contact-subpage" class="container reveal">
-            <div class="subpage-cta">
-                <h2 class="section-title">Request a Custom Quote</h2>
-                <p class="section-subtitle">Fill out our detailed order form and we’ll prepare a tailored quote within 24 hours.</p>
+        <section id="contact-form" class="container reveal" style="margin-bottom: 5rem;">
+             <div class="contact-form-container">
+                <h2 class="section-title" style="text-align: center;">Get Your Quote</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Fill out the form and we'll get back to you with a free consultation for your new website.</p>
                 
-                <div style="text-align: center; margin: 3rem 0;">
-                    <a href="/en/website-order-form" class="btn btn-primary btn-large" style="min-width: 320px;">
-                        Fill Out the Order Form
-                    </a>
-                </div>
-
-                <div style="max-width: 700px; margin: 3rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 12px;">
-                    <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem;">Or Contact Us Directly</h3>
-                    <div style="text-align: center; color: var(--slate-300);">
-                        <p style="margin-bottom: 1rem; font-size: 1.05rem;">
-                            <strong style="color: var(--white);">Email:</strong> 
-                            <a href="mailto:info@unoneto.eu" style="color: var(--cyan); text-decoration: none;">info@unoneto.eu</a>
-                        </p>
-                        <p style="margin-bottom: 2rem; font-size: 1.05rem;">
-                            <strong style="color: var(--white);">Phone:</strong> 
-                            <a href="tel:+421905351100" style="color: var(--cyan); text-decoration: none;">+421 905 351 100</a>
-                        </p>
-                        <p style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(34, 211, 238, 0.2);">
-                            <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-secondary">
-                                Book Consultation
-                            </a>
-                        </p>
+                <form name="website-contact-en" method="POST" data-netlify="true">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="John Doe" class="form-input">
                     </div>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="john@company.com" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone (Optional)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+421 9xx xxx xxx" class="form-input">
+                    </div>
+                     <div class="form-group">
+                        <label for="project-details" class="form-label">Tell us about your project</label>
+                        <textarea id="project-details" name="project-details" rows="5" required placeholder="What kind of website do you need? Do you have a design in mind?" class="form-input"></textarea>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; max-width: 300px;">Send Request</button>
+                    </div>
+                </form>
+             </div>
         </section>
+
     </main>
     
     <footer class="main-footer">
@@ -453,7 +482,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <a href="/#services">What We Do</a>
                     <a href="/#case-study">Our Results</a>
                     <a href="/#about">Who We Are</a>
-                    <a href="#contact-subpage">Contact Us</a>
+                    <a href="#contact-form">Contact Us</a>
                 </div>
 
                 <div class="footer-col">
@@ -477,7 +506,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </footer>
 
-<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Slider Initialization
+        new Splide('#references-slider', {
+            type   : 'loop',
+            perPage: 3,
+            gap    : '2rem',
+            autoplay: true,
+            interval: 4000,
+            breakpoints: {
+                768: {
+                    perPage: 1,
+                    padding: '1rem'
+                },
+                1024: {
+                    perPage: 2,
+                }
+            }
+        }).mount();
+
+        // Process Card Animations
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.process-card-anim');
+                    cards.forEach(card => card.classList.add('pop-in'));
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const processSection = document.querySelector('#process');
+        if (processSection) {
+            processObserver.observe(processSection);
+        }
+
+        // Hamburger Menu
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-menu');
+        const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
+
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                hamburgerBtn.classList.toggle('active');
+                const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                hamburgerBtn.setAttribute('aria-expanded', !expanded);
+            });
+        }
+
+        // Dropdown for mobile
+        if (dropdownToggle && window.innerWidth <= 768) {
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('active');
+            });
+        }
+    });
+</script>
 
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
