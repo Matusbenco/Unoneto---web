@@ -1,91 +1,471 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-shopy na platforme Upgates | Unoneto</title>
-    <meta name="description" content="Špecializovaná tvorba e-shopov na platforme Upgates. Dizajn na mieru, špičkové SEO, automatizácie a marketingové prepojenia pre váš rast.">
+    <title>E-shopy na mieru na platforme Upgates | Unoneto</title>
+    <meta name="description" content="Vytvárame unikátne e-shopy na platforme Upgates. Vďaka vlastným úpravám kódu a dizajnu na mieru sa odlíšite od konkurencie.">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        /* --- Pozadie a efekty --- */
+        .particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .ping-particle {
+            position: absolute; border-radius: 50%; opacity: 0.3;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            animation: particleMove infinite linear;
+        }
+        @keyframes particleMove {
+            0% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.3; }
+        }
+
+        /* --- Hrdinská sekcia úpravy --- */
+        .hero-section {
+            padding: 10rem 0 5rem;
+            text-align: center;
+        }
+        
+        /* --- Karty služieb a procesu (Glassmorphism) --- */
+        .services-grid .card, .process-step {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .services-grid .card:hover, .process-step:hover {
+             border-color: var(--cyan);
+             box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2);
+             transform: translateY(-5px);
+        }
+        .service-icon-wrapper {
+            display: inline-flex; padding: 15px; border-radius: 50%;
+            background: rgba(34, 211, 238, 0.1); color: var(--cyan);
+            font-size: 1.5rem; margin-bottom: 1rem;
+        }
+
+        /* --- Procesné kroky --- */
+        .step-number {
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;
+        }
+
+        /* --- Slider referencií --- */
+        .splide__slide { padding: 1rem; }
+        .portfolio-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px; overflow: hidden;
+            transition: transform 0.3s ease; display: block; text-decoration: none; height: 100%;
+        }
+        .portfolio-card:hover {
+            transform: translateY(-5px); border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .portfolio-preview {
+            height: 200px; background: #1e293b; display: flex; align-items: center; justify-content: center;
+            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .portfolio-preview img {
+            max-width: 90%; max-height: 90%; object-fit: contain;
+        }
+        .portfolio-preview span {
+            font-weight: 700; color: var(--cyan); font-size: 1.2rem; text-transform: uppercase;
+        }
+        .portfolio-info { padding: 1.5rem; text-align: center; }
+        .portfolio-title { color: white; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .portfolio-link { color: var(--cyan); font-size: 0.9rem; }
+        
+        .splide__arrow { background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); opacity: 1; }
+        .splide__arrow svg { fill: var(--cyan); }
+        .splide__arrow:hover { background: var(--cyan); }
+        .splide__arrow:hover svg { fill: var(--slate-900); }
+        .splide__pagination__page.is-active { background: var(--cyan); }
+
+        /* --- KONTAKTNÝ FORMULÁR --- */
+        .contact-form-container {
+            max-width: 700px; margin: 0 auto; padding: 3rem;
+            background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 20px; backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
+        .form-input {
+            width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white;
+            font-size: 1rem; transition: all 0.3s ease;
+        }
+        .form-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); background: rgba(15, 23, 42, 1); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+     
+        /* --- PROCES GRID --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 650px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9);
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+    </style>
 </head>
 <body>
-    <div class="background-shapes"><div class="shape shape1"></div><div class="shape shape2"></div></div>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
+    <div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; width: 150px; height: 150px; animation-duration: 8s;"></div>
+        <div class="ping-particle" style="top: 60%; left: 85%; width: 100px; height: 100px; animation-duration: 6s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 30%; width: 80px; height: 80px; animation-duration: 10s; animation-delay: 2s;"></div>
+    </div>
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+    </div>
+
     <header class="main-header">
         <nav class="container">
-            <a href="/" class="logo"><div class="logo-icon">U</div><span>Unoneto</span></a>
+            <a href="/" class="logo">
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                <span>Unoneto</span>
+            </a>
+            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+          
             <ul class="nav-links" id="nav-menu">
-                <li><a href="/#services">Služby</a></li>
-                <li><a href="/#process">Náš proces</a></li>
-                <li><a href="/#ostatne" id="toggle-ostatne">Projekty</a></li>
-                <li><a href="blog">Blog</a></li>
-                <li><a href="/#contact" class="btn btn-primary">Nezáväzná analýza</a></li>
+                <li class="has-dropdown">
+                    <a href="#" id="nasa-ponuka-toggle" class="active">Naša ponuka</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Prezentačné weby</a></li>
+                        <li><a href="eshopy" class="active">E-shopy na mieru</a></li>
+                        <li><a href="graficke-sluzby">Grafické služby a dizajn na mieru</a></li>
+                        <li><a href="automatizacia">AI Automatizácia procesov</a></li>
+                        <li><a href="raynetcrm">RAYNET CRM</a></li>
+                        <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
+                        <li><a href="vexion">Vernostný systém VEXION</a></li>
+                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
+                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog">Novinky</a></li>
+                <li class="language-switcher">
+                    <a href="/" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
+                    <span class="lang-separator">|</span>
+                    <a href="/en" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
+                </li>
+                <li><a href="#contact-form" class="btn btn-primary">Nezáväzná konzultácia</a></li>
             </ul>
-            <button id="hamburger-btn" aria-label="Toggle navigation"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></button>
         </nav>
     </header>
 
     <main>
-        <section class="subpage-hero container">
-            <h1 class="hero-title">Profesionálny e-shop na<br><span class="gradient-text">platforme Upgates</span></h1>
-            <p class="hero-description">Špecializujeme sa na systém Upgates. Vytlačíme z neho maximum pre váš biznis – od dizajnu na mieru až po dokonalé technické SEO a automatizácie.</p>
+        <section class="hero-section container reveal">
+            <div style="display: inline-block; padding: 8px 16px; background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 50px; color: var(--cyan); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+                E-commerce Riešenia na mieru
+            </div>
+            <h1 class="hero-title">Špičkové e-shopy na platforme <br><span class="gradient-text">UPGATES</span> s dizajnom na mieru</h1>
+            <p class="hero-description">
+                Spojili sme stabilitu osvedčeného systému s unikátnym vizuálom. Vďaka vlastným úpravám kódu vytvoríme e-shop, ktorý sa odlíši od konkurencie.
+            </p>
+            <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
+                <a href="#contact-form" class="btn btn-primary btn-large">Chcem e-shop, ktorý predáva</a>
+            </div>
         </section>
 
-        <section class="container subpage-content">
-            <h2>Viac než len šablóna</h2>
-            <p>Upgates je jedna z najlepších platforiem na našom trhu, ale len málokto využíva jej plný potenciál. My neponúkame len "klikacie" nastavenie. Vstupujeme do hĺbky kódu, upravujeme CSS a JavaScript a tvoríme e-shop, ktorý sa odlíši od konkurencie a bude technicky bezchybný.</p>
+        <section class="container reveal" style="margin-bottom: 4rem;">
+             <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; text-align: center; backdrop-filter: blur(5px);">
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Prečo staviame na Upgates?</h2>
+                <p style="font-size: 1.1rem; color: var(--slate-300); line-height: 1.7; margin-bottom: 1.5rem;">
+                    Máme s ním výborné skúsenosti. Je to stabilný a bezpečný systém s obrovským množstvom doplnkov, ktorý nám však dovoľuje <strong>zasiahnuť priamo do kódu</strong>.
+                </p>
+                <p style="font-size: 1.1rem; color: var(--slate-300); line-height: 1.7;">
+                    Neobmedzujeme sa preto len na základné šablóny. Vďaka vlastnému kódovaniu grafiky a funkcionalít vytvárame e-shopy, ktoré vyzerajú presne podľa vašich predstáv, no bežia na spoľahlivom jadre. Získate tak to najlepšie z oboch svetov: stabilitu krabicového riešenia a unikátnosť vývoja na mieru.
+                </p>
+             </div>
+        </section>
+
+        <section id="eshop-services" class="container reveal" style="margin-bottom: 5rem;">
+            <h2 class="section-title" style="text-align: center;">V čom sa naše riešenie líši?</h2>
+            <p class="section-subtitle" style="text-align: center;">Kombinácia technológie a kreativity</p>
+            <div class="services-grid" style="margin-top: 3rem;">
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-code"></i></div>
+                    <h3>Vlastný kód a dizajn</h3>
+                    <p>Nespoliehame sa len na "klikací" editor. Píšeme vlastný HTML/CSS/JS kód, vďaka čomu prispôsobíme vzhľad e-shopu do posledného detailu vašej značke.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-server"></i></div>
+                    <h3>Platforma Upgates</h3>
+                    <p>Staviame na systéme Upgates, ktorý zaručuje bezproblémový chod, pravidelné aktualizácie, bezpečnosť a širokú škálu modulov bez nutnosti drahého vývoja jadra.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-plug"></i></div>
+                    <h3>Pokročilé integrácie</h3>
+                    <p>Prepojíme váš e-shop s ERP systémami, účtovníctvom (Pohoda, Money), skladom alebo CRM (Raynet). Automatizujeme procesy, aby ste ušetrili čas.</p>
+                </div>
+                 <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-regular fa-credit-card"></i></div>
+                    <h3>Platobné brány</h3>
+                    <p>Implementácia moderných platobných metód (Comgate, GoPay, Stripe) vrátane Apple Pay a Google Pay pre maximálne pohodlie vašich zákazníkov.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>SEO a Marketing</h3>
+                    <p>Využívame silné SEO nástroje Upgates a dolaďujeme ich pre lepšiu viditeľnosť. Nastavíme meranie konverzií (GA4), aby ste mali dáta pod kontrolou.</p>
+                </div>
+                <div class="card">
+                    <div class="service-icon-wrapper"><i class="fa-solid fa-headset"></i></div>
+                    <h3>Zaškolenie a podpora</h3>
+                    <p>Naučíme vás e-shop efektívne spravovať. Vďaka intuitívnej administrácii Upgates a nášmu zaškoleniu to zvládnete ľavou zadnou.</p>
+                </div>
+            </div>
+        </section>
+
+       <section id="process" class="container reveal">
+            <h2 class="section-title">Ako prebieha spolupráca?</h2>
             
-            <h2>Komplexné riešenie pod jednou strechou</h2>
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <h3>Dizajn na mieru</h3>
-                    <p>Nezostávame pri základnom vzhľade. V rámci možností systému Upgates navrhneme a nakódujeme unikátny vizuál, ktorý buduje dôveru a zvyšuje konverzie.</p>
+            <div class="process-grid-fixed">
+                
+                <div class="process-card-anim" style="animation-delay: 0s;">
+                    <div class="process-number-bg">01</div>
+                    <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+                    <div class="process-content">
+                        <h3>Konzultácia a návrh</h3>
+                        <p>Preberieme vaše požiadavky. Navrhneme, ako využiť možnosti Upgates a kde nasadíme vlastné úpravy pre dosiahnutie vašich cieľov.</p>
+                    </div>
                 </div>
-                <div class="feature-item">
-                    <h3>Dokonalé SEO</h3>
-                    <p>Nastavíme technické SEO tak, aby vás Google miloval. Od štruktúrovaných dát, cez rýchlosť načítania, až po správnu hierarchiu obsahu a meta tagy.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Obsah a Produkty</h3>
-                    <p>Nemáte čas plniť e-shop? Vytvoríme pútavé popisy produktov, napíšeme odborné články do blogu a postaráme sa o kompletnú migráciu dát.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Marketing a Prepojenia</h3>
-                    <p>Napojíme vás na porovnávače (Heureka, Glami), nastavíme meracie pixely (Google, FB) a pripravíme XML feedy pre vaše kampane.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Automatizácie</h3>
-                    <p>Šetrite čas. Nastavíme automatické e-maily, prepojenie na fakturačné systémy a procesy, ktoré zjednodušia vybavovanie objednávok.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Školenie a Podpora</h3>
-                    <p>Po spustení vás v tom nenecháme. Zaškolíme vás do administrácie Upgates, aby ste svoj e-shop vedeli ovládať ľavou zadnou.</p>
-                </div>
-            </div>
 
-            <h2>Prečo práve Upgates s nami?</h2>
-            <p>Upgates ponúka ideálny balans medzi cenou a výkonom. Umožňuje pokročilé funkcie, ktoré sú inde spoplatnené drahými doplnkami. My k tomu pridávame:</p>
-            <ul>
-                <li><strong>Technickú precíznosť:</strong> Riešime detaily, ktoré bežný užívateľ nevidí, ale vyhľadávače áno.</li>
-                <li><strong>Proaktívny prístup:</strong> Navrhneme vylepšenia, na ktoré ste možno ani nepomysleli.</li>
-                <li><strong>Rýchle nasadenie:</strong> Vďaka špecializácii na jeden systém pracujeme efektívne a bez zbytočných prestojov.</li>
-            </ul>
+                <div class="process-card-anim" style="animation-delay: 0.15s;">
+                    <div class="process-number-bg">02</div>
+                    <div class="process-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+                    <div class="process-content">
+                        <h3>Dizajn a kódovanie</h3>
+                        <p>Vytvoríme grafický návrh a následne ho "nakódime" priamo do šablóny e-shopu. Nastavíme farby, fonty a rozloženie na mieru.</p>
+                    </div>
+                </div>
 
-            <div class="subpage-cta">
-                <h2>Máte záujem o e-shop na Upgates?</h2>
-                <p>Či už začínate na zelenej lúke, alebo chcete vylepšiť existujúci e-shop, sme pripravení.</p>
-                <a href="/#contact" class="btn btn-primary btn-large">Dohodnúť si konzultáciu zdarma</a>
+                <div class="process-card-anim" style="animation-delay: 0.3s;">
+                    <div class="process-number-bg">03</div>
+                    <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="process-content">
+                        <h3>Naplnenie a testy</h3>
+                        <p>Pomôžeme s importom produktov, nastavíme dopravu a platby. Všetko dôkladne otestujeme pred spustením.</p>
+                    </div>
+                </div>
+
+                <div class="process-card-anim" style="animation-delay: 0.45s;">
+                    <div class="process-number-bg">04</div>
+                    <div class="process-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="process-content">
+                        <h3>Spustenie a rast</h3>
+                        <p>E-shop spustíme do ostrej prevádzky. Zaškolíme vás do administrácie a sme pripravení pomôcť s ďalším rozvojom.</p>
+                    </div>
+                </div>
+
             </div>
         </section>
+
+        <section class="container reveal" style="margin-bottom: 5rem;">
+            <h2 class="section-title" style="text-align: center;">Ukážky našej práce</h2>
+            <p class="section-subtitle" style="text-align: center;">E-shopy postavené na Upgates s dizajnom na mieru</p>
+            
+            <div id="eshop-references-slider" class="splide" aria-label="Referencie E-shopov" style="margin-top: 3rem;">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        
+                        <li class="splide__slide">
+                            <a href="https://www.ombradoro.sk" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="ombra.png" alt="Ombra Doro E-shop" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>OMBRA DORO</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Ombra Doro</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Prémiová káva a príslušenstvo (Upgates Custom)</p>
+                                    <span class="portfolio-link">www.ombradoro.sk</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <div class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="carbox.png" alt="CarBox Top" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>CARBOX.TOP</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">CarBox Top</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Autodoplnky a príslušenstvo</p>
+                                    <span class="portfolio-link">carbox.top</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="splide__slide">
+                            <div class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="jistykrok.png" alt="Jistý Krok" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>JISTÝ KROK</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Jistý Krok</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Zdravotná obuv (Upgates)</p>
+                                    <span class="portfolio-link">jistykrok.cz</span>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-form" class="container reveal" style="margin-bottom: 5rem;">
+             <div class="contact-form-container">
+                <h2 class="section-title" style="text-align: center;">Chcete e-shop na mieru?</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Napíšte nám. Zistíme, či je Upgates pre vás to pravé riešenie a navrhneme postup.</p>
+                
+                <form name="eshop-contact" method="POST" data-netlify="true">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Meno a Priezvisko</label>
+                        <input type="text" id="name" name="name" required placeholder="Ján Vážny" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" id="email" name="email" required placeholder="jan@firma.sk" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefón (nepovinné)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+421 9xx xxx xxx" class="form-input">
+                    </div>
+                     <div class="form-group">
+                        <label for="project-details" class="form-label">O aký sortiment pôjde?</label>
+                        <textarea id="project-details" name="project-details" rows="5" required placeholder="Čo plánujete predávať? Máte nejaké špeciálne požiadavky na dizajn?" class="form-input"></textarea>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; max-width: 300px;">Odoslať nezáväzný dopyt</button>
+                    </div>
+                </form>
+             </div>
+        </section>
+
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2024 Unoneto. Všetky práva vyhradené.</p>
-         </div>
+        <div class="container copyright">
+            <p>© 2025 Unoneto | E-commerce riešenia na platforme Upgates</p>
+        </div>
     </footer>
-    <script src="script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    
+    <script>
+        // Inicializácia Slidera
+        document.addEventListener( 'DOMContentLoaded', function() {
+            new Splide( '#eshop-references-slider', {
+                type   : 'loop',
+                perPage: 3,
+                gap    : '2rem',
+                autoplay: true,
+                interval: 4000,
+                breakpoints: {
+                    768: {
+                        perPage: 1,
+                        padding: '1rem'
+                    },
+                    1024: {
+                        perPage: 2,
+                    }
+                }
+            } ).mount();
+        });
+
+        // Hamburger menu
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-menu');
+        const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
+
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                hamburgerBtn.classList.toggle('active');
+                const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                hamburgerBtn.setAttribute('aria-expanded', !expanded);
+            });
+        }
+
+        // Dropdown na mobile
+        if (dropdownToggle && window.innerWidth <= 768) {
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('active');
+            });
+        }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animácia pre procesné karty
+        const observerOptions = {
+            threshold: 0.2 // Spustí sa, keď je 20% sekcie viditeľnej
+        };
+
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.process-card-anim');
+                    cards.forEach(card => card.classList.add('pop-in'));
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const processSection = document.querySelector('#process');
+        if (processSection) {
+            processObserver.observe(processSection);
+        }
+    });
+</script>
 </body>
 </html>
