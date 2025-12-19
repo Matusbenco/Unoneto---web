@@ -23,181 +23,202 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="shortcut icon" href="favicon.png" type="image/png">
 
     <style>
-    /* --- POHYBLIVÝ BANER (MARQUEE) --- */
-    .promo-banner {
-        background: rgba(15, 23, 42, 0.95); /* Tmavé pozadie */
-        border-bottom: 1px solid rgba(34, 211, 238, 0.3);
-        height: 44px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        z-index: 100;
-    }
-    
-    .marquee-wrapper {
-        display: flex;
-        width: 100%;
-        overflow: hidden;
-        text-decoration: none; /* Klikateľné, ale bez podčiarknutia */
-    }
-
-    .marquee-content {
-        display: flex;
-        animation: marquee-scroll 30s linear infinite; /* Plynulý pohyb */
-    }
-
-    .marquee-item {
-        white-space: nowrap;
-        color: white;
-        font-size: 0.9rem;
-        padding: 0 40px; /* Medzera medzi opakovaniami */
-        display: flex;
-        align-items: center;
-    }
-
-    .marquee-item strong { color: var(--cyan); margin-right: 5px; }
-
-    @keyframes marquee-scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); } /* Posun o polovicu (pretože text je duplikovaný) */
-    }
-
-    /* Hover zastaví pohyb, aby sa dalo kliknúť */
-    .promo-banner:hover .marquee-content {
-        animation-play-state: paused;
-    }
-
-    /* --- SLIDER FIX (Jeden baner) --- */
-    #banner-slider .splide__slide {
-        display: flex;
-        justify-content: center;
-    }
-    
-    #banner-slider .slide-caption {
-        background: rgba(15, 23, 42, 0.9);
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid var(--cyan);
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 600px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    
-    #banner-slider img {
-        width: 100%;
-        height: 500px; /* Vyšší baner pre lepší efekt */
-        object-fit: cover;
-        border-radius: 16px;
-        filter: brightness(0.7);
-    }
-
-    .splide__pagination { bottom: -30px !important; }
-    .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
-    .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
-
-    /* --- PROCESS GRID --- */
-    .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
-    @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
-
-    .process-card-anim {
-        background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
-        border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
-        text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        opacity: 0; transform: translateY(30px) scale(0.9);
-    }
-    .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
-
-    .process-card-anim:hover {
-        transform: translateY(-10px) !important; border-color: var(--cyan);
-        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
-    }
-    .process-number-bg {
-        position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
-        color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
-    }
-    .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
-    
-    .process-icon {
-        font-size: 2.5rem; margin-bottom: 1.5rem;
-        background: linear-gradient(to bottom right, var(--cyan), var(--purple));
-        -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
-    }
-    .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
-    .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
-       /* --- OPRAVA MOBILNÉHO MENU --- */
-    
-    /* 1. Hamburger tlačidlo */
-    #hamburger-btn {
-        display: none; /* Na PC skryté */
-        flex-direction: column;
-        justify-content: space-between;
-        width: 30px;
-        height: 21px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        z-index: 2000;
-    }
-    
-    .hamburger-bar {
-        width: 100%;
-        height: 3px;
-        background-color: white;
-        border-radius: 3px;
-        transition: all 0.3s ease;
-    }
-
-    /* 2. Správanie na mobile (max-width: 768px) */
-    @media (max-width: 768px) {
-        #hamburger-btn {
-            display: flex; /* Zobraziť tlačidlo */
+        /* --- ZÁKLADNÉ PREMENNÉ A ŠTÝLY (BASE CSS) --- */
+        :root {
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
         }
 
-        .nav-links {
-            position: absolute;
-            top: 100%; /* Hneď pod hlavičkou */
-            left: 0;
-            width: 100%;
-            background: rgba(15, 23, 42, 0.98); /* Tmavé pozadie */
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
-            
+        /* --- POHYBLIVÝ BANER (MARQUEE) --- */
+        .promo-banner {
+            background: rgba(15, 23, 42, 0.95); /* Tmavé pozadie */
+            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+            height: 44px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 2rem 0;
-            gap: 1.5rem;
-            
-            /* Predvolený stav: SKRYTÉ */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-20px);
+            overflow: hidden;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .marquee-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            text-decoration: none; /* Klikateľné, ale bez podčiarknutia */
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee-scroll 30s linear infinite; /* Plynulý pohyb */
+        }
+
+        .marquee-item {
+            white-space: nowrap;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0 40px; /* Medzera medzi opakovaniami */
+            display: flex;
+            align-items: center;
+        }
+
+        .marquee-item strong { color: var(--cyan); margin-right: 5px; }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Posun o polovicu */
+        }
+
+        .promo-banner:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        /* --- SLIDER FIX (Jeden baner) --- */
+        #banner-slider .splide__slide {
+            display: flex;
+            justify-content: center;
+        }
+        
+        #banner-slider .slide-caption {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--cyan);
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        #banner-slider img {
+            width: 100%;
+            height: 500px; /* Vyšší baner pre lepší efekt */
+            object-fit: cover;
+            border-radius: 16px;
+            filter: brightness(0.7);
+        }
+
+        .splide__pagination { bottom: -30px !important; }
+        .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
+        .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
+
+        /* --- PROCESS GRID --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9);
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+
+        /* --- MOBILNÉ MENU FIX --- */
+        #hamburger-btn {
+            display: none; /* Na PC skryté */
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 2000;
+        }
+        
+        .hamburger-bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
             transition: all 0.3s ease;
-            z-index: 1000;
         }
 
-        /* Aktívny stav (po kliknutí): ZOBRAZENÉ */
-        .nav-links.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: flex; /* Zobraziť tlačidlo */
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%; /* Hneď pod hlavičkou */
+                left: 0;
+                width: 100%;
+                background: rgba(15, 23, 42, 0.98); /* Tmavé pozadie */
+                backdrop-filter: blur(15px);
+                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+                
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                gap: 1.5rem;
+                
+                /* Predvolený stav: SKRYTÉ */
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+                z-index: 1000;
+            }
+
+            /* Aktívny stav (po kliknutí): ZOBRAZENÉ */
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            /* Animácia hamburgera na krížik */
+            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
+            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
         }
 
-        /* Animácia hamburgera na krížik */
-        #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-        #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
-        #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-    }
-
-	</style>
+        /* --- ZVYŠOK ZÁKLADNÉHO CSS (Particles, Layout) --- */
+        .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
+        .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
+        @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
+        
+        .hero-section { padding: 10rem 0 5rem; text-align: center; }
+        .services-grid .card, .pricing-card { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); transition: all 0.3s ease; border-radius: 16px; }
+        .services-grid .card:hover, .pricing-card:hover { border-color: var(--cyan); box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2); transform: translateY(-5px); }
+        .service-icon-wrapper { display: inline-flex; padding: 15px; border-radius: 50%; background: rgba(34, 211, 238, 0.1); color: var(--cyan); font-size: 1.5rem; margin-bottom: 1rem; }
+        .card { padding: 2rem; text-align: center; }
+        .contact-form-container { max-width: 700px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 20px; backdrop-filter: blur(15px); }
+        .form-input { width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white; font-size: 1rem; transition: all 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+    </style>
 </head>
 
 <body>
@@ -265,15 +286,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <li class="has-dropdown">
                     <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
                     <ul class="dropdown-menu">
-                        <li><a href="weby">Prezentačné weby</a></li>
-                        <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafika</a></li>
-                        <li><a href="automatizacia">AI Automatizácia</a></li>
-                        <li><a href="raynetcrm">RAYNET CRM</a></li>
-                        <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
-                        <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO</a></li>
-                        <li><a href="ozobot">Roboty Ozobot</a></li>
+                        <li><a href="weby.html">Prezentačné weby</a></li>
+                        <li><a href="eshopy.html">E-shopy na mieru</a></li>
+                        <li><a href="graficke-sluzby.html">Grafika</a></li>
+                        <li><a href="automatizacia.html">AI Automatizácia</a></li>
+                        <li><a href="raynetcrm.html">RAYNET CRM</a></li>
+                        <li><a href="digitalnypodpis.html">DigiSign - Digitálny podpis</a></li>
+                        <li><a href="vexion.html">Vernostný systém VEXION</a></li>
+                        <li><a href="hugo.html">Informačný systém HUGO</a></li>
+                        <li><a href="ozobot.html">Roboty Ozobot</a></li>
                     </ul>
                 </li>
                 <li><a href="blog">Novinky</a></li>
@@ -337,7 +358,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
 						<li class="splide__slide">
-							<a href="raynet">
+							<a href="raynet.html">
 								<img src="raynet.jpg" alt="CRM, ktorému rozumiete.">
 								<div class="slide-caption">
 									<h2>CRM od RAYNET</h2>
@@ -347,7 +368,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
                         <li class="splide__slide">
-							<a href="vexion">
+							<a href="vexion.html">
 								<img src="karty.png" alt="Vernostný systém VEXION">
 								<div class="slide-caption">
 									<h2>Vernostný systém VEXION</h2>
@@ -357,7 +378,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
                         <li class="splide__slide">
-                            <a href="weby">
+                            <a href="weby.html">
                             <img src="weby1.webp" alt="Tvorba webstránky">
                             <div class="slide-caption">
                                 <h2>Moderné prezentačné weby</h2>
@@ -460,7 +481,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                      <h3>Konzultant pre firemné technológie</h3>
                      <p><strong>Webstránka je len začiatok. Skutočný úspech tvoria procesy za ňou.</strong></p>
                      <p>Mnoho firiem má pekný web, ale chaos v objednávkach, sklade alebo komunikácii. Moja úloha nie je len "dodať web". Mojím cieľom je nastaviť vaše <strong>predajné procesy</strong> tak, aby fungovali hladko.</p>
-                     <p>Ako váš konzultant prepájam jednotlivé body: Web privedie zákazníka → automatizácia spracuje dopyt → CRM postráži obchod. Zabezpečím technické "podhubie", vďaka ktorému sa vy môžete venovať biznisu, nie administratíve.</p>
+                     <p>Ako váš konzultant prepájam jednotlivé body: Web privedie zákazníka -> automatizácia spracuje dopyt -> CRM postráži obchod -> systém vystaví faktúru. Zabezpečím technické "podhubie", vďaka ktorému sa vy môžete venovať biznisu, nie administratíve.</p>
                  </div>
              </div>
         </section>
@@ -607,5 +628,4 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
     </script>
 </body>
-
 </html>
