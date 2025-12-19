@@ -44,13 +44,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         
         /* --- Cards & Glassmorphism --- */
-        .services-grid .card, .process-step {
+        .services-grid .card, .process-step, .pricing-card {
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
+            border-radius: 16px;
         }
-        .services-grid .card:hover, .process-step:hover {
+        .services-grid .card:hover, .process-step:hover, .pricing-card:hover {
              border-color: var(--cyan);
              box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2);
              transform: translateY(-5px);
@@ -70,12 +71,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
             border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
             text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0; transform: translateY(30px) scale(0.9);
         }
-        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+        /* Hover effect fix */
         .process-card-anim:hover {
-            transform: translateY(-10px) !important; border-color: var(--cyan);
+            transform: translateY(-10px); border-color: var(--cyan);
             box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
         }
         .process-number-bg {
@@ -140,6 +139,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .form-input::placeholder { color: rgba(255, 255, 255, 0.4); }
         .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); background: rgba(15, 23, 42, 1); }
         textarea.form-input { resize: vertical; min-height: 120px; }
+
+        /* --- NEW PRICING CSS --- */
+        .pricing-card {
+            display: flex; flex-direction: column;
+            padding: 2.5rem; position: relative; overflow: hidden;
+        }
+        .pricing-card.popular {
+            background: rgba(30, 41, 59, 0.8); border-color: var(--cyan);
+        }
+        .pricing-card.popular::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+        }
+        .popular-badge {
+            position: absolute; top: 1rem; right: 1rem;
+            background: rgba(34, 211, 238, 0.15); color: var(--cyan);
+            font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .price-huge { font-size: 3rem; font-weight: 900; color: white; line-height: 1; }
+        .price-period { font-size: 1rem; color: #94a3b8; font-weight: 400; }
+
+        /* Setup Fee Badge */
+        .setup-fee-badge {
+            display: inline-block; margin-top: 10px; padding: 6px 12px;
+            border-radius: 6px; font-size: 0.85rem; font-weight: 700; transition: all 0.3s ease;
+        }
+        .setup-paid { background: rgba(255, 99, 71, 0.15); color: #ff8a80; border: 1px solid rgba(255, 99, 71, 0.3); }
+        .setup-free { background: rgba(34, 211, 238, 0.15); color: var(--cyan); border: 1px solid rgba(34, 211, 238, 0.3); }
+
+        /* Hourly Rate Box */
+        .hourly-rate-box {
+            margin-top: 3rem; padding: 2rem; text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1); background: rgba(255, 255, 255, 0.02); border-radius: 12px;
+        }
+        .hourly-price { font-size: 1.8rem; font-weight: 900; color: var(--cyan); margin: 0.5rem 0; }
+        .yearly-total-text { font-size: 0.85rem; color: var(--cyan); margin-top: 5px; font-weight: 600; opacity: 0.9; min-height: 20px; }
     </style>
 </head>
 
@@ -157,7 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="shape shape3"></div>
     </div>
 
-    <header class="main-header">
+<header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
                 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
@@ -169,29 +205,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="hamburger-bar"></span>
             </button>
           
-            <ul class="nav-links" id="nav-menu">
-                <li class="has-dropdown">
-                    <a href="#" id="nasa-ponuka-toggle">Services</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="websites" class="active">Business Websites</a></li>
-                        <li><a href="ecommerce">Custom E-commerce</a></li>
-                        <li><a href="graphic-design">Graphic Design & Services</a></li>
-                        <li><a href="automation">AI Process Automation</a></li>
-                        <li><a href="raynetcrm-en">RAYNET CRM</a></li>
-                        <li><a href="digitalsignature">DigiSign - Digital Signature</a></li>
-                        <li><a href="vexion-en">VEXION Loyalty</a></li>
-                        <li><a href="hugo_en">HUGO Municipal System</a></li>
-                        <li><a href="ozobot-en">Ozobot Robots</a></li>
-                    </ul>
-                </li>
-                <li><a href="blog-en">Blog</a></li>
-                <li class="language-switcher">
-                    <a href="weby" class="lang-link" title="Slovak"><span class="fi fi-sk"></span></a>
-                    <span class="lang-separator">|</span>
-                    <a href="websites" class="lang-link active" title="English"><span class="fi fi-gb"></span></a>
-                </li>
-                <li><a href="#contact-form" class="btn btn-primary">Book Consultation</a></li>
-            </ul>
+<ul class="nav-links" id="nav-menu">
+    <li class="has-dropdown">
+        <a href="#" id="nasa-ponuka-toggle">Services</a>
+        <ul class="dropdown-menu">
+            <li><a href="websites" class="active">Business Websites</a></li>
+            <li><a href="ecommerce">Custom E-commerce</a></li>
+            <li><a href="graphic-design">Graphic Design & Services</a></li>
+            <li><a href="automation">AI Process Automation</a></li>
+            <li><a href="raynetcrm-en">RAYNET CRM</a></li>
+            <li><a href="digitalsignature">DigiSign - Digital Signature</a></li>
+            <li><a href="vexion-en">VEXION Loyalty</a></li>
+            <li><a href="hugo_en">HUGO Municipal System</a></li>
+            <li><a href="ozobot-en">Ozobot Robots</a></li>
+        </ul>
+    </li>
+    <li><a href="blog-en">Blog</a></li>
+    <li class="language-switcher">
+        <a href="weby" class="lang-link" title="Slovak"><span class="fi fi-sk"></span></a>
+        <span class="lang-separator">|</span>
+        <a href="weby-cz" class="lang-link" title="Czech"><span class="fi fi-cz"></span></a>
+        <span class="lang-separator">|</span>
+        <a href="websites" class="lang-link active" title="English"><span class="fi fi-gb"></span></a>
+    </li>
+    <li><a href="#contact-form" class="btn btn-primary">Book Consultation</a></li>
+</ul>
         </nav>
     </header>
 
@@ -207,14 +245,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </section>
 
-        <section class="container reveal" style="margin-bottom: 4rem;">
-             <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; text-align: center; backdrop-filter: blur(5px);">
-                <h2 class="section-title" style="margin-bottom: 1.5rem;">Why Does Your Business Need a Website?</h2>
-                <p style="font-size: 1.1rem; color: var(--slate-300); line-height: 1.7;">
-                    <strong>Your website is your 24/7 digital storefront.</strong> Today, the first thing potential customers do is search for your business online. If they can't find you or see an outdated site, you've lost them before you had a chance.
-                </p>
-             </div>
-        </section>
+ <section class="container reveal" style="margin-bottom: 4rem;">
+     <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; text-align: center; backdrop-filter: blur(5px);">
+        <h2 class="section-title" style="margin-bottom: 1.5rem;">Why Does Your Business Need a Website?</h2>
+        <p style="font-size: 1.1rem; color: var(--slate-300); line-height: 1.7;">
+            <strong>Your website is your 24/7 digital storefront.</strong> Today, the first thing potential customers do is search for your business online. If they can't find you or see an outdated site, you've lost them before you had a chance.
+        </p>
+     </div>
+</section>
 
         <section class="container reveal" style="margin-bottom: 5rem;">
             <div class="services-grid">
@@ -236,105 +274,519 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </section>
 
-        <section id="balicky" class="container reveal">
-            <h2 class="section-title">Choose the Package That Fits Your Needs</h2>
-            <p class="section-subtitle">No hidden fees. You pay once for website creation.</p>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="pricing-title">Starter Package</h3>
-                    <div class="pricing-price-wrapper">
-                        <span class="original-price">580€</span>
-                        <p class="pricing-price gradient-text">290€</p>
-                    </div>
-                    <p class="pricing-description">Perfect solution for freelancers and businesses that need a full-featured, professional online presence.</p>
-                    <ul class="pricing-features">
-                        <li><b>Up to 5 pages</b> included</li>
-                        <li>Custom original design</li>
-                        <li>Contact form</li>
-                        <li>Basic technical SEO</li>
-                        <li>100% mobile-friendly</li>
-                        <li>No monthly fees</li>
-                    </ul>
-                    <a href="#contact-form" class="btn btn-secondary">I'm Interested</a>
-                </div>
-
-                <div class="pricing-card popular">
-                    <span class="popular-badge">Best Value</span>
-                    <h3 class="pricing-title">Professional Package</h3>
-                    <div class="pricing-price-wrapper">
-                        <span class="original-price">990€</span>
-                        <p class="pricing-price gradient-text">480€</p>
-                    </div>
-                    <p class="pricing-description">For growing businesses that want to maximize their website with advanced features and interactivity.</p>
-                    <ul class="pricing-features">
-                        <li><b>Everything from Starter package</b></li>
-                        <li>Option to expand to more subpages</li>
-                        <li>Refined design with revisions included</li>
-                        <li><b>Live chat</b> with visitors</li>
-                        <li><b>Google Maps integration</b></li>
-                        <li><b>Online calendar integration</b></li>
-                    </ul>
-                    <a href="#contact-form" class="btn btn-primary">Choose Professional Package</a>
-                </div>
-
-                <div class="pricing-card">
-                    <h3 class="pricing-title">Custom E-shop</h3>
-                    <p class="pricing-price gradient-text">from 590€</p>
-                    <p class="pricing-description">Tailored solution for those who want to efficiently sell products or services online.</p>
-                    <ul class="pricing-features">
-                        <li>Complete sales tool</li>
-                        <li>Payment gateway integration</li>
-                        <li>Product management system</li>
-                        <li>Custom features as needed</li>
-                        <li>Price based on requirements</li>
-                    </ul>
-                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-secondary">Book Consultation</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="process" class="container reveal">
-            <h2 class="section-title">From Idea to Launch</h2>
+<section class="container reveal" style="padding: 4rem 0;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border-radius: 16px; border: 1px solid rgba(34, 211, 238, 0.3);">
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 3rem;">Did You Know?</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
             
-            <div class="process-grid-fixed">
-                <div class="process-card-anim" style="animation-delay: 0s;">
-                    <div class="process-number-bg">01</div>
-                    <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
-                    <div class="process-content">
-                        <h3>Consultation & Strategy</h3>
-                        <p>We discuss your goals and requirements for free to fully understand what you need.</p>
+            <div>
+                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">75%</div>
+                <p style="margin: 0; color: var(--slate-300);">of people judge a company’s credibility based on website design</p>
+            </div>
+
+            <div>
+                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">93%</div>
+                <p style="margin: 0; color: var(--slate-300);">of online experiences begin with a Google search</p>
+            </div>
+
+            <div>
+                <div style="font-size: 3rem; font-weight: 900; color: var(--cyan); margin-bottom: 0.5rem;">88%</div>
+                <p style="margin: 0; color: var(--slate-300);">of customers read online reviews before purchasing</p>
+            </div>
+
+        </div>
+
+        <p style="text-align: center; margin-top: 2.5rem; font-size: 1.1rem; color: var(--white);">
+            <strong>Your website is your first impression.</strong> Don’t lose customers just because they can’t find you online or you look unprofessional.
+        </p>
+    </div>
+</section>
+
+   <section id="balicky" class="container reveal">
+    <h2 class="section-title">Invest Wisely in Your Website</h2>
+    <p class="section-subtitle">Choose your path: Let us handle everything (monthly plan) or buy the website outright.</p>
+
+    <div class="pricing-mode-switch">
+        <button class="mode-btn active" onclick="switchMode('rental')">
+            <div class="mode-icon"><i class="fa-solid fa-handshake"></i></div>
+            <div class="mode-info">
+                <span class="mode-title">Partnership (Rental)</span>
+                <span class="mode-badge">Tech & Updates Included</span>
+            </div>
+        </button>
+        <button class="mode-btn" onclick="switchMode('onetime')">
+            <div class="mode-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="mode-info">
+                <span class="mode-title">One-time Purchase</span>
+                <span class="mode-badge">Configurator from €140</span>
+            </div>
+        </button>
+    </div>
+
+   <div id="view-rental" class="pricing-view">
+        
+        <div class="pricing-switch-container">
+            <span class="billing-label" id="label-monthly" style="color: var(--slate-300);">Monthly</span>
+            <label class="switch">
+                <input type="checkbox" id="billing-toggle" checked onchange="updateSetupFee()">
+                <span class="slider round"></span>
+            </label>
+            <span class="billing-label" id="label-yearly" style="color: white;">Yearly <span class="badge-save">Setup €0</span></span>
+        </div>
+
+        <div class="pricing-grid three-cols" style="grid-template-columns: repeat(2, 1fr); max-width: 900px; margin: 0 auto;">
+            
+            <div class="pricing-card">
+                <h3 class="pricing-title">START (Business Card)</h3>
+                <div class="pricing-price-wrapper">
+                    <p class="pricing-price gradient-text" style="font-size: 3rem; font-weight: 900; margin: 1rem 0;">€39 <span class="period" style="font-size: 1rem; color: #cbd5e1;">/ mo.</span></p>
+                    
+                    <p id="yearly-total-start" class="yearly-total-text">Billed yearly: €468</p>
+
+                    <div id="setup-fee-start" class="setup-fee-badge setup-free">
+                        <i class="fa-solid fa-gift"></i> Setup Fee €0
                     </div>
                 </div>
+                <p class="pricing-description">Professional custom website without hassle. Ideal for starting out.</p>
+                <div class="divider"></div>
+                <ul class="pricing-features">
+                    <li><i class="fa-solid fa-check"></i> <strong>Custom Website</strong> (Unique Design)</li>
+                    <li><i class="fa-solid fa-check"></i> Hosting, SSL & Technical Management</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>1 hr of updates</strong> monthly included</li>
+                    <li><i class="fa-solid fa-check"></i> Basic SEO Indexing</li>
+                    <li><i class="fa-solid fa-check"></i> Traffic Report (on request)</li>
+                </ul>
+                <a href="#contact-form" class="btn btn-secondary" style="margin-top: auto; text-align: center;" onclick="setSubject('Interest in START package')">Get Online</a>
+            </div>
 
-                <div class="process-card-anim" style="animation-delay: 0.15s;">
-                    <div class="process-number-bg">02</div>
-                    <div class="process-icon"><i class="fa-solid fa-pen-ruler"></i></div>
-                    <div class="process-content">
-                        <h3>Design & Development</h3>
-                        <p>We create a graphic design and, after your approval, proceed with technical implementation.</p>
+            <div class="pricing-card popular" style="background: rgba(30, 41, 59, 0.8); border-color: var(--cyan);">
+                <span class="popular-badge">Recommended</span>
+                <h3 class="pricing-title">PARTNER (Growth)</h3>
+                <div class="pricing-price-wrapper">
+                    <p class="pricing-price gradient-text" style="font-size: 3rem; font-weight: 900; margin: 1rem 0;">€89 <span class="period" style="font-size: 1rem; color: #cbd5e1;">/ mo.</span></p>
+                    
+                    <p id="yearly-total-partner" class="yearly-total-text">Billed yearly: €1068</p>
+
+                    <div id="setup-fee-partner" class="setup-fee-badge setup-free">
+                        <i class="fa-solid fa-gift"></i> Setup Fee €0
                     </div>
                 </div>
+                <p class="pricing-description">For businesses that want to actively gain customers.</p>
+                <div class="divider"></div>
+                <ul class="pricing-features">
+                    <li><i class="fa-solid fa-check"></i> <strong>Everything in START</strong></li>
+                    <li><i class="fa-solid fa-check"></i> <strong>+2 hrs of work</strong> monthly (content/graphics)</li>
+                    <li><i class="fa-solid fa-check"></i> Google Business Profile Management</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>AI Ads</strong> (Setup & Management)*</li>
+                    <li><i class="fa-solid fa-check"></i> Priority Support (Phone/Mail)</li>
+                </ul>
+                <a href="#contact-form" class="btn btn-primary" style="margin-top: auto; text-align: center;" onclick="setSubject('Interest in PARTNER package')">Become a Partner</a>
+            </div>
+        </div>
+        
+        <div class="hourly-rate-box">
+            <p style="color: var(--slate-300); margin-bottom: 0;">Need something extra?</p>
+            <div class="hourly-price">€39 / hour</div>
+            <p style="font-size: 0.9rem; color: var(--slate-300); max-width: 600px; margin: 0 auto;">
+                Applies to work beyond the scope of packages (e.g., custom feature programming).
+                You always approve the time estimate in advance.
+            </p>
+            <p style="font-size: 0.75rem; color: var(--slate-300); margin-top: 1rem; opacity: 0.7;">
+                *Partner package price does not include ad credit (Google/Meta), which you pay directly to the platforms.
+            </p>
+        </div>
+    </div>
 
-                <div class="process-card-anim" style="animation-delay: 0.3s;">
-                    <div class="process-number-bg">03</div>
-                    <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
-                    <div class="process-content">
-                        <h3>Review & Revisions</h3>
-                        <p>We present the finished website and incorporate your feedback and final adjustments.</p>
-                    </div>
+    <div id="view-onetime" class="pricing-view" style="display: none;">
+        
+        <div class="configurator-container">
+            <div class="config-options">
+                <h3 style="margin-bottom: 1.5rem; color: white;">Build Your Custom Web</h3>
+                
+                <div class="config-item disabled">
+                    <input type="checkbox" checked disabled id="base-web">
+                    <label for="base-web">
+                        <span class="opt-header">
+                            <span class="opt-name">Core: Landing Page</span>
+                            <span class="opt-price">€140</span>
+                        </span>
+                        <span class="opt-desc">Modern one-page presentation (Sections: Intro, About, Services, Contact), responsive design, HTTPS security.</span>
+                    </label>
                 </div>
 
-                <div class="process-card-anim" style="animation-delay: 0.45s;">
-                    <div class="process-number-bg">04</div>
-                    <div class="process-icon"><i class="fa-solid fa-handshake"></i></div>
-                    <div class="process-content">
-                        <h3>Launch & Training</h3>
-                        <p>We deploy the site on your hosting, test everything, and show you how to manage it.</p>
-                    </div>
+                <div class="config-item">
+                    <input type="checkbox" id="opt-pages" data-price="80" onchange="calculateTotal()">
+                    <label for="opt-pages">
+                        <span class="opt-header">
+                            <span class="opt-name">Multi-page Structure</span>
+                            <span class="opt-price">+ €80</span>
+                        </span>
+                        <span class="opt-desc">Expansion to a full website with separate subpages. Better for SEO and more content.</span>
+                    </label>
+                </div>
+
+                <div class="config-item">
+                    <input type="checkbox" id="opt-analytics" data-price="70" onchange="calculateTotal()">
+                    <label for="opt-analytics">
+                        <span class="opt-header">
+                            <span class="opt-name">Professional Tracking & SEO</span>
+                            <span class="opt-price">+ €70</span>
+                        </span>
+                        <span class="opt-desc">
+                            Essential for data collection and ads. Includes:
+                            <br>• <strong>Google Analytics 4</strong> (Detailed stats)
+                            <br>• <strong>Google Search Console</strong> (Indexing in Google)
+                            <br>• <strong>Meta (Facebook) Pixel</strong> (Connection with FB ads)
+                        </span>
+                    </label>
+                </div>
+
+                <div class="config-item">
+                    <input type="checkbox" id="opt-design" data-price="70" onchange="calculateTotal()">
+                    <label for="opt-design">
+                        <span class="opt-header">
+                            <span class="opt-name">Premium Branding</span>
+                            <span class="opt-price">+ €70</span>
+                        </span>
+                        <span class="opt-desc">Advanced graphic design, custom banners, and logo creation/modification (vector formats).</span>
+                    </label>
+                </div>
+
+                <div class="config-item">
+                    <input type="checkbox" id="opt-blog" data-price="50" onchange="calculateTotal()">
+                    <label for="opt-blog">
+                        <span class="opt-header">
+                            <span class="opt-name">Blog / News</span>
+                            <span class="opt-price">+ €50</span>
+                        </span>
+                        <span class="opt-desc">Module for adding articles. Increases traffic from search engines.</span>
+                    </label>
                 </div>
             </div>
-        </section>
 
+            <div class="config-summary-wrapper">
+                <div class="config-summary-card">
+                    <h4>Investment Total</h4>
+                    <div class="total-price-display">
+                        <span id="final-price">140</span> €
+                    </div>
+                    <p class="vat-note">One-time payment. You own 100% of the web.</p>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="summary-features">
+                        <p><i class="fa-solid fa-file-code"></i> Source Code Handover</p>
+                        <p><i class="fa-solid fa-lock"></i> Security Settings</p>
+                        <p><i class="fa-solid fa-bolt"></i> Speed Optimization</p>
+                    </div>
+                    
+                    <a href="#contact-form" class="btn btn-primary full-width" onclick="submitConfig()">I'm Interested</a>
+                    
+                    <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--slate-300);">
+                        <em>*Client pays for hosting and domain directly to the registrar (approx. €30/year).</em>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="process" class="container reveal">
+    <h2 class="section-title">From Idea to Online Success</h2>
+    
+    <div class="process-grid-fixed">
+        <div class="process-card-anim">
+            <div class="process-number-bg">01</div>
+            <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+            <div class="process-content">
+                <h3>Consultation</h3>
+                <p>We discuss your goals for free. We choose the package that fits you best (monthly or yearly).</p>
+            </div>
+        </div>
+
+        <div class="process-card-anim">
+            <div class="process-number-bg">02</div>
+            <div class="process-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+            <div class="process-content">
+                <h3>Development</h3>
+                <p>We design, write content, and technically prepare the web. We handle everything, you just approve.</p>
+            </div>
+        </div>
+
+        <div class="process-card-anim">
+            <div class="process-number-bg">03</div>
+            <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+            <div class="process-content">
+                <h3>Launch</h3>
+                <p>After your approval, we launch the site on your domain. We set up SEO, Google Maps, and analytics.</p>
+            </div>
+        </div>
+
+        <div class="process-card-anim">
+            <div class="process-number-bg">04</div>
+            <div class="process-icon"><i class="fa-solid fa-headset"></i></div>
+            <div class="process-content">
+                <h3>Care</h3>
+                <p>It doesn't end with the website. We regularly update it, send reports, and handle your change requests.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* FIX for double checkmarks */
+    ul.pricing-features {
+        list-style: none !important;
+        padding-left: 0;
+        margin: 1.5rem 0;
+        text-align: left;
+    }
+    ul.pricing-features li {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: var(--slate-300);
+        font-size: 0.95rem;
+        padding-left: 0 !important;
+    }
+    ul.pricing-features li::before { content: none !important; display: none !important; }
+    
+    ul.pricing-features li i {
+        color: var(--cyan);
+        min-width: 20px;
+        margin-top: 4px;
+    }
+
+    /* Toggle Switch Styles */
+    .pricing-switch-container {
+        display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 3rem;
+        font-weight: 600; font-size: 1.1rem;
+    }
+    .billing-label { color: var(--slate-300); transition: color 0.3s; }
+    .active-billing { color: white; }
+    
+    .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+        position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(30, 41, 59, 0.8); transition: .4s; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .slider:before {
+        position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 3px;
+        background-color: var(--cyan); transition: .4s;
+    }
+    input:checked + .slider { background-color: rgba(34, 211, 238, 0.2); }
+    input:checked + .slider:before { transform: translateX(26px); }
+    .slider.round { border-radius: 34px; }
+    .slider.round:before { border-radius: 50%; }
+
+    .badge-save {
+        background: var(--purple); color: white; font-size: 0.7rem; padding: 2px 6px;
+        border-radius: 4px; margin-left: 5px; vertical-align: middle;
+    }
+    
+    .billing-note { font-size: 0.8rem; color: var(--slate-300); margin-top: 5px; opacity: 0.8; }
+    
+    /* Grid layout help */
+    .pricing-grid.three-cols {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+    }
+    @media (max-width: 900px) { .pricing-grid.three-cols { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+    // Setup Fee Toggle Function
+    function updateSetupFee() {
+        const isYearly = document.getElementById('billing-toggle').checked;
+        const setups = document.querySelectorAll('.setup-fee-badge');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelYearly = document.getElementById('label-yearly');
+        
+        const totalStart = document.getElementById('yearly-total-start');
+        const totalPartner = document.getElementById('yearly-total-partner');
+        
+        if (isYearly) {
+            // Yearly = Setup FREE
+            setups.forEach(badge => {
+                badge.innerHTML = '<i class="fa-solid fa-gift"></i> Setup Fee <strong>€0</strong>';
+                badge.classList.remove('setup-paid');
+                badge.classList.add('setup-free');
+            });
+            
+            labelMonthly.style.color = 'var(--slate-300)';
+            labelYearly.style.color = 'white';
+            
+            if(totalStart) totalStart.innerText = "Billed yearly: €468";
+            if(totalPartner) totalPartner.innerText = "Billed yearly: €1068";
+
+        } else {
+            // Monthly = Setup €199
+            setups.forEach(badge => {
+                badge.innerHTML = '+ €199 Setup Fee';
+                badge.classList.remove('setup-free');
+                badge.classList.add('setup-paid');
+            });
+            
+            labelMonthly.style.color = 'white';
+            labelYearly.style.color = 'var(--slate-300)';
+            
+            if(totalStart) totalStart.innerText = "Billed monthly";
+            if(totalPartner) totalPartner.innerText = "Billed monthly";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSetupFee(); 
+    });
+
+    // Calculator for Configurator
+    function calculateTotal() {
+        let total = 140; // Base
+        const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:not(:disabled)');
+        
+        checkboxes.forEach(box => {
+            if (box.checked) {
+                total += parseInt(box.getAttribute('data-price'));
+            }
+        });
+
+        document.getElementById('final-price').innerText = total;
+    }
+
+    // Submit Config
+    function submitConfig() {
+        let selectedOptions = ["Base: Core Landing Page (€140)"];
+        const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:checked:not(:disabled)');
+        
+        checkboxes.forEach(box => {
+            const label = box.nextElementSibling.querySelector('.opt-name').innerText;
+            const price = box.getAttribute('data-price');
+            selectedOptions.push(`${label} (+€${price})`);
+        });
+
+        const finalPrice = document.getElementById('final-price').innerText;
+        const message = `I am interested in a one-time website purchase.\nEstimated investment: €${finalPrice}\n\nSelected configuration:\n- ` + selectedOptions.join("\n- ");
+        
+        setSubject(message, true);
+    }
+
+    function setSubject(subjectText, isDirectMessage = false) {
+        const textarea = document.getElementById('project-details');
+        if(textarea) {
+            if(isDirectMessage) {
+                 textarea.value = subjectText;
+            } else {
+                 textarea.value = subjectText + "\n\nMy message: ";
+            }
+            document.querySelector('#contact-form').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
+
+<style>
+    /* Switch Styles */
+    .pricing-switch-container {
+        display: flex; justify-content: center; margin-bottom: 3rem;
+    }
+    .pricing-switch {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50px; padding: 5px; display: inline-flex;
+        backdrop-filter: blur(10px);
+    }
+    .switch-btn {
+        background: transparent; border: none; color: var(--slate-300);
+        padding: 12px 25px; border-radius: 40px; cursor: pointer;
+        font-weight: 600; font-size: 1rem; transition: all 0.3s ease;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .switch-btn.active {
+        background: var(--cyan); color: var(--slate-900); box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+    }
+    .switch-btn:hover:not(.active) { color: white; }
+    .badge {
+        font-size: 0.7rem; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; text-transform: uppercase;
+    }
+    .switch-btn.active .badge { background: rgba(0,0,0,0.1); }
+
+    /* Divider in cards */
+    .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 1.5rem 0; }
+    
+    /* Individual Block */
+    .individual-block {
+        margin-top: 3rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(34, 211, 238, 0.1) 100%);
+        border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 16px;
+        padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    }
+    .individual-content h3 { color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+    .individual-content p { margin: 0; color: var(--slate-300); }
+    @media (max-width: 768px) { .individual-block { flex-direction: column; text-align: center; } }
+
+    /* Configurator Styles */
+    .configurator-wrapper {
+        display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;
+        max-width: 1000px; margin: 0 auto;
+    }
+    @media (max-width: 850px) { .configurator-wrapper { grid-template-columns: 1fr; } }
+
+    .config-item {
+        display: flex; align-items: center; background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px;
+        margin-bottom: 1rem; transition: all 0.2s ease; cursor: pointer;
+    }
+    .config-item:hover { border-color: rgba(34, 211, 238, 0.3); background: rgba(30, 41, 59, 0.6); }
+    .config-item.disabled { opacity: 0.7; cursor: default; background: rgba(34, 211, 238, 0.05); border-color: rgba(34, 211, 238, 0.2); }
+    
+    .config-item input[type="checkbox"] {
+        width: 20px; height: 20px; margin-right: 15px; accent-color: var(--cyan);
+    }
+    .config-item label { flex-grow: 1; cursor: pointer; }
+    .opt-name { display: block; font-weight: 700; color: white; font-size: 1.05rem; }
+    .opt-desc { display: block; font-size: 0.9rem; color: var(--slate-300); }
+    .opt-price { font-weight: 700; color: var(--cyan); font-size: 1.1rem; white-space: nowrap; }
+
+    /* Sticky Summary Card */
+    .sticky-card { position: sticky; top: 100px; }
+    .summary-card {
+        background: rgba(15, 23, 42, 0.8); border: 1px solid var(--cyan);
+        border-radius: 16px; padding: 2rem; text-align: center;
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); backdrop-filter: blur(10px);
+    }
+    .total-price-display { font-size: 3.5rem; font-weight: 900; color: white; line-height: 1; margin: 1rem 0; }
+    .vat-note { font-size: 0.8rem; color: var(--slate-300); margin-bottom: 1.5rem; }
+    .summary-features { text-align: left; margin-bottom: 1.5rem; font-size: 0.9rem; color: #cbd5e1; }
+    .summary-features p { margin-bottom: 0.5rem; }
+    .summary-features i { color: var(--cyan); margin-right: 8px; }
+    .btn.full-width { width: 100%; }
+
+    /* Helper for grid */
+    .pricing-grid.three-cols {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+    }
+    @media (max-width: 900px) { .pricing-grid.three-cols { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+    // 1. Switch Modes
+    function switchMode(mode) {
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+        const targetBtn = event.target.closest('.mode-btn');
+        if(targetBtn) targetBtn.classList.add('active');
+
+        if (mode === 'rental') {
+            document.getElementById('view-rental').style.display = 'block';
+            document.getElementById('view-onetime').style.display = 'none';
+        } else {
+            document.getElementById('view-rental').style.display = 'none';
+            document.getElementById('view-onetime').style.display = 'block';
+        }
+    }
+</script>
+
+       
         <section class="container reveal" style="margin-bottom: 5rem;">
             <h2 class="section-title" style="text-align: center;">Our Recent Projects</h2>
             <p class="section-subtitle" style="text-align: center;">Websites and e-shops we helped build</p>
@@ -388,47 +840,72 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </section>
     
         <section class="container subpage-content reveal">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-container">
-                <details class="faq-item">
-                    <summary class="faq-question">Why do I even need a website? I already have Facebook.</summary>
-                    <div class="faq-answer">
-                        <p><strong>Your website is your digital business card that you fully control.</strong> Facebook is a great tool, but:</p>
-                        <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                            <li>Not all customers use social media</li>
-                            <li>Your business looks more professional with your own domain</li>
-                            <li>Google finds your website easier than a Facebook page</li>
-                            <li>You own your website—no one can take it away</li>
-                        </ul>
-                    </div>
-                </details>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-subtitle" style="margin-bottom: 3rem;">Answers to our clients’ most common questions and concerns</p>
+    
+    <div class="faq-container">
+    <details class="faq-item">
+        <summary class="faq-question">Will I have access to the website administration?</summary>
+        <div class="faq-answer">
+            <p><strong>No, and that is an advantage for you.</strong> Our model is built on "Hassle-free Web" service. You don't have to learn a new system, deal with updates, or worry about breaking something.</p>
+            <p style="margin-top: 10px;">Need to change text, pricing, or a photo? Just write to us, and we'll implement it promptly. You focus on business, we handle the tech.</p>
+        </div>
+    </details>
 
-                <details class="faq-item">
-                    <summary class="faq-question">Why are your prices so low?</summary>
-                    <div class="faq-answer">
-                        <p>We achieve low prices through modern tools and efficient processes. You don’t pay for unnecessary meetings and bureaucracy—just real work. Every website has a unique custom design with professional SEO setup.</p>
-                    </div>
-                </details>
+<details class="faq-item">
+    <summary class="faq-question">What is the commitment and setup fee?</summary>
+    <div class="faq-answer">
+        <p>You have two options:</p>
+        <ul style="margin-top: 10px; padding-left: 20px;">
+            <li><strong>Yearly payment (RECOMMENDED):</strong> Pay for a year in advance, and the setup fee is <strong>FREE (€0)</strong>. You save €199.</li>
+            <li><strong>Monthly payment:</strong> Pay a one-time setup fee of <strong>€199</strong>. Then pay a monthly fee with no long-term commitment (1-month notice period).</li>
+        </ul>
+    </div>
+</details>
 
-                <details class="faq-item">
-                    <summary class="faq-question">Are there any monthly fees?</summary>
-                    <div class="faq-answer">
-                        <p>No. The listed prices are one-time for website creation. The only ongoing costs are the annual domain fee (~€20/year) and optional email. We can set up free hosting via GitHub Pages.</p>
-                    </div>
-                </details>
+<details class="faq-item">
+    <summary class="faq-question">Does the €89 price include ad credit?</summary>
+    <div class="faq-answer">
+        <p>No. The €89 price covers our work – <strong>setting up, managing, and optimizing</strong> ads using AI tools. The ad credit (budget) spent on Google or Facebook is paid directly by you to these platforms via your card.</p>
+    </div>
+</details>
 
-                <details class="faq-item">
-                    <summary class="faq-question">Will customers find me on Google?</summary>
-                    <div class="faq-answer">
-                        <p><strong>Yes!</strong> Today, 93% of people search for services on Google. Every site includes full SEO setup—meta tags, descriptions, structured URLs, sitemap, Google Search Console connection.</p>
-                    </div>
-                </details>
-            </div>
-        </section>
+    <details class="faq-item">
+        <summary class="faq-question">Why should I pay monthly instead of buying once?</summary>
+        <div class="faq-answer">
+            <p>Because a website isn't a one-time thing. Tech, Google, and trends change. With a monthly plan, you get:</p>
+            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                <li>Zero upfront investment (save hundreds at the start).</li>
+                <li>Certainty that the web won't become technically obsolete.</li>
+                <li>A partner who cares for the web (hosting, domain, changes included).</li>
+            </ul>
+        </div>
+    </details>
 
+    <details class="faq-item">
+        <summary class="faq-question">How fast do you implement changes?</summary>
+        <div class="faq-answer">
+            <p>Standard requests (text edits, image swaps, opening hours updates) are usually done within <strong>24 to 48 hours</strong> on business days. With the <em>Partner</em> package, your requests have priority.</p>
+        </div>
+    </details>
+
+    <details class="faq-item">
+        <summary class="faq-question">Who owns the domain (.sk / .com / .eu)?</summary>
+        <div class="faq-answer">
+            <p>The domain is always registered to you or your company. You are its 100% legal owner. We only technically manage it during our cooperation. If you decide to leave, the domain remains yours.</p>
+        </div>
+    </details>
+
+    <details class="faq-item">
+        <summary class="faq-question">Can I buy the website as a one-off?</summary>
+        <div class="faq-answer">
+            <p>Yes. If you don't want to pay monthly, you can use our configurator and pay for the web once. In that case, you own the code, but future updates, hosting, and content changes are up to you (or you can order them from us as a paid service).</p>
+        </div>
+    </details>
+</div>
         <section id="contact-form" class="container reveal" style="margin-bottom: 5rem;">
              <div class="contact-form-container">
-                <h2 class="section-title" style="text-align: center;">Get Your Quote</h2>
+                <h2 class="section-title" style="text-align: center;">I'm Interested in a Website</h2>
                 <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Fill out the form and we'll get back to you with a free consultation for your new website.</p>
                 
                 <form name="website-contact-en" method="POST" data-netlify="true">
@@ -493,9 +970,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </a>
                         <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram" title="Instagram">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-                        </a>
-                        <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn" title="LinkedIn">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
                         </a>
                     </div>
                 </div>
