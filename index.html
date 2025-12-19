@@ -9,7 +9,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeden partner pre všetky technológie vo Vašej firme | Unoneto</title>
-    <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate: od pokladní až po CRM a ERP. Zaistíme, aby všetko fungovalo ako jeden celok. Dohodnite si bezplatnú analýzu.">
+    <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate. Moderné weby na splátky bez vstupných investícií.">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
@@ -23,192 +23,160 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="shortcut icon" href="favicon.png" type="image/png">
 
     <style>
-    /* --- NOVÝ ŠTÝL PRE PROCES (Rovnaký ako na podstránkach) --- */
-    
-    /* 1. Mriežka */
-    .process-grid-fixed {
-        display: grid;
-        grid-template-columns: 1fr; /* Mobil: 1 stĺpec */
-        gap: 2rem;
-        margin-top: 3rem;
-    }
-
-    /* Tablet: 2 stĺpce */
-    @media (min-width: 700px) {
-        .process-grid-fixed {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    /* Desktop: 4 stĺpce */
-    @media (min-width: 1200px) {
-        .process-grid-fixed {
-            grid-template-columns: repeat(4, 1fr);
-        }
-    }
-
-    /* 2. Karty s animáciou */
-    .process-card-anim {
-        background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(34, 211, 238, 0.15);
-        border-radius: 16px;
-        padding: 2.5rem 2rem;
-        position: relative;
+    /* --- POHYBLIVÝ BANER (MARQUEE) --- */
+    .promo-banner {
+        background: rgba(15, 23, 42, 0.95); /* Tmavé pozadie */
+        border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+        height: 44px;
+        display: flex;
+        align-items: center;
         overflow: hidden;
-        text-align: center;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        
-        /* Pripravené na animáciu (skryté) */
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
+        position: relative;
+        z-index: 100;
+    }
+    
+    .marquee-wrapper {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        text-decoration: none; /* Klikateľné, ale bez podčiarknutia */
     }
 
-    /* Trieda pre spustenie animácie */
-    .process-card-anim.pop-in {
-        animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    .marquee-content {
+        display: flex;
+        animation: marquee-scroll 30s linear infinite; /* Plynulý pohyb */
     }
 
-    @keyframes cardPopIn {
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-
-    /* Hover efekt */
-    .process-card-anim:hover {
-        transform: translateY(-10px) !important;
-        border-color: var(--cyan);
-        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15);
-        background: rgba(30, 41, 59, 0.7);
-    }
-
-    /* Číslo v pozadí */
-    .process-number-bg {
-        position: absolute;
-        top: -10px;
-        right: 10px;
-        font-size: 5rem;
-        font-weight: 900;
-        color: rgba(255, 255, 255, 0.03);
-        line-height: 1;
-        pointer-events: none;
-        transition: transform 0.5s ease;
-    }
-
-    .process-card-anim:hover .process-number-bg {
-        transform: scale(1.2) rotate(-10deg);
-        color: rgba(34, 211, 238, 0.1);
-    }
-
-    /* Ikona */
-    .process-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
-        background: linear-gradient(to bottom right, var(--cyan), var(--purple));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        display: inline-block;
-    }
-
-    /* Texty */
-    .process-content h3 {
-        font-size: 1.3rem;
+    .marquee-item {
+        white-space: nowrap;
         color: white;
-        margin-bottom: 1rem;
-        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 0 40px; /* Medzera medzi opakovaniami */
+        display: flex;
+        align-items: center;
     }
 
-    .process-content p {
-        font-size: 0.95rem;
-        color: #cbd5e1;
-        margin: 0;
-        line-height: 1.6;
+    .marquee-item strong { color: var(--cyan); margin-right: 5px; }
+
+    @keyframes marquee-scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); } /* Posun o polovicu (pretože text je duplikovaný) */
     }
 
-        .snowflake {
-            color: #fff;
-            font-size: 1em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px #000;
-            position: fixed;
-            top: -10%;
-            z-index: 9999;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            cursor: default;
-            pointer-events: none; /* Aby sa dalo klikať cez vločky */
-            -webkit-animation-name: snowflakes-fall, snowflakes-shake;
-            -webkit-animation-duration: 10s, 3s;
-            -webkit-animation-timing-function: linear, ease-in-out;
-            -webkit-animation-iteration-count: infinite, infinite;
-            -webkit-animation-play-state: running, running;
-            animation-name: snowflakes-fall, snowflakes-shake;
-            animation-duration: 10s, 3s;
-            animation-timing-function: linear, ease-in-out;
-            animation-iteration-count: infinite, infinite;
-            animation-play-state: running, running;
-        }
-        
-        @-webkit-keyframes snowflakes-fall { 0% { top: -10% } 100% { top: 100% } }
-        @-webkit-keyframes snowflakes-shake { 0%, 100% { -webkit-transform: translateX(0); transform: translateX(0) } 50% { -webkit-transform: translateX(80px); transform: translateX(80px) } }
-        @keyframes snowflakes-fall { 0% { top: -10% } 100% { top: 100% } }
-        @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0) } 50% { transform: translateX(80px) } }
-        
-        .snowflake:nth-of-type(0) { left: 1%; -webkit-animation-delay: 0s, 0s; animation-delay: 0s, 0s }
-        .snowflake:nth-of-type(1) { left: 10%; -webkit-animation-delay: 1s, 1s; animation-delay: 1s, 1s }
-        .snowflake:nth-of-type(2) { left: 20%; -webkit-animation-delay: 6s, .5s; animation-delay: 6s, .5s }
-        .snowflake:nth-of-type(3) { left: 30%; -webkit-animation-delay: 4s, 2s; animation-delay: 4s, 2s }
-        .snowflake:nth-of-type(4) { left: 40%; -webkit-animation-delay: 2s, 2s; animation-delay: 2s, 2s }
-        .snowflake:nth-of-type(5) { left: 50%; -webkit-animation-delay: 8s, 3s; animation-delay: 8s, 3s }
-        .snowflake:nth-of-type(6) { left: 60%; -webkit-animation-delay: 6s, 2s; animation-delay: 6s, 2s }
-        .snowflake:nth-of-type(7) { left: 70%; -webkit-animation-delay: 2.5s, 1s; animation-delay: 2.5s, 1s }
-        .snowflake:nth-of-type(8) { left: 80%; -webkit-animation-delay: 1s, 0s; animation-delay: 1s, 0s }
-        .snowflake:nth-of-type(9) { left: 90%; -webkit-animation-delay: 3s, 1.5s; animation-delay: 3s, 1.5s }
-        .snowflake:nth-of-type(10) { left: 25%; -webkit-animation-delay: 2s, 0s; animation-delay: 2s, 0s }
-        .snowflake:nth-of-type(11) { left: 65%; -webkit-animation-delay: 4s, 2.5s; animation-delay: 4s, 2.5s }
+    /* Hover zastaví pohyb, aby sa dalo kliknúť */
+    .promo-banner:hover .marquee-content {
+        animation-play-state: paused;
+    }
+
+    /* --- SLIDER FIX (Jeden baner) --- */
+    #banner-slider .splide__slide {
+        display: flex;
+        justify-content: center;
+    }
+    
+    #banner-slider .slide-caption {
+        background: rgba(15, 23, 42, 0.9);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid var(--cyan);
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    #banner-slider img {
+        width: 100%;
+        height: 500px; /* Vyšší baner pre lepší efekt */
+        object-fit: cover;
+        border-radius: 16px;
+        filter: brightness(0.7);
+    }
+
+    .splide__pagination { bottom: -30px !important; }
+    .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
+    .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
+
+    /* --- PROCESS GRID --- */
+    .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+    @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+    .process-card-anim {
+        background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+        border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+        text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0; transform: translateY(30px) scale(0.9);
+    }
+    .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .process-card-anim:hover {
+        transform: translateY(-10px) !important; border-color: var(--cyan);
+        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+    }
+    .process-number-bg {
+        position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+        color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+    }
+    .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+    
+    .process-icon {
+        font-size: 2.5rem; margin-bottom: 1.5rem;
+        background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+        -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+    }
+    .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+    .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
     </style>
 </head>
 
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<div class="snowflakes" aria-hidden="true">
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
-</div>
 
 <div id="december-banner" class="side-banner">
-    <a href="unoneto_akcia.html" class="banner-link-content">
-        <img src="december.jpg" alt="Vianočná akcia - Webstránka" />
+    <a href="weby.html" class="banner-link-content">
+        <img src="december.jpg" alt="Web bez starostí" />
         <div class="banner-text">
-            <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-gift" style="width: 18px; color: #22d3ee;"></i> Do 31.12.</span>
-            <span><strong>Vianočná akcia!</strong><br>Kompletný web za 290€.</span>
+            <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-check-circle" style="width: 18px; color: #22d3ee;"></i> Nový model</span>
+            <span><strong>Web bez starostí</strong><br>Setup 0€ pri ročnej platbe.</span>
         </div>
     </a>
     <button class="close-banner" aria-label="Zatvoriť banner">&times;</button>
 </div>
 
 <div id="promo-banner" class="promo-banner">
-    <p>
-        <strong><i class="fa-solid fa-tree" style="margin-right: 8px; color: #22d3ee;"></i> VIANOČNÁ NÁDIELKA:</strong> Profi webstránka <strong>za 290€</strong> (namiesto 580€). Akcia platí do konca roka!
-    </p>
-    <a href="unoneto_akcia.html" class="btn btn-secondary btn-small">Rozbaliť darček</a>
+    <a href="weby.html" class="marquee-wrapper">
+        <div class="marquee-content">
+            <span class="marquee-item">
+                <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
+                <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
+            </span>
+            <span class="marquee-item">
+                <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
+                <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
+            </span>
+            <span class="marquee-item">
+                <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
+                <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
+            </span>
+            <span class="marquee-item">
+                <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
+                <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
+            </span>
+        </div>
+    </a>
 </div>
 
     <div class="particle-container">
         <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
         <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
         <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
-        <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
-        <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
     </div>
     <div class="background-shapes">
         <div class="shape shape1"></div>
@@ -216,7 +184,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="shape shape3"></div>
     </div>
 
-<header class="main-header">
+    <header class="main-header">
         <nav class="container">
             <a href="/" class="logo">
                 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
@@ -228,63 +196,64 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="hamburger-bar"></span>
             </button>
           
-<ul class="nav-links" id="nav-menu">
-    <li class="has-dropdown">
-        <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
-        <ul class="dropdown-menu">
-            <li><a href="weby">Prezentačné weby</a></li>
+            <ul class="nav-links" id="nav-menu">
+                <li class="has-dropdown">
+                    <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Prezentačné weby</a></li>
                         <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafické služby a dizajn na mieru</a></li>
-                        <li><a href="automatizacia">AI Automatizácia procesov</a></li>
+                        <li><a href="graficke-sluzby">Grafika</a></li>
+                        <li><a href="automatizacia">AI Automatizácia</a></li>
                         <li><a href="raynetcrm">RAYNET CRM</a></li>
                         <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
                         <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
-        </ul>
-    </li>
-    <li><a href="blog">Novinky</a></li>
-    <li class="language-switcher">
-        <a href="/" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
-        <span class="lang-separator">|</span>
-        <a href="/en" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
-    </li>
-    <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Dohodnúť si konzultáciu</a></li>
-</ul>
+                        <li><a href="hugo">Informačný systém HUGO</a></li>
+                        <li><a href="ozobot">Roboty Ozobot</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog">Novinky</a></li>
+                <li class="language-switcher">
+                    <a href="/" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
+                    <span class="lang-separator">|</span>
+                    <a href="/en" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
+                </li>
+                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Dohodnúť si konzultáciu</a></li>
+            </ul>
         </nav>
     </header>
 
     <main>
         <section class="hero container reveal">
             <h1 class="hero-title">Jeden partner pre všetky<br><span class="gradient-text">technológie vo Vašej firme</span></h1>
-            <p class="hero-description">Od webstránky, eshopu, pokladne, vernostného systému až po AI automatizácie, komplexné CRM alebo ERP riešenia. Zabezpečíme, aby všetky Vaše nástroje spolu komunikovali a Vy ste sa mohli venovať tomu najdôležitejšiemu – Vašim zákazníkom.</p>
+            <p class="hero-description">Od webstránky, eshopu, pokladne, vernostného systému až po AI automatizácie. Zabezpečíme, aby všetko fungovalo ako jeden celok.</p>
             <div class="hero-buttons">
                 <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary btn-large">Dohodnite si bezplatnú konzultáciu</a>
                 <a href="#services" class="btn btn-secondary btn-large">Naše riešenia</a>
             </div>
         </section>
 
-<section class="container reveal" style="padding: 4rem 0; margin-bottom: 2rem;">
-    <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border: 2px solid var(--cyan); border-radius: 16px; text-align: center;">
-        <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 999px; margin-bottom: 1rem;">
-            <span style="color: var(--white); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-gift" style="margin-right: 8px;"></i> Akcia December</span>
-        </div>
+        <section class="container reveal" style="padding: 4rem 0; margin-bottom: 2rem;">
+            <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: linear-gradient(135deg, rgba(34,211,238,0.1) 0%, rgba(168,85,247,0.1) 100%); border: 2px solid var(--cyan); border-radius: 16px; text-align: center;">
+                <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(to right, var(--cyan), var(--purple)); border-radius: 999px; margin-bottom: 1rem;">
+                    <span style="color: var(--white); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-bolt" style="margin-right: 8px;"></i> Nový Cenník 2025</span>
+                </div>
 
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--white);">
-            Vianočná ponuka <span class="gradient-text">na novú webstránku</span>
-        </h2>
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--white);">
+                    Webstránka, ktorá <span class="gradient-text">nezaťaží váš rozpočet</span>
+                </h2>
 
-        <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--slate-300);">
-            Darujte firme darček a znížte si daňový základ. Kompletný PROFI balík so VŠETKÝMI 3 prémiovými funkciami len za <strong style="color: var(--cyan);">290€</strong> namiesto 480€.
-        </p>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--slate-300);">
+                    Zabudnite na tisícové investície vopred. Získajte moderný web na mieru formou služby.
+                    <br><span style="color:white; font-weight:bold;">ŠTART (39€)</span> alebo <span style="color:white; font-weight:bold;">PARTNER (89€)</span>.
+                </p>
 
-        <a href="unoneto_akcia.html" class="btn btn-primary btn-large" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Zobraziť kompletnú ponuku</a>
+                <a href="weby.html" class="btn btn-primary btn-large" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Porovnať balíky</a>
 
-         <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--slate-400);">
-            <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Ponuka platí do 31.12.2025
-        </p>
-    </div>
-</section>
+                 <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--slate-400);">
+                    <i class="fa-solid fa-check" style="margin-right: 4px;"></i> Zriadenie 0€ pri ročnej platbe
+                </p>
+            </div>
+        </section>
 
         <section id="services" class="container reveal">
             
@@ -293,11 +262,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <ul class="splide__list">
 
                         <li class="splide__slide">
-                            <a href="unoneto_akcia.html">
-                                <img src="december.jpg" alt="Vianočná akcia - Web za 290€">
+                            <a href="weby.html">
+                                <img src="december.jpg" alt="Web bez starostí">
                                 <div class="slide-caption">
-                                    <h2><i class="fa-solid fa-star" style="margin-right: 8px; color: #ffffff;"></i> Vianočná akcia</h2>
-                                    <p>Web do nákladov ešte tento rok! Ušetrite 190€</p>
+                                    <h2><i class="fa-solid fa-star" style="margin-right: 8px; color: #ffffff;"></i> Web bez starostí</h2>
+                                    <p>Váš nový web formou mesačného paušálu.</p>
                                 </div>
                             </a>
                         </li>
@@ -309,18 +278,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 									<h2>CRM od RAYNET</h2>
 									<p>Prvý krok k úspešnejšiemu obchodu.</p>
 								</div>
-                                </a>
-                                 </li>
+                            </a>
+                        </li>
 
-                                 <li class="splide__slide">
+                        <li class="splide__slide">
 							<a href="vexion">
 								<img src="karty.png" alt="Vernostný systém VEXION">
 								<div class="slide-caption">
 									<h2>Vernostný systém VEXION</h2>
-									<p>Nový spôsob vernostných kariet so skvelými možnosťami.</p>
+									<p>Nový spôsob vernostných kariet.</p>
 								</div>
-                                </a>
-                                 </li>
+                            </a>
+                        </li>
 
                         <li class="splide__slide">
                             <a href="weby">
@@ -334,16 +303,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li class="splide__slide">
                            <img src="image_0588b6.webp" alt="Automatizácia procesov">
                             <div class="slide-caption">
-                                <h2>Automatizácia procesov v praxi</h2>
-                                <p>Prepojíme Vaše nástroje do jedného fungujúceho celku.</p>
-                            </div>
-
-                        </li>
-                        <li class="splide__slide">
-                            <img src="image_057cde.jpg" alt="Inteligentné riešenia na mieru">
-                            <div class="slide-caption">
-                                <h2>Inteligentné riešenia na mieru</h2>
-                                <p>Analyzujeme a navrhneme systém presne pre Vás.</p>
+                                <h2>Automatizácia procesov</h2>
+                                <p>Prepojíme Vaše nástroje do jedného celku.</p>
                             </div>
                         </li>
                     </ul>
@@ -351,114 +312,113 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <h2 class="section-title">Komplexné riešenia pod jednou strechou</h2>
-            <p class="section-subtitle">Či už prevádzkujete e-shop, kamennú predajňu alebo poskytujete služby v B2B a B2C segmente, sme tu pre Vás. Zo skúseností vieme, že nesprávne vybrané nástroje a systémy biznis často spomaľujú a zvyšujú náklady. Dôležité je nielen dobre si vybrať, ale vedieť technológie aj naplno používať. A presne v tom Vám pomôžeme.</p>
+            <p class="section-subtitle">Či už prevádzkujete e-shop, kamennú predajňu alebo poskytujete služby, sme tu pre Vás.</p>
             
             <div class="services-grid">
                  <div class="card">
                     <h3>Web & E-shop</h3>
-                    <p>Vytvoríme Vám moderný web alebo výkonný e-shop, ktorý bude nielen dobre vyzerať, ale bude pripravený na napojenie ďalších systémov, ktoré Váš biznis potrebuje.</p>
+                    <p>Vytvoríme Vám moderný web alebo výkonný e-shop pripravený na napojenie ďalších systémov.</p>
                 </div>
                 <div class="card">
                     <h3>Vernostné a rezervačné systémy</h3>
-                    <p>Udržte si stálych zákazníkov vďaka modernému vernostnému systému (Vexion) alebo si zjednodušte plánovanie vďaka online rezervačnému kalendáru.</p>
+                    <p>Udržte si stálych zákazníkov vďaka modernému vernostnému systému Vexion.</p>
                 </div>
                 <div class="card">
-                    <h3>Integrácia a automatizácia systémov</h3>
-                    <p>Prepojíme všetko so všetkým: e-shop so skladom, CRM s marketingom, faktúry s účtovníctvom. Odstránime manuálnu prácu a ušetríme Vám desiatky hodín.</p>
+                    <h3>Integrácia a automatizácia</h3>
+                    <p>Prepojíme všetko so všetkým: e-shop so skladom, CRM s marketingom, faktúry s účtovníctvom.</p>
                 </div>
                 <div class="card">
                   <h3>Platobné systémy</h3>
-                  <p>Zabezpečíme Vám spoľahlivé platobné terminály pre Vašu prevádzku a integrujeme moderné online platobné brány do Vášho webu alebo e-shopu.</p>
+                  <p>Zabezpečíme spoľahlivé platobné terminály a online platobné brány.</p>
                 </div>
                  <div class="card">
                   <h3>Pokladničné systémy</h3>
-                  <p>Dodáme a nastavíme Vám moderné a spoľahlivé pokladničné riešenia (eKasa), ktoré budú plne v súlade s legislatívou a prepojené s Vaším skladom.</p>
+                  <p>Dodáme moderné pokladničné riešenia (eKasa) prepojené so skladom.</p>
                 </div>
                  <div class="card">
-                  <h3>Marketing, ktorý privádza zákazníkov</h3>
-                  <p>Keď je Vaša digitálna infraštruktúra pripravená, pomôžeme Vám ju zviditeľniť. Zabezpečíme SEO, PPC reklamu a správu sociálnych sietí.</p>
+                  <h3>Marketing</h3>
+                  <p>Pomôžeme Vám s viditeľnosťou. SEO, PPC reklama a správa sociálnych sietí.</p>
                 </div>
             </div>
         </section>
 
         <section id="process" class="container reveal">
-    <h2 class="section-title">Ako prebieha spolupráca?</h2>
-    <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Jednoduchý a transparentný proces od prvej kávy až po hotové riešenie.</p>
-    
-    <div class="process-grid-fixed">
-        
-        <div class="process-card-anim" style="animation-delay: 0s;">
-            <div class="process-number-bg">01</div>
-            <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
-            <div class="process-content">
-                <h3>Analýza potrieb</h3>
-                <p>Na úvodnej konzultácii preberieme vaše ciele a problémy. Pochopíme váš biznis, aby sme navrhli to najlepšie riešenie.</p>
-            </div>
-        </div>
+            <h2 class="section-title">Ako prebieha spolupráca?</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Jednoduchý proces od prvej kávy až po hotové riešenie.</p>
+            
+            <div class="process-grid-fixed">
+                <div class="process-card-anim" style="animation-delay: 0s;">
+                    <div class="process-number-bg">01</div>
+                    <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+                    <div class="process-content">
+                        <h3>Analýza</h3>
+                        <p>Pochopíme váš biznis a ciele, aby sme navrhli to najlepšie riešenie.</p>
+                    </div>
+                </div>
 
-        <div class="process-card-anim" style="animation-delay: 0.15s;">
-            <div class="process-number-bg">02</div>
-            <div class="process-icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <div class="process-content">
-                <h3>Návrh riešenia</h3>
-                <p>Pripravíme stratégiu a navrhneme ideálnu kombináciu nástrojov (web, CRM, automatizácie), ktoré budú pracovať pre vás.</p>
-            </div>
-        </div>
+                <div class="process-card-anim" style="animation-delay: 0.15s;">
+                    <div class="process-number-bg">02</div>
+                    <div class="process-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="process-content">
+                        <h3>Návrh</h3>
+                        <p>Pripravíme stratégiu a vyberieme ideálnu kombináciu nástrojov.</p>
+                    </div>
+                </div>
 
-        <div class="process-card-anim" style="animation-delay: 0.3s;">
-            <div class="process-number-bg">03</div>
-            <div class="process-icon"><i class="fa-solid fa-code"></i></div>
-            <div class="process-content">
-                <h3>Realizácia</h3>
-                <p>Zabezpečíme kompletnú realizáciu. Od dizajnu a programovania webu až po prepojenie a nastavenie všetkých systémov.</p>
-            </div>
-        </div>
+                <div class="process-card-anim" style="animation-delay: 0.3s;">
+                    <div class="process-number-bg">03</div>
+                    <div class="process-icon"><i class="fa-solid fa-code"></i></div>
+                    <div class="process-content">
+                        <h3>Realizácia</h3>
+                        <p>Zabezpečíme kompletnú realizáciu, dizajn a prepojenie systémov.</p>
+                    </div>
+                </div>
 
-        <div class="process-card-anim" style="animation-delay: 0.45s;">
-            <div class="process-number-bg">04</div>
-            <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
-            <div class="process-content">
-                <h3>Spustenie a podpora</h3>
-                <p>Všetko otestujeme, spustíme do ostrej prevádzky, zaškolíme vás a poskytneme dlhodobú technickú podporu.</p>
+                <div class="process-card-anim" style="animation-delay: 0.45s;">
+                    <div class="process-number-bg">04</div>
+                    <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="process-content">
+                        <h3>Podpora</h3>
+                        <p>Všetko otestujeme, spustíme a poskytneme dlhodobú starostlivosť.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-
-    </div>
-</section>
+        </section>
 		
         <section id="about" class="container reveal">
-             <h2 class="section-title">Prečo firemný agent a nie len ďalší dodávateľ?</h2>
+             <h2 class="section-title">Prečo spolupracovať s konzultantom?</h2>
              <div class="about-grid">
                  <div class="about-image">
-                    <img src="https://raw.githubusercontent.com/Matusbenco/Unoneto---web/refs/heads/main/1701295455694%20(1).jpg?raw=true" alt="Matúš Benčo - Váš firemný agent">
+                    <img src="https://raw.githubusercontent.com/Matusbenco/Unoneto---web/refs/heads/main/1701295455694%20(1).jpg?raw=true" alt="Matúš Benčo - Konzultant">
                  </div>
                  <div class="about-text">
-                     <h3>Váš partner pre firemné technológie</h3>
-                     <p>Podobne ako finančný agent háji Vaše záujmy vo svete financií, my sme Váš partner pre firemné technológie. Našou úlohou nie je len predať Vám produkt. Našou úlohou je pochopiť Váš biznis a nájsť tú správnu kombináciu nástrojov, ktoré Vám reálne ušetria čas a peniaze. Jednoducho povedané, zabezpečíme Vám presne to, čo pre svoje podnikanie naozaj potrebujete.</p>
-                     <p>Už žiadne starosti s tým, či sa nová pokladňa prepojí so skladom alebo či sa dá vernostný systém napojiť na Váš web. Túto zložitosť preberáme na seba. Sme Váš jediný kontaktný bod, ktorý zabezpečí, že technológie pracujú pre Vás, a nie Vy pre ne.</p>
+                     <h3>Konzultant pre firemné technológie</h3>
+                     <p><strong>Webstránka je len začiatok. Skutočný úspech tvoria procesy za ňou.</strong></p>
+                     <p>Mnoho firiem má pekný web, ale chaos v objednávkach, sklade alebo komunikácii. Moja úloha nie je len "dodať web". Mojím cieľom je nastaviť vaše <strong>predajné procesy</strong> tak, aby fungovali hladko.</p>
+                     <p>Ako váš konzultant prepájam jednotlivé body: Web privedie zákazníka → automatizácia spracuje dopyt → CRM postráži obchod. Zabezpečím technické "podhubie", vďaka ktorému sa vy môžete venovať biznisu, nie administratíve.</p>
                  </div>
              </div>
         </section>
 
         <section id="contact" class="container reveal">
-            <h2 class="section-title">Nechajte si poradiť od Vášho firemného agenta</h2>
-            <p class="section-subtitle">Dohodnite si bezplatnú úvodnú konzultáciu, kde zistíme, ako Vám môžeme zjednodušiť biznis.</p>
+            <h2 class="section-title">Nechajte si poradiť</h2>
+            <p class="section-subtitle">Dohodnite si bezplatnú úvodnú konzultáciu.</p>
             <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
                 <div class="input-group">
                     <label for="full-name">Vaše meno</label>
                     <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
                 </div>
 				<div class="input-group">
-									<label for="phone-number">Telefónne číslo (nepovinné)</label>
-									<input type="tel" id="phone-number" name="telefon" placeholder="napr. 0905 123 456">
-								</div>
+					<label for="phone-number">Telefón (nepovinné)</label>
+					<input type="tel" id="phone-number" name="telefon" placeholder="napr. 0905 123 456">
+				</div>
                 <div class="input-group">
                     <label for="email-address">Váš email</label>
                     <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@firma.sk" required>
                 </div>
                 <div class="input-group">
-                    <label for="message">Stručná správa</label>
-                    <textarea id="message" name="message" placeholder="Stručne popíšte, s čím potrebujete pomôcť..." rows="6" required></textarea>
+                    <label for="message">Správa</label>
+                    <textarea id="message" name="message" placeholder="S čím potrebujete pomôcť?" rows="6" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-large">Odoslať správu</button>
             </form>
@@ -479,32 +439,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			<div class="footer-col">
 				<h4>Kontakt</h4>
 				<p>Unoneto s. r. o.</p>
-					 <p>IČO: 55530966</p>
-				<p>DIČ: 2122015522</p>
+				<p>IČO: 55530966</p>
 				<p><a href="tel:+421905351100">+421 905 351 100</a></p>
 				<p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
 			</div>
 			
 			<div class="footer-col">
 				<h4>Rýchle odkazy</h4>
-				<a href="/#services">Naše riešenia</a>
-				<a href="/#process">Náš proces</a>
-				<a href="/#about">Kto sme</a>
+				<a href="/#services">Riešenia</a>
+				<a href="/#process">Proces</a>
+				<a href="/#about">O nás</a>
 				<a href="#contact">Kontakt</a>
 			</div>
 
 			<div class="footer-col">
 				<h4>Sledujte nás</h4>
 				<div class="social-icons">
-					<a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook" title="Facebook">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
-					</a>
-					<a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram" title="Instagram">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-					</a>
-					<a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn" title="LinkedIn">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
-					</a>
+					<a href="https://www.facebook.com/unonetostore/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+					<a href="https://www.instagram.com/unoneto.eu/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+					<a href="https://www.linkedin.com/company/101294763" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
 				</div>
 			</div>
 		</div>
@@ -531,6 +484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Popup Banner Logic
             const banner = document.getElementById('december-banner');
             const closeBtn = banner ? banner.querySelector('.close-banner') : null;
             if(banner && closeBtn) {
@@ -538,33 +492,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     banner.classList.add('hidden');
                 });
             }
+
+            // Process Animation
+            const observerOptions = { threshold: 0.2 };
+            const processObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const cards = entry.target.querySelectorAll('.process-card-anim');
+                        cards.forEach(card => card.classList.add('pop-in'));
+                        processObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const processSection = document.querySelector('#process');
+            if (processSection) {
+                processObserver.observe(processSection);
+            }
+            
+            // Slider Init - JEDEN BANER (Per Page 1)
+            new Splide('#banner-slider', {
+                type   : 'loop', 
+                perPage: 1, 
+                gap    : '2rem', 
+                autoplay: true, 
+                interval: 5000,
+                padding: '0',
+                pagination: true,
+                arrows: true
+            }).mount();
+            
+            // Mobile Menu
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navLinks = document.getElementById('nav-menu');
+            const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
+
+            if (hamburgerBtn && navLinks) {
+                hamburgerBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    hamburgerBtn.classList.toggle('active');
+                });
+            }
+            if (dropdownToggle && window.innerWidth <= 768) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.parentElement.classList.toggle('active');
+                });
+            }
         });
     </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Observer pre animáciu kariet procesu
-        const observerOptions = {
-            threshold: 0.2 // Spustí sa, keď je 20% sekcie viditeľnej
-        };
-
-        const processObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Nájde všetky karty v sekcii a pridá im triedu .pop-in
-                    const cards = entry.target.querySelectorAll('.process-card-anim');
-                    cards.forEach(card => card.classList.add('pop-in'));
-                    
-                    // Prestane sledovať po spustení
-                    processObserver.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        const processSection = document.querySelector('#process');
-        if (processSection) {
-            processObserver.observe(processSection);
-        }
-    });
-</script>
 </body>
 </html>
