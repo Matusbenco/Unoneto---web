@@ -69,9 +69,14 @@
         }
         .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-        /* --- 3. MOBILNÉ MENU (Hamburger) --- */
+        /* --- 3. MOBILNÉ MENU (Hamburger) - OPRAVENÉ --- */
         #hamburger-btn {
             display: none; /* Na PC skryté */
+            
+            /* DÔLEŽITÉ: Position relative aby fungoval z-index nad menu */
+            position: relative; 
+            z-index: 20000; 
+
             flex-direction: column;
             justify-content: space-between;
             width: 30px;
@@ -79,10 +84,8 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            z-index: 2000;
         }
         
-        /* OPRAVA: Pridané späť zobrazenie tlačidla na mobile */
         @media (max-width: 768px) {
             #hamburger-btn {
                 display: flex;
@@ -95,6 +98,7 @@
             background-color: white;
             border-radius: 3px;
             transition: all 0.3s ease;
+            pointer-events: none; /* Kliknutie prejde na button */
         }
         
         /* --- 4. SLIDER (Jeden baner) --- */
