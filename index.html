@@ -69,7 +69,7 @@
         }
         .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-        /* --- 3. MOBILNÉ MENU (Hamburger - Iba základ, zbytok rieši style.css) --- */
+        /* --- 3. MOBILNÉ MENU (Hamburger) --- */
         #hamburger-btn {
             display: none; /* Na PC skryté */
             flex-direction: column;
@@ -81,6 +81,14 @@
             cursor: pointer;
             z-index: 2000;
         }
+        
+        /* OPRAVA: Pridané späť zobrazenie tlačidla na mobile */
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: flex;
+            }
+        }
+
         .hamburger-bar {
             width: 100%;
             height: 3px;
@@ -89,9 +97,6 @@
             transition: all 0.3s ease;
         }
         
-        /* POZNÁMKA: Tu bola odstránená sekcia @media query, ktorá spôsobovala konflikt. 
-           Mobilné menu teraz plne riadi súbor style.css */
-
         /* --- 4. SLIDER (Jeden baner) --- */
         #banner-slider .splide__slide {
             display: flex;
