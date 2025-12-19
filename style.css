@@ -1507,5 +1507,190 @@ select {
     }
 }
 
+/* --- HLAVNÝ PREPÍNAČ (TABS) --- */
+.pricing-mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
 
-   
+.mode-btn {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--slate-300);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+}
+
+.mode-btn i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--cyan);
+}
+
+.mode-btn:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: var(--cyan);
+    color: white;
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+    border-color: var(--cyan);
+    color: white;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+}
+
+.mode-badge {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+/* --- KONFIGURÁTOR GRID --- */
+.configurator-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: left;
+}
+@media (max-width: 900px) {
+    .configurator-container { grid-template-columns: 1fr; }
+}
+
+/* --- KONFIGURÁTOR POLOŽKY --- */
+.config-item {
+    display: flex;
+    align-items: flex-start; /* Zarovnanie hore kvoli viacriadkovemu textu */
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.config-item:hover {
+    border-color: var(--cyan);
+    background: rgba(30, 41, 59, 0.6);
+}
+.config-item.disabled {
+    opacity: 0.8;
+    cursor: default;
+    background: rgba(34, 211, 238, 0.05);
+    border-color: rgba(34, 211, 238, 0.2);
+}
+.config-item input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-right: 15px;
+    accent-color: var(--cyan);
+    margin-top: 2px;
+}
+.config-item label {
+    flex-grow: 1;
+    cursor: pointer;
+}
+.opt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+.opt-name {
+    font-weight: 700;
+    color: white;
+    font-size: 1.1rem;
+}
+.opt-price {
+    font-weight: 700;
+    color: var(--cyan);
+    font-size: 1.1rem;
+}
+.opt-desc {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--slate-300);
+    line-height: 1.5;
+}
+
+/* --- KONFIGURÁTOR SUMÁR --- */
+.config-summary-card {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid var(--cyan);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    position: sticky;
+    top: 100px; /* Aby to plávalo pri scrollovaní */
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+}
+.total-price-display {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    margin: 1rem 0;
+}
+.vat-note {
+    font-size: 0.85rem;
+    color: var(--slate-300);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+.btn.full-width {
+    width: 100%;
+    margin-top: 1rem;
+}
+   /* --- NOVÉ CSS PRE CENNÍK (Pridať na koniec <style>) --- */
+
+/* Odznak pre Zriaďovací poplatok */
+.setup-fee-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.setup-paid { 
+    background: rgba(255, 99, 71, 0.15); 
+    color: #ff8a80; /* Červenkastá - platí sa */
+    border: 1px solid rgba(255, 99, 71, 0.3);
+}
+.setup-free { 
+    background: rgba(34, 211, 238, 0.15); 
+    color: var(--cyan); /* Modrá - zadarmo */
+    border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+/* Box pre hodinovú sadzbu */
+.hourly-rate-box {
+    margin-top: 3rem;
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+.hourly-price {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--cyan);
+    margin: 0.5rem 0;
+}
