@@ -69,7 +69,7 @@
         }
         .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-        /* --- 3. MOBILNÉ MENU (Hamburger) --- */
+        /* --- 3. MOBILNÉ MENU (Hamburger - Iba základ, zbytok rieši style.css) --- */
         #hamburger-btn {
             display: none; /* Na PC skryté */
             flex-direction: column;
@@ -88,43 +88,9 @@
             border-radius: 3px;
             transition: all 0.3s ease;
         }
-
-        @media (max-width: 768px) {
-            #hamburger-btn { display: flex; } /* Zobraziť na mobile */
-            
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(15, 23, 42, 0.98);
-                backdrop-filter: blur(15px);
-                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
-                
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem 0;
-                gap: 1.5rem;
-                
-                /* Skryté */
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: all 0.3s ease;
-                z-index: 1000;
-            }
-            /* Zobrazené */
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-            /* Animácia krížika */
-            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
-            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-        }
+        
+        /* POZNÁMKA: Tu bola odstránená sekcia @media query, ktorá spôsobovala konflikt. 
+           Mobilné menu teraz plne riadi súbor style.css */
 
         /* --- 4. SLIDER (Jeden baner) --- */
         #banner-slider .splide__slide {
