@@ -1694,3 +1694,350 @@ select {
     color: var(--cyan);
     margin: 0.5rem 0;
 }
+/* =================================================================
+   MOBILNÁ RESPONZIVITA PRE WEBY.HTML (ADD-ON)
+   Vložte na úplný koniec súboru style.css
+   ================================================================= */
+
+@media (max-width: 900px) {
+    /* --- 1. Oprava Gridov (Cenník a Proces) --- */
+    /* Vynútime 1 stĺpec aj keď je v HTML napísané inak */
+    .pricing-grid, 
+    .pricing-grid.three-cols,
+    .process-grid-fixed {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    /* --- 2. Prepínač režimov (Partnerstvo vs Kúpa) --- */
+    .pricing-mode-switch {
+        flex-direction: column; /* Tlačidlá pod seba */
+        align-items: stretch;   /* Roztiahnuť na šírku */
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    .mode-btn {
+        width: 100%;
+        min-width: auto; /* Zrušíme fixnú šírku */
+    }
+
+    /* --- 3. Prepínač Mesačne / Ročne --- */
+    .pricing-switch-container {
+        flex-direction: row; /* Necháme vedľa seba, ale zmenšíme */
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .billing-label {
+        font-size: 0.9rem;
+    }
+
+    /* --- 4. Cenníkové karty --- */
+    .pricing-card {
+        padding: 1.5rem; /* Menší padding */
+    }
+
+    .pricing-price {
+        font-size: 2.5rem !important; /* Menšie číslo ceny */
+    }
+    
+    .price-huge {
+        font-size: 2.5rem !important;
+    }
+
+    /* --- 5. Konfigurátor (Jednorazová kúpa) --- */
+    .configurator-container {
+        grid-template-columns: 1fr !important; /* Všetko pod seba */
+        display: flex;
+        flex-direction: column-reverse; /* Sumár dáme NA VRCH alebo DOLE? Tu dávam dole (klasika) */
+        /* Ak chceš sumár hore, zmeň na: flex-direction: column; */
+    }
+
+    /* Sumárna karta v konfigurátore */
+    .config-summary-card {
+        position: relative !important; /* Už nebude behať (sticky) */
+        top: 0 !important;
+        width: 100%;
+        margin-top: 2rem;
+        z-index: 1;
+    }
+    
+    /* Položky konfigurátora */
+    .config-item {
+        flex-direction: column; /* Checkbox hore, text dole */
+        align-items: flex-start;
+    }
+    
+    .config-item input[type="checkbox"] {
+        margin-bottom: 10px; /* Medzera pod checkboxom */
+    }
+    
+    .opt-header {
+        flex-direction: column; /* Názov a cena pod seba */
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    /* --- 6. Všeobecné úpravy textov --- */
+    .hero-title {
+        font-size: 2.2rem !important; /* Menší hlavný nadpis */
+    }
+    
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .setup-fee-badge {
+        white-space: normal; /* Povoliť zalomenie textu v odznaku */
+        text-align: center;
+        line-height: 1.4;
+    }
+}
+
+/* Fix pre veľmi malé mobily (iPhone SE a pod.) */
+@media (max-width: 400px) {
+    .pricing-price {
+        font-size: 2rem !important;
+    }
+    
+    .hourly-rate-box {
+        padding: 1rem;
+    }
+    
+    .hourly-price {
+        font-size: 1.5rem;
+    }
+}
+/* =================================================================
+   MOBILNÁ RESPONZIVITA PRE WEBY.HTML (ADD-ON)
+   Vložte na úplný koniec súboru style.css
+   ================================================================= */
+
+@media (max-width: 900px) {
+    /* --- 1. Oprava Gridov (Cenník a Proces) --- */
+    /* Vynútime 1 stĺpec aj keď je v HTML napísané inak */
+    .pricing-grid, 
+    .pricing-grid.three-cols,
+    .process-grid-fixed {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    /* --- 2. Prepínač režimov (Partnerstvo vs Kúpa) --- */
+    .pricing-mode-switch {
+        flex-direction: column; /* Tlačidlá pod seba */
+        align-items: stretch;   /* Roztiahnuť na šírku */
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    .mode-btn {
+        width: 100%;
+        min-width: auto; /* Zrušíme fixnú šírku */
+    }
+
+    /* --- 3. Prepínač Mesačne / Ročne --- */
+    .pricing-switch-container {
+        flex-direction: row; /* Necháme vedľa seba, ale zmenšíme */
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .billing-label {
+        font-size: 0.9rem;
+    }
+
+    /* --- 4. Cenníkové karty --- */
+    .pricing-card {
+        padding: 1.5rem; /* Menší padding */
+    }
+
+    .pricing-price {
+        font-size: 2.5rem !important; /* Menšie číslo ceny */
+    }
+    
+    .price-huge {
+        font-size: 2.5rem !important;
+    }
+
+    /* --- 5. Konfigurátor (Jednorazová kúpa) --- */
+    .configurator-container {
+        grid-template-columns: 1fr !important; /* Všetko pod seba */
+        display: flex;
+        flex-direction: column-reverse; /* Sumár dáme NA VRCH alebo DOLE? Tu dávam dole (klasika) */
+        /* Ak chceš sumár hore, zmeň na: flex-direction: column; */
+    }
+
+    /* Sumárna karta v konfigurátore */
+    .config-summary-card {
+        position: relative !important; /* Už nebude behať (sticky) */
+        top: 0 !important;
+        width: 100%;
+        margin-top: 2rem;
+        z-index: 1;
+    }
+    
+    /* Položky konfigurátora */
+    .config-item {
+        flex-direction: column; /* Checkbox hore, text dole */
+        align-items: flex-start;
+    }
+    
+    .config-item input[type="checkbox"] {
+        margin-bottom: 10px; /* Medzera pod checkboxom */
+    }
+    
+    .opt-header {
+        flex-direction: column; /* Názov a cena pod seba */
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    /* --- 6. Všeobecné úpravy textov --- */
+    .hero-title {
+        font-size: 2.2rem !important; /* Menší hlavný nadpis */
+    }
+    
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .setup-fee-badge {
+        white-space: normal; /* Povoliť zalomenie textu v odznaku */
+        text-align: center;
+        line-height: 1.4;
+    }
+}
+
+/* Fix pre veľmi malé mobily (iPhone SE a pod.) */
+@media (max-width: 400px) {
+    .pricing-price {
+        font-size: 2rem !important;
+    }
+    
+    .hourly-rate-box {
+        padding: 1rem;
+    }
+    
+    .hourly-price {
+        font-size: 1.5rem;
+    }
+}
+
+/* =================================================================
+   MOBILNÁ RESPONZIVITA PRE WEBY.HTML (ADD-ON)
+   Vložte na úplný koniec súboru style.css
+   ================================================================= */
+
+@media (max-width: 900px) {
+    /* --- 1. Oprava Gridov (Cenník a Proces) --- */
+    /* Vynútime 1 stĺpec aj keď je v HTML napísané inak */
+    .pricing-grid, 
+    .pricing-grid.three-cols,
+    .process-grid-fixed {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    /* --- 2. Prepínač režimov (Partnerstvo vs Kúpa) --- */
+    .pricing-mode-switch {
+        flex-direction: column; /* Tlačidlá pod seba */
+        align-items: stretch;   /* Roztiahnuť na šírku */
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    .mode-btn {
+        width: 100%;
+        min-width: auto; /* Zrušíme fixnú šírku */
+    }
+
+    /* --- 3. Prepínač Mesačne / Ročne --- */
+    .pricing-switch-container {
+        flex-direction: row; /* Necháme vedľa seba, ale zmenšíme */
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .billing-label {
+        font-size: 0.9rem;
+    }
+
+    /* --- 4. Cenníkové karty --- */
+    .pricing-card {
+        padding: 1.5rem; /* Menší padding */
+    }
+
+    .pricing-price {
+        font-size: 2.5rem !important; /* Menšie číslo ceny */
+    }
+    
+    .price-huge {
+        font-size: 2.5rem !important;
+    }
+
+    /* --- 5. Konfigurátor (Jednorazová kúpa) --- */
+    .configurator-container {
+        grid-template-columns: 1fr !important; /* Všetko pod seba */
+        display: flex;
+        flex-direction: column-reverse; /* Sumár dáme NA VRCH alebo DOLE? Tu dávam dole (klasika) */
+        /* Ak chceš sumár hore, zmeň na: flex-direction: column; */
+    }
+
+    /* Sumárna karta v konfigurátore */
+    .config-summary-card {
+        position: relative !important; /* Už nebude behať (sticky) */
+        top: 0 !important;
+        width: 100%;
+        margin-top: 2rem;
+        z-index: 1;
+    }
+    
+    /* Položky konfigurátora */
+    .config-item {
+        flex-direction: column; /* Checkbox hore, text dole */
+        align-items: flex-start;
+    }
+    
+    .config-item input[type="checkbox"] {
+        margin-bottom: 10px; /* Medzera pod checkboxom */
+    }
+    
+    .opt-header {
+        flex-direction: column; /* Názov a cena pod seba */
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    /* --- 6. Všeobecné úpravy textov --- */
+    .hero-title {
+        font-size: 2.2rem !important; /* Menší hlavný nadpis */
+    }
+    
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .setup-fee-badge {
+        white-space: normal; /* Povoliť zalomenie textu v odznaku */
+        text-align: center;
+        line-height: 1.4;
+    }
+}
+
+/* Fix pre veľmi malé mobily (iPhone SE a pod.) */
+@media (max-width: 400px) {
+    .pricing-price {
+        font-size: 2rem !important;
+    }
+    
+    .hourly-rate-box {
+        padding: 1rem;
+    }
+    
+    .hourly-price {
+        font-size: 1.5rem;
+    }
+}
+
