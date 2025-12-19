@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<meta charset="UTF-8">
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeden partner pre všetky technológie vo Vašej firme | Unoneto</title>
     <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate. Moderné weby na splátky bez vstupných investícií.">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +22,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="shortcut icon" href="favicon.png" type="image/png">
 
     <style>
-        /* --- ZÁKLADNÉ PREMENNÉ A ŠTÝLY (BASE CSS) --- */
+        /* --- 1. ZÁKLADNÉ PREMENNÉ A RESET --- */
         :root {
             --cyan: #22d3ee;
             --purple: #a855f7;
@@ -32,10 +31,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --text-main: #ffffff;
             --text-muted: #cbd5e1;
         }
-
-        /* --- POHYBLIVÝ BANER (MARQUEE) --- */
+        
+        /* --- 2. POHYBLIVÝ BANER (MARQUEE) --- */
         .promo-banner {
-            background: rgba(15, 23, 42, 0.95); /* Tmavé pozadie */
+            background: rgba(15, 23, 42, 0.95);
             border-bottom: 1px solid rgba(34, 211, 238, 0.3);
             height: 44px;
             display: flex;
@@ -44,45 +43,94 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             position: relative;
             z-index: 100;
         }
-        
         .marquee-wrapper {
             display: flex;
             width: 100%;
             overflow: hidden;
-            text-decoration: none; /* Klikateľné, ale bez podčiarknutia */
+            text-decoration: none;
         }
-
         .marquee-content {
             display: flex;
-            animation: marquee-scroll 30s linear infinite; /* Plynulý pohyb */
+            animation: marquee-scroll 30s linear infinite;
         }
-
         .marquee-item {
             white-space: nowrap;
             color: white;
             font-size: 0.9rem;
-            padding: 0 40px; /* Medzera medzi opakovaniami */
+            padding: 0 40px;
             display: flex;
             align-items: center;
         }
-
         .marquee-item strong { color: var(--cyan); margin-right: 5px; }
-
+        
         @keyframes marquee-scroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Posun o polovicu */
+            100% { transform: translateX(-50%); }
+        }
+        .promo-banner:hover .marquee-content { animation-play-state: paused; }
+
+        /* --- 3. MOBILNÉ MENU (Hamburger) --- */
+        #hamburger-btn {
+            display: none; /* Na PC skryté */
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 2000;
+        }
+        .hamburger-bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
         }
 
-        .promo-banner:hover .marquee-content {
-            animation-play-state: paused;
+        @media (max-width: 768px) {
+            #hamburger-btn { display: flex; } /* Zobraziť na mobile */
+            
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(15px);
+                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+                
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                gap: 1.5rem;
+                
+                /* Skryté */
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+                z-index: 1000;
+            }
+            /* Zobrazené */
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+            /* Animácia krížika */
+            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
+            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
         }
 
-        /* --- SLIDER FIX (Jeden baner) --- */
+        /* --- 4. SLIDER (Jeden baner) --- */
         #banner-slider .splide__slide {
             display: flex;
             justify-content: center;
         }
-        
         #banner-slider .slide-caption {
             background: rgba(15, 23, 42, 0.9);
             padding: 2rem;
@@ -97,20 +145,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        
         #banner-slider img {
             width: 100%;
-            height: 500px; /* Vyšší baner pre lepší efekt */
+            height: 500px;
             object-fit: cover;
             border-radius: 16px;
             filter: brightness(0.7);
         }
-
         .splide__pagination { bottom: -30px !important; }
         .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
         .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
 
-        /* --- PROCESS GRID --- */
+        /* --- 5. PROCESS GRID (Karty) --- */
         .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
         @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
@@ -133,7 +179,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
         }
         .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
-        
         .process-icon {
             font-size: 2.5rem; margin-bottom: 1.5rem;
             background: linear-gradient(to bottom right, var(--cyan), var(--purple));
@@ -142,69 +187,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
         .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
 
-        /* --- MOBILNÉ MENU FIX --- */
-        #hamburger-btn {
-            display: none; /* Na PC skryté */
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 21px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 2000;
-        }
-        
-        .hamburger-bar {
-            width: 100%;
-            height: 3px;
-            background-color: white;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            #hamburger-btn {
-                display: flex; /* Zobraziť tlačidlo */
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%; /* Hneď pod hlavičkou */
-                left: 0;
-                width: 100%;
-                background: rgba(15, 23, 42, 0.98); /* Tmavé pozadie */
-                backdrop-filter: blur(15px);
-                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
-                
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem 0;
-                gap: 1.5rem;
-                
-                /* Predvolený stav: SKRYTÉ */
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: all 0.3s ease;
-                z-index: 1000;
-            }
-
-            /* Aktívny stav (po kliknutí): ZOBRAZENÉ */
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            /* Animácia hamburgera na krížik */
-            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
-            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-        }
-
-        /* --- ZVYŠOK ZÁKLADNÉHO CSS (Particles, Layout) --- */
+        /* --- 6. OSTATNÉ ŠTÝLY (Pre istotu, ak chýba style.css) --- */
         .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
         .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
         @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
@@ -481,7 +464,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                      <h3>Konzultant pre firemné technológie</h3>
                      <p><strong>Webstránka je len začiatok. Skutočný úspech tvoria procesy za ňou.</strong></p>
                      <p>Mnoho firiem má pekný web, ale chaos v objednávkach, sklade alebo komunikácii. Moja úloha nie je len "dodať web". Mojím cieľom je nastaviť vaše <strong>predajné procesy</strong> tak, aby fungovali hladko.</p>
-                     <p>Ako váš konzultant prepájam jednotlivé body: Web privedie zákazníka -> automatizácia spracuje dopyt -> CRM postráži obchod -> systém vystaví faktúru. Zabezpečím technické "podhubie", vďaka ktorému sa vy môžete venovať biznisu, nie administratíve.</p>
+                     <p>Ako váš konzultant prepájam jednotlivé body: Web privedie zákazníka → automatizácia spracuje dopyt → CRM postráži obchod. Zabezpečím technické "podhubie", vďaka ktorému sa vy môžete venovať biznisu, nie administratíve.</p>
                  </div>
              </div>
         </section>
