@@ -12,7 +12,8 @@
     <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate. Moderné weby na splátky bez vstupných investícií.">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,39 +70,7 @@
         }
         .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-        /* --- 3. MOBILNÉ MENU (Hamburger) - OPRAVENÉ --- */
-        #hamburger-btn {
-            display: none; /* Na PC skryté */
-            
-            /* DÔLEŽITÉ: Position relative aby fungoval z-index nad menu */
-            position: relative; 
-            z-index: 20000; 
-
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 21px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            #hamburger-btn {
-                display: flex;
-            }
-        }
-
-        .hamburger-bar {
-            width: 100%;
-            height: 3px;
-            background-color: white;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            pointer-events: none; /* Kliknutie prejde na button */
-        }
-        
-        /* --- 4. SLIDER (Jeden baner) --- */
+        /* --- 3. SLIDER (Jeden baner) --- */
         #banner-slider .splide__slide {
             display: flex;
             justify-content: center;
@@ -131,7 +100,7 @@
         .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
         .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
 
-        /* --- 5. PROCESS GRID (Karty) --- */
+        /* --- 4. PROCESS GRID (Karty) --- */
         .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
         @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
@@ -162,7 +131,7 @@
         .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
         .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
 
-        /* --- 6. OSTATNÉ ŠTÝLY (Pre istotu, ak chýba style.css) --- */
+        /* --- 5. OSTATNÉ ŠTÝLY --- */
         .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
         .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
         @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
@@ -566,7 +535,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 arrows: true
             }).mount();
             
-            // Mobile Menu
+            // --- OPRAVENÉ MOBILNÉ MENU (PODĽA WEBY) ---
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const navLinks = document.getElementById('nav-menu');
             const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
@@ -575,8 +544,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 hamburgerBtn.addEventListener('click', function() {
                     navLinks.classList.toggle('active');
                     hamburgerBtn.classList.toggle('active');
+                    // Pridaná logika pre aria-expanded
+                    const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                    hamburgerBtn.setAttribute('aria-expanded', !expanded);
                 });
             }
+
             if (dropdownToggle && window.innerWidth <= 768) {
                 dropdownToggle.addEventListener('click', function(e) {
                     e.preventDefault();
