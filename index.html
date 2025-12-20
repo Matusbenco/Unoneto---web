@@ -70,73 +70,7 @@
         }
         .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-        /* --- 3. MOBILNÉ MENU (OPRAVA) --- */
-        /* Toto zabezpečí, že menu bude fungovať aj bez style.css */
-        
-        /* Skryť hamburger na PC */
-        #hamburger-btn {
-            display: none; 
-        }
-
-        /* Zobraziť a nastaviť na mobile */
-        @media (max-width: 768px) {
-            #hamburger-btn {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                width: 30px;
-                height: 21px;
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                z-index: 2000;
-            }
-            .hamburger-bar {
-                width: 100%;
-                height: 3px;
-                background-color: white;
-                border-radius: 3px;
-                transition: all 0.3s ease;
-            }
-
-            /* Logika otvárania */
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(15, 23, 42, 0.98);
-                backdrop-filter: blur(15px);
-                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
-                
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem 0;
-                gap: 1.5rem;
-                
-                /* Skryté (východiskový stav) */
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: all 0.3s ease;
-                z-index: 1000;
-            }
-
-            /* Zobrazené (keď JS pridá triedu active) */
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            /* Animácia krížika */
-            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
-            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-        }
-
-        /* --- 4. SLIDER (Jeden baner) --- */
+        /* --- 3. SLIDER (Jeden baner) --- */
         #banner-slider .splide__slide {
             display: flex;
             justify-content: center;
@@ -166,7 +100,7 @@
         .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
         .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
 
-        /* --- 5. PROCESS GRID (Karty) --- */
+        /* --- 4. PROCESS GRID (Karty) --- */
         .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
         @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
@@ -197,7 +131,7 @@
         .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
         .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
 
-        /* --- 6. OSTATNÉ ŠTÝLY --- */
+        /* --- 5. OSTATNÉ ŠTÝLY --- */
         .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
         .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
         @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
@@ -547,8 +481,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <script src="script.js"></script>
-
+    
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
@@ -601,7 +534,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 arrows: true
             }).mount();
             
-            // --- MOBILNÉ MENU ---
+            // --- MOBILNÉ MENU (PRESNE PODĽA WEBY.HTML) ---
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const navLinks = document.getElementById('nav-menu');
             const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
