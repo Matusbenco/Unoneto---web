@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<meta charset="UTF-8">
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeden partner pre všetky technológie vo Vašej firme | Unoneto</title>
     <meta name="description" content="Vytvoríme Vám web a prepojíme ho s nástrojmi, ktoré už používate. Moderné weby na splátky bez vstupných investícií.">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
     
@@ -23,115 +23,195 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="shortcut icon" href="favicon.png" type="image/png">
 
     <style>
-    /* --- POHYBLIVÝ BANER (MARQUEE) --- */
-    .promo-banner {
-        background: rgba(15, 23, 42, 0.95); /* Tmavé pozadie */
-        border-bottom: 1px solid rgba(34, 211, 238, 0.3);
-        height: 44px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        z-index: 100;
-    }
-    
-    .marquee-wrapper {
-        display: flex;
-        width: 100%;
-        overflow: hidden;
-        text-decoration: none; /* Klikateľné, ale bez podčiarknutia */
-    }
+        /* --- 1. ZÁKLADNÉ PREMENNÉ A RESET --- */
+        :root {
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+        }
+        
+        /* --- 2. POHYBLIVÝ BANER (MARQUEE) --- */
+        .promo-banner {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+            height: 44px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            z-index: 100;
+        }
+        .marquee-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee-scroll 30s linear infinite;
+        }
+        .marquee-item {
+            white-space: nowrap;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-item strong { color: var(--cyan); margin-right: 5px; }
+        
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .promo-banner:hover .marquee-content { animation-play-state: paused; }
 
-    .marquee-content {
-        display: flex;
-        animation: marquee-scroll 30s linear infinite; /* Plynulý pohyb */
-    }
+        /* --- 3. SLIDER (Jeden baner) --- */
+        #banner-slider .splide__slide {
+            display: flex;
+            justify-content: center;
+        }
+        #banner-slider .slide-caption {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--cyan);
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #banner-slider img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 16px;
+            filter: brightness(0.7);
+        }
+        .splide__pagination { bottom: -30px !important; }
+        .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
+        .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
 
-    .marquee-item {
-        white-space: nowrap;
-        color: white;
-        font-size: 0.9rem;
-        padding: 0 40px; /* Medzera medzi opakovaniami */
-        display: flex;
-        align-items: center;
-    }
+        /* --- 4. PROCESS GRID (Karty) --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
 
-    .marquee-item strong { color: var(--cyan); margin-right: 5px; }
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9);
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    @keyframes marquee-scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); } /* Posun o polovicu (pretože text je duplikovaný) */
-    }
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
 
-    /* Hover zastaví pohyb, aby sa dalo kliknúť */
-    .promo-banner:hover .marquee-content {
-        animation-play-state: paused;
-    }
+        /* --- 5. OSTATNÉ ŠTÝLY --- */
+        .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
+        .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
+        @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
+        
+        .hero-section { padding: 10rem 0 5rem; text-align: center; }
+        .services-grid .card, .pricing-card { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); transition: all 0.3s ease; border-radius: 16px; }
+        .services-grid .card:hover, .pricing-card:hover { border-color: var(--cyan); box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2); transform: translateY(-5px); }
+        .service-icon-wrapper { display: inline-flex; padding: 15px; border-radius: 50%; background: rgba(34, 211, 238, 0.1); color: var(--cyan); font-size: 1.5rem; margin-bottom: 1rem; }
+        .card { padding: 2rem; text-align: center; }
+        .contact-form-container { max-width: 700px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 20px; backdrop-filter: blur(15px); }
+        .form-input { width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white; font-size: 1rem; transition: all 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
 
-    /* --- SLIDER FIX (Jeden baner) --- */
-    #banner-slider .splide__slide {
-        display: flex;
-        justify-content: center;
-    }
-    
-    #banner-slider .slide-caption {
-        background: rgba(15, 23, 42, 0.9);
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid var(--cyan);
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 600px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    
-    #banner-slider img {
-        width: 100%;
-        height: 500px; /* Vyšší baner pre lepší efekt */
-        object-fit: cover;
-        border-radius: 16px;
-        filter: brightness(0.7);
-    }
+        /* --- MOBILNÉ MENU FIX --- */
+        #hamburger-btn { display: none; }
 
-    .splide__pagination { bottom: -30px !important; }
-    .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
-    .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 30px;
+                height: 21px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                z-index: 3000;
+                position: relative;
+            }
+            .hamburger-bar {
+                width: 100%;
+                height: 3px;
+                background-color: white;
+                border-radius: 3px;
+                transition: all 0.3s ease;
+            }
 
-    /* --- PROCESS GRID --- */
-    .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
-    @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
+            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-    .process-card-anim {
-        background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
-        border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
-        text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        opacity: 0; transform: translateY(30px) scale(0.9);
-    }
-    .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(10px);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 2999;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
 
-    .process-card-anim:hover {
-        transform: translateY(-10px) !important; border-color: var(--cyan);
-        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
-    }
-    .process-number-bg {
-        position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
-        color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
-    }
-    .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
-    
-    .process-icon {
-        font-size: 2.5rem; margin-bottom: 1.5rem;
-        background: linear-gradient(to bottom right, var(--cyan), var(--purple));
-        -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
-    }
-    .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
-    .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+            .nav-links.active { transform: translateX(0); }
+            
+            .dropdown-menu {
+                position: static;
+                background: transparent;
+                box-shadow: none;
+                text-align: center;
+                display: none;
+                border: none;
+                padding-top: 1rem;
+            }
+            .has-dropdown.active .dropdown-menu {
+                display: block;
+                animation: fadeIn 0.3s ease;
+            }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        }
     </style>
 </head>
 
@@ -200,15 +280,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <li class="has-dropdown">
                     <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
                     <ul class="dropdown-menu">
-                        <li><a href="weby">Prezentačné weby</a></li>
-                        <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafika</a></li>
-                        <li><a href="automatizacia">AI Automatizácia</a></li>
-                        <li><a href="raynetcrm">RAYNET CRM</a></li>
-                        <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
-                        <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO</a></li>
-                        <li><a href="ozobot">Roboty Ozobot</a></li>
+                        <li><a href="weby.html">Prezentačné weby</a></li>
+                        <li><a href="eshopy.html">E-shopy na mieru</a></li>
+                        <li><a href="graficke-sluzby.html">Grafika</a></li>
+                        <li><a href="automatizacia.html">AI Automatizácia</a></li>
+                        <li><a href="raynetcrm.html">RAYNET CRM</a></li>
+                        <li><a href="digitalnypodpis.html">DigiSign - Digitálny podpis</a></li>
+                        <li><a href="vexion.html">Vernostný systém VEXION</a></li>
+                        <li><a href="hugo.html">Informačný systém HUGO</a></li>
+                        <li><a href="ozobot.html">Roboty Ozobot</a></li>
                     </ul>
                 </li>
                 <li><a href="blog">Novinky</a></li>
@@ -272,7 +352,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
 						<li class="splide__slide">
-							<a href="raynet">
+							<a href="raynet.html">
 								<img src="raynet.jpg" alt="CRM, ktorému rozumiete.">
 								<div class="slide-caption">
 									<h2>CRM od RAYNET</h2>
@@ -282,7 +362,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
                         <li class="splide__slide">
-							<a href="vexion">
+							<a href="vexion.html">
 								<img src="karty.png" alt="Vernostný systém VEXION">
 								<div class="slide-caption">
 									<h2>Vernostný systém VEXION</h2>
@@ -292,7 +372,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </li>
 
                         <li class="splide__slide">
-                            <a href="weby">
+                            <a href="weby.html">
                             <img src="weby1.webp" alt="Tvorba webstránky">
                             <div class="slide-caption">
                                 <h2>Moderné prezentačné weby</h2>
@@ -468,8 +548,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <script src="script.js"></script>
-
+    
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
@@ -522,7 +601,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 arrows: true
             }).mount();
             
-            // Mobile Menu
+            // --- MOBILNÉ MENU (PRESNE PODĽA WEBY.HTML) ---
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const navLinks = document.getElementById('nav-menu');
             const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
@@ -531,8 +610,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 hamburgerBtn.addEventListener('click', function() {
                     navLinks.classList.toggle('active');
                     hamburgerBtn.classList.toggle('active');
+                    // Pridaná logika pre aria-expanded
+                    const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                    hamburgerBtn.setAttribute('aria-expanded', !expanded);
                 });
             }
+
             if (dropdownToggle && window.innerWidth <= 768) {
                 dropdownToggle.addEventListener('click', function(e) {
                     e.preventDefault();
