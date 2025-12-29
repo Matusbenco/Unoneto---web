@@ -643,456 +643,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </style>
 
 <script>
-    // Funkcia na prepínanie Setup Fee (Mesačne vs Ročne)
-    function updateSetupFee() {
-        const isYearly = document.getElementById('billing-toggle').checked;
-        const setups = document.querySelectorAll('.setup-fee-badge');
-        const labelMonthly = document.getElementById('label-monthly');
-        const labelYearly = document.getElementById('label-yearly');
-        
-        // Zmena textov a farieb odznakov
-        setups.forEach(badge => {
-            if (isYearly) {
-                // Ročne = Setup ZADARMO
-                badge.innerHTML = '<i class="fa-solid fa-gift"></i> Zriaďovací poplatok <strong>0 €</strong>';
-                badge.classList.remove('setup-paid');
-                badge.classList.add('setup-free');
-            } else {
-                // Mesačne = Setup 199€
-                badge.innerHTML = '+ 199 € zriaďovací poplatok';
-                badge.classList.remove('setup-free');
-                badge.classList.add('setup-paid');
-            }
-        });
-
-        // Zvýraznenie textu prepínača
-        if(isYearly) {
-            labelMonthly.style.color = 'var(--slate-300)';
-            labelYearly.style.color = 'white';
-        } else {
-            labelMonthly.style.color = 'white';
-            labelYearly.style.color = 'var(--slate-300)';
-        }
-    }
-</script>
-
-<style>
-    /* Switch Styles */
-    .pricing-switch-container {
-        display: flex; justify-content: center; margin-bottom: 3rem;
-    }
-    .pricing-switch {
-        background: rgba(30, 41, 59, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 50px; padding: 5px; display: inline-flex;
-        backdrop-filter: blur(10px);
-    }
-    .switch-btn {
-        background: transparent; border: none; color: var(--slate-300);
-        padding: 12px 25px; border-radius: 40px; cursor: pointer;
-        font-weight: 600; font-size: 1rem; transition: all 0.3s ease;
-        display: flex; align-items: center; gap: 8px;
-    }
-    .switch-btn.active {
-        background: var(--cyan); color: var(--slate-900); box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
-    }
-    .switch-btn:hover:not(.active) { color: white; }
-    .badge {
-        font-size: 0.7rem; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; text-transform: uppercase;
-    }
-    .switch-btn.active .badge { background: rgba(0,0,0,0.1); }
-
-    /* Divider in cards */
-    .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 1.5rem 0; }
-    
-    /* Individual Block */
-    .individual-block {
-        margin-top: 3rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(34, 211, 238, 0.1) 100%);
-        border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 16px;
-        padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-    }
-    .individual-content h3 { color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
-    .individual-content p { margin: 0; color: var(--slate-300); }
-    @media (max-width: 768px) { .individual-block { flex-direction: column; text-align: center; } }
-
-    /* Configurator Styles */
-    .configurator-wrapper {
-        display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;
-        max-width: 1000px; margin: 0 auto;
-    }
-    @media (max-width: 850px) { .configurator-wrapper { grid-template-columns: 1fr; } }
-
-    .config-item {
-        display: flex; align-items: center; background: rgba(30, 41, 59, 0.4);
-        border: 1px solid rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px;
-        margin-bottom: 1rem; transition: all 0.2s ease; cursor: pointer;
-    }
-    .config-item:hover { border-color: rgba(34, 211, 238, 0.3); background: rgba(30, 41, 59, 0.6); }
-    .config-item.disabled { opacity: 0.7; cursor: default; background: rgba(34, 211, 238, 0.05); border-color: rgba(34, 211, 238, 0.2); }
-    
-    .config-item input[type="checkbox"] {
-        width: 20px; height: 20px; margin-right: 15px; accent-color: var(--cyan);
-    }
-    .config-item label { flex-grow: 1; cursor: pointer; }
-    .opt-name { display: block; font-weight: 700; color: white; font-size: 1.05rem; }
-    .opt-desc { display: block; font-size: 0.9rem; color: var(--slate-300); }
-    .opt-price { font-weight: 700; color: var(--cyan); font-size: 1.1rem; white-space: nowrap; }
-
-    /* Sticky Summary Card */
-    .sticky-card { position: sticky; top: 100px; }
-    .summary-card {
-        background: rgba(15, 23, 42, 0.8); border: 1px solid var(--cyan);
-        border-radius: 16px; padding: 2rem; text-align: center;
-        box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); backdrop-filter: blur(10px);
-    }
-    .total-price-display { font-size: 3.5rem; font-weight: 900; color: white; line-height: 1; margin: 1rem 0; }
-    .vat-note { font-size: 0.8rem; color: var(--slate-300); margin-bottom: 1.5rem; }
-    .summary-features { text-align: left; margin-bottom: 1.5rem; font-size: 0.9rem; color: #cbd5e1; }
-    .summary-features p { margin-bottom: 0.5rem; }
-    .summary-features i { color: var(--cyan); margin-right: 8px; }
-    .btn.full-width { width: 100%; }
-
-    /* Helper for grid */
-    .pricing-grid.three-cols {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-    }
-    @media (max-width: 900px) { .pricing-grid.three-cols { grid-template-columns: 1fr; } }
-</style>
-
-<script>
-    // 1. Prepínanie medzi Prenájmom a Kúpou
-    function switchPricing(mode) {
-        // Update buttons
-        document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-
-        // Show/Hide sections
-        document.getElementById('pricing-rental').style.display = (mode === 'rental') ? 'block' : 'none';
-        document.getElementById('pricing-onetime').style.display = (mode === 'onetime') ? 'block' : 'none';
-    }
-
-    // 2. Kalkulačka pre Konfigurátor
-    function calculateTotal() {
-        let total = 100; // Základná cena
-        
-        const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:not(:disabled)');
-        
-        checkboxes.forEach(box => {
-            if (box.checked) {
-                total += parseInt(box.getAttribute('data-price'));
-            }
-        });
-
-        // Animácia čísla
-        const display = document.getElementById('final-price');
-        display.innerText = total;
-    }
-
-    // 3. Predvyplnenie formulára po kliknutí na tlačidlo
-    function setSubject(subjectText) {
-        const textarea = document.getElementById('project-details');
-        if(textarea) {
-            textarea.value = subjectText + "\n\nMoja správa: ";
-            // Scroll k formuláru
-            document.querySelector('#contact-form').scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    function submitConfig() {
-        // Zozbierať vybrané možnosti
-        let selectedOptions = ["Základ: One-Page Web (100€)"];
-        const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:checked:not(:disabled)');
-        checkboxes.forEach(box => {
-            const label = box.nextElementSibling.querySelector('.opt-name').innerText;
-            const price = box.getAttribute('data-price');
-            selectedOptions.push(`${label} (+${price}€)`);
-        });
-
-        const finalPrice = document.getElementById('final-price').innerText;
-        const message = `Mám záujem o vyskladaný web v hodnote cca ${finalPrice}€.\n\nVybrané komponenty:\n- ` + selectedOptions.join("\n- ");
-        
-        const textarea = document.getElementById('project-details');
-        if(textarea) {
-            textarea.value = message;
-             document.querySelector('#contact-form').scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-</script>
-
-       
-        <section class="container reveal" style="margin-bottom: 5rem;">
-            <h2 class="section-title" style="text-align: center;">Naše najnovšie práce</h2>
-            <p class="section-subtitle" style="text-align: center;">Weby a e-shopy, ktoré sme pomohli vybudovať</p>
-            
-            <div id="references-slider" class="splide" aria-label="Referencie Webov" style="margin-top: 3rem;">
-                <div class="splide__track">
-                    <ul class="splide__list">
-                        
-                        <li class="splide__slide">
-                            <a href="https://www.ombradoro.sk" target="_blank" class="portfolio-card">
-                                <div class="portfolio-preview">
-                                     <img src="ombra.png" alt="Ombra Doro" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>OMBRA DORO</span>'">
-                                </div>
-                                <div class="portfolio-info">
-                                    <h4 class="portfolio-title">Ombra Doro</h4>
-                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Prémiový E-shop s kávou</p>
-                                    <span class="portfolio-link">www.ombradoro.sk</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="splide__slide">
-                            <div class="portfolio-card">
-                                <div class="portfolio-preview">
-                                     <img src="carbox.png" alt="CarBox Top" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>CARBOX.TOP</span>'">
-                                </div>
-                                <div class="portfolio-info">
-                                    <h4 class="portfolio-title">CarBox Top</h4>
-                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Autodoplnky</p>
-                                    <span class="portfolio-link">carbox.top</span>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="splide__slide">
-                            <div class="portfolio-card">
-                                <div class="portfolio-preview">
-                                     <img src="jistykrok.png" alt="Jistý Krok" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>JISTÝ KROK</span>'">
-                                </div>
-                                <div class="portfolio-info">
-                                    <h4 class="portfolio-title">Jistý Krok</h4>
-                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Zdravotná obuv E-shop</p>
-                                    <span class="portfolio-link">jistykrok.cz</span>
-                                </div>
-                            </div>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </section>
-    
-        <section class="container subpage-content reveal">
-    <h2 class="section-title">Často kladené otázky</h2>
-    <p class="section-subtitle" style="margin-bottom: 3rem;">Odpovede na najčastejšie otázky a obavy našich klientov</p>
-    
-    <div class="faq-container">
-    <details class="faq-item">
-        <summary class="faq-question">Budem mať prístup do administrácie webu?</summary>
-        <div class="faq-answer">
-            <p><strong>Nie, a to je pre vás výhoda.</strong> Náš model je postavený na službe "Web bez starostí". Vy sa nemusíte učiť pracovať s novým systémom, riešiť aktualizácie ani sa báť, že niečo pokazíte.</p>
-            <p style="margin-top: 10px;">Potrebujete zmeniť text, cenník alebo fotku? Jednoducho nám napíšete a my to obratom zapracujeme. Vy sa venujete podnikaniu, my technológiám.</p>
-        </div>
-    </details>
-
-<details class="faq-item">
-    <summary class="faq-question">Aká je viazanosť a zriaďovací poplatok?</summary>
-    <div class="faq-answer">
-        <p>Máte dve možnosti:</p>
-        <ul style="margin-top: 10px; padding-left: 20px;">
-            <li><strong>Ročná platba (ODPORÚČAME):</strong> Platíte paušál na rok vopred a zriaďovací poplatok máte <strong>ZADARMO (0 €)</strong>. Ušetríte 199 €.</li>
-            <li><strong>Mesačná platba:</strong> Platíte jednorazový zriaďovací poplatok <strong>199 €</strong>. Následne platíte mesačný paušál bez viazanosti (výpovedná lehota 1 mesiac).</li>
-        </ul>
-    </div>
-</details>
-
-<details class="faq-item">
-    <summary class="faq-question">Je v cene 89€ aj kredit na reklamu?</summary>
-    <div class="faq-answer">
-        <p>Nie. Cena 89 € zahŕňa našu prácu – <strong>nastavenie, správu a optimalizáciu</strong> reklám pomocou AI nástrojov. Samotný kredit (rozpočet), ktorý sa minie v Google alebo na Facebooku, platíte priamo týmto platformám z vašej karty.</p>
-    </div>
-</details>
-
-    <details class="faq-item">
-        <summary class="faq-question">Prečo by som mal platiť mesačne namiesto jednorazovej kúpy?</summary>
-        <div class="faq-answer">
-            <p>Pretože web nie je jednorazová záležitosť. Technológie, Google a trendy sa menia. S mesačným paušálom získavate:</p>
-            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                <li>Nulovú vstupnú investíciu (ušetríte stovky eur na začiatku).</li>
-                <li>Istotu, že web technicky nezostarne.</li>
-                <li>Partnera, ktorý sa o web stará (hosting, doména, zmeny sú v cene).</li>
-            </ul>
-        </div>
-    </details>
-
-    <details class="faq-item">
-        <summary class="faq-question">Ako rýchlo zapracujete zmeny na webe?</summary>
-        <div class="faq-answer">
-            <p>Štandardné požiadavky (úprava textu, výmena obrázkov, aktualizácia otváracích hodín) realizujeme zvyčajne do <strong>24 až 48 hodín</strong> v pracovných dňoch. Pri balíku <em>Partner</em> majú vaše požiadavky prioritu.</p>
-        </div>
-    </details>
-
-    <details class="faq-item">
-        <summary class="faq-question">Komu patrí doména (.sk / .eu)?</summary>
-        <div class="faq-answer">
-            <p>Doména je vždy registrovaná na vás alebo vašu firmu. Ste jej 100% právnym vlastníkom. My ju len technicky spravujeme počas trvania našej spolupráce. Ak sa rozhodnete skončiť, doména vám ostáva.</p>
-        </div>
-    </details>
-
-    <details class="faq-item">
-        <summary class="faq-question">Môžem si web kúpiť aj jednorazovo?</summary>
-        <div class="faq-answer">
-            <p>Áno. Ak nechcete platiť mesačne, môžete využiť náš konfigurátor a zaplatiť za web jednorazovo. V tom prípade sa stanete vlastníkom kódu, ale následné aktualizácie, hosting a zmeny obsahu si už riešite sami (alebo si ich u nás objednáte ako platenú službu).</p>
-        </div>
-    </details>
-</div>
-        <section id="contact-form" class="container reveal" style="margin-bottom: 5rem;">
-             <div class="contact-form-container">
-                <h2 class="section-title" style="text-align: center;">Mám záujem o web</h2>
-                <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Vyplňte formulár a ozveme sa vám s nezáväznou konzultáciou k vášmu novému webu.</p>
-                
-                <form name="website-contact" method="POST" data-netlify="true">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Meno a Priezvisko</label>
-                        <input type="text" id="name" name="name" required placeholder="Ján Vážny" class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="email" id="email" name="email" required placeholder="jan@firma.sk" class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone" class="form-label">Telefón (nepovinné)</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+421 9xx xxx xxx" class="form-input">
-                    </div>
-                     <div class="form-group">
-                        <label for="project-details" class="form-label">Priblížte nám váš projekt</label>
-                        <textarea id="project-details" name="project-details" rows="5" required placeholder="Aký web potrebujete? Máte už predstavu o dizajne?" class="form-input"></textarea>
-                    </div>
-                    <div style="text-align: center; margin-top: 2rem;">
-                         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; max-width: 300px;">Odoslať nezáväzný dopyt</button>
-                    </div>
-                </form>
-             </div>
-        </section>
-
-    </main>
-    
-    <footer class="main-footer">
-        <div class="container">
-           <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="/" class="logo">
-                        <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
-                        <span>Unoneto</span>
-                    </a>
-                    <p>Váš rast, poháňaný výsledkami.</p>
-                </div>
-    
-                <div class="footer-col">
-                    <h4>Kontakt</h4>
-                    <p>Unoneto s. r. o.</p>
-                    <p>IČO: 55530966</p>
-                    <p>DIČ: 2122015522</p>
-                    <p><a href="tel:+421905351100">+421 905 351 100</a></p>
-                    <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
-                </div>
-    
-                <div class="footer-col">
-                    <h4>Rýchle odkazy</h4>
-                    <a href="/#services">Čo robíme</a>
-                    <a href="/#case-study">Naše výsledky</a>
-                    <a href="/#about">Kto sme</a>
-                    <a href="#contact-form">Napíšte nám</a>
-                </div>
-
-                <div class="footer-col">
-                    <h4>Sledujte nás</h4>
-                    <div class="social-icons">
-                        <a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook" title="Facebook">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
-                        </a>
-                        <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram" title="Instagram">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-                        </a>
-                        <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn" title="LinkedIn">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
-            </div>
-        </div>
-    </footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Slider Initialization
-        new Splide('#references-slider', {
-            type   : 'loop',
-            perPage: 3,
-            gap    : '2rem',
-            autoplay: true,
-            interval: 4000,
-            breakpoints: {
-                768: {
-                    perPage: 1,
-                    padding: '1rem'
-                },
-                1024: {
-                    perPage: 2,
-                }
-            }
-        }).mount();
-
-        // Process Card Animations
-        const observerOptions = {
-            threshold: 0.2
-        };
-
-        const processObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const cards = entry.target.querySelectorAll('.process-card-anim');
-                    cards.forEach(card => card.classList.add('pop-in'));
-                    processObserver.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        const processSection = document.querySelector('#process');
-        if (processSection) {
-            processObserver.observe(processSection);
-        }
-
-        // Hamburger Menu
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const navLinks = document.getElementById('nav-menu');
-        const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
-
-        if (hamburgerBtn && navLinks) {
-            hamburgerBtn.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-                hamburgerBtn.classList.toggle('active');
-                const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
-                hamburgerBtn.setAttribute('aria-expanded', !expanded);
-            });
-        }
-
-        // Dropdown for mobile
-        if (dropdownToggle && window.innerWidth <= 768) {
-            dropdownToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                this.parentElement.classList.toggle('active');
-            });
-        }
-    });
-</script>
-
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<script>
     // 1. PREPÍNAČ REŽIMOV
     function switchMode(mode) {
         document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
@@ -1203,5 +753,434 @@ s0.parentNode.insertBefore(s1,s0);
         }
     }
 </script>
+
+       
+        <section class="container reveal" style="margin-bottom: 5rem;">
+            <h2 class="section-title" style="text-align: center;">Naše najnovšie práce</h2>
+            <p class="section-subtitle" style="text-align: center;">Weby a e-shopy, ktoré sme pomohli vybudovať</p>
+            
+            <div id="references-slider" class="splide" aria-label="Referencie Webov" style="margin-top: 3rem;">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        
+                        <li class="splide__slide">
+                            <a href="https://www.ombradoro.sk" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="ombra.png" alt="Ombra Doro" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>OMBRA DORO</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Ombra Doro</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Prémiový E-shop s kávou</p>
+                                    <span class="portfolio-link">www.ombradoro.sk</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.lov-ryb.cz" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="lovryb1.jpg" alt="Lov Ryb" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>LOV RYB</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Lov Ryb</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Rybárske potreby</p>
+                                    <span class="portfolio-link">www.lov-ryb.cz</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://carbox.top" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="carbox.png" alt="CarBox Top" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>CARBOX.TOP</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">CarBox Top</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Autodoplnky</p>
+                                    <span class="portfolio-link">carbox.top</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.istykrok.sk" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="jistykrok.png" alt="Istý Krok SK" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>ISTÝ KROK</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Istý Krok SK</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Zdravotná obuv</p>
+                                    <span class="portfolio-link">www.istykrok.sk</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.jistykrok.cz" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="jistykrok.png" alt="Jistý Krok CZ" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>JISTÝ KROK</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Jistý Krok CZ</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Zdravotná obuv</p>
+                                    <span class="portfolio-link">www.jistykrok.cz</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="splide__slide">
+                            <a href="https://www.unoneto.eu" target="_blank" class="portfolio-card">
+                                <div class="portfolio-preview">
+                                     <img src="favicon.png" alt="Unoneto" style="max-height: 80px; width: auto;" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>UNONETO</span>'">
+                                </div>
+                                <div class="portfolio-info">
+                                    <h4 class="portfolio-title">Unoneto</h4>
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--slate-300);">Náš firemný web</p>
+                                    <span class="portfolio-link">www.unoneto.eu</span>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+    
+        <section class="container subpage-content reveal">
+    <h2 class="section-title">Často kladené otázky</h2>
+    <p class="section-subtitle" style="margin-bottom: 3rem;">Odpovede na najčastejšie otázky a obavy našich klientov</p>
+    
+    <div class="faq-container">
+        <details class="faq-item">
+            <summary class="faq-question">Prečo vôbec potrebujem webstránku? Mám predsa Facebook a Instagram.</summary>
+            <div class="faq-answer">
+                <p><strong>Webstránka je vaša digitálna vizitka, ktorú plne ovládate.</strong> Facebook a Instagram sú skvelé nástroje, ale:</p>
+                <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                    <li>Nie všetci zákazníci používajú sociálne siete</li>
+                    <li>Vaša firma vyzerá profesionálnejšie s vlastnou doménou</li>
+                    <li>Google ľahšie nájde váš web než Facebook stránku</li>
+                    <li>Sociálne siete môžu kedykoľvek zmeniť pravidlá alebo zablokovať účet</li>
+                    <li>Web vlastníte vy - nikto vám ho nemôže vziať</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Najlepšie riešenie:</strong> Webstránka ako základ + Facebook/Instagram na marketing. Spolu vytvárajú silnú online prítomnosť.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Prečo sú vaše ceny také nízke? Je to naozaj kvalitný web?</summary>
+            <div class="faq-answer">
+                <p>Áno, kvalita je plnohodnotná! Nízke ceny dosahujeme vďaka moderným nástrojom a efektívnym procesom. Neplatíte za zbytočné stretnutia a byrokraciu, ale za skutočnú prácu. Každý web je originálny dizajn na mieru s profesionálnym SEO nastavením.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Sú v cene zahrnuté aj nejaké ďalšie poplatky?</summary>
+            <div class="faq-answer">
+                <p>Nie. Uvedené ceny sú jednorazové za vytvorenie webu. Jediné ďalšie náklady, s ktorými musíte počítať (nech si web objednáte kdekoľvek), sú ročný poplatok za doménu (cca 20€/rok) a prípadne email (15€/rok). Hosting vieme zariadiť aj zdarma cez GitHub Pages.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Ako prebieha platba? Musím platiť vopred?</summary>
+            <div class="faq-answer">
+                <p>Ponúkame flexibilné možnosti: môžete zaplatiť 50% zálohu pred začatím práce a 50% pri odovzdaní, alebo celú sumu až pri odovzdaní hotového webu. Vždy sa dohodneme na variante, ktorá vám vyhovuje.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Ako dlho trvá vytvorenie webstránky?</summary>
+            <div class="faq-answer">
+                <p>Štartovací web balík zvyčajne dodávame do 4 pracovných dní od dodania všetkých podkladov. Pri Profi balíku do 10 dní.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Čo ak sa mi hotový web nepáči?</summary>
+            <div class="faq-answer">
+                <p>V cene sú zahrnuté 2-3 kolá revízií, takže môžete požiadať o úpravy. Najprv vám ukážeme dizajn a až po vašom schválení ho doprogramujeme. Chceme, aby ste boli 100% spokojní, preto sa nebojte komunikovať vaše pripomienky.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Čo všetko potrebujem dodať?</summary>
+            <div class="faq-answer">
+                <p>Budeme od vás potrebovať texty, logo, prípadne fotografie a predstavu o štruktúre. Ak nemáte pripravené texty alebo logo, radi vám s ich tvorbou pomôžeme v rámci našich marketingových služieb (za príplatok).</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Bude web fungovať na mobilných telefónoch?</summary>
+            <div class="faq-answer">
+                <p>Samozrejme! Každý web, ktorý vytvárame, je plne responzívny - funguje perfektne na mobiloch, tabletoch aj počítačoch. Viac ako 60% návštevníkov prichádza z mobilov, preto je to pre nás absolútna priorita.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Budem si vedieť web upravovať sám/sama?</summary>
+            <div class="faq-answer">
+                <p>Áno! Po odovzdaní projektu vás zaučíme, aby ste si vedeli upravovať texty a obrázky. Ak sa niečo technické pokazí alebo budete potrebovať väčšie zmeny, sme vždy k dispozícii.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Čo je to GitHub Pages hosting zdarma?</summary>
+            <div class="faq-answer">
+                <p>GitHub Pages je profesionálna hostingová služba od GitHubu, ktorá je úplne zadarmo, rýchla a spoľahlivá. Používajú ju milióny webov po celom svete. Váš web bude bezpečný (HTTPS), rýchly a bez ročných poplatkov za hosting.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Budem vlastníkom webu a domény?</summary>
+            <div class="faq-answer">
+                <p>Áno, absolútne! Doménu registrujeme cez váš vlastný účet, takže ste právnym vlastníkom. Web vytvárame pre vás a všetky súbory vám odovzdáme. Nie sste od nás závislí - môžete kedykoľvek prejsť k inému poskytovateľovi.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+    <summary class="faq-question">Nájdu ma zákazníci cez Google?</summary>
+    <div class="faq-answer">
+        <p><strong>Áno!</strong> Dnes 93% ľudí hľadá služby cez Google. Ak vás tam nenájdu, neexistujete. Každý web robíme s kompletným SEO nastavením - meta tagy, popisky, štruktúrované URL, sitemap, napojenie na Google Search Console.</p>
+        <p style="margin-top: 1rem;">To zabezpečí, že Google váš web nájde a zaindexuje. <strong>Vaša digitálna vizitka bude viditeľná pre tisíce potenciálnych zákazníkov.</strong> Pre ešte lepšie pozície odporúčame pravidelný obsah (články, blog) a lokálne SEO.</p>
+    </div>
+</details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Potrebujem mesačnú údržbu?</summary>
+            <div class="faq-answer">
+                <p>Nie. Statické weby, ktoré vytvárame, nepotrebujú pravidelnú údržbu ako WordPress weby. GitHub Pages sa o všetko postará automaticky. Ak budete potrebovať zmeny alebo úpravy, môžete nás kontaktovať kedykoľvek - účtujeme hodinovú sadzbu 40€/hod alebo mesačný paušál.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Prečo by som si mal vybrať vás namiesto WordPress / Wix / Webnode?</summary>
+            <div class="faq-answer">
+                <p><strong>Wix/Webnode:</strong> Ste závislí, nemôžete odísť, mesačné poplatky navždy, pomalé, horšie SEO.<br>
+                <strong>WordPress:</strong> Potrebuje údržbu, aktualizácie, zabezpečenie, mesačný hosting.<br>
+                <strong>Naše riešenie:</strong> Vlastníte všetko, žiadne mesačné poplatky, rýchle, bezpečné, profesionálne. Jednorazová investícia.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary class="faq-question">Ponúkate aj tvorbu loga a grafiku?</summary>
+            <div class="faq-answer">
+                <p>Áno, v rámci našich marketingových služieb ponúkame tvorbu loga, grafický dizajn, copywriting a sociálne médiá. Môžeme zabezpečiť kompletnú vizuálnu identitu vašej firmy.</p>
+            </div>
+        </details>
+    </div>
+</section>
+
+        <section id="contact-form" class="container reveal" style="margin-bottom: 5rem;">
+             <div class="contact-form-container">
+                <h2 class="section-title" style="text-align: center;">Mám záujem o web</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Vyplňte formulár a ozveme sa vám s nezáväznou konzultáciou k vášmu novému webu.</p>
+                
+                <form name="website-contact" method="POST" data-netlify="true">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Meno a Priezvisko</label>
+                        <input type="text" id="name" name="name" required placeholder="Ján Vážny" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" id="email" name="email" required placeholder="jan@firma.sk" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefón (nepovinné)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+421 9xx xxx xxx" class="form-input">
+                    </div>
+                     <div class="form-group">
+                        <label for="project-details" class="form-label">Priblížte nám váš projekt</label>
+                        <textarea id="project-details" name="project-details" rows="5" required placeholder="Aký web potrebujete? Máte už predstavu o dizajne?" class="form-input"></textarea>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; max-width: 300px;">Odoslať nezáväzný dopyt</button>
+                    </div>
+                </form>
+             </div>
+        </section>
+
+    </main>
+    
+    <footer class="main-footer">
+        <div class="container">
+           <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="/" class="logo">
+                        <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                        <span>Unoneto</span>
+                    </a>
+                    <p>Váš rast, poháňaný výsledkami.</p>
+                </div>
+    
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>Unoneto s. r. o.</p>
+                    <p>IČO: 55530966</p>
+                    <p>DIČ: 2122015522</p>
+                    <p><a href="tel:+421905351100">+421 905 351 100</a></p>
+                    <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
+                </div>
+    
+                <div class="footer-col">
+                    <h4>Rýchle odkazy</h4>
+                    <a href="/#services">Čo robíme</a>
+                    <a href="/#case-study">Naše výsledky</a>
+                    <a href="/#about">Kto sme</a>
+                    <a href="#contact-form">Napíšte nám</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Sledujte nás</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook" title="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram" title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn" title="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="script.js"></script>
+
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <script>
+        // 1. PREPÍNAČ REŽIMOV
+        function switchMode(mode) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            const targetBtn = event.target.closest('.mode-btn');
+            if(targetBtn) targetBtn.classList.add('active');
+
+            if (mode === 'rental') {
+                document.getElementById('view-rental').style.display = 'block';
+                document.getElementById('view-onetime').style.display = 'none';
+            } else {
+                document.getElementById('view-rental').style.display = 'none';
+                document.getElementById('view-onetime').style.display = 'block';
+            }
+        }
+
+        // 2. LOGIKA PRE MESAČNE / ROČNE
+        function updateSetupFee() {
+            const isYearly = document.getElementById('billing-toggle').checked;
+            const setups = document.querySelectorAll('.setup-fee-badge');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelYearly = document.getElementById('label-yearly');
+            
+            const totalStart = document.getElementById('yearly-total-start');
+            const totalPartner = document.getElementById('yearly-total-partner');
+            
+            if (isYearly) {
+                setups.forEach(badge => {
+                    badge.innerHTML = '<i class="fa-solid fa-gift"></i> Zriaďovací poplatok <strong>0 €</strong>';
+                    badge.classList.remove('setup-paid');
+                    badge.classList.add('setup-free');
+                });
+                labelMonthly.style.color = 'var(--slate-300)';
+                labelYearly.style.color = 'white';
+                
+                if(totalStart) totalStart.innerText = "Fakturácia ročne: 468€";
+                if(totalPartner) totalPartner.innerText = "Fakturácia ročne: 1068€";
+
+            } else {
+                setups.forEach(badge => {
+                    badge.innerHTML = '+ 199 € zriaďovací poplatok';
+                    badge.classList.remove('setup-free');
+                    badge.classList.add('setup-paid');
+                });
+                labelMonthly.style.color = 'white';
+                labelYearly.style.color = 'var(--slate-300)';
+                
+                if(totalStart) totalStart.innerText = "Fakturácia mesačne";
+                if(totalPartner) totalPartner.innerText = "Fakturácia mesačne";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSetupFee(); 
+        });
+
+        // 3. KALKULAČKA
+        function calculateTotal() {
+            let total = 140; 
+            const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:not(:disabled)');
+            
+            checkboxes.forEach(box => {
+                if (box.checked) {
+                    total += parseInt(box.getAttribute('data-price'));
+                }
+            });
+
+            document.getElementById('final-price').innerText = total;
+        }
+
+        // 4. ODOSLANIE
+        function submitConfig() {
+            let selectedOptions = ["Základ: Core Landing Page (140€)"];
+            const checkboxes = document.querySelectorAll('.config-options input[type="checkbox"]:checked:not(:disabled)');
+            
+            checkboxes.forEach(box => {
+                const label = box.nextElementSibling.querySelector('.opt-name').innerText;
+                const price = box.getAttribute('data-price');
+                selectedOptions.push(`${label} (+${price}€)`);
+            });
+
+            const finalPrice = document.getElementById('final-price').innerText;
+            const message = `Mám záujem o jednorazovú kúpu webu.\nOdhadovaná investícia: ${finalPrice}€\n\nVybraná konfigurácia:\n- ` + selectedOptions.join("\n- ");
+            
+            setSubject(message, true);
+        }
+
+        function setSubject(subjectText, isDirectMessage = false) {
+            const textarea = document.getElementById('project-details');
+            if(textarea) {
+                if(isDirectMessage) {
+                     textarea.value = subjectText;
+                } else {
+                     textarea.value = subjectText + "\n\nMoja správa: ";
+                }
+                document.querySelector('#contact-form').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // SLIDER
+        document.addEventListener('DOMContentLoaded', function() {
+            new Splide('#references-slider', {
+                type   : 'loop',
+                perPage: 3,
+                gap    : '2rem',
+                autoplay: true,
+                interval: 4000,
+                breakpoints: {
+                    768: {
+                        perPage: 1,
+                        padding: '1rem'
+                    },
+                    1024: {
+                        perPage: 2,
+                    }
+                }
+            }).mount();
+        });
+    </script>
 </body>
 </html>
