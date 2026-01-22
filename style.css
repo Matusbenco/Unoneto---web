@@ -184,15 +184,79 @@ p {
 .process-step h3 { font-size: 1.25rem; margin-bottom: 1rem; }
 
 
-/* ===== KONTAKTNÝ FORMULÁR ===== */
-.contact-form { max-width: 700px; margin: 2rem auto 0 auto; padding: 2.5rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; gap: 1.5rem; }
-.input-group { display: flex; flex-direction: column; text-align: left; }
-.input-group label { margin-bottom: 0.5rem; color: var(--slate-300); font-size: 0.9rem; font-weight: 500; }
-.contact-form input, .contact-form textarea { width: 100%; padding: 1rem; background: var(--slate-900); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 8px; color: var(--white); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.3s, box-shadow 0.3s; }
-.contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--slate-400); opacity: 0.8; }
-.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
-.contact-form button { width: 100%; margin-top: 1rem; }
+/* ===== KONTAKTNÝ FORMULÁR (FIX) ===== */
+.contact-form {
+    width: 100%;                /* Vyplní dostupný priestor */
+    max-width: 700px;           /* Ale maximálne do 700px */
+    margin: 2rem auto 0 auto;   /* Vycentrovanie */
+    padding: 2.5rem;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-sizing: border-box;     /* KĽÚČOVÉ: Padding nezväčší šírku elementu */
+}
 
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    margin-bottom: 0.5rem;
+    color: var(--slate-300);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Štýly pre polia - oprava pretekania */
+.contact-form input, 
+.contact-form textarea {
+    width: 100%;                /* Šírka 100% rodiča */
+    max-width: 100%;            /* Poistka proti pretečeniu */
+    padding: 1rem;
+    background: var(--slate-900);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 1rem;
+    font-family: var(--font-family);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;     /* KĽÚČOVÉ: Aby padding nerozbil šírku poľa */
+}
+
+.contact-form input::placeholder, 
+.contact-form textarea::placeholder {
+    color: var(--slate-400);
+    opacity: 0.8;
+}
+
+.contact-form input:focus, 
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+}
+
+.contact-form button {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* --- RESPONZIVITA PRE MOBILY --- */
+@media (max-width: 768px) {
+    .contact-form {
+        padding: 1.5rem;        /* Menší padding na mobile */
+        margin-top: 1rem;
+        border-radius: 12px;
+    }
+}
 
 /* ===== PÄTIČKA (FOOTER) ===== */
 .main-footer { background: rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(34, 211, 238, 0.2); padding: 4rem 0; }
@@ -209,19 +273,125 @@ p {
 .social-icons a:hover svg { fill: var(--slate-900); }
 
 
-/* ===== SLIDER (SPLIDE.JS) ===== */
-#banner-slider { max-width: 900px; margin: 0 auto 4rem auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); overflow: hidden; }
-.splide__track { max-height: 400px; }
-.splide__slide { position: relative; display: flex; justify-content: center; align-items: center; background-color: var(--slate-900); }
-.splide__slide img { width: 100%; height: 400px; display: block; opacity: 0.6; object-fit: cover; object-position: center; }
-.slide-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; text-align: center; color: var(--white); background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent); }
-.slide-caption h2 { font-size: 2rem; margin: 0; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-.slide-caption p { font-size: 1.1rem; margin-top: 0.5rem; color: var(--slate-300); text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-.splide__arrow { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(5px); width: 3rem; height: 3rem; opacity: 0.7; transition: opacity 0.3s; }
-.splide__arrow:hover { opacity: 1; }
-.splide__arrow svg { fill: var(--cyan); width: 1.2rem; height: 1.2rem; }
-.splide__pagination__page { background: rgba(255, 255, 255, 0.3); width: 10px; height: 10px; margin: 0 5px; transition: background 0.3s; }
-.splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
+/* --- 3. NOVÝ MODERNÝ SLIDER (Split Layout) --- */
+
+/* Reset pre Splide kontajner */
+#banner-slider {
+    margin-bottom: 4rem;
+    padding: 10px; /* Priestor pre tieň */
+}
+
+#banner-slider .splide__slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+/* Karta slidera - Kontajner */
+.modern-slide-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Pol na pol */
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1000px;
+    min-height: 400px; /* Fixná výška pre konzistenciu */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* Ľavá strana - Text */
+.slide-content {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    z-index: 2;
+}
+
+.slide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+.slide-content h2 {
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.slide-content p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--slate-300);
+    margin-bottom: 2rem;
+    max-width: 100%;
+}
+
+.slide-content .btn {
+    padding: 12px 30px;
+}
+
+/* Pravá strana - Obrázok */
+.slide-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Vyplní celý priestor */
+    transition: transform 0.5s ease;
+    border-radius: 0; /* Zrušiť zaoblenie z globálnych štýlov */
+}
+
+/* Hover efekt */
+.modern-slide-card:hover .slide-image img {
+    transform: scale(1.05);
+}
+
+/* --- RESPONZIVITA PRE MOBILY --- */
+@media (max-width: 900px) {
+    .modern-slide-card {
+        grid-template-columns: 1fr; /* Pod seba */
+        grid-template-rows: 250px auto; /* Obrázok hore fixne, text dole */
+        min-height: auto;
+    }
+
+    .slide-image {
+        order: -1; /* Obrázok prvý */
+        height: 100%;
+    }
+
+    .slide-content {
+        padding: 2rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    .slide-content h2 {
+        font-size: 1.8rem;
+    }
+}
 
 
 /* ===== ANIMÁCIE ===== */
@@ -2053,3 +2223,234 @@ select {
     background: transparent; /* Neviditeľné, ale myš to zachytí */
 }
 
+/* =========================================
+   KOMPLETNÝ ŠTÝL PRE PPC BANNER (FINAL)
+   ========================================= */
+
+/* 1. KONTAJNER (Desktop nastavenie) */
+#ppc-banner {
+    position: fixed;            /* Fixná pozícia = ŽIADNA MEDZERA v obsahu */
+    top: 50%;                   /* Vertikálne v strede */
+    right: 0;                   /* Pripnuté vpravo */
+    z-index: 9999;              /* Vždy navrchu */
+    
+    /* Vzhľad */
+    background: rgba(15, 23, 42, 0.98);
+    border: 2px solid var(--cyan);
+    border-right: none;         /* Bez rámu vpravo */
+    border-radius: 12px 0 0 12px;
+    
+    padding: 15px 20px 15px 15px;
+    max-width: 320px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    
+    /* Nastavenie počiatočnej pozície */
+    transform: translateY(-50%); 
+    
+    /* SPUSTENIE ANIMÁCIE (Silné pulzovanie) */
+    animation: desktopPulse 2s infinite ease-in-out;
+}
+
+/* 2. ANIMÁCIA PRE DESKTOP (Opravená, aby banner neskákal) */
+@keyframes desktopPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4);
+        border-color: rgba(34, 211, 238, 0.5);
+        /* Musíme zopakovať translateY, inak sa banner posunie hore */
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        /* Efekt žiary a zväčšenia */
+        box-shadow: 0 0 20px 5px rgba(34, 211, 238, 0.5); 
+        border-color: #ffffff; 
+        transform: translateY(-50%) scale(1.05); /* Zväčšenie o 5% */
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4);
+        border-color: rgba(34, 211, 238, 0.5);
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+/* 3. ROZLOŽENIE OBSAHU */
+.pc-banner-layout {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+}
+
+/* 4. IKONY (Google + Meta) */
+.pc-banner-icons-group {
+    display: flex;
+    gap: 10px;
+    font-size: 1.8rem;
+    color: var(--cyan);
+    flex-shrink: 0;
+    /* Neónový efekt pre ikony */
+    filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.8));
+}
+
+/* 5. TEXTY */
+.pc-banner-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pc-banner-headline {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 800; /* Extra hrubé */
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.pc-banner-subline {
+    color: var(--cyan);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 6. TLAČIDLO ZATVORIŤ (X) */
+.close-banner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 30px;
+    text-align: center;
+    transition: color 0.3s;
+}
+.close-banner:hover {
+    color: var(--cyan);
+}
+
+/* 7. HOVER EFEKT NA ŠÍPKU */
+#ppc-banner:hover .fa-arrow-right {
+    transform: translateX(5px);
+}
+.pc-banner-subline .fa-arrow-right {
+    transition: transform 0.3s ease;
+}
+
+
+/* =========================================
+   MOBILNÁ VERZIA (Sticky lišta dole)
+   ========================================= */
+@media (max-width: 768px) {
+    #ppc-banner {
+        /* Reset hodnôt z desktopu */
+        top: auto; 
+        right: auto;
+        border-radius: 0;
+        
+        /* DÔLEŽITÉ: Zrušiť transformáciu z desktopu, inak bude lišta mimo */
+        transform: none !important; 
+        
+        /* Nová pozícia: Prilepené dole */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-width: none; /* Roztiahnuť na celú šírku */
+        
+        /* Rámik len hore */
+        border: none;
+        border-top: 2px solid var(--cyan);
+        
+        /* Layout lišty */
+        display: flex;
+        justify-content: center; /* Vycentrovať obsah */
+        padding: 10px 40px 10px 15px; /* Viac miesta vpravo kvôli X */
+        
+        /* Iná animácia pre mobil */
+        animation: mobileGlow 2s infinite ease-in-out;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Animácia pre mobil (Len blikanie, bez zväčšovania) */
+    @keyframes mobileGlow {
+        0%, 100% { border-color: var(--cyan); box-shadow: 0 -2px 10px rgba(34, 211, 238, 0.2); }
+        50% { border-color: white; box-shadow: 0 -5px 25px rgba(34, 211, 238, 0.6); }
+    }
+
+    /* Zmenšenie prvkov pre mobil */
+    .pc-banner-icons-group { font-size: 1.5rem; }
+    .pc-banner-headline { font-size: 0.95rem; }
+    .pc-banner-subline { font-size: 0.75rem; }
+    
+    /* Krížik na mobile - väčší a vycentrovaný */
+    .close-banner {
+        top: 50%;
+        transform: translateY(-50%);
+        right: 5px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 1.8rem;
+    }
+}
+/* --- NOVÝ ŠTÝL PRE SEKCIU O NÁS (PODĽA LETÁKU) --- */
+.flyer-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.flyer-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.flyer-item:hover {
+    transform: translateX(5px);
+    border-color: var(--cyan);
+    background: rgba(34, 211, 238, 0.05);
+}
+
+.flyer-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Úprava mriežky pre mobil */
+@media (max-width: 900px) {
+    .about-grid {
+        grid-template-columns: 1fr; /* Fotka hore, text dole */
+        gap: 2rem;
+    }
+    
+    .about-image img {
+        max-height: 400px; /* Aby fotka nebola na mobile obrovská */
+        object-fit: cover;
+        width: 100%;
+    }
+}
