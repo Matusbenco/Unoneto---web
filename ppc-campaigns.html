@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPC Advertising & Performance Marketing | Unoneto</title>
+    <meta name="description" content="Professional Google Ads and Meta Ads management. Entrust your campaigns to a senior specialist. Audit and setup of performance marketing.">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        :root {
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --slate-900: #0f172a;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+        }
+
+        /* --- Background & Effects --- */
+        .particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .ping-particle {
+            position: absolute; border-radius: 50%; opacity: 0.3;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            animation: particleMove infinite linear;
+        }
+        @keyframes particleMove {
+            0% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.3; }
+        }
+
+        /* --- Hero Section --- */
+        .hero-section { padding: 10rem 0 5rem; text-align: center; }
+        
+        /* --- Cards & Glassmorphism --- */
+        .services-grid .card, .process-step, .pricing-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .services-grid .card:hover {
+             border-color: var(--cyan);
+             box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.2);
+             transform: translateY(-5px);
+        }
+        .service-icon-wrapper {
+            display: inline-flex; padding: 15px; border-radius: 50%;
+            background: rgba(34, 211, 238, 0.1); color: var(--cyan);
+            font-size: 1.5rem; margin-bottom: 1rem;
+        }
+
+        /* --- Process Grid (Fixed) --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 650px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9); /* Pre animáciu */
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+
+        /* --- FAQ Styles --- */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px; margin-bottom: 1rem; overflow: hidden; transition: all 0.3s ease;
+        }
+        .faq-question {
+            padding: 1.5rem; cursor: pointer; font-weight: 600; color: white; list-style: none;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .faq-question::after { content: '+'; font-size: 1.5rem; color: var(--cyan); transition: transform 0.3s; }
+        details[open] .faq-question::after { transform: rotate(45deg); }
+        .faq-answer { padding: 0 1.5rem 1.5rem; color: var(--text-muted); line-height: 1.6; border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 0; padding-top: 1rem; }
+
+        /* --- Contact Form --- */
+        .contact-form-container {
+            max-width: 700px; margin: 0 auto; padding: 3rem;
+            background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 20px; backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
+        .form-input {
+            width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white;
+            font-size: 1rem; transition: all 0.3s ease;
+        }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); background: rgba(15, 23, 42, 1); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+
+        /* --- Comparison Grid (Specific for this page) --- */
+        .comparison-grid {
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
+        }
+        @media (min-width: 768px) { .comparison-grid { grid-template-columns: 1fr 1fr; } }
+        
+        /* --- Mobile Menu Styles (from index.html) --- */
+        #hamburger-btn { display: none; }
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: flex; flex-direction: column; justify-content: space-between;
+                width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; z-index: 3000; position: relative;
+            }
+            .hamburger-bar { width: 100%; height: 3px; background-color: white; border-radius: 3px; transition: all 0.3s ease; }
+            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
+            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+            .nav-links {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+                background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(10px);
+                display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 2999; margin: 0; padding: 0; list-style: none;
+            }
+            .nav-links.active { transform: translateX(0); }
+            .dropdown-menu { position: static; background: transparent; box-shadow: none; text-align: center; display: none; border: none; padding-top: 1rem; }
+            .has-dropdown.active .dropdown-menu { display: block; animation: fadeIn 0.3s ease; }
+        }
+    </style>
+</head>
+
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="particle-container">
+    <div class="ping-particle" style="top: 20%; left: 15%; width: 150px; height: 150px; animation-duration: 8s;"></div>
+    <div class="ping-particle" style="top: 60%; left: 85%; width: 100px; height: 100px; animation-duration: 6s; animation-delay: 1s;"></div>
+    <div class="ping-particle" style="top: 80%; left: 30%; width: 80px; height: 80px; animation-duration: 10s; animation-delay: 2s;"></div>
+</div>
+<div class="background-shapes">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+</div>
+
+<header class="main-header">
+    <nav class="container">
+        <a href="/" class="logo">
+            <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+            <span>Unoneto</span>
+        </a>
+        <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+      
+        <ul class="nav-links" id="nav-menu">
+            <li class="has-dropdown">
+                <a href="#" id="nasa-ponuka-toggle">Our Services</a>
+                <ul class="dropdown-menu">
+                    <li><a href="weby.html">Presentation Websites</a></li>
+                    <li><a href="eshopy.html">Custom E-shops</a></li>
+                    <li><a href="ppc-kampane.html" class="active">PPC & Online Ads</a></li> <li><a href="graficke-sluzby.html">Graphics</a></li>
+                    <li><a href="automatizacia.html">AI Automation</a></li>
+                    <li><a href="raynetcrm.html">RAYNET CRM</a></li>
+                    <li><a href="digitalnypodpis.html">DigiSign - Digital Signature</a></li>
+                    <li><a href="vexion.html">VEXION Loyalty System</a></li>
+                    <li><a href="hugo.html">HUGO Information System</a></li>
+                    <li><a href="ozobot.html">Ozobot Robots</a></li>
+                </ul>
+            </li>
+            <li><a href="blog">Blog</a></li>
+            <li class="language-switcher">
+                <a href="ppc-kampane.html" class="lang-link" title="Slovenčina"><span class="fi fi-sk"></span></a>
+                <span class="lang-separator">|</span>
+                <a href="/en" class="lang-link active" title="English"><span class="fi fi-gb"></span></a>
+            </li>
+            <li><a href="#contact-form" class="btn btn-primary">Book a Consultation</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content">
+    
+    <section class="hero-section container reveal">
+        <div style="display: inline-block; padding: 8px 16px; background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 50px; color: var(--cyan); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+            Google Ads & Meta Ads
+        </div>
+        <h1 class="hero-title">Turn Clicks into<br><span class="gradient-text">Paying Customers</span></h1>
+        <p class="hero-description">
+            Stop losing money on ineffective ads. We combine Unoneto's technical background with senior expertise in campaign management. We will prepare a clear plan to get your business into the black.
+        </p>
+        <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
+            <a href="#contact-form" class="btn btn-primary btn-large">I Want a Campaign Audit</a>
+        </div>
+    </section>
+
+    <section class="container reveal" style="margin-bottom: 5rem;">
+        <div class="services-grid">
+            <div class="card">
+                <div class="service-icon-wrapper"><i class="fa-solid fa-money-bill-wave"></i></div>
+                <h3>Burning Through Budget?</h3>
+                <p>Feel like Google and Facebook are just "eating" your money without real orders? The mistake is often in poor goal setting.</p>
+            </div>
+            <div class="card">
+                <div class="service-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Lacking a Strategy?</h3>
+                <p>Running ads without a plan is a gamble. We look deep into the data and propose a solution that makes sense.</p>
+            </div>
+            <div class="card">
+                <div class="service-icon-wrapper"><i class="fa-solid fa-user-tie"></i></div>
+                <h3>Doing It Yourself?</h3>
+                <p>Marketing changes every month. Entrust your campaigns to a senior specialist so you can focus on running your business.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container reveal" style="padding: 2rem 0 6rem;">
+        <div style="max-width: 900px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; backdrop-filter: blur(5px);">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Where Will We Find Your Clients?</h2>
+            
+            <div class="comparison-grid">
+                <div>
+                    <h3 style="color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-brands fa-google" style="color: var(--cyan);"></i> Google Ads
+                    </h3>
+                    <p style="color: var(--text-muted); line-height: 1.6;">
+                        <strong>Capture demand at the right time.</strong><br>
+                        Your ad appears exactly when someone is searching for your services. Ideal for immediate sales.
+                    </p>
+                    <ul style="margin-top: 1.5rem; color: var(--text-muted); list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color: var(--cyan); margin-right: 8px;"></i> Search Ads</li>
+                        <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color: var(--cyan); margin-right: 8px;"></i> Google Shopping</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--cyan); margin-right: 8px;"></i> YouTube Campaigns</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-brands fa-meta" style="color: #a855f7;"></i> Meta Ads
+                    </h3>
+                    <p style="color: var(--text-muted); line-height: 1.6;">
+                        <strong>Create demand visually.</strong><br>
+                        We reach people on Facebook and Instagram who don't know about you yet, or remind them of an unfinished purchase.
+                    </p>
+                     <ul style="margin-top: 1.5rem; color: var(--text-muted); list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color: #a855f7; margin-right: 8px;"></i> Interest-based Targeting</li>
+                        <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color: #a855f7; margin-right: 8px;"></i> Dynamic Remarketing</li>
+                        <li><i class="fa-solid fa-check" style="color: #a855f7; margin-right: 8px;"></i> Lead Generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="container reveal">
+        <h2 class="section-title">How Do We Start Generating Profit?</h2>
+        <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">A fair process. Analysis first, then cooperation.</p>
+        
+        <div class="process-grid-fixed">
+            <div class="process-card-anim" style="animation-delay: 0s;">
+                <div class="process-number-bg">01</div>
+                <div class="process-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="process-content">
+                    <h3>Initial Consultation</h3>
+                    <p>We'll have a call to understand your goals. No obligations, just clear communication about what you need to achieve.</p>
+                </div>
+            </div>
+
+            <div class="process-card-anim" style="animation-delay: 0.15s;">
+                <div class="process-number-bg">02</div>
+                <div class="process-icon"><i class="fa-solid fa-key"></i></div>
+                <div class="process-content">
+                    <h3>Account Audit</h3>
+                    <p>If you're interested, we'll send you instructions on how to securely share access. We'll check how your ads are set up.</p>
+                </div>
+            </div>
+
+            <div class="process-card-anim" style="animation-delay: 0.3s;">
+                <div class="process-number-bg">03</div>
+                <div class="process-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <div class="process-content">
+                    <h3>In-depth Analysis</h3>
+                    <p>We'll prepare a clear plan with a vision. We'll propose solutions that deliver desired results and show you where to save money.</p>
+                </div>
+            </div>
+
+            <div class="process-card-anim" style="animation-delay: 0.45s;">
+                <div class="process-number-bg">04</div>
+                <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+                <div class="process-content">
+                    <h3>Collaboration Start</h3>
+                    <p>Cooperation begins only when our plan makes sense to you. We take over campaign management and start optimizing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container subpage-content reveal" style="margin-top: 6rem;">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-container">
+            <details class="faq-item">
+                <summary class="faq-question">Who will manage my campaigns?</summary>
+                <div class="faq-answer">
+                    <p>We collaborate with a vetted external senior specialist with 10 years of experience. This gives you <strong>expertise at the level of a large agency for significantly less money</strong>, but with a more personal approach to achieving the best possible results.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">How much do I need to invest in ad spend?</summary>
+                <div class="faq-answer">
+                    <p>This depends on your segment and competition. During the analysis (step 3), we will prepare a budget estimate needed to achieve relevant results. You pay for credit directly to Google/Meta; you pay us only for management.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">Do I have access to my accounts?</summary>
+                <div class="faq-answer">
+                    <p>Of course. The accounts are always your property. We work in them as managers. You have a 100% transparent overview of every cent spent and can see what is happening in the account at any time.</p>
+                </div>
+            </details>
+
+                   </div>
+    </section>
+
+    <section id="contact-form" class="container reveal" style="margin-bottom: 5rem; margin-top: 5rem;">
+         <div class="contact-form-container">
+            <h2 class="section-title" style="text-align: center;">Want a Free Analysis?</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 2.5rem;">Fill out the form and we will arrange an initial consultation.</p>
+            
+            <form name="ppc-contact" method="POST" data-netlify="true">
+                <div class="form-group">
+                    <label for="name" class="form-label">Name and Surname</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" id="email" name="email" required placeholder="john@company.com" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+421 9xx xxx xxx" class="form-input" required>
+                </div>
+                 <div class="form-group">
+                    <label for="project-details" class="form-label">Website or E-shop</label>
+                    <textarea id="project-details" name="project-details" rows="3" placeholder="Enter your website address and briefly describe your goal (e.g., more orders, more leads)." class="form-input"></textarea>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                     <button type="submit" class="btn btn-primary btn-large" style="width: 100%; max-width: 300px;">Send</button>
+                </div>
+            </form>
+         </div>
+    </section>
+
+</main>
+    
+<footer class="main-footer">
+    <div class="container">
+       <div class="footer-grid">
+            <div class="footer-col">
+                <a href="/" class="logo">
+                    <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                    <span>Unoneto</span>
+                </a>
+                <p>Your growth, driven by results.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Unoneto s. r. o.</p>
+                <p>ID No.: 55530966</p>
+                <p>VAT ID: 2122015522</p>
+                <p><a href="tel:+421905351100">+421 905 351 100</a></p>
+                <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="weby.html">Websites</a>
+                <a href="ppc-kampane.html">PPC Advertising</a>
+                <a href="automatizacia.html">Automation</a>
+                <a href="#contact-form">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/unonetostore/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/unoneto.eu/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/company/101294763" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 Unoneto | Created to deliver value.</p>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Process Animation
+        const observerOptions = { threshold: 0.2 };
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.process-card-anim');
+                    cards.forEach(card => card.classList.add('pop-in'));
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const processSection = document.querySelector('#process');
+        if (processSection) {
+            processObserver.observe(processSection);
+        }
+
+        // Scroll Reveal for sections (general animation)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+        
+        // Mobile Menu
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-menu');
+        const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
+
+        if (hamburgerBtn && navLinks) {
+            hamburgerBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                hamburgerBtn.classList.toggle('active');
+                const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                hamburgerBtn.setAttribute('aria-expanded', !expanded);
+            });
+        }
+
+        if (dropdownToggle && window.innerWidth <= 768) {
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('active');
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
