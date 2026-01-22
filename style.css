@@ -2453,4 +2453,38 @@ select {
         object-fit: cover;
         width: 100%;
     }
+
+  
+}
+/* =======================================================
+   MOBILNÁ ÚPRAVA PRE SEKCIU O NÁS (Bez obrázkov)
+   ======================================================= */
+
+@media (max-width: 900px) {
+    /* 1. Skryje celý ľavý stĺpec (Fotku aj meno pod ňou) */
+    .about-image {
+        display: none !important;
+    }
+
+    /* 2. Roztiahne textovú časť na celú šírku */
+    .about-grid {
+        display: block !important; /* Zruší grid */
+        padding-top: 0 !important;
+    }
+
+    /* 3. Úprava nadpisu na mobile, aby bol pekne v strede */
+    .about-text h3 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.6rem;
+    }
+
+    /* 4. Úprava zoznamu služieb pre mobil */
+    .flyer-features-list {
+        gap: 1rem; /* Menšie medzery medzi položkami */
+    }
+
+    .flyer-item {
+        padding: 0.8rem; /* Kompaktnejšie karty */
+    }
 }
