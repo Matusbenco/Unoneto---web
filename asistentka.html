@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zubná klinika Úsmev</title>
+</head>
+<body>
+    <h1>🦷 Zubná klinika Úsmev</h1>
+    <p>Kliknite na tlačidlo vpravo dole pre spojenie s asistentkou Klárou</p>
+
+    <script>
+        var vapiInstance = null;
+        const assistant = "d5c7cf1c-4113-473c-ba65-5bab06be8c17";
+        const apiKey = "afff6212-7ded-43fa-8903-160b78b19e63"; // <-- Nahraďte vaším Public Key
+        
+        (function (d, t) {
+            var g = document.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.defer = true;
+            g.async = true;
+            s.parentNode.insertBefore(g, s);
+
+            g.onload = function () {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: apiKey,
+                    assistant: assistant,
+                    config: {
+                        position: "bottom-right",
+                        idle: {
+                            color: "#667eea",
+                            type: "pill",
+                            title: "Zavolať Kláre"
+                        },
+                        active: {
+                            color: "#e74c3c",
+                            type: "pill", 
+                            title: "Ukončiť hovor"
+                        }
+                    }
+                });
+            };
+        })(document, "script");
+    </script>
+</body>
+</html>
