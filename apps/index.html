@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Tools Suite</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-sidebar: #1e293b;
+            --accent: #6366f1; /* Indigo */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --sidebar-width: 260px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 40%);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden; /* Scrolluje len hlavný obsah */
+            display: flex;
+        }
+
+        /* --- SIDEBAR MENU (PC) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 50;
+        }
+
+        .brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand span { color: var(--accent); }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .menu-btn.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .menu-icon { width: 20px; text-align: center; }
+
+        /* --- HLAVNÝ OBSAH --- */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1400px; /* Limit šírky pre pekné centrovanie */
+            margin: 0 auto;
+        }
+
+        /* --- SEARCH BAR --- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 2rem; }
+        .page-title p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem; }
+
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+        .search-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 12px 20px 12px 45px;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+        /* --- GRID BEZ DIER --- */
+        .app-grid {
+            display: grid;
+            /* Toto je kľúčové pre odstránenie dier: auto-fill + minmax */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 25px;
+            padding-bottom: 100px;
+        }
+
+        /* --- KARTA --- */
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+        }
+
+        /* Farebné prúžky pre kategórie */
+        .app-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; opacity: 0.8; }
+        .app-card[data-cat="pdf"]::before { background: #22d3ee; }
+        .app-card[data-cat="img"]::before { background: #a78bfa; }
+        .app-card[data-cat="av"]::before { background: #fb923c; }
+        .app-card[data-cat="data"]::before { background: #4ade80; }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .badge { font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
+        
+        .title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+        .desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
+
+        /* --- RESPONSIVITA (MOBIL) --- */
+        @media (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            .sidebar {
+                position: fixed; bottom: 0; left: 0; width: 100%; height: auto;
+                flex-direction: row; padding: 10px; border-right: none; border-top: 1px solid var(--border);
+                justify-content: space-around; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px);
+            }
+            .brand { display: none; } /* Logo na mobile skryjeme alebo dáme hore */
+            .menu { flex-direction: row; width: 100%; justify-content: space-evenly; }
+            .menu-btn { flex-direction: column; padding: 8px; font-size: 0.7rem; gap: 5px; border-radius: 8px; }
+            .menu-icon { font-size: 1.2rem; }
+            .btn-text { display: block; }
+            
+            .main-content { padding: 20px 20px 100px 20px; }
+            .top-bar { flex-direction: column; align-items: flex-start; }
+            .search-box { width: 100%; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Skrývanie filtrovaných */
+        .hidden { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand">
+            <div style="width:30px; height:30px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center;">⚡</div>
+            <span>OfficeSuite</span>
+        </div>
+
+        <div class="menu">
+            <button class="menu-btn active" onclick="filterApps('all', this)">
+                <span class="menu-icon">🏠</span> <span class="btn-text">Všetky</span>
+            </button>
+            <button class="menu-btn" onclick="filterApps('pdf', this)">
+                <span class="menu-icon">📄</span> <span class="btn-text">PDF Nástroje</span>
+            </button>
+            <button class="menu-btn" onclick="filterApps('img', this)">
+                <span class="menu-icon">🖼️</span> <span class="btn-text">Obrázky</span>
+            </button>
+            <button class="menu-btn" onclick="filterApps('av', this)">
+                <span class="menu-icon">🎬</span> <span class="btn-text">Audio/Video</span>
+            </button>
+            <button class="menu-btn" onclick="filterApps('data', this)">
+                <span class="menu-icon">📊</span> <span class="btn-text">Dáta</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p>Všetky nástroje na jednom mieste. Bezpečne v prehliadači.</p>
+                </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Rýchle hľadanie...">
+                </div>
+            </div>
+
+            <div class="app-grid" id="appGrid">
+                
+                <a href="pdf replacer.html" class="app-card" data-cat="pdf">
+                    <div class="card-header">
+                        <div class="card-icon">🔄</div>
+                        <span class="badge" style="background:#22d3ee; color:#083344;">PDF</span>
+                    </div>
+                    <div class="title">PDF Replacer</div>
+                    <div class="desc">Výmena strán v dokumente za nové naskenované verzie.</div>
+                </a>
+
+                <a href="pdfmerger.html" class="app-card" data-cat="pdf">
+                    <div class="card-header">
+                        <div class="card-icon">📑</div>
+                        <span class="badge" style="background:#22d3ee; color:#083344;">PDF</span>
+                    </div>
+                    <div class="title">PDF Merger</div>
+                    <div class="desc">Spojenie viacerých PDF súborov do jedného dokumentu.</div>
+                </a>
+
+                <a href="pdfsplitter.html" class="app-card" data-cat="pdf">
+                    <div class="card-header">
+                        <div class="card-icon">✂️</div>
+                        <span class="badge" style="background:#22d3ee; color:#083344;">PDF</span>
+                    </div>
+                    <div class="title">PDF Splitter</div>
+                    <div class="desc">Vytiahnutie konkrétnych strán alebo rozdelenie dokumentu.</div>
+                </a>
+
+                <a href="pdfimageconverter.html" class="app-card" data-cat="pdf">
+                    <div class="card-header">
+                        <div class="card-icon">📄</div>
+                        <span class="badge" style="background:#22d3ee; color:#083344;">PDF</span>
+                    </div>
+                    <div class="title">PDF to Image</div>
+                    <div class="desc">Konverzia PDF na obrázky a naopak.</div>
+                </a>
+
+                <a href="imageresizer.html" class="app-card" data-cat="img">
+                    <div class="card-header">
+                        <div class="card-icon">📐</div>
+                        <span class="badge" style="background:#a78bfa; color:#2e1065;">IMG</span>
+                    </div>
+                    <div class="title">Image Resizer</div>
+                    <div class="desc">Hromadná zmena veľkosti (pixel/percentá) s podporou HEIC.</div>
+                </a>
+
+                <a href="image-converter.html" class="app-card" data-cat="img">
+                    <div class="card-header">
+                        <div class="card-icon">🎨</div>
+                        <span class="badge" style="background:#a78bfa; color:#2e1065;">IMG</span>
+                    </div>
+                    <div class="title">Image Converter</div>
+                    <div class="desc">Prevod formátov: HEIC, WEBP, PNG, JPG, TIFF, BMP.</div>
+                </a>
+
+                <a href="av-converter.html" class="app-card" data-cat="av">
+                    <div class="card-header">
+                        <div class="card-icon">📼</div>
+                        <span class="badge" style="background:#fb923c; color:#431407;">A/V</span>
+                    </div>
+                    <div class="title">A/V Converter</div>
+                    <div class="desc">Univerzálny konvertor pre audio a video súbory.</div>
+                </a>
+
+                <a href="av-cutter.html" class="app-card" data-cat="av">
+                    <div class="card-header">
+                        <div class="card-icon">🎞️</div>
+                        <span class="badge" style="background:#fb923c; color:#431407;">A/V</span>
+                    </div>
+                    <div class="title">A/V Cutter</div>
+                    <div class="desc">Strihanie, orezávanie a fade efekty pre video a zvuk.</div>
+                </a>
+
+                <a href="finstat-dashboard.html" class="app-card" data-cat="data">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <span class="badge" style="background:#4ade80; color:#064e3b;">DATA</span>
+                    </div>
+                    <div class="title">Finstat Dashboard</div>
+                    <div class="desc">Analýza a spracovanie firemných kontaktov a dát.</div>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const grid = document.getElementById('appGrid');
+        const cards = grid.querySelectorAll('.app-card');
+        const titleEl = document.getElementById('pageTitle');
+        const searchInput = document.getElementById('searchInput');
+
+        // Funkcia na filtrovanie podľa kategórie (Menu)
+        function filterApps(category, btnElement) {
+            // Update Active Class
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            // Update Title
+            const titles = {
+                'all': 'Dashboard',
+                'pdf': 'PDF Nástroje',
+                'img': 'Grafické Nástroje',
+                'av': 'Audio & Video',
+                'data': 'Dáta & Biznis'
+            };
+            titleEl.innerText = titles[category] || 'Nástroje';
+
+            // Filter Cards
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-cat');
+                if (category === 'all' || cardCat === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Funkcia na vyhľadávanie
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            
+            // Ak sa hľadá, zrušíme výber v menu (vizuálne)
+            if(term.length > 0) document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+
+            cards.forEach(card => {
+                const title = card.querySelector('.title').innerText.toLowerCase();
+                const desc = card.querySelector('.desc').innerText.toLowerCase();
+                const cat = card.getAttribute('data-cat');
+
+                if (title.includes(term) || desc.includes(term) || cat.includes(term)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
