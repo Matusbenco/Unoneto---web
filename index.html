@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -234,6 +235,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <button class="close-banner" aria-label="Zatvoriť banner" onclick="document.getElementById('ppc-banner').style.display='none';">&times;</button>
 </div>
 
+
+<div id="apps-banner">
+    <a href="apps/" class="banner-link-content pc-banner-layout">
+        <div class="pc-banner-icons-group" style="color: var(--purple); margin-right: 15px;">
+           <i class="fa-solid fa-rocket"></i>
+           <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        
+        <div class="pc-banner-text">
+            <span class="pc-banner-headline" style="color: #cbd5e1;">Užitočné nástroje</span>
+            <span class="pc-banner-subline" style="color: var(--purple); font-weight: bold; text-transform: uppercase;">
+                VYSKÚŠAŤ ZDARMA <i class="fa-solid fa-arrow-right"></i>
+            </span>
+        </div>
+    </a>
+    
+    <button onclick="document.getElementById('apps-banner').style.display='none';" 
+            style="position: absolute; top: 5px; left: 5px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 18px;">
+        &times;
+    </button>
+</div>
+
+<div id="apps-banner" class="side-banner pulsed-banner">
+    <a href="apps/" class="banner-link-content pc-banner-layout">
+        <div class="pc-banner-icons-group" style="color: #a855f7;">
+           <i class="fa-solid fa-file-pdf"></i>
+           <i class="fa-solid fa-image"></i>
+           <i class="fa-solid fa-qrcode"></i>
+        </div>
+        
+        <div class="pc-banner-text">
+            <span class="pc-banner-headline">Užitočné nástroje</span>
+            <span class="pc-banner-subline" style="color: #a855f7;">
+                Vyskúšať ZADARMO <i class="fa-solid fa-arrow-right" style="font-size: 0.8em;"></i>
+            </span>
+        </div>
+    </a>
+    <button class="close-banner" aria-label="Zatvoriť banner" onclick="document.getElementById('apps-banner').style.display='none';">&times;</button>
+</div>
+
+
+
+
 <div id="promo-banner" class="promo-banner">
     <a href="weby.html" class="marquee-wrapper">
         <div class="marquee-content">
@@ -284,6 +328,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <li class="has-dropdown">
                     <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
                     <ul class="dropdown-menu">
+                        <li><a href="apps/">Unoneto aplikácie</a></li>
                         <li><a href="weby.html">Prezentačné weby</a></li>
                         <li><a href="eshopy.html">E-shopy na mieru</a></li>
                         <li><a href="graficke-sluzby.html">Grafika</a></li>
@@ -303,6 +348,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </li>
                 <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Dohodnúť si konzultáciu</a></li>
             </ul>
+
+
+            
+
         </nav>
     </header>
 
