@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZIP Manažér Pro | Unoneto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; -webkit-tap-highlight-color: transparent; }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow: hidden; /* Dôležité pre sticky header */
+        }
+
+        .btn-action {
+            background: #4f46e5; color: white; font-weight: 600; padding: 12px 20px;
+            border-radius: 12px; transition: all 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; border: none; cursor: pointer;
+        }
+        .btn-action:active { transform: scale(0.96); background: #4338ca; }
+
+        .tab-btn { padding: 15px; text-align: center; color: #94a3b8; border-bottom: 2px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; font-weight: 500; }
+        .tab-btn.active { color: #818cf8; border-color: #818cf8; background: rgba(129, 140, 248, 0.1); }
+
+        /* ZOZNAM SÚBOROV */
+        .file-item {
+            display: flex; align-items: center; padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .file-item:hover { background: rgba(255,255,255,0.03); }
+        .file-item.selected { background: rgba(79, 70, 229, 0.15); }
+        
+        /* CUSTOM CHECKBOX */
+        .custom-checkbox {
+            width: 20px; height: 20px; border: 2px solid #64748b; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; margin-right: 12px;
+            transition: 0.2s; flex-shrink: 0;
+        }
+        .file-item.selected .custom-checkbox, .header-row.selected .custom-checkbox {
+            background: #4f46e5; border-color: #4f46e5;
+        }
+        .custom-checkbox::after {
+            content: '✓'; color: white; font-size: 14px; display: none;
+        }
+        .file-item.selected .custom-checkbox::after, .header-row.selected .custom-checkbox::after { display: block; }
+
+        .upload-box { border: 2px dashed #475569; border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(15, 23, 42, 0.5); }
+        
+        /* HEADER ZOZNAMU */
+        .header-row {
+            display: flex; align-items: center; padding: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        /* BOTTOM BAR */
+        .selection-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%);
+            background: #1e293b; border: 1px solid #475569; padding: 10px 20px; border-radius: 50px;
+            display: flex; gap: 15px; align-items: center; shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 50; width: 90%; max-width: 400px; justify-content: space-between;
+        }
+        .selection-bar.visible { transform: translateX(-50%) translateY(0); }
+
+        .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #818cf8; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4">
+
+    <div class="w-full max-w-lg flex items-center justify-between mb-4 pt-2">
+        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white px-2 py-1 rounded-lg">
+            <span>←</span> Späť
+        </a>
+        <h1 class="font-bold text-lg text-white">ZIP Manažér</h1>
+    </div>
+
+    <div class="w-full max-w-lg glass-panel h-[80vh] flex flex-col">
+        
+        <div class="grid grid-cols-2 flex-shrink-0">
+            <div id="tab-extract" class="tab-btn active" onclick="switchView('extract')">📂 Rozbaliť</div>
+            <div id="tab-compress" class="tab-btn" onclick="switchView('compress')">🗜️ Vytvoriť</div>
+        </div>
+
+        <div id="view-extract" class="flex-1 overflow-hidden relative flex flex-col">
+            
+            <div id="upload-area-extract" class="p-6 overflow-y-auto">
+                <p class="text-slate-400 text-sm text-center mb-4">Otvorte ZIP súbor pre zobrazenie obsahu.</p>
+                <label class="upload-box block">
+                    <input type="file" id="zipInput" class="hidden" accept=".zip, application/zip, application/x-zip-compressed">
+                    <div class="text-4xl mb-2">📥</div>
+                    <span class="font-semibold text-slate-200">Vybrať ZIP súbor</span>
+                </label>
+            </div>
+
+            <div id="loading-indicator" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-slate-900/80 z-20">
+                <div class="loader mb-3"></div>
+                <p class="text-slate-400 text-sm">Analyzujem archív...</p>
+            </div>
+
+            <div id="file-list-container" class="hidden flex-1 flex flex-col min-h-0">
+                
+                <div class="header-row" id="list-header" onclick="toggleSelectAll()">
+                    <div class="custom-checkbox" id="master-checkbox"></div>
+                    <div class="flex-1 font-semibold text-sm">Vybrať všetko</div>
+                    <div class="text-xs text-slate-400" id="file-count-display">0 súborov</div>
+                </div>
+
+                <div class="overflow-y-auto flex-1 p-2" id="files-output">
+                    </div>
+            </div>
+        </div>
+
+        <div id="view-compress" class="p-6 hidden overflow-y-auto flex-1">
+            <p class="text-slate-400 text-sm text-center mb-4">Vyberte fotky alebo dokumenty na zbalenie.</p>
+            
+            <label class="upload-box block mb-4">
+                <input type="file" id="compressInput" class="hidden" multiple>
+                <div class="text-4xl mb-2">📤</div>
+                <span class="font-semibold text-slate-200">Pridať súbory</span>
+            </label>
+
+            <div id="compress-file-list" class="hidden">
+                <div class="bg-slate-900/50 rounded-xl p-3 mb-4 max-h-[200px] overflow-y-auto">
+                    <ul id="files-to-zip-ul" class="text-sm text-slate-300 space-y-1"></ul>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <input type="text" id="archive-name" placeholder="nazov-archivu" class="bg-slate-800 border border-slate-600 text-white rounded-lg px-4 py-3 w-full focus:outline-none focus:border-indigo-500">
+                    <button onclick="createZip()" id="btn-create" class="btn-action">
+                        <span>⬇ Stiahnuť ZIP</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="selection-bar" class="selection-bar">
+        <div class="text-sm font-semibold pl-2">
+            <span id="selected-count">0</span> vybraných
+        </div>
+        <button onclick="downloadSelected()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-bold transition flex items-center gap-2">
+            <span>Stiahnuť (ZIP)</span> ⬇
+        </button>
+    </div>
+
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl text-sm opacity-0 transition-opacity pointer-events-none z-50 border border-slate-600 flex items-center gap-2">
+        <span id="toast-msg">Správa</span>
+    </div>
+
+<script>
+    // --- VARIABLES ---
+    let currentZipObject = null;
+    let filesForCompression = [];
+    let selectedFiles = new Set(); // Stores filenames of selected items
+    let allFileNames = [];
+
+    // --- UI TABS ---
+    function switchView(viewName) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + viewName).classList.add('active');
+        document.getElementById('view-extract').classList.add('hidden');
+        document.getElementById('view-compress').classList.add('hidden');
+        document.getElementById('view-' + viewName).classList.remove('hidden');
+        document.getElementById('selection-bar').classList.remove('visible');
+    }
+
+    // --- EXTRACT LOGIC ---
+    document.getElementById('zipInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        document.getElementById('upload-area-extract').classList.add('hidden');
+        document.getElementById('loading-indicator').classList.remove('hidden');
+        
+        // Reset
+        selectedFiles.clear();
+        updateSelectionUI();
+        document.getElementById('files-output').innerHTML = '';
+
+        JSZip.loadAsync(file).then(function(zip) {
+            currentZipObject = zip;
+            renderFileListFast(zip);
+            document.getElementById('loading-indicator').classList.add('hidden');
+            document.getElementById('file-list-container').classList.remove('hidden');
+        }, function () {
+            document.getElementById('loading-indicator').classList.add('hidden');
+            document.getElementById('upload-area-extract').classList.remove('hidden');
+            showToast("❌ Chyba pri načítaní ZIP súboru");
+        });
+    });
+
+    function renderFileListFast(zip) {
+        const container = document.getElementById('files-output');
+        const fragment = document.createDocumentFragment();
+        allFileNames = [];
+        let count = 0;
+
+        zip.forEach(function (relativePath, zipEntry) {
+            if (zipEntry.dir) return; 
+            count++;
+            allFileNames.push(relativePath);
+
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.dataset.filename = relativePath;
+            div.onclick = (e) => toggleFileSelection(relativePath, div, e); // Handle selection
+
+            // Icon detection
+            let icon = '📄';
+            const ext = relativePath.split('.').pop().toLowerCase();
+            if(['jpg','jpeg','png','webp','gif'].includes(ext)) icon = '🖼️';
+            if(['pdf'].includes(ext)) icon = '📕';
+            if(['doc','docx','txt'].includes(ext)) icon = '📝';
+
+            div.innerHTML = `
+                <div class="custom-checkbox"></div>
+                <div class="flex items-center overflow-hidden min-w-0 flex-1">
+                    <span class="mr-3 text-xl">${icon}</span>
+                    <div class="truncate">
+                        <div class="text-sm text-white font-medium truncate">${relativePath}</div>
+                        <div class="text-xs text-slate-500">Kliknite pre výber</div>
+                    </div>
+                </div>
+                <button onclick="downloadSingleFile(event, '${relativePath.replace(/'/g, "\\'")}')" class="ml-2 bg-slate-800 text-indigo-400 p-2 rounded-lg hover:bg-slate-700 transition">
+                    ⬇
+                </button>
+            `;
+            fragment.appendChild(div);
+        });
+
+        container.appendChild(fragment);
+        document.getElementById('file-count-display').innerText = `${count} súborov`;
+    }
+
+    // --- SELECTION LOGIC ---
+
+    function toggleFileSelection(filename, element, event) {
+        // Prevent triggering if clicked on download button
+        if(event && event.target.tagName === 'BUTTON') return;
+
+        if (selectedFiles.has(filename)) {
+            selectedFiles.delete(filename);
+            element.classList.remove('selected');
+        } else {
+            selectedFiles.add(filename);
+            element.classList.add('selected');
+        }
+        updateSelectionUI();
+    }
+
+    function toggleSelectAll() {
+        const master = document.getElementById('list-header');
+        const isSelectingAll = !master.classList.contains('selected');
+        const allRows = document.querySelectorAll('.file-item');
+
+        if (isSelectingAll) {
+            // Select ALL
+            master.classList.add('selected');
+            allFileNames.forEach(name => selectedFiles.add(name));
+            allRows.forEach(row => row.classList.add('selected'));
+        } else {
+            // Deselect ALL
+            master.classList.remove('selected');
+            selectedFiles.clear();
+            allRows.forEach(row => row.classList.remove('selected'));
+        }
+        updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+        const bar = document.getElementById('selection-bar');
+        const countSpan = document.getElementById('selected-count');
+        const master = document.getElementById('list-header');
+        
+        countSpan.innerText = selectedFiles.size;
+
+        // Show/Hide bar
+        if (selectedFiles.size > 0) {
+            bar.classList.add('visible');
+        } else {
+            bar.classList.remove('visible');
+        }
+
+        // Update master checkbox state visually
+        if (selectedFiles.size === allFileNames.length && allFileNames.length > 0) {
+            master.classList.add('selected');
+        } else {
+            master.classList.remove('selected');
+        }
+    }
+
+    // --- DOWNLOAD LOGIC ---
+
+    function downloadSingleFile(event, filename) {
+        event.stopPropagation(); // Don't trigger selection
+        if(!currentZipObject) return;
+        
+        showToast("⏳ Sťahujem súbor...");
+        currentZipObject.file(filename).async("blob").then(function(blob) {
+            saveAs(blob, filename.split('/').pop());
+        });
+    }
+
+    function downloadSelected() {
+        if (selectedFiles.size === 0) return;
+        
+        showToast(`⏳ Balím ${selectedFiles.size} súborov...`);
+        
+        const newZip = new JSZip();
+        let processed = 0;
+
+        // Add selected files to new zip
+        const promises = [];
+        selectedFiles.forEach(filename => {
+            const fileData = currentZipObject.file(filename).async("arraybuffer");
+            promises.push(fileData.then(data => {
+                newZip.file(filename, data);
+            }));
+        });
+
+        // When all files are added, generate and save
+        Promise.all(promises).then(() => {
+            newZip.generateAsync({type:"blob"}).then(function(content) {
+                saveAs(content, "vybrane_subory.zip");
+                showToast("✅ Hotovo! Sťahovanie začalo");
+                // Optional: Clear selection after download
+                // toggleSelectAll(); 
+            });
+        });
+    }
+
+    // --- COMPRESS LOGIC (Original) ---
+    document.getElementById('compressInput').addEventListener('change', function(e) {
+        if(e.target.files.length > 0) {
+            filesForCompression = Array.from(e.target.files);
+            const ul = document.getElementById('files-to-zip-ul');
+            ul.innerHTML = '';
+            filesForCompression.forEach(f => {
+                ul.innerHTML += `<li class="flex items-center gap-2"><span class="text-green-500">✓</span> ${f.name}</li>`;
+            });
+            document.getElementById('compress-file-list').classList.remove('hidden');
+        }
+    });
+
+    function createZip() {
+        if(filesForCompression.length === 0) return;
+        const btn = document.getElementById('btn-create');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `⏳ Pracujem...`;
+        btn.disabled = true;
+
+        const zip = new JSZip();
+        filesForCompression.forEach(file => zip.file(file.name, file));
+
+        let name = document.getElementById('archive-name').value.trim();
+        if(!name) name = "novy-archiv";
+        if(!name.endsWith('.zip')) name += ".zip";
+
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            saveAs(content, name);
+            btn.innerHTML = "✅ Hotovo!";
+            setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
+        });
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-msg').innerText = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+    }
+</script>
+</body>
+</html>
