@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro QR Generátor | OfficeSuite</title>
+    <script src="coi-serviceworker.js"></script> <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #333; margin: 0; padding: 20px; }
+        
+        .main-container {
+            max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 30px;
+        }
+
+        /* Ľavý panel - Ovládanie */
+        .controls { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        /* Pravý panel - Náhľad */
+        .preview-pane { 
+            background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            text-align: center; position: sticky; top: 20px; height: fit-content;
+        }
+
+        h1 { color: #1a202c; margin-top: 0; }
+        h3 { border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 30px; color: #4a5568; }
+
+        /* Taby pre typ dát */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 10px 20px; border: none; background: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; color: #4a5568;
+            transition: 0.2s;
+        }
+        .tab-btn.active { background: #3182ce; color: white; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9em; color: #718096; }
+        input, select, textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-family: inherit;
+            box-sizing: border-box; /* Aby padding nedeformoval šírku */
+        }
+        input:focus { outline: 2px solid #3182ce; border-color: transparent; }
+
+        /* Sekcie obsahu */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        /* Color Pickers */
+        .color-row { display: flex; gap: 20px; margin-bottom: 15px; }
+        input[type="color"] { height: 40px; padding: 2px; cursor: pointer; }
+
+        /* Logo upload */
+        .file-upload { border: 2px dashed #cbd5e0; padding: 20px; text-align: center; border-radius: 6px; cursor: pointer; }
+        .file-upload:hover { border-color: #3182ce; background: #ebf8ff; }
+
+        /* Preview Canvas */
+        #qr-canvas { margin: 20px auto; }
+
+        /* Buttons */
+        .download-btn {
+            display: block; width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 6px;
+            font-weight: bold; cursor: pointer; color: white; transition: 0.2s;
+        }
+        .btn-png { background: #38a169; }
+        .btn-svg { background: #dd6b20; }
+        .btn-png:hover { background: #2f855a; }
+        .btn-svg:hover { background: #c05621; }
+
+        @media (max-width: 800px) {
+            .main-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div class="controls">
+            <h1>Generátor QR Kódov</h1>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('url')">Web (URL)</button>
+                <button class="tab-btn" onclick="switchTab('text')">Text</button>
+                <button class="tab-btn" onclick="switchTab('wifi')">WiFi</button>
+                <button class="tab-btn" onclick="switchTab('vcard')">Vizitka</button>
+                <button class="tab-btn" onclick="switchTab('email')">E-mail</button>
+            </div>
+
+            <div id="form-url" class="content-section active">
+                <div class="input-group">
+                    <label>Adresa webstránky (URL)</label>
+                    <input type="text" id="inp-url" placeholder="https://www.tvojastranka.sk" value="https://google.com">
+                </div>
+            </div>
+
+            <div id="form-text" class="content-section">
+                <div class="input-group">
+                    <label>Ľubovoľný text</label>
+                    <textarea id="inp-text" rows="4" placeholder="Napíš sem čokoľvek..."></textarea>
+                </div>
+            </div>
+
+            <div id="form-wifi" class="content-section">
+                <div class="input-group">
+                    <label>Názov siete (SSID)</label>
+                    <input type="text" id="inp-wifi-ssid" placeholder="Názov tvojej WiFi">
+                </div>
+                <div class="input-group">
+                    <label>Heslo</label>
+                    <input type="text" id="inp-wifi-pass" placeholder="Tajné heslo">
+                </div>
+                <div class="input-group">
+                    <label>Zabezpečenie</label>
+                    <select id="inp-wifi-type">
+                        <option value="WPA">WPA/WPA2</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">Žiadne (Otvorená)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" id="inp-wifi-hidden" style="width:auto;"> Skrytá sieť
+                    </label>
+                </div>
+            </div>
+
+            <div id="form-vcard" class="content-section">
+                <div class="input-group"><label>Meno</label><input type="text" id="vc-name"></div>
+                <div class="input-group"><label>Priezvisko</label><input type="text" id="vc-surname"></div>
+                <div class="input-group"><label>Telefón</label><input type="text" id="vc-phone"></div>
+                <div class="input-group"><label>Email</label><input type="text" id="vc-email"></div>
+                <div class="input-group"><label>Firma</label><input type="text" id="vc-org"></div>
+                <div class="input-group"><label>Web</label><input type="text" id="vc-web"></div>
+            </div>
+
+            <div id="form-email" class="content-section">
+                <div class="input-group"><label>Komu (Email)</label><input type="text" id="em-to"></div>
+                <div class="input-group"><label>Predmet</label><input type="text" id="em-sub"></div>
+                <div class="input-group"><label>Správa</label><textarea id="em-body"></textarea></div>
+            </div>
+
+            <h3>🎨 Dizajn a Logo</h3>
+            
+            <div class="input-group">
+                <label>Tvar bodiek</label>
+                <select id="style-dots">
+                    <option value="square">Štvorce (Klasik)</option>
+                    <option value="dots">Bodky (Moderné)</option>
+                    <option value="rounded">Zaoblené</option>
+                    <option value="extra-rounded">Extra oblé</option>
+                    <option value="classy">Classy</option>
+                    <option value="classy-rounded">Classy Rounded</option>
+                </select>
+            </div>
+
+            <div class="color-row">
+                <div class="input-group" style="flex:1">
+                    <label>Farba kódu</label>
+                    <input type="color" id="col-dots" value="#000000">
+                </div>
+                <div class="input-group" style="flex:1">
+                    <label>Farba pozadia</label>
+                    <input type="color" id="col-bg" value="#ffffff">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Logo v strede (klikni pre výber)</label>
+                <div class="file-upload" onclick="document.getElementById('inp-logo').click()">
+                    📂 Nahrať logo (PNG/JPG)
+                </div>
+                <input type="file" id="inp-logo" accept="image/*" style="display:none">
+                <button onclick="clearLogo()" style="margin-top:5px; padding:5px; background:#e53e3e; color:white; border:none; border-radius:4px; font-size:0.8em; cursor:pointer;">Odstrániť logo</button>
+            </div>
+
+        </div>
+
+        <div class="preview-pane">
+            <h2>Náhľad</h2>
+            <div id="qr-canvas"></div>
+            
+            <p style="font-size:0.8em; color:#718096">
+                💡 Tip: Pred tlačou vždy skontroluj kód mobilom.
+            </p>
+
+            <button class="download-btn btn-png" onclick="downloadQR('png')">Stiahnuť PNG (Web)</button>
+            <button class="download-btn btn-svg" onclick="downloadQR('svg')">Stiahnuť SVG (Tlač)</button>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+    <script>
+        // 1. Inicializácia QR Kódu
+        const qrCode = new QRCodeStyling({
+            width: 300,
+            height: 300,
+            type: "svg", // Pre náhľad
+            data: "https://google.com",
+            image: "",
+            dotsOptions: { color: "#000000", type: "square" },
+            backgroundOptions: { color: "#ffffff" },
+            imageOptions: { crossOrigin: "anonymous", margin: 10 }
+        });
+
+        // Vykreslenie do divu
+        qrCode.append(document.getElementById("qr-canvas"));
+
+        // Globálne premenné
+        let currentType = 'url';
+        let logoUrl = "";
+
+        // 2. Prepínanie tabov
+        function switchTab(type) {
+            currentType = type;
+            
+            // UI Update
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn')[['url','text','wifi','vcard','email'].indexOf(type)].classList.add('active');
+
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`form-${type}`).classList.add('active');
+
+            updateQR();
+        }
+
+        // 3. Generovanie dátového reťazca podľa typu
+        function getDataString() {
+            if (currentType === 'url') return document.getElementById('inp-url').value;
+            if (currentType === 'text') return document.getElementById('inp-text').value;
+            
+            if (currentType === 'wifi') {
+                const ssid = document.getElementById('inp-wifi-ssid').value;
+                const pass = document.getElementById('inp-wifi-pass').value;
+                const type = document.getElementById('inp-wifi-type').value;
+                const hidden = document.getElementById('inp-wifi-hidden').checked;
+                // Formát: WIFI:S:Nazov;T:WPA;P:Heslo;H:false;;
+                return `WIFI:S:${ssid};T:${type};P:${pass};H:${hidden};;`;
+            }
+
+            if (currentType === 'vcard') {
+                const n = document.getElementById('vc-name').value;
+                const sn = document.getElementById('vc-surname').value;
+                const tel = document.getElementById('vc-phone').value;
+                const em = document.getElementById('vc-email').value;
+                const org = document.getElementById('vc-org').value;
+                const web = document.getElementById('vc-web').value;
+                
+                return `BEGIN:VCARD\nVERSION:3.0\nN:${sn};${n}\nFN:${n} ${sn}\nORG:${org}\nTEL:${tel}\nEMAIL:${em}\nURL:${web}\nEND:VCARD`;
+            }
+
+            if (currentType === 'email') {
+                const to = document.getElementById('em-to').value;
+                const sub = document.getElementById('em-sub').value;
+                const body = document.getElementById('em-body').value;
+                return `mailto:${to}?subject=${sub}&body=${body}`;
+            }
+            
+            return "https://google.com";
+        }
+
+        // 4. Update QR kódu
+        function updateQR() {
+            const data = getDataString();
+            const dotsType = document.getElementById('style-dots').value;
+            const dotsColor = document.getElementById('col-dots').value;
+            const bgColor = document.getElementById('col-bg').value;
+
+            qrCode.update({
+                data: data,
+                image: logoUrl,
+                dotsOptions: {
+                    color: dotsColor,
+                    type: dotsType
+                },
+                backgroundOptions: {
+                    color: bgColor,
+                },
+                cornersSquareOptions: {
+                    type: dotsType === 'rounded' || dotsType === 'extra-rounded' ? 'extra-rounded' : 'square',
+                    color: dotsColor
+                },
+                cornersDotOptions: {
+                    type: dotsType === 'rounded' ? 'dot' : 'square',
+                    color: dotsColor
+                }
+            });
+        }
+
+        // 5. Nahranie loga
+        document.getElementById('inp-logo').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    logoUrl = e.target.result;
+                    updateQR();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function clearLogo() {
+            logoUrl = "";
+            document.getElementById('inp-logo').value = "";
+            updateQR();
+        }
+
+        // 6. Sťahovanie
+        function downloadQR(ext) {
+            qrCode.download({ name: "moj-qr-kod", extension: ext });
+        }
+
+        // 7. Event Listeners pre live update
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', updateQR);
+            el.addEventListener('change', updateQR);
+        });
+
+    </script>
+</body>
+</html>

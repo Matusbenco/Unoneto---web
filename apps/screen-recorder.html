@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nahrávač obrazovky | OfficeSuite</title>
+    <script src="coi-serviceworker.js"></script>
+    
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f4f4f9; text-align: center; color: #333; }
+        
+        .recorder-box {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px;
+        }
+
+        video {
+            width: 100%; max-height: 500px; background: #000; border-radius: 8px;
+            margin: 20px 0; display: none;
+        }
+
+        .controls {
+            display: flex; justify-content: center; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 20px;
+        }
+
+        select, button {
+            padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        
+        select { border: 2px solid #e2e8f0; background: #fff; color: #4a5568; }
+        
+        button { border: none; color: white; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        #btn-start { background-color: #3182ce; }
+        #btn-stop { background-color: #e53e3e; display: none; }
+
+        .status { margin-top: 20px; font-weight: 500; color: #718096; min-height: 24px; }
+        .error-log { color: #e53e3e; font-size: 0.9em; margin-top: 10px; display: none; }
+
+        .rec-dot {
+            color: #e53e3e; font-weight: bold; animation: pulse 1.5s infinite; 
+            display: none; margin-bottom: 10px; font-size: 1.2em;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <h1>Nahrávač obrazovky</h1>
+    
+    <div class="recorder-box">
+        <div class="rec-dot" id="recDot">🔴 NAHRÁVANIE BEŽÍ...</div>
+        
+        <video id="preview" autoplay muted playsinline></video>
+
+        <div class="controls">
+            <select id="formatSelect">
+                <option value="original">WebM (Originál - Bezpečné)</option>
+                <option value="mp4" selected>MP4 (Konverzia)</option>
+                <option value="avi">AVI</option>
+                <option value="gif">GIF (Bez zvuku)</option>
+            </select>
+
+            <button id="btn-start">▶ Spustiť nahrávanie</button>
+            <button id="btn-stop">⏹ Ukončiť</button>
+        </div>
+
+        <div class="status" id="statusLog">Pripravené.</div>
+        <div class="error-log" id="errorLog"></div>
+    </div>
+
+<script>
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    let ffmpeg = null;
+
+    const preview = document.getElementById('preview');
+    const btnStart = document.getElementById('btn-start');
+    const btnStop = document.getElementById('btn-stop');
+    const formatSelect = document.getElementById('formatSelect');
+    const statusLog = document.getElementById('statusLog');
+    const errorLog = document.getElementById('errorLog');
+
+    let mediaRecorder;
+    let recordedChunks = [];
+    let supportedMimeType = "";
+
+    // 1. Zistenie najlepšieho formátu pre tento prehliadač
+    function getSupportedMimeType() {
+        const types = [
+            "video/webm;codecs=vp9", 
+            "video/webm;codecs=vp8", 
+            "video/webm", 
+            "video/mp4"
+        ];
+        for (const type of types) {
+            if (MediaRecorder.isTypeSupported(type)) {
+                return type;
+            }
+        }
+        return "";
+    }
+
+    // 2. Načítanie FFmpeg (iba ak treba)
+    async function loadFFmpeg() {
+        if (ffmpeg) return true;
+        statusLog.innerText = "⏳ Načítavam konvertor...";
+        try {
+            ffmpeg = createFFmpeg({ corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js', log: true });
+            await ffmpeg.load();
+            statusLog.innerText = "✅ Konvertor pripravený.";
+            return true;
+        } catch (e) {
+            console.error(e);
+            errorLog.style.display = 'block';
+            errorLog.innerText = "Chyba konvertora: " + e.message;
+            return false;
+        }
+    }
+
+    btnStart.addEventListener('click', async () => {
+        recordedChunks = [];
+        errorLog.style.display = 'none';
+        
+        supportedMimeType = getSupportedMimeType();
+        if (!supportedMimeType) {
+            alert("Tvoj prehliadač nepodporuje nahrávanie.");
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: { cursor: "always" },
+                audio: true // Pokus o zvuk
+            });
+
+            preview.srcObject = stream;
+            preview.style.display = 'block';
+            btnStart.style.display = 'none';
+            btnStop.style.display = 'flex';
+            document.getElementById('recDot').style.display = 'block';
+            formatSelect.disabled = true;
+            statusLog.innerText = "Nahrávam...";
+
+            // Inicializácia nahrávača
+            mediaRecorder = new MediaRecorder(stream, { mimeType: supportedMimeType });
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                    recordedChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.onstop = processRecording;
+
+            // DÔLEŽITÉ: Ukladaj dáta každú sekundu (rieši 0kB problém)
+            mediaRecorder.start(1000); 
+
+        } catch (err) {
+            console.error(err);
+            statusLog.innerText = "❌ Chyba pri štarte.";
+        }
+    });
+
+    btnStop.addEventListener('click', () => {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+            preview.srcObject.getTracks().forEach(track => track.stop());
+        }
+    });
+
+    async function processRecording() {
+        document.getElementById('recDot').style.display = 'none';
+        btnStop.style.display = 'none';
+        statusLog.innerText = "Spracovávam...";
+
+        // Vytvorenie základného BLOBu
+        const originalBlob = new Blob(recordedChunks, { type: supportedMimeType });
+
+        if (originalBlob.size === 0) {
+            statusLog.innerText = "❌ Chyba: Nahralo sa 0 bajtov.";
+            resetUI();
+            return;
+        }
+
+        const format = formatSelect.value;
+
+        // Ak chce originál, sťahujeme hneď
+        if (format === 'original') {
+            downloadBlob(originalBlob, 'nahravka.webm');
+            resetUI();
+            return;
+        }
+
+        // Pokus o konverziu
+        try {
+            const isLoaded = await loadFFmpeg();
+            if (!isLoaded) throw new Error("FFmpeg sa nenačítal");
+
+            statusLog.innerText = `🔄 Konvertujem na ${format.toUpperCase()}...`;
+            
+            ffmpeg.FS('writeFile', 'input.video', await fetchFile(originalBlob));
+
+            // Bezpečnejšie nastavenie pre MP4
+            let args = ['-i', 'input.video', `output.${format}`];
+            if (format === 'mp4') {
+                // Preset ultrafast = menej chýb, rýchlejšie
+                args = ['-i', 'input.video', '-c:v', 'libx264', '-preset', 'ultrafast', `output.mp4`];
+            }
+            if (format === 'gif') {
+                args = ['-i', 'input.video', '-vf', 'fps=10,scale=480:-1', `output.gif`];
+            }
+
+            await ffmpeg.run(...args);
+
+            const data = ffmpeg.FS('readFile', `output.${format}`);
+            
+            // Kontrola či výsledok nie je prázdny (riešenie 0kB pri konverzii)
+            if (data.length === 0) throw new Error("Konverzia vytvorila prázdny súbor.");
+
+            const outputBlob = new Blob([data.buffer], { type: `video/${format}` });
+            downloadBlob(outputBlob, `video.${format}`);
+            statusLog.innerText = "✅ Hotovo!";
+
+            // Cleanup
+            try { ffmpeg.FS('unlink', 'input.video'); ffmpeg.FS('unlink', `output.${format}`); } catch(e){}
+
+        } catch (err) {
+            console.error(err);
+            errorLog.innerText = "Konverzia zlyhala (" + err.message + "). Sťahujem aspoň originál.";
+            errorLog.style.display = 'block';
+            // ZÁCHRANA: Stiahni originál ak konverzia zlyhá
+            downloadBlob(originalBlob, 'zachrana-video.webm');
+        }
+
+        resetUI();
+    }
+
+    function downloadBlob(blob, name) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    }
+
+    function resetUI() {
+        btnStart.style.display = 'flex';
+        preview.style.display = 'none';
+        formatSelect.disabled = false;
+    }
+</script>
+
+</body>
+</html>

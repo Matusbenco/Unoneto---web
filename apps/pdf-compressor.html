@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern PDF Compressor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-preset.active { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-100 to-indigo-50">
+
+    <div class="max-w-4xl w-full bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 overflow-hidden fade-in">
+        
+        <div class="bg-white border-b border-slate-100 p-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">PDF Optimizer <span class="text-indigo-600">Pro</span></h1>
+                <p class="text-sm text-slate-500">Inteligentná kompresia dokumentov</p>
+            </div>
+            <div id="globalStatus" class="hidden px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase tracking-wide">
+                Pripravené
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row h-[600px]">
+            
+            <div class="w-full md:w-5/12 p-6 bg-slate-50 border-r border-slate-100 flex flex-col gap-6 overflow-y-auto">
+                
+                <div id="dropZone" onclick="document.getElementById('fileInput').click()" 
+                     class="group relative border-2 border-dashed border-indigo-200 hover:border-indigo-500 rounded-xl p-8 text-center cursor-pointer transition-all bg-white hover:bg-indigo-50/50">
+                    <input type="file" id="fileInput" class="hidden" multiple accept="application/pdf">
+                    <div class="mb-3 text-indigo-500 group-hover:scale-110 transition-transform text-4xl">
+                        ☁️
+                    </div>
+                    <h3 class="font-semibold text-slate-700">Nahrať PDF</h3>
+                    <p class="text-xs text-slate-400 mt-1">Pretiahnite súbory sem</p>
+                </div>
+
+                <div id="controlsArea" class="hidden flex-col gap-6 fade-in">
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 block">Rýchle nastavenie</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setPreset('low')" class="btn-preset py-2 px-1 text-xs font-medium border border-slate-200 rounded-lg hover:bg-slate-100 transition text-slate-600">
+                                🔥 Extrémna
+                            </button>
+                            <button onclick="setPreset('balanced')" class="btn-preset active py-2 px-1 text-xs font-medium border border-slate-200 rounded-lg hover:bg-slate-100 transition text-slate-600">
+                                ✨ Vyvážená
+                            </button>
+                            <button onclick="setPreset('high')" class="btn-preset py-2 px-1 text-xs font-medium border border-slate-200 rounded-lg hover:bg-slate-100 transition text-slate-600">
+                                💎 Kvalita
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-medium text-slate-700">Sila kompresie</span>
+                            <span id="qualityLabel" class="text-sm font-bold text-indigo-600">75%</span>
+                        </div>
+                        <input type="range" id="qualityRange" min="10" max="100" value="75" step="5" 
+                               class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-sm text-slate-600">Zmenšiť rozlíšenie (DPI)</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="resizeCheck" class="sr-only peer" checked>
+                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="actionBtn" onclick="processFiles()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all transform active:scale-95 flex justify-center items-center gap-2">
+                        <span>⚡ Spustiť kompresiu</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="w-full md:w-7/12 p-6 bg-white flex flex-col">
+                <div class="flex justify-between items-end mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Súbory</h2>
+                    <span id="fileCount" class="text-xs text-slate-400 font-medium">0 súborov</span>
+                </div>
+
+                <div id="emptyState" class="flex-1 flex flex-col items-center justify-center text-slate-300">
+                    <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <p>Zoznam súborov je prázdny</p>
+                </div>
+
+                <div id="fileListContainer" class="hidden flex-1 overflow-y-auto pr-2 space-y-3">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- State Management ---
+    let filesStore = []; // { id, file, status: 'pending'|'processing'|'done', resultBlob: null, saved: 0 }
+    
+    // UI Elements
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const controlsArea = document.getElementById('controlsArea');
+    const fileListContainer = document.getElementById('fileListContainer');
+    const emptyState = document.getElementById('emptyState');
+    const fileCount = document.getElementById('fileCount');
+    const qualityRange = document.getElementById('qualityRange');
+    const qualityLabel = document.getElementById('qualityLabel');
+    const actionBtn = document.getElementById('actionBtn');
+    const resizeCheck = document.getElementById('resizeCheck');
+
+    // --- 1. Drag & Drop Logika ---
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50'); });
+    dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-500', 'bg-indigo-50'); });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+        handleNewFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', (e) => handleNewFiles(e.target.files));
+
+    // --- 2. Spracovanie vstupov ---
+    function handleNewFiles(fileList) {
+        if (fileList.length === 0) return;
+
+        // Pridanie nových súborov do existujúceho store
+        Array.from(fileList).forEach(file => {
+            filesStore.push({
+                id: Math.random().toString(36).substr(2, 9),
+                file: file,
+                status: 'pending',
+                resultBlob: null,
+                savedPct: 0
+            });
+        });
+
+        updateUI();
+        
+        // Ak je to prvé nahratie, aktivujeme UI
+        if (filesStore.length > 0) {
+            controlsArea.classList.remove('hidden');
+            controlsArea.classList.add('flex');
+            emptyState.classList.add('hidden');
+            fileListContainer.classList.remove('hidden');
+            
+            // Smart auto-detect (iba pri prvom nahratí)
+            smartAutoDetect();
+        }
+    }
+
+    // --- 3. Presets & Controls ---
+    function setPreset(type) {
+        // Reset buttons visual
+        document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+        
+        if (type === 'low') {
+            qualityRange.value = 40;
+            resizeCheck.checked = true;
+            event.target.classList.add('active');
+        } else if (type === 'balanced') {
+            qualityRange.value = 75;
+            resizeCheck.checked = true;
+            event.target.classList.add('active');
+        } else if (type === 'high') {
+            qualityRange.value = 90;
+            resizeCheck.checked = false;
+            event.target.classList.add('active');
+        }
+        updateQualityLabel();
+        markAsNeedsUpdate();
+    }
+
+    qualityRange.addEventListener('input', () => {
+        updateQualityLabel();
+        markAsNeedsUpdate();
+        // Zrušenie active class z presetov, keďže užívateľ mení manuálne
+        document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+    });
+    
+    resizeCheck.addEventListener('change', markAsNeedsUpdate);
+
+    function updateQualityLabel() {
+        qualityLabel.innerText = qualityRange.value + "%";
+    }
+
+    function smartAutoDetect() {
+        // Jednoduchá logika: Ak je priemer > 5MB, daj agresívnejšiu kompresiu
+        let totalSize = filesStore.reduce((acc, item) => acc + item.file.size, 0);
+        let avgSize = totalSize / filesStore.length;
+        
+        if (avgSize > 5 * 1024 * 1024) {
+            setPreset('low'); // Simulujeme klik na low
+            // Ale vizuálne nastavíme správne tlačidlo
+            document.querySelectorAll('.btn-preset')[0].click();
+        }
+    }
+
+    // Ak užívateľ zmení nastavenia po kompresii, zmeníme tlačidlo na "Prepočítať"
+    function markAsNeedsUpdate() {
+        const hasProcessed = filesStore.some(f => f.status === 'done');
+        if (hasProcessed) {
+            actionBtn.innerHTML = "<span>🔄 Prepočítať zmeny</span>";
+            actionBtn.classList.remove('bg-indigo-600');
+            actionBtn.classList.add('bg-slate-700');
+        }
+    }
+
+    // --- 4. Renderovanie zoznamu (The View) ---
+    function updateUI() {
+        fileCount.innerText = `${filesStore.length} súborov`;
+        fileListContainer.innerHTML = '';
+
+        filesStore.forEach(item => {
+            const sizeMB = (item.file.size / (1024 * 1024)).toFixed(2);
+            let statusHtml = '';
+            let actionHtml = '';
+
+            // Rozhodovanie o vzhľade podľa statusu
+            if (item.status === 'pending') {
+                statusHtml = `<span class="text-xs text-slate-400 font-medium">Čaká na štart</span>`;
+            } else if (item.status === 'processing') {
+                statusHtml = `<span class="text-xs text-indigo-500 font-bold animate-pulse">Spracovávam...</span>`;
+            } else if (item.status === 'done') {
+                statusHtml = `<span class="text-xs text-green-600 font-bold">Hotovo (-${item.savedPct}%)</span>`;
+                // Vytvoríme dummy download link
+                actionHtml = `
+                    <a href="${URL.createObjectURL(item.file)}" download="compressed_${item.file.name}" 
+                       class="ml-3 px-3 py-1.5 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-100 transition flex items-center gap-1">
+                       ⬇ Stiahnuť
+                    </a>
+                `;
+            }
+
+            const div = document.createElement('div');
+            div.className = "bg-white border border-slate-100 p-3 rounded-xl shadow-sm flex items-center justify-between hover:shadow-md transition-shadow";
+            div.innerHTML = `
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-500 text-xl flex-shrink-0">
+                        📄
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-slate-700 truncate">${item.file.name}</p>
+                        <p class="text-xs text-slate-400">${sizeMB} MB</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    ${statusHtml}
+                    ${actionHtml}
+                    <button onclick="removeFile('${item.id}')" class="text-slate-300 hover:text-red-400 p-1">✕</button>
+                </div>
+            `;
+            fileListContainer.appendChild(div);
+        });
+    }
+
+    function removeFile(id) {
+        filesStore = filesStore.filter(f => f.id !== id);
+        if (filesStore.length === 0) {
+            controlsArea.classList.add('hidden');
+            controlsArea.classList.remove('flex');
+            emptyState.classList.remove('hidden');
+            fileListContainer.classList.add('hidden');
+        }
+        updateUI();
+    }
+
+    // --- 5. Logika Kompresie (Regenerácia) ---
+    async function processFiles() {
+        // UI Stav: Pracujem
+        actionBtn.disabled = true;
+        actionBtn.innerHTML = "<span>⏳ Optimalizujem...</span>";
+        
+        // Nastavíme status všetkých na processing
+        filesStore.forEach(f => f.status = 'processing');
+        updateUI();
+
+        // Simulácia nastavení
+        const quality = parseInt(qualityRange.value);
+        const shouldResize = resizeCheck.checked;
+
+        // Simulácia oneskorenia (Backend API call)
+        // V reálnom nasadení tu pošleš originalFile na server
+        await new Promise(r => setTimeout(r, 1500));
+
+        // Update výsledkov
+        filesStore.forEach(f => {
+            f.status = 'done';
+            
+            // Fiktívny výpočet ušetreného miesta podľa nastavení
+            // Čím menšia kvalita (slider), tým viac ušetrené
+            let mockSavings = (100 - quality) + (shouldResize ? 15 : 0);
+            if(mockSavings > 95) mockSavings = 95;
+            if(mockSavings < 5) mockSavings = 5;
+            
+            f.savedPct = mockSavings;
+            // Tu by sme v reále priradili blob z API: f.resultBlob = apiResponseBlob;
+        });
+
+        updateUI();
+
+        // Reset tlačidla
+        actionBtn.disabled = false;
+        actionBtn.innerHTML = "<span>⚡ Spustiť kompresiu</span>";
+        actionBtn.classList.remove('bg-slate-700');
+        actionBtn.classList.add('bg-indigo-600');
+    }
+
+</script>
+</body>
+</html>
