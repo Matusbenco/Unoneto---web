@@ -3,47 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nahrávač obrazovky | Mobile Fix</title>
+    <title>Nahrávač obrazovky | Pro Verzia</title>
+    
     <script src="coi-serviceworker.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 
     <style>
         body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f4f4f9; text-align: center; color: #333; }
-        .recorder-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px; }
-        video { width: 100%; max-height: 500px; background: #000; border-radius: 8px; margin: 20px 0; display: none; }
-        .controls { display: flex; justify-content: center; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 20px; }
-        select, button { padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        .recorder-box {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px;
+        }
+
+        video {
+            width: 100%; max-height: 500px; background: #000; border-radius: 8px;
+            margin: 20px 0; display: none;
+        }
+
+        .controls {
+            display: flex; justify-content: center; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 20px;
+        }
+
+        select, button {
+            padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        
         select { border: 2px solid #e2e8f0; background: #fff; color: #4a5568; }
+        
         button { border: none; color: white; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
         #btn-start { background-color: #3182ce; }
+        #btn-start:disabled { background-color: #cbd5e0; cursor: not-allowed; }
         #btn-stop { background-color: #e53e3e; display: none; }
+
         .status { margin-top: 20px; font-weight: 500; color: #718096; min-height: 24px; }
-        .error-log { color: #e53e3e; font-size: 0.9em; margin-top: 10px; display: none; }
-        .rec-dot { color: #e53e3e; font-weight: bold; animation: pulse 1.5s infinite; display: none; margin-bottom: 10px; font-size: 1.2em; }
-        .mobile-warning { background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none; border: 1px solid #ffeeba; }
+        .error-log { color: #e53e3e; font-size: 0.9em; margin-top: 10px; display: none; white-space: pre-wrap; }
+
+        .rec-dot {
+            color: #e53e3e; font-weight: bold; animation: pulse 1.5s infinite; 
+            display: none; margin-bottom: 10px; font-size: 1.2em;
+        }
+
+        /* Varovania pre mobil */
+        .mobile-alert {
+            background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; 
+            margin-bottom: 20px; border: 1px solid #ffeeba; display: none; text-align: left; font-size: 0.9em;
+        }
+
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <h1>Nahrávač obrazovky</h1>
-    
-    <div id="iosWarning" class="mobile-warning">
-        ⚠️ <b>Pozor:</b> Na zariadeniach iPhone/iPad Apple blokuje nahrávanie obrazovky cez web.
+
+   
+    <div id="iosAlert" class="mobile-alert">
+        🍎 <b>iOS (iPhone/iPad):</b> Apple blokuje nahrávanie obrazovky cez webové prehliadače. Prosím, použite vstavané nahrávanie v Ovládacom centre iOS.
     </div>
 
-    <div id="androidNote" class="mobile-warning">
-        📱 <b>Režim Android:</b> Konverzia na MP4 je vypnutá kvôli výkonu. Video sa stiahne v originálnom formáte.
+    <div id="androidAlert" class="mobile-alert" style="background: #d4edda; color: #155724; border-color: #c3e6cb;">
+        📱 <b>Režim Android:</b> Bola aktivovaná odľahčená verzia. Konverzia videa je vypnutá pre stabilitu systému. Video sa uloží v originálnom formáte.
     </div>
     
     <div class="recorder-box">
         <div class="rec-dot" id="recDot">🔴 NAHRÁVANIE BEŽÍ...</div>
+        
         <video id="preview" autoplay muted playsinline></video>
 
         <div class="controls">
             <select id="formatSelect">
-                <option value="original">WebM (Originál - Bezpečné)</option>
-                <option value="mp4" selected>MP4 (Konverzia)</option>
+                <option value="original">WebM (Originál - Rýchle)</option>
+                <option value="mp4" selected>MP4 (Pomalšie - Konverzia)</option>
                 <option value="avi">AVI</option>
                 <option value="gif">GIF (Bez zvuku)</option>
             </select>
@@ -66,51 +97,60 @@
     const formatSelect = document.getElementById('formatSelect');
     const statusLog = document.getElementById('statusLog');
     const errorLog = document.getElementById('errorLog');
-    const iosWarning = document.getElementById('iosWarning');
-    const androidNote = document.getElementById('androidNote');
+
+    // Detekcia zariadenia
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    const isMobile = isIOS || isAndroid;
+
+    // Kontrola HTTPS
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+        document.getElementById('httpsAlert').style.display = 'block';
+    }
+
+    // Nastavenie UI podľa zariadenia
+    if (isIOS) {
+        document.getElementById('iosAlert').style.display = 'block';
+        btnStart.disabled = true;
+        statusLog.innerText = "Nepodporované na iOS.";
+    } 
+    else if (isMobile) {
+        document.getElementById('androidAlert').style.display = 'block';
+        // Na mobile zakážeme náročné formáty
+        const options = formatSelect.options;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value !== 'original') {
+                options[i].disabled = true;
+                options[i].text += " (Iba PC)";
+            }
+        }
+        formatSelect.value = 'original'; // Vynútime originál
+        statusLog.innerText = "Pripravené (Mobilný režim).";
+    }
 
     let mediaRecorder;
     let recordedChunks = [];
     let supportedMimeType = "";
 
-    // DETEKCIA MOBILU
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isAndroid = /Android/.test(navigator.userAgent);
-    const isMobile = isIOS || isAndroid;
-
-    // Úprava UI pre mobil
-    if (isIOS) {
-        iosWarning.style.display = 'block';
-        btnStart.disabled = true; // Na iOS to nemá zmysel ani skúšať
-        btnStart.style.backgroundColor = '#cbd5e0';
-        statusLog.innerText = "❌ iOS nepodporuje nahrávanie obrazovky cez web.";
-    } else if (isAndroid) {
-        androidNote.style.display = 'block';
-        // Na Androide zakážeme konverziu (MP4/GIF), lebo to zhodí prehliadač
-        formatSelect.value = "original";
-        formatSelect.disabled = true;
-        statusLog.innerText = "📱 Android detegovaný: Konverzia vypnutá.";
-    }
-
+    // 1. Zistenie najlepšieho formátu
     function getSupportedMimeType() {
         const types = [
             "video/webm;codecs=vp9", 
             "video/webm;codecs=vp8", 
             "video/webm", 
-            "video/mp4" // Niektoré Androidy podporujú priamo MP4 nahrávanie
+            "video/mp4" // Niektoré Androidy podporujú priamo MP4
         ];
         for (const type of types) {
-            if (MediaRecorder.isTypeSupported(type)) {
-                return type;
-            }
+            if (MediaRecorder.isTypeSupported(type)) return type;
         }
         return "";
     }
 
+    // 2. Načítanie FFmpeg (IBA PRE PC)
     async function loadFFmpeg() {
-        if (isMobile) return false; // Na mobile FFmpeg nespúšťame
+        if (isMobile) return false; // Na mobile FFmpeg nikdy nespúšťame
+
         if (ffmpeg) return true;
-        
         statusLog.innerText = "⏳ Načítavam konvertor...";
         try {
             ffmpeg = createFFmpeg({ corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js', log: true });
@@ -120,38 +160,50 @@
         } catch (e) {
             console.error(e);
             errorLog.style.display = 'block';
-            errorLog.innerText = "Chyba konvertora. Budeš sťahovať len originál.";
+            errorLog.innerText = "Chyba konvertora: " + e.message;
             return false;
         }
     }
 
     btnStart.addEventListener('click', async () => {
-        if(isIOS) return;
-
         recordedChunks = [];
         errorLog.style.display = 'none';
         
         supportedMimeType = getSupportedMimeType();
         if (!supportedMimeType) {
-            alert("Tvoj prehliadač nepodporuje nahrávanie.");
+            alert("Tvoj prehliadač nepodporuje žiadny známy formát nahrávania.");
             return;
         }
 
         try {
-            // Na mobile parameter { cursor: "always" } môže robiť problémy, odstránime ho
-            const displayMediaOptions = {
-                video: true,
-                audio: true
+            statusLog.innerText = "Vyžiadavam povolenie...";
+            
+            // Konfigurácia streamu - pre mobil opatrnejšie
+            const constraints = {
+                video: isMobile ? true : { cursor: "always" }, 
+                audio: true 
             };
 
-            const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+            let stream;
+            try {
+                stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+            } catch (err) {
+                // Ak zlyhá audio (časté na mobile), skúsime to bez neho
+                console.warn("Prvý pokus zlyhal, skúšam bez audia...", err);
+                if (isMobile) {
+                    stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+                } else {
+                    throw err; // Na PC to necháme padnúť a vypíšeme chybu
+                }
+            }
 
             preview.srcObject = stream;
             preview.style.display = 'block';
             btnStart.style.display = 'none';
             btnStop.style.display = 'flex';
             document.getElementById('recDot').style.display = 'block';
-            formatSelect.disabled = true;
+            
+            if(!isMobile) formatSelect.disabled = true;
             statusLog.innerText = "Nahrávam...";
 
             mediaRecorder = new MediaRecorder(stream, { mimeType: supportedMimeType });
@@ -163,11 +215,15 @@
             };
 
             mediaRecorder.onstop = processRecording;
+
+            // Ukladanie po 1s blokoch pre bezpečnosť
             mediaRecorder.start(1000); 
 
         } catch (err) {
             console.error(err);
-            statusLog.innerText = "❌ Nahrávanie zrušené alebo nepodporované.";
+            statusLog.innerText = "❌ Chyba pri štarte.";
+            errorLog.style.display = 'block';
+            errorLog.innerText = "Nepodarilo sa spustiť nahrávanie.\nDetail: " + err.message + "\n\nTip: Na mobile skús iný prehliadač (Chrome/Firefox).";
         }
     });
 
@@ -196,20 +252,21 @@
         const format = formatSelect.value;
 
         // Ak je to mobil alebo používateľ chce originál -> sťahujeme hneď
+        // Týmto sa vyhneme pádu na mobile
         if (format === 'original' || isMobile) {
-            // Pridáme príponu podľa MIME typu
             let ext = 'webm';
             if (supportedMimeType.includes('mp4')) ext = 'mp4';
             
             downloadBlob(originalBlob, `nahravka.${ext}`);
+            statusLog.innerText = "✅ Uložené (Originál)";
             resetUI();
             return;
         }
 
-        // ... ZVYŠOK KÓDU PRE KONVERZIU NA DESKTOPE OSTÁVA ROVNAKÝ ...
+        // --- SEKCIA KONVERZIE (IBA PC) ---
         try {
             const isLoaded = await loadFFmpeg();
-            if (!isLoaded) throw new Error("FFmpeg sa nenačítal");
+            if (!isLoaded) throw new Error("FFmpeg modul nie je dostupný");
 
             statusLog.innerText = `🔄 Konvertujem na ${format.toUpperCase()}...`;
             
@@ -226,7 +283,7 @@
             await ffmpeg.run(...args);
 
             const data = ffmpeg.FS('readFile', `output.${format}`);
-            if (data.length === 0) throw new Error("Chyba konverzie");
+            if (data.length === 0) throw new Error("Konverzia zlyhala (prázdny súbor)");
 
             const outputBlob = new Blob([data.buffer], { type: `video/${format}` });
             downloadBlob(outputBlob, `video.${format}`);
@@ -236,8 +293,9 @@
 
         } catch (err) {
             console.error(err);
-            errorLog.innerText = "Konverzia zlyhala. Sťahujem originál.";
+            errorLog.innerText = "Chyba konverzie (" + err.message + "). Sťahujem originál.";
             errorLog.style.display = 'block';
+            // Záchrana - stiahni aspoň originál
             downloadBlob(originalBlob, 'zachrana-video.webm');
         }
 
@@ -258,11 +316,14 @@
         btnStart.style.display = 'flex';
         preview.style.display = 'none';
         
-        // Ak je mobil, nechaj select zablokovaný
-        if (!isMobile) {
-            formatSelect.disabled = false;
-        }
-        statusLog.innerText = isMobile ? "Pripravené (Režim Mobil)" : "Pripravené.";
+        if (!isMobile) formatSelect.disabled = false;
+        
+        // Vrátime status na Pripravené po chvíľke
+        setTimeout(() => {
+            if(statusLog.innerText.includes("Hotovo") || statusLog.innerText.includes("Uložené")) {
+                statusLog.innerText = isMobile ? "Pripravené (Mobil)" : "Pripravené.";
+            }
+        }, 3000);
     }
 </script>
 
