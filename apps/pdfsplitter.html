@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF SPLITTER | Office Tools</title>
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ec4899; /* Ružová pre "strihanie" */
+            --primary-hover: #db2777;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- 1. OCHRANA (Zdieľaná) --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP LAYOUT --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+
+        /* DROP ZONE */
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #fdf2f8; transform: scale(1.01); }
+        .drop-icon { font-size: 3.5rem; color: #cbd5e1; }
+        
+        /* EDITOR SECTION */
+        .editor-section {
+            background: white; border-radius: 16px; padding: 30px; margin-top: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;
+            display: none; /* Skryté kým nie je súbor */
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .file-info {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+            padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;
+        }
+        .page-badge {
+            background: #eff6ff; color: #2563eb; padding: 5px 12px; 
+            border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+        }
+
+        .split-input-group { margin-bottom: 25px; }
+        .split-label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--secondary); }
+        .split-desc { font-size: 0.85rem; color: #64748b; margin-bottom: 10px; }
+        
+        .main-input {
+            width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 1.1rem; font-family: monospace; transition: 0.2s;
+        }
+        .main-input:focus { border-color: var(--primary); outline: none; }
+
+        .action-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            font-size: 1rem; font-weight: 700; border-radius: 10px; cursor: pointer;
+            width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <h2 style="color: var(--secondary);">Vytváram nové PDF...</h2>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">✂️</div>
+            <div>PDF <span>SPLITTER</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Rozdeliť / Vytiahnuť strany</h1>
+            <p style="color: #64748b; font-size: 1rem;">
+                Ideálne, ak potrebujete poslať len jednu stranu na podpis.
+            </p>
+        </div>
+
+        <div class="drop-area" id="dropArea">
+            <div class="drop-icon">📄</div>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #334155;">Nahrajte PDF súbor</div>
+            <div style="color: #94a3b8; font-size: 0.9rem;">(Kliknite alebo presuňte)</div>
+            <input type="file" id="fileInput" accept=".pdf" style="display:none">
+        </div>
+
+        <div class="editor-section" id="editorSection">
+            <div class="file-info">
+                <div style="font-size: 2rem;">📑</div>
+                <div>
+                    <div id="fileName" style="font-weight: 700; color: var(--secondary);">Dokument.pdf</div>
+                    <div class="page-badge" id="pageCount">Načítavam...</div>
+                </div>
+            </div>
+
+            <div class="split-input-group">
+                <label class="split-label">Ktoré strany chcete vytiahnuť?</label>
+                <div class="split-desc">
+                    Zadajte čísla strán oddelené čiarkou alebo rozsah pomlčkou.<br>
+                    <i>Príklady: <b>1</b> (len prvá), <b>1-5</b> (prvých päť), <b>10</b> (len desiata), <b>1-9, 11</b> (všetko okrem desiatej)</i>
+                </div>
+                <input type="text" id="pagesInput" class="main-input" placeholder="napr. 1-3, 5">
+            </div>
+
+            <button class="action-btn" onclick="splitPdf()">
+                <span>✂️ Vytvoriť a Stiahnuť PDF</span>
+            </button>
+        </div>
+
+    </div>
+
+<script>
+  
+
+    // --- 2. LOGIKA SPLITTERA ---
+    let currentPdfBytes = null;
+    let totalPages = 0;
+    let originalName = "";
+
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const editorSection = document.getElementById('editorSection');
+    const loading = document.getElementById('processingOverlay');
+
+    // Drag & Drop
+    dropArea.addEventListener('click', () => fileInput.click());
+    dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', (e) => { e.preventDefault(); dropArea.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+    async function handleFile(file) {
+        if (!file || file.type !== 'application/pdf') { alert("Prosím, nahrajte PDF."); return; }
+        
+        originalName = file.name.replace('.pdf', '');
+        document.getElementById('fileName').innerText = file.name;
+        
+        // Načítanie PDF
+        const arrayBuffer = await file.arrayBuffer();
+        currentPdfBytes = arrayBuffer;
+        
+        // Zistenie počtu strán
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        totalPages = pdfDoc.getPageCount();
+        
+        document.getElementById('pageCount').innerText = `Celkom strán: ${totalPages}`;
+        editorSection.style.display = 'block';
+        
+        // Predvyplniť: "Vytiahni poslednú stranu" (Smart tip)
+        document.getElementById('pagesInput').value = totalPages; 
+        document.getElementById('pagesInput').focus();
+    }
+
+    async function splitPdf() {
+        const input = document.getElementById('pagesInput').value.trim();
+        if (!input) { alert("Zadajte čísla strán."); return; }
+
+        loading.style.display = 'flex';
+
+        try {
+            const { PDFDocument } = PDFLib;
+            const srcDoc = await PDFDocument.load(currentPdfBytes);
+            const newDoc = await PDFDocument.create();
+
+            // Parsovanie vstupu (napr. "1-3, 5")
+            const pagesToKeep = parsePageRange(input, totalPages);
+            
+            if (pagesToKeep.length === 0) {
+                throw new Error("Žiadne platné strany na výber.");
+            }
+
+            // Kopírovanie strán (pdf-lib používa 0-index, my máme 1-index)
+            const indices = pagesToKeep.map(p => p - 1); 
+            const copiedPages = await newDoc.copyPages(srcDoc, indices);
+            copiedPages.forEach(p => newDoc.addPage(p));
+
+            const pdfBytes = await newDoc.save();
+            download(pdfBytes, `${originalName}_vyber.pdf`, "application/pdf");
+
+        } catch (e) {
+            console.error(e);
+            alert("Chyba: Skontrolujte či ste zadali správne čísla strán (nepresahujú rozsah).");
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    // Pomocná funkcia na rozlúštenie "1-3, 5"
+    function parsePageRange(str, max) {
+        const result = new Set();
+        const parts = str.split(',');
+
+        parts.forEach(part => {
+            const p = part.trim();
+            if (p.includes('-')) {
+                const [start, end] = p.split('-').map(Number);
+                if (!isNaN(start) && !isNaN(end)) {
+                    for (let i = start; i <= end; i++) result.add(i);
+                }
+            } else {
+                const num = Number(p);
+                if (!isNaN(num)) result.add(num);
+            }
+        });
+
+        // Zoradiť a filtrovať len platné strany
+        return Array.from(result)
+            .filter(p => p >= 1 && p <= max)
+            .sort((a, b) => a - b);
+    }
+</script>
+</body>
+</html>

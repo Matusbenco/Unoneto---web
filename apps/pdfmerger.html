@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF MERGER | Office Tools</title>
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #f59e0b; /* Oranžová pre PDF nástroje */
+            --primary-hover: #d97706;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- 1. LOCK SCREEN (Kopirujeme z minula) --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+        
+        /* --- APP LAYOUT --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+
+        /* DROP ZONE */
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 50px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #fffbeb; transform: scale(1.01); }
+        .drop-icon { font-size: 4rem; color: #cbd5e1; }
+        .drop-text { font-size: 1.2rem; font-weight: 600; color: var(--text-main); }
+        .drop-sub { color: #94a3b8; font-size: 0.9rem; }
+
+        /* FILE LIST */
+        .file-list { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; }
+        .file-item {
+            background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0;
+            display: flex; align-items: center; justify-content: space-between; gap: 15px;
+            animation: slideIn 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .f-icon { font-size: 1.5rem; color: #ef4444; } /* Červená pre PDF ikonu */
+        .f-info { flex: 1; overflow: hidden; }
+        .f-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .f-size { font-size: 0.75rem; color: #94a3b8; }
+
+        .f-actions { display: flex; gap: 5px; }
+        .act-btn {
+            background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 6px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: #64748b; transition: 0.2s;
+        }
+        .act-btn:hover { background: #e2e8f0; color: var(--secondary); }
+        .btn-del:hover { background: #fee2e2; color: #ef4444; }
+
+        /* MERGE BUTTON */
+        .merge-section { margin-top: 30px; text-align: center; display: none; /* Skryté kým nie sú súbory */ }
+        .btn-merge {
+            background: var(--primary); color: white; border: none; padding: 15px 40px;
+            font-size: 1.1rem; font-weight: 700; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4); transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-merge:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(245, 158, 11, 0.5); background: var(--primary-hover); }
+        .btn-merge:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        /* SIDEBAR (Zjednodušený pre nástroje) */
+        #sidebar-container {
+            position: fixed; top: 0; left: -260px; width: 250px; height: 100vh;
+            background: #1e293b; color: white; padding: 20px; transition: left 0.3s; z-index: 1000;
+        }
+        .sb-toggle { position: fixed; top: 20px; left: 20px; font-size: 1.5rem; cursor: pointer; color: #94a3b8; z-index: 900; }
+        .sb-toggle:hover { color: var(--primary); }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+   
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <h2 style="color: var(--secondary);">Spájam PDF súbory...</h2>
+        <p style="color: #64748b;">Prosím čakajte, spracovávam to u vás v prehliadači.</p>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">📄</div>
+            <div>PDF <span>MERGER</span></div>
+        </div>
+        <a href="#" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Spojiť PDF súbory</h1>
+            <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Nahrajte viacero dokumentov a spojte ich do jedného. <br>
+                <span style="color: var(--success); font-weight: 600; font-size: 0.9rem;">🔒 100% Bezpečné - súbory neopúšťajú váš počítač.</span>
+            </p>
+        </div>
+
+        <div class="drop-area" id="dropArea">
+            <div class="drop-icon">📂</div>
+            <div class="drop-text">Sem presuňte PDF súbory</div>
+            <div class="drop-sub">alebo kliknite pre výber</div>
+            <input type="file" id="fileInput" multiple accept=".pdf" style="display:none">
+        </div>
+
+        <div class="file-list" id="fileList"></div>
+
+        <div class="merge-section" id="mergeSection">
+            <button class="btn-merge" onclick="mergePdfs()">
+                <span>Spojiť PDF a Stiahnuť</span>
+                <span>⬇</span>
+            </button>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; color: #cbd5e1; font-size: 0.8rem;">
+            Office Tools Bundle • Vytvoril Matúš Benčo
+        </div>
+
+    </div>
+
+<script>
+   
+
+
+    // --- 2. PDF LOGIKA ---
+    let filesArray = []; // Tu držíme načítané súbory
+
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const mergeSection = document.getElementById('mergeSection');
+    const loading = document.getElementById('processingOverlay');
+
+    // Drag & Drop Events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+    });
+
+    dropArea.addEventListener('drop', handleDrop, false);
+    dropArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        handleFiles(dt.files);
+    }
+
+    function handleFiles(files) {
+        // Pridáme len PDFká
+        const newFiles = Array.from(files).filter(f => f.type === 'application/pdf');
+        
+        if(newFiles.length === 0) {
+            alert("Prosím, nahrávajte len PDF súbory.");
+            return;
+        }
+
+        // Pridáme do poľa
+        filesArray = [...filesArray, ...newFiles];
+        renderFiles();
+    }
+
+    function renderFiles() {
+        fileList.innerHTML = '';
+        if(filesArray.length > 0) {
+            mergeSection.style.display = 'block';
+        } else {
+            mergeSection.style.display = 'none';
+        }
+
+        filesArray.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `
+                <div style="display:flex; align-items:center; gap:15px; overflow:hidden;">
+                    <div class="f-icon">📄</div>
+                    <div class="f-info">
+                        <span class="f-name">${file.name}</span>
+                        <span class="f-size">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
+                </div>
+                <div class="f-actions">
+                    <button class="act-btn" onclick="moveFile(${index}, -1)" title="Hore">▲</button>
+                    <button class="act-btn" onclick="moveFile(${index}, 1)" title="Dole">▼</button>
+                    <button class="act-btn btn-del" onclick="removeFile(${index})" title="Odstrániť">✖</button>
+                </div>
+            `;
+            fileList.appendChild(div);
+        });
+    }
+
+    // Funkcie na manipuláciu so zoznamom
+    window.removeFile = (index) => {
+        filesArray.splice(index, 1);
+        renderFiles();
+    };
+
+    window.moveFile = (index, direction) => {
+        const newIndex = index + direction;
+        if (newIndex >= 0 && newIndex < filesArray.length) {
+            [filesArray[index], filesArray[newIndex]] = [filesArray[newIndex], filesArray[index]];
+            renderFiles();
+        }
+    };
+
+    // --- 3. MERGE FUNKCIA (pdf-lib) ---
+    async function mergePdfs() {
+        if(filesArray.length < 2) {
+            alert("Na spojenie potrebujete aspoň 2 súbory.");
+            return;
+        }
+
+        loading.style.display = 'flex'; // Ukázať spinner
+
+        try {
+            const { PDFDocument } = PDFLib;
+            const mergedPdf = await PDFDocument.create();
+
+            for (const file of filesArray) {
+                // 1. Načítať súbor ako ArrayBuffer
+                const arrayBuffer = await file.arrayBuffer();
+                // 2. Načítať do pdf-lib
+                const pdf = await PDFDocument.load(arrayBuffer);
+                // 3. Skopírovať všetky strany
+                const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                // 4. Vložiť do nového dokumentu
+                copiedPages.forEach((page) => mergedPdf.addPage(page));
+            }
+
+            // Uložiť
+            const pdfBytes = await mergedPdf.save();
+            
+            // Stiahnuť
+            download(pdfBytes, "spojene-dokumenty.pdf", "application/pdf");
+
+        } catch (err) {
+            console.error(err);
+            alert("Chyba pri spájaní PDF. Skontrolujte, či súbory nie sú poškodené alebo zaheslované.");
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+</script>
+</body>
+</html>

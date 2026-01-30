@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAGE CONVERTER PRO | Office Tools</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- OCHRANA --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP UI --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #f5f3ff; transform: scale(1.01); }
+        .drop-icon { font-size: 3.5rem; color: #cbd5e1; }
+        
+        .settings-card {
+            background: white; border-radius: 16px; padding: 30px; margin-top: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;
+            display: none; animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid-options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        @media(max-width:600px) { .grid-options { grid-template-columns: 1fr; } }
+
+        .option-group { display: flex; flex-direction: column; gap: 8px; }
+        .opt-label { font-weight: 700; font-size: 0.9rem; color: #475569; }
+        
+        .main-select {
+            padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 1rem; background: white; cursor: pointer;
+        }
+        .main-select:focus { outline: none; border-color: var(--primary); }
+
+        .file-list-preview {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px;
+        }
+        .preview-item {
+            position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;
+            background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+        }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; }
+        .fmt-badge {
+            position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.6); color: white;
+            font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase;
+        }
+        .heic-badge { background: #2563eb; }
+        
+        .remove-badge {
+            position: absolute; top: 4px; right: 4px; background: rgba(239, 68, 68, 0.9); color: white;
+            width: 20px; height: 20px; border-radius: 50%; font-size: 12px; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        .action-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            font-size: 1rem; font-weight: 700; border-radius: 10px; cursor: pointer;
+            width: 100%; margin-top: 25px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .progress-text { font-weight: 600; color: var(--primary); font-size: 1.1rem; }
+
+        optgroup { font-weight: bold; color: #64748b; }
+
+    </style>
+</head>
+<body>
+
+    
+
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <div class="progress-text" id="progressText">Spracovávam...</div>
+        <div style="margin-top:5px; font-size:0.9rem; color:#64748b;">(TIFF a HEIC môžu chvíľu trvať)</div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🔄</div>
+            <div>IMAGE <span>CONVERTER</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Univerzálny konvertor obrázkov</h1>
+            <p style="color: #64748b; font-size: 1rem;">
+                Rozšírená podpora pre <b>HEIC, TIFF, BMP, GIF, ICO</b> a bežné formáty.
+            </p>
+        </div>
+
+        <div class="drop-area" id="dropArea">
+            <div class="drop-icon">📂</div>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #334155;">Nahrajte obrázky</div>
+            <div style="color: #94a3b8; font-size: 0.9rem;">(JPG, PNG, HEIC, WEBP, BMP, SVG, TIFF...)</div>
+            <input type="file" id="fileInput" multiple accept="image/*, .heic, .tiff, .tif" style="display:none">
+        </div>
+
+        <div class="settings-card" id="settingsCard">
+            
+            <div class="grid-options">
+                <div class="option-group">
+                    <label class="opt-label">Konvertovať DO formátu:</label>
+                    <select id="selFormat" class="main-select" onchange="toggleQuality(this.value)">
+                        <optgroup label="Web & Bežné">
+                            <option value="image/jpeg">JPG (Fotky, Email)</option>
+                            <option value="image/png">PNG (Grafika, Priehľadnosť)</option>
+                            <option value="image/webp">WEBP (Moderný web)</option>
+                        </optgroup>
+                        <optgroup label="Špeciálne">
+                            <option value="image/bmp">BMP (Windows Bitmap)</option>
+                            <option value="image/tiff">TIFF (Tlač)</option>
+                            <option value="image/gif">GIF (Statický)</option>
+                            <option value="image/x-icon">ICO (Favicon 64x64)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="option-group" id="qualityGroup">
+                    <label class="opt-label">Kvalita kompresie: <span id="qValue">90%</span></label>
+                    <input type="range" id="rngQuality" min="10" max="100" value="90" style="width:100%; accent-color:var(--primary); cursor:pointer;" oninput="updateQ(this.value)">
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; font-weight:700; color:#475569;">Súbory na konverziu (<span id="fileCount">0</span>):</div>
+            <div class="file-list-preview" id="filePreview"></div>
+
+            <button class="action-btn" onclick="convertImages()">
+                <span>🔮 Konvertovať a Stiahnuť</span>
+            </button>
+        </div>
+
+    </div>
+
+<script>
+
+
+    // --- 2. UI LOGIKA ---
+    let filesQueue = [];
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const settingsCard = document.getElementById('settingsCard');
+    const filePreview = document.getElementById('filePreview');
+    const fileCount = document.getElementById('fileCount');
+
+    dropArea.addEventListener('click', () => fileInput.click());
+    dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropArea.classList.remove('dragover'); 
+        handleFiles(e.dataTransfer.files); 
+    });
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+        // Akceptovať takmer všetko
+        const newFiles = Array.from(files).filter(f => 
+            f.type.startsWith('image/') || 
+            f.name.toLowerCase().endsWith('.heic') || 
+            f.name.toLowerCase().endsWith('.tiff') ||
+            f.name.toLowerCase().endsWith('.tif')
+        );
+
+        if (newFiles.length === 0) { alert("Prosím, nahrajte obrázky."); return; }
+        
+        filesQueue = [...filesQueue, ...newFiles];
+        renderPreview();
+        settingsCard.style.display = 'block';
+    }
+
+    function isHeic(file) {
+        return file.name.toLowerCase().endsWith('.heic') || file.type === 'image/heic';
+    }
+
+    function renderPreview() {
+        filePreview.innerHTML = '';
+        fileCount.innerText = filesQueue.length;
+        
+        filesQueue.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            
+            let ext = file.name.split('.').pop().toUpperCase();
+            let badgeClass = 'fmt-badge';
+            if(isHeic(file)) { ext = 'HEIC'; badgeClass += ' heic-badge'; }
+            
+            if (isHeic(file) || file.type === 'image/tiff' || file.name.toLowerCase().endsWith('.tiff')) {
+                div.innerHTML = `<div style="text-align:center;font-size:0.8rem;color:#64748b;">${ext}<br>Súbor</div>`;
+            } else {
+                const img = document.createElement('img');
+                img.className = 'preview-img';
+                img.src = URL.createObjectURL(file);
+                div.appendChild(img);
+            }
+            
+            div.innerHTML += `<div class="${badgeClass}">${ext}</div>`;
+            const removeBtn = document.createElement('div');
+            removeBtn.className = 'remove-badge';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = (e) => { e.stopPropagation(); removeFile(index); };
+            div.appendChild(removeBtn);
+            filePreview.appendChild(div);
+        });
+
+        if (filesQueue.length === 0) settingsCard.style.display = 'none';
+    }
+
+    window.removeFile = (index) => {
+        filesQueue.splice(index, 1);
+        renderPreview();
+    };
+
+    window.updateQ = (val) => { document.getElementById('qValue').innerText = val + '%'; }
+    window.toggleQuality = (fmt) => {
+        // Kvalita má zmysel hlavne pre JPG a WEBP
+        const show = (fmt === 'image/jpeg' || fmt === 'image/webp');
+        document.getElementById('qualityGroup').style.opacity = show ? '1' : '0.5';
+        document.getElementById('rngQuality').disabled = !show;
+    }
+
+
+    // --- 3. CONVERSION CORE ---
+    async function convertImages() {
+        if (filesQueue.length === 0) return;
+        
+        const overlay = document.getElementById('processingOverlay');
+        const progress = document.getElementById('progressText');
+        overlay.style.display = 'flex';
+
+        const zip = new JSZip();
+        const targetFormat = document.getElementById('selFormat').value;
+        const quality = parseInt(document.getElementById('rngQuality').value) / 100;
+
+        let processedCount = 0;
+
+        for (const file of filesQueue) {
+            progress.innerText = `Konvertujem ${processedCount + 1} / ${filesQueue.length}`;
+            
+            try {
+                let sourceBlob = file;
+                
+                // 1. HEIC Handling
+                if (isHeic(file)) {
+                    progress.innerText = `Dekódujem HEIC...`;
+                    const converted = await heic2any({ blob: file, toType: "image/jpeg" });
+                    sourceBlob = Array.isArray(converted) ? converted[0] : converted;
+                }
+
+                // 2. TIFF Handling (Input) - zatiaľ preskočíme dekódovanie TIFF na vstupe pre jednoduchosť (browser to nepodporuje natívne), 
+                // ale ak user nahrá TIFF, môžeme skúsiť UTIF.decode (komplexné). 
+                // Pre tento nástroj sa spoliehame, že browser vie načítať Image() zo sourceBlob.
+                // Väčšina moderných browserov TIFF nezobrazí v <img>, takže TIFF vstup funguje len ak to browser podporuje (napr. Safari).
+                // Ak by sme chceli full TIFF input, treba dekódovať cez UTIF.js buffer.
+                // Pre stručnosť kódu: ak Image() zlyhá, skúsime UTIF.
+                
+                let imageBitmap;
+                try {
+                    imageBitmap = await createImageBitmap(sourceBlob);
+                } catch(err) {
+                    // Fallback pre TIFF input cez UTIF
+                    if(file.name.toLowerCase().endsWith('.tiff') || file.name.toLowerCase().endsWith('.tif')) {
+                         const buff = await file.arrayBuffer();
+                         const ifds = UTIF.decode(buff);
+                         UTIF.decodeImage(buff, ifds[0]);
+                         const rgba = UTIF.toRGBA8(ifds[0]);
+                         const imageData = new ImageData(new Uint8ClampedArray(rgba), ifds[0].width, ifds[0].height);
+                         imageBitmap = await createImageBitmap(imageData);
+                    } else {
+                        throw err;
+                    }
+                }
+
+                // 3. Conversion
+                const finalBlob = await convertToFormat(imageBitmap, targetFormat, quality);
+                
+                // 4. Filename
+                let filename = file.name.split('.').slice(0, -1).join('.');
+                let ext = targetFormat.split('/')[1].replace('jpeg', 'jpg').replace('x-icon', 'ico');
+                
+                zip.file(`${filename}.${ext}`, finalBlob);
+
+            } catch (e) {
+                console.error("Konverzia zlyhala pre " + file.name, e);
+            }
+            processedCount++;
+        }
+
+        progress.innerText = "Balím ZIP...";
+        
+        if (processedCount === 1) {
+            const content = await zip.file(Object.keys(zip.files)[0]).async("blob");
+            saveAs(content, Object.keys(zip.files)[0]);
+        } else if (processedCount > 1) {
+            const zipContent = await zip.generateAsync({ type: "blob" });
+            saveAs(zipContent, "obrazky_konvertovane.zip");
+        }
+        
+        overlay.style.display = 'none';
+    }
+
+    async function convertToFormat(imgBitmap, format, quality) {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgBitmap.width;
+        canvas.height = imgBitmap.height;
+        const ctx = canvas.getContext('2d');
+
+        // Biele pozadie pre formáty bez priehľadnosti
+        if (format === 'image/jpeg' || format === 'image/bmp' || format === 'image/tiff') {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        ctx.drawImage(imgBitmap, 0, 0);
+
+        // A. ŠPECIÁLNE FORMÁTY (ktoré toBlob nevie)
+        
+        // 1. BMP
+        if (format === 'image/bmp') {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            return encodeBMP(imageData);
+        }
+
+        // 2. TIFF
+        if (format === 'image/tiff') {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            // UTIF encode
+            const tiffParams = UTIF.encodeImage(imageData.data, canvas.width, canvas.height);
+            return new Blob([tiffParams], { type: 'image/tiff' });
+        }
+
+        // 3. ICO (Zmenšíme na 64x64 a uložíme ako PNG s príponou ICO - funguje vo Windows)
+        if (format === 'image/x-icon') {
+            const icoCanvas = document.createElement('canvas');
+            icoCanvas.width = 64; icoCanvas.height = 64;
+            const icoCtx = icoCanvas.getContext('2d');
+            icoCtx.drawImage(imgBitmap, 0, 0, 64, 64);
+            return new Promise(r => icoCanvas.toBlob(r, 'image/png')); // MIME png, ale uložíme ako .ico
+        }
+
+        // B. ŠTANDARDNÉ FORMÁTY (JPG, PNG, WEBP, GIF)
+        return new Promise(resolve => {
+            // GIF podpora je v moderných browseroch cez toBlob('image/gif'), ak nie, fallbackne na PNG
+            canvas.toBlob(blob => resolve(blob), format, quality);
+        });
+    }
+
+    // --- BMP ENCODER (Jednoduchý) ---
+    function encodeBMP(imageData) {
+        const width = imageData.width;
+        const height = imageData.height;
+        const data = imageData.data;
+        const padding = (4 - (width * 3) % 4) % 4;
+        const fileSize = 54 + (width * 3 + padding) * height;
+        const buffer = new ArrayBuffer(fileSize);
+        const view = new DataView(buffer);
+
+        // Bitmap File Header
+        view.setUint16(0, 0x4D42, true); // BM
+        view.setUint32(2, fileSize, true);
+        view.setUint32(10, 54, true); // Offset
+
+        // DIB Header
+        view.setUint32(14, 40, true); // Header size
+        view.setInt32(18, width, true);
+        view.setInt32(22, -height, true); // Top-down
+        view.setUint16(26, 1, true); // Planes
+        view.setUint16(28, 24, true); // 24-bit
+        
+        let offset = 54;
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = (y * width + x) * 4;
+                view.setUint8(offset++, data[i + 2]); // B
+                view.setUint8(offset++, data[i + 1]); // G
+                view.setUint8(offset++, data[i]);     // R
+            }
+            offset += padding;
+        }
+        return new Blob([buffer], { type: "image/bmp" });
+    }
+
+</script>
+</body>
+</html>

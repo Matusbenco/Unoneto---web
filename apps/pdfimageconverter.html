@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF & IMAGE CONVERTER | Office Tools</title>
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #8b5cf6; /* Fialová pre konvertor */
+            --primary-hover: #7c3aed;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- OCHRANA --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP LAYOUT --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; }
+        .tab {
+            padding: 12px 30px; background: white; border: 2px solid #e2e8f0; border-radius: 30px;
+            font-weight: 700; color: #64748b; cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+        }
+        .tab:hover { border-color: var(--primary); color: var(--primary); }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* CONTENT AREAS */
+        .tool-content { display: none; animation: fadeIn 0.3s ease; }
+        .tool-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* DROP ZONE */
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 50px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #f5f3ff; transform: scale(1.01); }
+        .drop-icon { font-size: 4rem; color: #cbd5e1; }
+        
+        .action-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 40px;
+            font-size: 1.1rem; font-weight: 700; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4); transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; width: 100%; justify-content: center;
+        }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.5); background: var(--primary-hover); }
+
+        /* FILE LISTS */
+        .file-list { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .file-item {
+            background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;
+            display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem;
+        }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <h2 style="color: var(--secondary);" id="loadingText">Pracujem...</h2>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🖼️</div>
+            <div>PDF & <span>IMAGES</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Konvertor Dokumentov</h1>
+            <p style="color: #64748b;">Bezpečný prevod medzi PDF a Obrázkami priamo v prehliadači.</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('img2pdf', this)">Obrázky ➔ PDF</div>
+            <div class="tab" onclick="switchTab('pdf2img', this)">PDF ➔ Obrázky</div>
+        </div>
+
+        <div id="img2pdf" class="tool-content active">
+            <div class="drop-area" id="dropImg" onclick="document.getElementById('fileImg').click()">
+                <div class="drop-icon">📸</div>
+                <div style="font-weight:600; font-size:1.1rem;">Nahrajte JPG alebo PNG obrázky</div>
+                <div style="color:#94a3b8;">(Z týchto fotiek vytvoríme jedno PDF)</div>
+                <input type="file" id="fileImg" multiple accept="image/jpeg, image/png" style="display:none">
+            </div>
+            <div class="file-list" id="listImg"></div>
+            <button class="action-btn" id="btnImg2Pdf" style="display:none" onclick="convertImgToPdf()">
+                Vytvoriť PDF a Stiahnuť ⬇
+            </button>
+        </div>
+
+        <div id="pdf2img" class="tool-content">
+            <div class="drop-area" id="dropPdf" onclick="document.getElementById('filePdf').click()">
+                <div class="drop-icon">📄</div>
+                <div style="font-weight:600; font-size:1.1rem;">Nahrajte PDF dokument</div>
+                <div style="color:#94a3b8;">(Každú stranu uložíme ako obrázok)</div>
+                <input type="file" id="filePdf" accept=".pdf" style="display:none">
+            </div>
+            <div class="file-list" id="listPdf"></div>
+            <button class="action-btn" id="btnPdf2Img" style="display:none" onclick="convertPdfToImg()">
+                Uložiť strany ako Obrázky (ZIP) ⬇
+            </button>
+        </div>
+
+    </div>
+
+<script>
+  
+    // --- 2. PREPÍNANIE TABOV ---
+    function switchTab(id, tabElement) {
+        document.querySelectorAll('.tool-content').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        tabElement.classList.add('active');
+    }
+
+    // --- 3. LOGIKA: IMG -> PDF ---
+    let imgFiles = [];
+    const dropImg = document.getElementById('dropImg');
+    const fileImg = document.getElementById('fileImg');
+
+    dropImg.addEventListener('dragover', (e) => { e.preventDefault(); dropImg.classList.add('dragover'); });
+    dropImg.addEventListener('dragleave', () => dropImg.classList.remove('dragover'));
+    dropImg.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropImg.classList.remove('dragover'); 
+        handleImgFiles(e.dataTransfer.files); 
+    });
+    fileImg.addEventListener('change', (e) => handleImgFiles(e.target.files));
+
+    function handleImgFiles(files) {
+        const newFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+        if(newFiles.length === 0) { alert("Prosím, nahrajte obrázky."); return; }
+        
+        imgFiles = [...imgFiles, ...newFiles];
+        renderImgList();
+    }
+
+    function renderImgList() {
+        const list = document.getElementById('listImg');
+        list.innerHTML = '';
+        imgFiles.forEach((f, i) => {
+            list.innerHTML += `<div class="file-item"><span>${f.name}</span> <button onclick="removeImg(${i})" style="border:none;background:none;cursor:pointer;color:red;">✖</button></div>`;
+        });
+        document.getElementById('btnImg2Pdf').style.display = imgFiles.length > 0 ? 'inline-flex' : 'none';
+    }
+
+    window.removeImg = (i) => { imgFiles.splice(i, 1); renderImgList(); };
+
+    async function convertImgToPdf() {
+        if(imgFiles.length === 0) return;
+        document.getElementById('loadingText').innerText = "Vytváram PDF...";
+        document.getElementById('processingOverlay').style.display = 'flex';
+
+        try {
+            const { PDFDocument } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+
+            for (const file of imgFiles) {
+                const buffer = await file.arrayBuffer();
+                let image;
+                if (file.type === 'image/jpeg') {
+                    image = await pdfDoc.embedJpg(buffer);
+                } else if (file.type === 'image/png') {
+                    image = await pdfDoc.embedPng(buffer);
+                }
+
+                if (image) {
+                    const page = pdfDoc.addPage([image.width, image.height]);
+                    page.drawImage(image, {
+                        x: 0, y: 0, width: image.width, height: image.height,
+                    });
+                }
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            download(pdfBytes, "obrazky-spojene.pdf", "application/pdf");
+
+        } catch (e) {
+            console.error(e);
+            alert("Chyba pri konverzii: " + e.message);
+        } finally {
+            document.getElementById('processingOverlay').style.display = 'none';
+        }
+    }
+
+    // --- 4. LOGIKA: PDF -> IMG ---
+    let pdfFile = null;
+    const dropPdf = document.getElementById('dropPdf');
+    const filePdf = document.getElementById('filePdf');
+
+    dropPdf.addEventListener('dragover', (e) => { e.preventDefault(); dropPdf.classList.add('dragover'); });
+    dropPdf.addEventListener('dragleave', () => dropPdf.classList.remove('dragover'));
+    dropPdf.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropPdf.classList.remove('dragover'); 
+        handlePdfFile(e.dataTransfer.files[0]); 
+    });
+    filePdf.addEventListener('change', (e) => handlePdfFile(e.target.files[0]));
+
+    function handlePdfFile(file) {
+        if(!file || file.type !== 'application/pdf') { alert("Len PDF."); return; }
+        pdfFile = file;
+        document.getElementById('listPdf').innerHTML = `<div class="file-item">✅ ${file.name}</div>`;
+        document.getElementById('btnPdf2Img').style.display = 'inline-flex';
+    }
+
+    async function convertPdfToImg() {
+        if(!pdfFile) return;
+        document.getElementById('loadingText').innerText = "Extrahujem obrázky...";
+        document.getElementById('processingOverlay').style.display = 'flex';
+
+        try {
+            const arrayBuffer = await pdfFile.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            const zip = new JSZip();
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2 }); // Scale 2 pre lepšiu kvalitu
+                
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                // Konverzia canvas na blob
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+                zip.file(`strana-${i}.jpg`, blob);
+            }
+
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, "pdf-obrazky.zip");
+
+        } catch (e) {
+            console.error(e);
+            alert("Chyba pri extrakcii: " + e.message);
+        } finally {
+            document.getElementById('processingOverlay').style.display = 'none';
+        }
+    }
+
+</script>
+</body>
+</html>

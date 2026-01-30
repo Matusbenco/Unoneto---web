@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+<script src="coi-serviceworker.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/V CUTTER | Office Tools</title>
+    
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #f43f5e; /* Červená/Ružová pre média */
+            --primary-hover: #e11d48;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- OCHRANA --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP LAYOUT --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+        /* DROP ZONE */
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #fff1f2; transform: scale(1.01); }
+        .drop-icon { font-size: 3rem; color: #cbd5e1; }
+
+        /* FILE LIST ITEMS */
+        .track-list { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .track-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02); position: relative;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .track-info { flex: 1; min-width: 200px; }
+        .t-name { font-weight: 700; color: var(--secondary); font-size: 1rem; margin-bottom: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .t-meta { font-size: 0.8rem; color: #64748b; display: flex; gap: 10px; }
+        .badge { background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+
+        .controls-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+            flex: 2; min-width: 300px;
+        }
+        .ctrl-group { display: flex; flex-direction: column; gap: 5px; }
+        .ctrl-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+        .ctrl-input {
+            padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;
+            font-family: monospace; font-size: 0.9rem;
+        }
+        .ctrl-input:focus { outline: none; border-color: var(--primary); }
+
+        .track-status {
+            position: absolute; right: 20px; top: 20px; 
+            font-size: 0.8rem; font-weight: 700; color: #cbd5e1;
+        }
+        .track-status.done { color: #10b981; }
+        .track-status.processing { color: var(--primary); }
+
+        .btn-remove {
+            position: absolute; right: -10px; top: -10px; background: #ef4444; color: white;
+            border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer;
+            font-weight: bold; font-size: 12px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* MAIN ACTION */
+        .process-section { text-align: center; margin-top: 40px; display: none; }
+        .btn-process {
+            background: var(--primary); color: white; border: none; padding: 15px 50px;
+            font-size: 1.1rem; font-weight: 700; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(244, 63, 94, 0.4); transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-process:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(244, 63, 94, 0.5); background: var(--primary-hover); }
+        .btn-process:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* LOADING OVERLAY */
+        #logOverlay {
+            display: none; position: fixed; bottom: 20px; right: 20px; width: 300px;
+            background: #1e293b; color: #a5b4fc; padding: 15px; border-radius: 10px;
+            font-family: monospace; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 5000; max-height: 200px; overflow-y: auto; border: 1px solid #334155;
+        }
+
+    </style>
+</head>
+<body>
+
+    
+
+    <div id="logOverlay"></div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🎬</div>
+            <div style="margin-left:10px; font-weight:800; color:var(--secondary);">A/V <span>CUTTER</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Strihač Audia a Videa</h1>
+            <p style="color: #64748b;">
+                Orezať, nastaviť fade-in/out a upraviť hlasitosť.<br>
+                Podporuje MP3, WAV, MP4, MOV a ďalšie. Všetko u vás v prehliadači.
+            </p>
+        </div>
+
+        <div class="drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+            <div class="drop-icon">🎵 / 🎥</div>
+            <div style="font-weight:600; font-size:1.1rem; color:#334155;">Nahrajte súbory</div>
+            <div style="color:#94a3b8;">(Kliknite alebo presuňte)</div>
+            <input type="file" id="fileInput" multiple accept="audio/*,video/*" style="display:none">
+        </div>
+
+        <div class="track-list" id="trackList"></div>
+
+        <div class="process-section" id="processSection">
+            <button class="btn-process" onclick="processAllFiles()">
+                <span>✂️ Spracovať a Stiahnuť Všetko</span>
+            </button>
+            <div style="margin-top:10px; font-size:0.8rem; color:#94a3b8;">
+                Pozor: Spracovanie videa môže chvíľu trvať. Nezatvárajte okno.
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // --- 1. LICENCIA ---
+    (function() {
+        const verified = localStorage.getItem('finstat_license_verified');
+        if(verified) { document.getElementById('lockOverlay').style.display = 'none'; }
+    })();
+
+    function checkLicense() {
+        const key = document.getElementById('licKey').value.trim();
+        if(key === 'START-123' || key.length > 5) {
+             localStorage.setItem('finstat_license_verified', key);
+             document.getElementById('lockOverlay').style.display = 'none';
+        } else {
+            document.getElementById('lockError').style.display = 'block';
+        }
+    }
+
+    // --- 2. FFmpeg INIT ---
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    // Používame single-core verziu pre istotu (github pages headers issue)
+    const ffmpeg = createFFmpeg({ 
+        log: true,
+        corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+    });
+
+    let isFfmpegLoaded = false;
+    let filesData = [];
+
+    const logBox = document.getElementById('logOverlay');
+    function log(msg) {
+        logBox.style.display = 'block';
+        logBox.innerHTML += `> ${msg}<br>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    async function loadFfmpeg() {
+        if(!isFfmpegLoaded) {
+            log("Načítavam FFmpeg jadro (toto sa deje len raz)...");
+            await ffmpeg.load();
+            isFfmpegLoaded = true;
+            log("FFmpeg pripravený!");
+        }
+    }
+
+    // --- 3. UI LOGIKA ---
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const trackList = document.getElementById('trackList');
+    const processSection = document.getElementById('processSection');
+
+    // Drag & Drop
+    dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropArea.classList.remove('dragover'); 
+        handleFiles(e.dataTransfer.files); 
+    });
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    async function handleFiles(files) {
+        // Inicializácia FFmpeg pri prvom nahratí
+        loadFfmpeg(); 
+
+        for (const file of files) {
+            // Získanie trvania súboru cez dočasný audio/video element
+            const duration = await getDuration(file);
+            
+            const fileObj = {
+                id: Math.random().toString(36).substr(2, 9),
+                file: file,
+                duration: duration,
+                name: file.name,
+                type: file.type.startsWith('video') ? 'video' : 'audio',
+                // Default hodnoty
+                start: 0,
+                end: duration,
+                fadeIn: 0,
+                fadeOut: 0,
+                volume: 0 // dB
+            };
+            filesData.push(fileObj);
+            renderFile(fileObj);
+        }
+        
+        if (filesData.length > 0) processSection.style.display = 'block';
+    }
+
+    function getDuration(file) {
+        return new Promise((resolve) => {
+            const url = URL.createObjectURL(file);
+            const media = document.createElement(file.type.startsWith('video') ? 'video' : 'audio');
+            media.preload = 'metadata';
+            media.onloadedmetadata = () => {
+                URL.revokeObjectURL(url);
+                resolve(media.duration);
+            };
+            media.src = url;
+        });
+    }
+
+    function renderFile(data) {
+        const div = document.createElement('div');
+        div.className = 'track-card';
+        div.id = `card-${data.id}`;
+        div.innerHTML = `
+            <button class="btn-remove" onclick="removeFile('${data.id}')">✖</button>
+            <div class="track-info">
+                <div class="t-name" title="${data.name}">${data.name}</div>
+                <div class="t-meta">
+                    <span class="badge">${data.type.toUpperCase()}</span>
+                    <span class="badge">Dĺžka: ${formatTime(data.duration)}</span>
+                </div>
+                <div id="status-${data.id}" class="track-status">Pripravené</div>
+            </div>
+            <div class="controls-grid">
+                <div class="ctrl-group">
+                    <label class="ctrl-label">Štart (sek)</label>
+                    <input type="number" class="ctrl-input" value="0" min="0" step="0.1" 
+                           onchange="updateVal('${data.id}', 'start', this.value)">
+                </div>
+                <div class="ctrl-group">
+                    <label class="ctrl-label">Koniec (sek)</label>
+                    <input type="number" class="ctrl-input" value="${data.duration.toFixed(1)}" min="0" step="0.1"
+                           onchange="updateVal('${data.id}', 'end', this.value)">
+                </div>
+                <div class="ctrl-group">
+                    <label class="ctrl-label">Fade In (sek)</label>
+                    <input type="number" class="ctrl-input" value="0" min="0" step="0.5"
+                           onchange="updateVal('${data.id}', 'fadeIn', this.value)">
+                </div>
+                <div class="ctrl-group">
+                    <label class="ctrl-label">Fade Out (sek)</label>
+                    <input type="number" class="ctrl-input" value="0" min="0" step="0.5"
+                           onchange="updateVal('${data.id}', 'fadeOut', this.value)">
+                </div>
+                <div class="ctrl-group">
+                    <label class="ctrl-label">Hlasitosť (dB)</label>
+                    <input type="number" class="ctrl-input" value="0" step="1" placeholder="0" title="+ zvýšiť, - znížiť"
+                           onchange="updateVal('${data.id}', 'volume', this.value)">
+                </div>
+            </div>
+        `;
+        trackList.appendChild(div);
+    }
+
+    window.updateVal = (id, key, val) => {
+        const item = filesData.find(f => f.id === id);
+        if(item) item[key] = parseFloat(val);
+    };
+
+    window.removeFile = (id) => {
+        filesData = filesData.filter(f => f.id !== id);
+        document.getElementById(`card-${id}`).remove();
+        if(filesData.length === 0) processSection.style.display = 'none';
+    };
+
+    function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}:${s < 10 ? '0'+s : s}`;
+    }
+
+    // --- 4. SPRACOVANIE (CORE LOGIC) ---
+    async function processAllFiles() {
+        if(!isFfmpegLoaded) await loadFfmpeg();
+
+        const btn = document.querySelector('.btn-process');
+        btn.disabled = true;
+        btn.innerHTML = "⏳ Pracujem...";
+
+        for (const item of filesData) {
+            updateStatus(item.id, 'processing', 'Spracovávam...');
+            try {
+                await processSingleFile(item);
+                updateStatus(item.id, 'done', '✅ Hotovo');
+            } catch (err) {
+                console.error(err);
+                updateStatus(item.id, 'error', '❌ Chyba');
+                log(`Chyba pri ${item.name}: ${err.message}`);
+            }
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = "✂️ Spracovať a Stiahnuť Všetko";
+        setTimeout(() => { logBox.style.display = 'none'; }, 5000);
+    }
+
+    async function processSingleFile(data) {
+        const { file, name, start, end, fadeIn, fadeOut, volume } = data;
+        const duration = end - start;
+        
+        // 1. Nahrať súbor do FFmpeg FS
+        log(`Nahrávam ${name} do pamäte...`);
+        ffmpeg.FS('writeFile', name, await fetchFile(file));
+
+        // 2. Vytvoriť príkazy
+        // Orezanie: -ss [start] -to [end]
+        // Audio filtre: afade (in), afade (out), volume
+        // Fade Out start time calculation: duration - fadeOut
+        const fadeOutStart = duration - fadeOut;
+        
+        // Zostavenie filtra
+        let filters = [];
+        if (fadeIn > 0) filters.push(`afade=t=in:st=0:d=${fadeIn}`);
+        if (fadeOut > 0) filters.push(`afade=t=out:st=${fadeOutStart}:d=${fadeOut}`);
+        if (volume !== 0) filters.push(`volume=${volume}dB`);
+        
+        const filterStr = filters.length > 0 ? `-af "${filters.join(',')}"` : '';
+        const outputName = `cut_${name}`;
+
+        // Zostavenie FFmpeg príkazu
+        // -i [input] -ss [start] -t [duration] [filters] [output]
+        // Pre video musíme spracovať aj video stream (copy alebo re-encode).
+        // Ak meníme audio (volume/fade), musíme re-enkódovať audio (-c:a aac), video skúsime kopírovať ak sa dá, 
+        // ale pre presný strih je lepšie re-enkódovať, no to trvá dlho.
+        // Pre jednoduchosť a rýchlosť skúsime audio re-encode a video copy ak sa nemení video. 
+        // Alebo len rýchly preset.
+        
+        const args = [
+            '-i', name,
+            '-ss', start.toString(),
+            '-t', duration.toString()
+        ];
+
+        if (filters.length > 0) {
+            args.push('-af', filters.join(','));
+        }
+
+        // Ak je to video, použijeme preset ultrafast pre rýchlosť
+        // Ak je to audio, je to jedno
+        if(data.type === 'video') {
+            args.push('-c:v', 'libx264', '-preset', 'ultrafast', '-c:a', 'aac'); 
+        }
+
+        args.push(outputName);
+
+        log(`Spúšťam konverziu pre ${name}...`);
+        await ffmpeg.run(...args);
+
+        // 3. Stiahnuť výsledok
+        log(`Hotovo. Sťahujem ${outputName}...`);
+        const dataUint8 = ffmpeg.FS('readFile', outputName);
+        
+        // Vytvoriť Blob a stiahnuť
+        const mime = data.type === 'video' ? 'video/mp4' : 'audio/mpeg'; // Zjednodušene
+        const blob = new Blob([dataUint8.buffer], { type: mime });
+        download(blob, outputName, mime);
+
+        // 4. Upratať pamäť
+        ffmpeg.FS('unlink', name);
+        ffmpeg.FS('unlink', outputName);
+    }
+
+    function updateStatus(id, type, text) {
+        const el = document.getElementById(`status-${id}`);
+        el.className = `track-status ${type}`;
+        el.innerText = text;
+    }
+
+</script>
+</body>
+</html>

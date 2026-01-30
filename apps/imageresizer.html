@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAGE RESIZER | Office Tools</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d9488; /* Teal */
+            --primary-hover: #0f766e;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- OCHRANA --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP UI --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        .drop-area {
+            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
+            padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #f0fdfa; transform: scale(1.01); }
+        .drop-icon { font-size: 3.5rem; color: #cbd5e1; }
+        
+        .settings-card {
+            background: white; border-radius: 16px; padding: 30px; margin-top: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;
+            display: none; animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .res-tabs { display: flex; gap: 10px; margin-bottom: 25px; background: #f1f5f9; padding: 5px; border-radius: 10px; width: fit-content; }
+        .res-tab {
+            padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 0.9rem; transition: 0.2s;
+        }
+        .res-tab.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        .inputs-row { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
+        .input-wrapper { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 150px; }
+        .input-label { font-size: 0.85rem; font-weight: 700; color: #475569; }
+        .main-input {
+            padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 1rem; font-family: monospace; transition: 0.2s; width: 100%;
+        }
+        .main-input:focus { border-color: var(--primary); outline: none; }
+
+        .checkbox-wrapper { display: flex; align-items: center; gap: 8px; margin-top: 15px; font-size: 0.9rem; color: #334155; font-weight: 500; cursor: pointer; }
+        .checkbox-wrapper input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+        .file-list-preview {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px;
+        }
+        .preview-item {
+            position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;
+            background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+        }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; }
+        .heic-badge {
+            position: absolute; bottom: 4px; left: 4px; background: #2563eb; color: white;
+            font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold;
+        }
+        .remove-badge {
+            position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white;
+            width: 20px; height: 20px; border-radius: 50%; font-size: 12px; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        .action-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            font-size: 1rem; font-weight: 700; border-radius: 10px; cursor: pointer;
+            width: 100%; margin-top: 25px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .progress-text { font-weight: 600; color: var(--primary); font-size: 1.1rem; }
+
+    </style>
+</head>
+<body>
+
+    
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <div class="progress-text" id="progressText">Spracovávam...</div>
+        <div style="margin-top:5px; font-size:0.9rem; color:#64748b;">(HEIC súbory môžu chvíľu trvať)</div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">📐</div>
+            <div>IMAGE <span>RESIZER</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Hromadný zmenšovač obrázkov</h1>
+            <p style="color: #64748b; font-size: 1rem;">
+                Podpora pre JPG, PNG, WEBP a <span style="color:#2563eb; font-weight:bold;">HEIC (iPhone)</span>.
+            </p>
+        </div>
+
+        <div class="drop-area" id="dropArea">
+            <div class="drop-icon">🖼️</div>
+            <div style="font-weight: 600; font-size: 1.1rem; color: #334155;">Nahrajte obrázky</div>
+            <div style="color: #94a3b8; font-size: 0.9rem;">(Presuňte sem súbory alebo kliknite)</div>
+            <input type="file" id="fileInput" multiple accept="image/*, .heic" style="display:none">
+        </div>
+
+        <div class="settings-card" id="settingsCard">
+            <div class="res-tabs">
+                <div class="res-tab active" onclick="setMode('pixels', this)">Podľa veľkosti (px)</div>
+                <div class="res-tab" onclick="setMode('percent', this)">Podľa percent (%)</div>
+            </div>
+
+            <div id="modePixels" class="mode-content">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <label class="input-label">Šírka (Width)</label>
+                        <input type="number" id="inpWidth" class="main-input" placeholder="napr. 1920">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Výška (Height)</label>
+                        <input type="number" id="inpHeight" class="main-input" placeholder="napr. 1080">
+                    </div>
+                </div>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="chkRatio" checked>
+                    🔒 Zamknúť pomer strán (Aspect Ratio)
+                </label>
+            </div>
+
+            <div id="modePercent" class="mode-content" style="display:none;">
+                <div class="input-wrapper">
+                    <label class="input-label">Zmenšiť na (%)</label>
+                    <input type="number" id="inpPercent" class="main-input" value="50" min="1" max="200">
+                    <input type="range" id="rngPercent" min="1" max="100" value="50" style="width:100%; margin-top:10px; accent-color:var(--primary);" oninput="document.getElementById('inpPercent').value = this.value">
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                <label class="input-label" style="display:block; margin-bottom:8px;">Výstupný formát</label>
+                <select id="selFormat" class="main-input" style="max-width:200px;">
+                    <option value="original">Pôvodný formát (alebo JPG pre HEIC)</option>
+                    <option value="image/jpeg">JPG (Dobrá kompresia)</option>
+                    <option value="image/png">PNG (Bez straty kvality)</option>
+                    <option value="image/webp">WEBP (Moderný web)</option>
+                </select>
+            </div>
+
+            <div style="margin-top: 20px; font-weight:700; color:#475569;">Vybrané súbory (<span id="fileCount">0</span>):</div>
+            <div class="file-list-preview" id="filePreview"></div>
+
+            <button class="action-btn" onclick="processImages()">
+                <span>⚡ Zmenšiť a Stiahnuť (ZIP)</span>
+            </button>
+        </div>
+
+    </div>
+
+<script>
+ 
+
+    // --- 2. LOGIKA UI ---
+    let filesQueue = [];
+    let currentMode = 'pixels';
+
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const settingsCard = document.getElementById('settingsCard');
+    const filePreview = document.getElementById('filePreview');
+    const fileCount = document.getElementById('fileCount');
+
+    dropArea.addEventListener('click', () => fileInput.click());
+    dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropArea.classList.remove('dragover'); 
+        handleFiles(e.dataTransfer.files); 
+    });
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+        // Pridáme podporu pre HEIC v filtri
+        const newFiles = Array.from(files).filter(f => 
+            f.type.startsWith('image/') || 
+            f.name.toLowerCase().endsWith('.heic')
+        );
+
+        if (newFiles.length === 0) { alert("Prosím, nahrajte obrázky."); return; }
+        
+        filesQueue = [...filesQueue, ...newFiles];
+        renderPreview();
+        settingsCard.style.display = 'block';
+
+        // Ak je prvý súbor HEIC, nemôžeme hneď čítať rozmery (lebo to trvá), preskočíme to
+        if (filesQueue.length > 0 && document.getElementById('inpWidth').value === "") {
+            const first = filesQueue[0];
+            if (!isHeic(first)) {
+                const img = new Image();
+                img.src = URL.createObjectURL(first);
+                img.onload = () => {
+                    document.getElementById('inpWidth').value = img.width;
+                    document.getElementById('inpHeight').value = img.height;
+                };
+            }
+        }
+    }
+
+    function isHeic(file) {
+        return file.name.toLowerCase().endsWith('.heic') || file.type === 'image/heic';
+    }
+
+    function renderPreview() {
+        filePreview.innerHTML = '';
+        fileCount.innerText = filesQueue.length;
+        
+        filesQueue.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            
+            // HEIC nemá náhľad v prehliadači, dáme tam ikonku
+            if (isHeic(file)) {
+                div.innerHTML = `<div style="text-align:center;font-size:0.8rem;color:#64748b;">HEIC<br>Obrázok</div><div class="heic-badge">HEIC</div>`;
+            } else {
+                const img = document.createElement('img');
+                img.className = 'preview-img';
+                img.src = URL.createObjectURL(file);
+                div.appendChild(img);
+            }
+            
+            const badge = document.createElement('div');
+            badge.className = 'remove-badge';
+            badge.innerHTML = '×';
+            badge.onclick = (e) => { e.stopPropagation(); removeFile(index); };
+
+            div.appendChild(badge);
+            filePreview.appendChild(div);
+        });
+
+        if (filesQueue.length === 0) settingsCard.style.display = 'none';
+    }
+
+    window.removeFile = (index) => {
+        filesQueue.splice(index, 1);
+        renderPreview();
+    };
+
+    window.setMode = (mode, el) => {
+        currentMode = mode;
+        document.querySelectorAll('.res-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+
+        document.getElementById('modePixels').style.display = mode === 'pixels' ? 'block' : 'none';
+        document.getElementById('modePercent').style.display = mode === 'percent' ? 'block' : 'none';
+    }
+
+    const inpW = document.getElementById('inpWidth');
+    const inpH = document.getElementById('inpHeight');
+    const chkRatio = document.getElementById('chkRatio');
+    let aspectRatio = 0; 
+    
+    inpW.addEventListener('input', () => {
+        if (chkRatio.checked && inpH.value && aspectRatio) {
+            inpH.value = Math.round(inpW.value / aspectRatio);
+        }
+    });
+
+    inpH.addEventListener('input', () => {
+        if (chkRatio.checked && inpW.value && aspectRatio) {
+            inpW.value = Math.round(inpH.value * aspectRatio);
+        }
+    });
+    
+    inpW.addEventListener('blur', () => { if(inpW.value && inpH.value) aspectRatio = inpW.value / inpH.value; });
+
+
+    // --- 3. RESIZE LOGIKA ---
+    async function processImages() {
+        if (filesQueue.length === 0) return;
+        
+        const overlay = document.getElementById('processingOverlay');
+        const progress = document.getElementById('progressText');
+        overlay.style.display = 'flex';
+
+        const zip = new JSZip();
+        const targetFormat = document.getElementById('selFormat').value;
+        const reqW = parseInt(inpW.value);
+        const reqH = parseInt(inpH.value);
+        const reqPercent = parseInt(document.getElementById('inpPercent').value) / 100;
+        const lockRatio = chkRatio.checked;
+
+        if (currentMode === 'pixels' && (!reqW && !reqH)) {
+            alert("Zadajte aspoň jeden rozmer.");
+            overlay.style.display = 'none';
+            return;
+        }
+
+        let processedCount = 0;
+
+        for (const file of filesQueue) {
+            progress.innerText = `Spracovávam ${processedCount + 1} / ${filesQueue.length}`;
+            
+            try {
+                // Konverzia HEIC na BLOB (JPG) predtým než začneme
+                let sourceFile = file;
+                let isConvertedHeic = false;
+
+                if (isHeic(file)) {
+                    progress.innerText = `Konvertujem HEIC ${processedCount + 1}...`;
+                    try {
+                        const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg" });
+                        // heic2any môže vrátiť pole, ak je to Live Photo, berieme prvé
+                        sourceFile = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                        isConvertedHeic = true;
+                    } catch (e) {
+                        console.error("HEIC Error", e);
+                        continue; // Preskočíme chybný súbor
+                    }
+                }
+
+                const blob = await resizeImage(sourceFile, {
+                    mode: currentMode,
+                    width: reqW,
+                    height: reqH,
+                    percent: reqPercent,
+                    lockRatio: lockRatio,
+                    format: targetFormat,
+                    isHeic: isConvertedHeic
+                });
+
+                let filename = file.name.split('.').slice(0, -1).join('.');
+                
+                // Prípona
+                let finalExt = 'jpg';
+                if (blob.type === 'image/png') finalExt = 'png';
+                else if (blob.type === 'image/webp') finalExt = 'webp';
+                
+                // Ak user zvolil "Original", ale vstup bol HEIC, musí to byť JPG (lebo prehliadač HEIC neuloží)
+                if (targetFormat === 'original' && !isHeic(file)) {
+                     finalExt = file.name.split('.').pop();
+                }
+
+                zip.file(`${filename}_resized.${finalExt}`, blob);
+
+            } catch (e) {
+                console.error(e);
+            }
+            processedCount++;
+        }
+
+        progress.innerText = "Balím do ZIP...";
+        const zipContent = await zip.generateAsync({ type: "blob" });
+        saveAs(zipContent, "obrazky_zmensene.zip");
+        
+        overlay.style.display = 'none';
+    }
+
+    function resizeImage(file, options) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                let newW = img.width;
+                let newH = img.height;
+
+                if (options.mode === 'percent') {
+                    newW = Math.round(img.width * options.percent);
+                    newH = Math.round(img.height * options.percent);
+                } else {
+                    if (options.width && options.height && !options.lockRatio) {
+                        newW = options.width;
+                        newH = options.height;
+                    } else if (options.width) {
+                         newW = options.width;
+                         newH = Math.round(img.height * (options.width / img.width));
+                    } else if (options.height) {
+                         newH = options.height;
+                         newW = Math.round(img.width * (options.height / img.height));
+                    }
+                }
+
+                canvas.width = newW;
+                canvas.height = newH;
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, newW, newH);
+
+                let mime = file.type;
+                if (options.format !== 'original') mime = options.format;
+                
+                // Ak bol HEIC a user chce original, donútime JPG
+                if (options.format === 'original' && options.isHeic) mime = 'image/jpeg';
+
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, mime, 0.9);
+            };
+            img.onerror = reject;
+        });
+    }
+
+</script>
+</body>
+</html>

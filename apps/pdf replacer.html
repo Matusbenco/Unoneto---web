@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF REPLACER | Office Tools</title>
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #06b6d4; /* Cyan/Tyrkysová pre "výmenu" */
+            --primary-hover: #0891b2;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --border-radius: 12px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
+        * { box-sizing: border-box; }
+
+        /* --- OCHRANA (Zdieľaná) --- */
+        #lockOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: opacity 0.5s ease;
+        }
+        .lock-box {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            max-width: 450px; width: 90%; border: 1px solid #334155;
+        }
+        .lock-input {
+            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
+            border: 1px solid #475569; background: #0f172a; color: white;
+            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
+            font-family: monospace; outline: none;
+        }
+        .lock-input:focus { border-color: var(--primary); }
+        .lock-btn {
+            padding: 15px 30px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; width: 100%; transition: 0.2s;
+        }
+        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+
+        /* --- APP LAYOUT --- */
+        header {
+            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .brand span { color: var(--primary); }
+        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { color: var(--primary); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        .grid-upload { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        @media (max-width: 768px) { .grid-upload { grid-template-columns: 1fr; } }
+
+        /* UPLOAD BOXES */
+        .upload-card {
+            background: white; border-radius: 16px; padding: 25px;
+            border: 2px dashed #cbd5e1; text-align: center; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px;
+            position: relative;
+        }
+        .upload-card:hover { border-color: var(--primary); background: #ecfeff; }
+        .upload-card.active { border-color: var(--success); background: #f0fdf4; border-style: solid; }
+        
+        .uc-icon { font-size: 2.5rem; margin-bottom: 10px; color: #94a3b8; }
+        .uc-title { font-weight: 700; color: var(--secondary); margin-bottom: 5px; }
+        .uc-desc { font-size: 0.8rem; color: #64748b; }
+        .file-status { 
+            margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--primary); 
+            background: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 5px; display: none; 
+        }
+
+        /* SETTINGS SECTION */
+        .settings-section {
+            background: white; border-radius: 16px; padding: 30px; margin-top: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;
+            display: none; animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-group { margin-bottom: 20px; }
+        .main-input {
+            width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 1.1rem; font-family: monospace; transition: 0.2s;
+        }
+        .main-input:focus { border-color: var(--primary); outline: none; }
+
+        .action-btn {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            font-size: 1rem; font-weight: 700; border-radius: 10px; cursor: pointer;
+            width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        #processingOverlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 5000; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+   
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <h2 style="color: var(--secondary);">Vymieňam strany...</h2>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🔄</div>
+            <div>PDF <span>REPLACER</span></div>
+        </div>
+        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+    </header>
+
+    <div class="container">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Výmena strán v PDF</h1>
+            <p style="color: #64748b; font-size: 1rem;">
+                Vráťte podpísané alebo opravené strany späť do pôvodného dokumentu.
+            </p>
+        </div>
+
+        <div class="grid-upload">
+            <div class="upload-card" id="dropOrig" onclick="document.getElementById('fileOrig').click()">
+                <div class="uc-icon">📑</div>
+                <div class="uc-title">1. Pôvodný dokument</div>
+                <div class="uc-desc">Celá zmluva (veľa strán)</div>
+                <div id="statusOrig" class="file-status">✅ Nahrané</div>
+                <input type="file" id="fileOrig" accept=".pdf" style="display:none">
+            </div>
+
+            <div class="upload-card" id="dropNew" onclick="document.getElementById('fileNew').click()">
+                <div class="uc-icon">📄✍️</div>
+                <div class="uc-title">2. Naskenované strany</div>
+                <div class="uc-desc">Len tie, čo chcete vymeniť</div>
+                <div id="statusNew" class="file-status">✅ Nahrané</div>
+                <input type="file" id="fileNew" accept=".pdf" style="display:none">
+            </div>
+        </div>
+
+        <div class="settings-section" id="settingsSection">
+            <div class="input-group">
+                <label style="display:block; font-weight:700; margin-bottom:5px; color:#1e293b;">Ktoré strany v Pôvodnom dokumente nahradiť?</label>
+                <div style="font-size:0.85rem; color:#64748b; margin-bottom:10px;">
+                    Zadajte čísla strán oddelené čiarkou v poradí, ako sú v naskenovanom súbore.<br>
+                    <i>Príklad: Ak ste naskenovali strany 1, 3 a 5 do jedného PDF, napíšte: <b>1, 3, 5</b></i>
+                </div>
+                <input type="text" id="pagesInput" class="main-input" placeholder="napr. 1, 3, 5">
+            </div>
+            
+            <div style="background:#fff7ed; border-left:4px solid #f97316; padding:15px; margin-bottom:20px; font-size:0.9rem; color:#9a3412;">
+                <b>💡 Ako to funguje:</b><br>
+                1. strana z naskenovaného súboru ➜ nahradí 1. číslo, ktoré napíšete.<br>
+                2. strana z naskenovaného súboru ➜ nahradí 2. číslo...
+            </div>
+
+            <button class="action-btn" onclick="replacePages()">
+                <span>🔄 Vymeniť a Stiahnuť</span>
+            </button>
+        </div>
+
+    </div>
+
+<script>
+
+
+    // --- 2. UPLOAD LOGIKA ---
+    let bytesOrig = null;
+    let bytesNew = null;
+    let origName = "";
+
+    const dropOrig = document.getElementById('dropOrig');
+    const dropNew = document.getElementById('dropNew');
+    
+    // Setup listeners pre Drag&Drop (pre zjednodušenie kódu voláme rovnakú funkciu)
+    setupDrop(dropOrig, document.getElementById('fileOrig'), 'orig');
+    setupDrop(dropNew, document.getElementById('fileNew'), 'new');
+
+    function setupDrop(area, input, type) {
+        area.addEventListener('dragover', (e) => { e.preventDefault(); area.classList.add('active'); });
+        area.addEventListener('dragleave', () => area.classList.remove('active'));
+        area.addEventListener('drop', (e) => { 
+            e.preventDefault(); 
+            handleFile(e.dataTransfer.files[0], type); 
+        });
+        input.addEventListener('change', (e) => handleFile(e.target.files[0], type));
+    }
+
+    async function handleFile(file, type) {
+        if (!file || file.type !== 'application/pdf') { alert("Prosím PDF."); return; }
+        
+        const buffer = await file.arrayBuffer();
+        
+        if (type === 'orig') {
+            bytesOrig = buffer;
+            origName = file.name.replace('.pdf', '');
+            document.getElementById('statusOrig').style.display = 'inline-block';
+            document.getElementById('statusOrig').innerText = `✅ ${file.name}`;
+            dropOrig.classList.add('active'); // Ostaň zelený
+        } else {
+            bytesNew = buffer;
+            document.getElementById('statusNew').style.display = 'inline-block';
+            document.getElementById('statusNew').innerText = `✅ ${file.name}`;
+            dropNew.classList.add('active');
+        }
+
+        // Ak sú oba, ukáž nastavenia
+        if (bytesOrig && bytesNew) {
+            document.getElementById('settingsSection').style.display = 'block';
+        }
+    }
+
+    // --- 3. REPLACE LOGIKA ---
+    async function replacePages() {
+        const inputStr = document.getElementById('pagesInput').value.trim();
+        if (!inputStr) { alert("Napíšte, ktoré strany vymeniť."); return; }
+
+        document.getElementById('processingOverlay').style.display = 'flex';
+
+        try {
+            const { PDFDocument } = PDFLib;
+            
+            // 1. Načítať dokumenty
+            const pdfOrig = await PDFDocument.load(bytesOrig);
+            const pdfNew = await PDFDocument.load(bytesNew);
+            
+            // 2. Parsuj vstup (napr. "1, 3, 5") na čísla [1, 3, 5]
+            const targetPages = inputStr.split(',')
+                                      .map(s => parseInt(s.trim()))
+                                      .filter(n => !isNaN(n) && n > 0);
+
+            // 3. Kontrola
+            const newPageCount = pdfNew.getPageCount();
+            if (targetPages.length !== newPageCount) {
+                throw new Error(`Počet zadaných strán (${targetPages.length}) nesedí s počtom strán v novom súbore (${newPageCount}).`);
+            }
+
+            // 4. Vytvoríme ÚPLNE NOVÝ dokument a skladáme ho (najbezpečnejšia metóda)
+            const finalPdf = await PDFDocument.create();
+            const totalOrigPages = pdfOrig.getPageCount();
+
+            // Mapa: Ktorú stranu (index) nahradiť akou stranou z nového PDF
+            // user zadáva 1, my potrebujeme index 0
+            const replacementMap = {}; 
+            targetPages.forEach((targetNum, index) => {
+                replacementMap[targetNum - 1] = index; // targetIndex -> newPdfIndex
+            });
+
+            // 5. Slučka cez pôvodný dokument
+            for (let i = 0; i < totalOrigPages; i++) {
+                if (replacementMap.hasOwnProperty(i)) {
+                    // TÚTO STRANU MENÍME
+                    const newPdfIndex = replacementMap[i];
+                    const [copiedPage] = await finalPdf.copyPages(pdfNew, [newPdfIndex]);
+                    finalPdf.addPage(copiedPage);
+                } else {
+                    // TÚTO STRANU NECHÁVAME PÔVODNÚ
+                    const [copiedPage] = await finalPdf.copyPages(pdfOrig, [i]);
+                    finalPdf.addPage(copiedPage);
+                }
+            }
+
+            // 6. Uložiť
+            const pdfBytes = await finalPdf.save();
+            download(pdfBytes, `${origName}_vymene.pdf`, "application/pdf");
+
+        } catch (e) {
+            console.error(e);
+            alert("Chyba: " + e.message);
+        } finally {
+            document.getElementById('processingOverlay').style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
