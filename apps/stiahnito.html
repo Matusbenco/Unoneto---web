@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StiahniTo - Univerzálny Sťahovač</title>
+    <style>
+        :root {
+            --primary: #10b981;
+            --bg: #111827;
+            --card: #1f2937;
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --code-bg: #000000;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { max-width: 900px; width: 100%; }
+
+        h1 { color: var(--primary); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #374151; padding-bottom: 20px; }
+        .header p { color: var(--muted); margin-top: 5px; }
+
+        .step {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #374151;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .step-title {
+            color: var(--primary); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-number {
+            background: var(--primary); color: black; width: 24px; height: 24px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
+        }
+
+        /* TLAČIDLÁ */
+        .grid-options {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px;
+        }
+        .option-btn {
+            background: #374151; border: 2px solid transparent; color: white; padding: 15px 5px;
+            border-radius: 8px; cursor: pointer; text-align: center; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80px;
+            transition: all 0.2s;
+        }
+        .option-btn small { font-weight: normal; font-size: 0.75rem; opacity: 0.7; margin-top: 4px; }
+        .option-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .option-btn.active { border-color: var(--primary); background: #1f2937; box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
+
+        /* Farby pre platformy */
+        .btn-fb { border-bottom: 3px solid #1877F2; }
+        .btn-ig { border-bottom: 3px solid #E1306C; }
+        .btn-tt { border-bottom: 3px solid #FE2C55; }
+        .btn-yt { border-bottom: 3px solid #FF0000; }
+        .btn-drive { border-bottom: 3px solid #34A853; }
+        .btn-meet { border-bottom: 3px solid #EA4335; }
+        .btn-zoom { border-bottom: 3px solid #2D8CFF; }
+        .btn-fathom { border-bottom: 3px solid #FF007F; }
+        .btn-vimeo { border-bottom: 3px solid #1AB7EA; }
+        .btn-sound { border-bottom: 3px solid #FF5500; }
+        .btn-suno { border-bottom: 3px solid #8B5CF6; }
+
+        /* INŠTALÁCIA & KÓD */
+        .install-guide {
+            background: var(--code-bg); border-left: 4px solid var(--primary); 
+            padding: 20px; border-radius: 6px; margin-top: 15px; display: none;
+        }
+        .how-to-open { margin-bottom: 15px; color: #d1d5db; font-size: 0.95rem; }
+        .how-to-open b { color: white; }
+        
+        .code-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #111; padding: 10px 15px; border-radius: 6px; border: 1px solid #333; margin-top: 8px;
+        }
+        .code-text { font-family: 'Consolas', monospace; color: #22d3ee; word-break: break-all; margin-right: 10px; }
+        
+        /* MINI COPY BUTTON */
+        .mini-copy {
+            background: #374151; color: white; border: none; padding: 5px 10px;
+            border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: bold; white-space: nowrap;
+        }
+        .mini-copy:hover { background: var(--primary); color: black; }
+        .mini-copy:active { transform: scale(0.95); }
+
+        /* INPUTY */
+        input[type="text"] {
+            width: 100%; padding: 15px; background: #111827; border: 1px solid #4b5563;
+            color: white; border-radius: 8px; box-sizing: border-box; font-size: 1.1rem; margin-bottom: 10px;
+        }
+        input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; }
+        label { cursor: pointer; display: flex; align-items: center; gap: 8px; user-select: none; }
+        input[type="checkbox"] { transform: scale(1.3); accent-color: var(--primary); }
+
+        /* INFO & RESULTS */
+        .info-box { padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 0.95rem; display: none; }
+        .guide-blue { background: #1e3a8a; color: #bfdbfe; }
+        .guide-red { background: #451a1a; color: #fca5a5; }
+        .guide-green { background: #064e3b; color: #a7f3d0; }
+
+        .result-box {
+            background: black; padding: 20px; border-radius: 8px; position: relative; margin-top: 10px; border: 1px solid #374151;
+        }
+        .cmd-output { color: #22d3ee; font-family: 'Consolas', monospace; font-size: 1.2rem; word-break: break-all; margin-right: 90px; }
+        
+        .main-copy-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: var(--primary); color: black; border: none;
+            padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .main-copy-btn:active { transform: scale(0.95); }
+
+        .hidden { display: none; }
+        a { color: var(--primary); text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>StiahniTo</h1>
+        <p>Jednoduchý návod a generátor príkazov</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><span class="step-number">1</span> Aký máš systém?</div>
+        <div class="grid-options">
+            <button class="option-btn" onclick="selectOS('windows')">Windows<small>PC / Laptop</small></button>
+            <button class="option-btn" onclick="selectOS('mac')">macOS<small>MacBook / iMac</small></button>
+            <button class="option-btn" onclick="selectOS('linux')">Linux<small>Ubuntu / iné</small></button>
+            <button class="option-btn" onclick="selectOS('android')">Android<small>Samsung, Xiaomi...</small></button>
+            <button class="option-btn" onclick="selectOS('ios')">iPhone / iPad<small>iOS</small></button>
+        </div>
+
+        <div id="install-box" class="install-guide">
+            </div>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><span class="step-number">2</span> Odkiaľ chceš sťahovať?</div>
+        <div class="grid-options">
+            <button class="option-btn btn-fb" onclick="selectPlatform('facebook')">Facebook<small>Reels/Watch</small></button>
+            <button class="option-btn btn-ig" onclick="selectPlatform('instagram')">Instagram<small>Post/Reel</small></button>
+            <button class="option-btn btn-tt" onclick="selectPlatform('tiktok')">TikTok<small>No Watermark</small></button>
+            <button class="option-btn btn-yt" onclick="selectPlatform('youtube')">YouTube<small>Video/Shorts</small></button>
+            
+            <button class="option-btn btn-drive" onclick="selectPlatform('drive')">Google Drive<small>Meet Záznam</small></button>
+            <button class="option-btn btn-zoom" onclick="selectPlatform('zoom')">Zoom<small>Cloud Record</small></button>
+            <button class="option-btn btn-fathom" onclick="selectPlatform('fathom')">Fathom / AI<small>Notetakers</small></button>
+            <button class="option-btn btn-meet" onclick="selectPlatform('meet')">Live Meet<small>Google/Teams</small></button>
+            
+            <button class="option-btn btn-vimeo" onclick="selectPlatform('vimeo')">Vimeo<small>Kurzy</small></button>
+            <button class="option-btn btn-sound" onclick="selectPlatform('soundcloud')">SoundCloud<small>Hudba</small></button>
+            <button class="option-btn btn-suno" onclick="selectPlatform('suno')">Suno AI<small>Hudba</small></button>
+            <button class="option-btn" onclick="selectPlatform('generic')">Iné / Web<small>Univerzálne</small></button>
+        </div>
+    </div>
+
+    <div class="step" id="input-step">
+        <div class="step-title"><span class="step-number">3</span> Vlož odkaz</div>
+        
+        <div id="standard-inputs">
+            <input type="text" id="video-url" placeholder="Sem vlož skopírovaný link..." oninput="generate()">
+            
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="audio-only" onchange="generate()"> Len zvuk (MP3)</label>
+                <label><input type="checkbox" id="has-password" onchange="togglePassword()"> Video je za heslom</label>
+            </div>
+            
+            <div id="password-field" class="hidden" style="margin-top: 15px;">
+                <input type="text" id="video-pass" placeholder="Zadaj heslo (ak ho video vyžaduje)" oninput="generate()">
+            </div>
+        </div>
+
+        <div id="hint-box" class="hidden"></div>
+    </div>
+
+    <div class="step" id="result-step">
+        <div class="step-title"><span class="step-number">4</span> Tvoj príkaz</div>
+        <div class="result-box">
+            <button class="main-copy-btn" onclick="copyResult()">KOPÍROVAŤ</button>
+            <div class="cmd-output" id="final-cmd">Čakám na link...</div>
+        </div>
+        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 15px; text-align: center;">
+            Vlož tento kód do terminálu a stlač ENTER.
+        </p>
+    </div>
+</div>
+
+<script>
+    let state = {
+        os: null,
+        platform: 'youtube',
+        url: '',
+        audioOnly: false,
+        password: ''
+    };
+
+    // GENERÁTOR NÁVODU NA INŠTALÁCIU
+    function selectOS(osName) {
+        state.os = osName;
+        document.querySelectorAll('.step')[0].querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const box = document.getElementById('install-box');
+        box.style.display = 'block';
+
+        let html = '';
+
+        if (osName === 'windows') {
+            html = `
+                <div class="how-to-open">
+                    1. Stlač klávesu <b>Windows</b> (Vlajka) + <b>R</b>.<br>
+                    2. Napíš <b>powershell</b> a stlač Enter.
+                </div>
+                <div>Potom vlož tento príkaz (stačí urobiť iba raz):</div>
+                ${createCodeBlock('winget install yt-dlp ffmpeg')}
+            `;
+        } 
+        else if (osName === 'mac') {
+            html = `
+                <div class="how-to-open">
+                    1. Stlač <b>Command ⌘</b> + <b>Medzerník</b>.<br>
+                    2. Napíš <b>Terminal</b> a stlač Enter.
+                </div>
+                <div>Potom vlož tento príkaz (musíš mať Homebrew):</div>
+                ${createCodeBlock('brew install yt-dlp ffmpeg')}
+            `;
+        } 
+        else if (osName === 'linux') {
+            html = `
+                <div class="how-to-open">
+                    Skratka pre terminál: <b>Ctrl</b> + <b>Alt</b> + <b>T</b>
+                </div>
+                ${createCodeBlock('sudo apt update && sudo apt install yt-dlp ffmpeg')}
+            `;
+        }
+        else if (osName === 'android') {
+            html = `
+                <div class="how-to-open">
+                    ⚠️ Android nemá terminál. Musíš si stiahnuť aplikáciu <b>Termux</b>.<br>
+                    <span style="color:var(--muted)">Pozor: Verzia na Google Play nefunguje! Stiahni si ju tu:</span><br>
+                    👉 <a href="https://f-droid.org/repo/com.termux_118.apk" target="_blank">Stiahnuť Termux (APK)</a>
+                </div>
+                <div>Po inštalácii otvor Termux a vlož tento príkaz:</div>
+                ${createCodeBlock('pkg install python ffmpeg && pip install yt-dlp')}
+            `;
+        }
+        else if (osName === 'ios') {
+            html = `
+                <div class="how-to-open">
+                    Na iPhone potrebuješ aplikáciu <b>a-Shell</b> z App Store.<br>
+                    👉 <a href="https://apps.apple.com/us/app/a-shell/id1473805438" target="_blank">Stiahnuť a-Shell</a>
+                </div>
+                <div>Otvor a-Shell a nainštaluj nástroj príkazom:</div>
+                ${createCodeBlock('pip install yt-dlp')}
+            `;
+        }
+
+        box.innerHTML = html;
+    }
+
+    // POMOCNÁ FUNKCIA PRE KÓD A TLAČIDLO
+    function createCodeBlock(command) {
+        // Escapovanie úvodzoviek pre onclick atribút
+        const safeCmd = command.replace(/'/g, "\\'");
+        return `
+            <div class="code-row">
+                <div class="code-text">${command}</div>
+                <button class="mini-copy" onclick="copyText('${safeCmd}', this)">KOPÍROVAŤ</button>
+            </div>
+        `;
+    }
+
+    // KOPÍROVANIE INŠTALAČNÝCH PRÍKAZOV
+    function copyText(text, btnElement) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "OK!";
+            btnElement.style.background = "var(--primary)";
+            btnElement.style.color = "black";
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.background = "#374151";
+                btnElement.style.color = "white";
+            }, 1500);
+        });
+    }
+
+    // VÝBER PLATFORMY
+    function selectPlatform(platName) {
+        state.platform = platName;
+        document.querySelectorAll('.step')[1].querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // Logic UI
+        const standardInputs = document.getElementById('standard-inputs');
+        const resultStep = document.getElementById('result-step');
+        const hintBox = document.getElementById('hint-box');
+        
+        // Reset defaults
+        standardInputs.style.display = 'block';
+        resultStep.style.display = 'block';
+        hintBox.style.display = 'none';
+        hintBox.className = 'info-box';
+        document.getElementById('audio-only').checked = false;
+
+        // Custom Logic
+        if (platName === 'meet') {
+            standardInputs.style.display = 'none';
+            resultStep.style.display = 'none';
+            showHint('guide-red', '<b>⚠️ Live Stream:</b> Nedá sa stiahnuť cez kód. Použi nahrávanie obrazovky (OBS). <br>Ak máš záznam (Google Drive link), zvoľ možnosť <b>Google Drive</b>.');
+        } 
+        else if (platName === 'drive') {
+            document.getElementById('video-url').placeholder = "https://drive.google.com/file/d/...";
+            showHint('guide-green', '<b>Drive / Meet Záznam:</b> Uisti sa, že máš právo súbor vidieť (napr. si prihlásený v prehliadači, z ktorého berieš cookies).');
+        }
+        else if (platName === 'suno' || platName === 'soundcloud') {
+            document.getElementById('audio-only').checked = true;
+            showHint('guide-green', '<b>Hudba:</b> Automaticky nastavené sťahovanie ako MP3.');
+        }
+        else if (platName === 'tiktok') {
+            showHint('guide-green', '<b>TikTok:</b> Sťahuje sa verzia bez vodoznaku.');
+        }
+        else {
+            document.getElementById('video-url').placeholder = "Vlož URL adresu videa sem...";
+        }
+        
+        generate();
+    }
+
+    function showHint(colorClass, htmlContent) {
+        const hintBox = document.getElementById('hint-box');
+        hintBox.innerHTML = htmlContent;
+        hintBox.className = `info-box ${colorClass}`;
+        hintBox.style.display = 'block';
+    }
+
+    function togglePassword() {
+        const check = document.getElementById('has-password');
+        const field = document.getElementById('password-field');
+        if (check.checked) field.classList.remove('hidden');
+        else {
+            field.classList.add('hidden');
+            document.getElementById('video-pass').value = '';
+        }
+        generate();
+    }
+
+    function generate() {
+        state.url = document.getElementById('video-url').value.trim();
+        state.audioOnly = document.getElementById('audio-only').checked;
+        state.password = document.getElementById('video-pass').value.trim();
+
+        let cmd = "yt-dlp";
+
+        if (state.audioOnly) cmd += " -x --audio-format mp3";
+        if (state.password) cmd += ` --video-password "${state.password}"`;
+
+        if (state.url) cmd += ` "${state.url}"`;
+        else cmd += ` "LINK_VIDEA"`;
+
+        document.getElementById('final-cmd').innerText = cmd;
+    }
+
+    // KOPÍROVANIE VÝSLEDKU
+    function copyResult() {
+        const text = document.getElementById('final-cmd').innerText;
+        const btn = document.querySelector('.main-copy-btn');
+        copyText(text, btn);
+    }
+
+    // Init
+    generate();
+</script>
+
+</body>
+</html>
