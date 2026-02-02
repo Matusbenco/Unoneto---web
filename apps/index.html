@@ -6,12 +6,9 @@
     <title>Unoneto Tools Suite</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"/>
 
     <style>
         :root {
-            /* Pôvodné premenné */
             --bg-dark: #0f172a;
             --bg-sidebar: #1e293b;
             --accent: #6366f1; /* Indigo - Primary */
@@ -24,11 +21,6 @@
             --card-hover: rgba(51, 65, 85, 0.9);
             
             --sidebar-width: 280px;
-
-            /* Nové premenné pre Header */
-            --cyan: #22d3ee;
-            --purple: #a855f7;
-            --header-bg: #0f172a;
         }
 
         * { box-sizing: border-box; }
@@ -45,124 +37,9 @@
             height: 100vh;
             overflow: hidden;
             display: flex;
-            flex-direction: column; /* ZMENA: Vertikálne usporiadanie pre Header + Dashboard */
         }
 
-        /* =========================================
-           NOVÝ HORNÝ PANEL (HEADER SEKCIA)
-           ========================================= */
-        
-        /* 1. Marquee Banner */
-        .promo-banner {
-            background: rgba(15, 23, 42, 0.95);
-            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
-            height: 44px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            z-index: 100;
-            flex-shrink: 0;
-        }
-        .marquee-wrapper {
-            display: flex;
-            width: 100%;
-            overflow: hidden;
-            text-decoration: none;
-        }
-        .marquee-content {
-            display: flex;
-            animation: marquee-scroll 30s linear infinite;
-        }
-        .marquee-item {
-            white-space: nowrap;
-            color: white;
-            font-size: 0.9rem;
-            padding: 0 40px;
-            display: flex;
-            align-items: center;
-        }
-        .marquee-item strong { color: var(--cyan); margin-right: 5px; }
-
-        @keyframes marquee-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .promo-banner:hover .marquee-content { animation-play-state: paused; }
-
-        /* 2. Hlavná Navigácia */
-        .main-header {
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--card-border);
-            padding: 0 20px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            z-index: 90;
-        }
-        .header-container {
-            max-width: 1600px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: white;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-        .logo-icon-img { height: 32px; width: auto; } /* Ak máte obrázok */
-        .logo-text { font-size: 1.5rem; }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            align-items: center;
-        }
-        .nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-        .nav-links a:hover { color: var(--cyan); }
-        
-        .btn-consult {
-            background: linear-gradient(90deg, #22d3ee, #a855f7);
-            color: white !important;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-            transition: transform 0.2s;
-        }
-        .btn-consult:hover { transform: translateY(-2px); }
-
-        .lang-separator { margin: 0 5px; color: var(--text-muted); }
-
-        /* =========================================
-           DASHBOARD WRAPPER (Aby fungoval pod headerom)
-           ========================================= */
-        .dashboard-wrapper {
-            display: flex;
-            flex: 1; /* Zoberie zvyšok výšky */
-            overflow: hidden; /* Aby sa scrolloval len main-content */
-            position: relative;
-        }
-
-        /* --- SIDEBAR (Upravená výška) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: rgba(30, 41, 59, 0.5);
@@ -173,19 +50,27 @@
             padding: 30px 20px;
             z-index: 50;
             flex-shrink: 0;
-            height: 100%; /* Plná výška wrapperu */
         }
 
-        .brand-in-sidebar {
-            /* Skryjeme veľké logo v sidebare, lebo je už v headeri, 
-               alebo ho necháme len ako "Tools" nápis */
+        .brand {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 30px;
+            color: white;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding-left: 10px;
-            display: flex; align-items: center; gap: 10px;
+        }
+        
+        .brand-logo {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
         .menu { display: flex; flex-direction: column; gap: 6px; }
@@ -237,7 +122,7 @@
 
         .container { max-width: 1600px; margin: 0 auto; }
 
-        /* --- TOP BAR (Search only now) --- */
+        /* --- TOP BAR --- */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -265,12 +150,14 @@
         .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* --- APP GRID --- */
+        /* --- APP GRID (NO HOLES) --- */
         .app-grid {
             display: grid;
+            /* Responzívne stĺpce */
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
             padding-bottom: 100px;
+            /* Zarovnanie výšky kariet */
             align-items: stretch; 
         }
 
@@ -287,6 +174,7 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             backdrop-filter: blur(10px);
+            /* Kľúčové pre rovnakú výšku */
             height: 100%; 
             min-height: 200px;
         }
@@ -298,6 +186,7 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
+        /* Header karty */
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -305,12 +194,14 @@
             margin-bottom: 15px;
         }
 
+        /* Ikony v boxoch pre jednotný štýl */
         .card-icon-box {
             width: 48px; height: 48px;
             border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.6rem;
             margin-bottom: 10px;
+            /* Dynamické pozadie cez inline style alebo CSS premenné */
         }
 
         .card-badge {
@@ -334,9 +225,10 @@
             font-size: 0.9rem; 
             color: var(--text-muted); 
             line-height: 1.6; 
-            flex-grow: 1; 
+            flex-grow: 1; /* Tlačí obsah dole, aby karta bola plná */
         }
 
+        /* Šípka na hover */
         .card-arrow {
             margin-top: 15px;
             font-size: 0.9rem;
@@ -349,18 +241,23 @@
         .app-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
         /* Kategórie - Farby */
+        /* PDF: Cyan/Blue */
         .cat-pdf .card-icon-box { background: rgba(34, 211, 238, 0.15); color: #22d3ee; }
         .cat-pdf .card-badge { background: rgba(34, 211, 238, 0.1); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.2); }
         
+        /* IMG: Purple */
         .cat-img .card-icon-box { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
         .cat-img .card-badge { background: rgba(167, 139, 250, 0.1); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.2); }
         
+        /* AV: Orange */
         .cat-av .card-icon-box { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
         .cat-av .card-badge { background: rgba(251, 146, 60, 0.1); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.2); }
         
+        /* DATA: Emerald */
         .cat-data .card-icon-box { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
         .cat-data .card-badge { background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.2); }
 
+        /* UTILS: Pink/Gray */
         .cat-util .card-icon-box { background: rgba(244, 114, 182, 0.15); color: #f472b6; }
         .cat-util .card-badge { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid rgba(244, 114, 182, 0.2); }
 
@@ -368,30 +265,24 @@
 
         /* RESPONSIVITA */
         @media (max-width: 900px) {
-            body { height: auto; overflow: auto; }
-            .dashboard-wrapper { flex-direction: column; overflow: visible; }
-            
-            .main-header { padding: 0 15px; height: 70px; }
-            .nav-links { display: none; } /* Na mobile skryjeme menu pre jednoduchosť, alebo pridáme hamburger */
-            .logo { font-size: 1.2rem; }
-
+            body { flex-direction: column; height: auto; overflow: auto; }
             .sidebar {
                 width: 100%; border-right: none; border-bottom: 1px solid var(--card-border);
-                padding: 15px; position: sticky; top: 0; 
-                height: auto;
+                padding: 15px; position: sticky; top: 0; backdrop-filter: blur(15px);
             }
-            .brand-in-sidebar { display: none; } /* Sidebar logo netreba, je hore */
+            .brand { margin-bottom: 0; font-size: 1.2rem; }
+            .menu { display: none; } /* Na mobile môžeme menu skryť alebo spraviť hamburger */
             
-            .menu { display: none; }
+            /* Jednoduché horizontálne menu na mobile */
             .sidebar .menu-mobile {
-                display: flex; gap: 10px; overflow-x: auto; padding-top: 0;
+                display: flex; gap: 10px; overflow-x: auto; padding-top: 15px;
             }
             .sidebar .menu-mobile button {
                 white-space: nowrap; padding: 8px 12px; font-size: 0.8rem;
                 background: rgba(255,255,255,0.05); color: white; border: none; border-radius: 8px;
             }
             
-            .main-content { padding: 20px; overflow: visible; }
+            .main-content { padding: 20px; }
             .top-bar { flex-direction: column; align-items: flex-start; }
             .search-box { width: 100%; }
         }
@@ -399,277 +290,203 @@
 </head>
 <body>
 
-    <div id="promo-banner" class="promo-banner">
-        <a href="weby.html" class="marquee-wrapper">
-            <div class="marquee-content">
-                <span class="marquee-item">
-                    <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
-                    <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
-                </span>
-                <span class="marquee-item">
-                    <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
-                    <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
-                </span>
-                <span class="marquee-item">
-                    <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
-                    <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
-                </span>
-                <span class="marquee-item">
-                    <i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i>
-                    <strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.
-                </span>
-            </div>
-        </a>
-    </div>
-
-    <header class="main-header">
-        <div class="header-container">
-            <a href="/" class="logo">
-                <img src="favicon.png" alt="" class="logo-icon-img" onerror="this.style.display='none'"> 
-                <i class="fa-solid fa-layer-group" style="color:var(--accent); margin-right:5px;" id="fallback-icon"></i>
-                <span>Unoneto</span>
-            </a>
-            
-            <ul class="nav-links">
-                <li><a href="#" style="color:white;">Naša ponuka</a></li>
-                <li><a href="blog" class="btn btn-primary" style="background-color: #0f3485; padding: 5px 10px; border-radius: 5px;">Novinky</a></li>
-                <li>
-                    <a href="/" title="Slovenčina"><span class="fi fi-sk"></span></a>
-                    <span class="lang-separator">|</span>
-                    <a href="/en" title="English"><span class="fi fi-gb"></span></a>
-                </li>
-                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn-consult">Dohodnúť si konzultáciu</a></li>
-            </ul>
+    <nav class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">⚡</div>
+            <span>Unoneto Tools Suite</span>
         </div>
-    </header>
 
-    <div class="dashboard-wrapper">
-        
-        <nav class="sidebar">
-            <div class="brand-in-sidebar">
-                <span>Tools Suite</span>
+        <div class="menu">
+            <div class="menu-label">Prehľad</div>
+            <button class="menu-btn active" onclick="filterApps('all', this)">
+                <span>🏠</span> Dashboard
+            </button>
+
+            <div class="menu-label">Kategórie</div>
+            <button class="menu-btn" onclick="filterApps('cat-pdf', this)">
+                <span>📄</span> PDF Dokumenty
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-img', this)">
+                <span>🖼️</span> Grafika
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-av', this)">
+                <span>🎬</span> Audio & Video
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-util', this)">
+                <span>🛠️</span> Utility
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-data', this)">
+                <span>📊</span> Dáta & Firmy
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1 id="pageTitle">Všetky nástroje</h1>
+                    <p>Bezpečná práca so súbormi priamo vo vašom prehliadači.</p>
+                </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Hľadať nástroj...">
+                </div>
             </div>
 
-            <div class="menu-mobile" style="display:none;">
-               </div>
-
-            <div class="menu">
-                <div class="menu-label">Prehľad</div>
-                <button class="menu-btn active" onclick="filterApps('all', this)">
-                    <span>🏠</span> Dashboard
-                </button>
-
-                <div class="menu-label">Kategórie</div>
-                <button class="menu-btn" onclick="filterApps('cat-pdf', this)">
-                    <span>📄</span> PDF Dokumenty
-                </button>
-                <button class="menu-btn" onclick="filterApps('cat-img', this)">
-                    <span>🖼️</span> Grafika
-                </button>
-                <button class="menu-btn" onclick="filterApps('cat-av', this)">
-                    <span>🎬</span> Audio & Video
-                </button>
-                <button class="menu-btn" onclick="filterApps('cat-util', this)">
-                    <span>🛠️</span> Utility
-                </button>
-                <button class="menu-btn" onclick="filterApps('cat-data', this)">
-                    <span>📊</span> Dáta & Firmy
-                </button>
-            </div>
-        </nav>
-
-        <main class="main-content">
-            <div class="container">
+            <div class="app-grid" id="appGrid">
                 
-                <div class="top-bar">
-                    <div class="page-title">
-                        <h1 id="pageTitle">Všetky nástroje</h1>
-                        <p>Bezpečná práca so súbormi priamo vo vašom prehliadači.</p>
+                <a href="pdf-compressor.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">📉</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                    <div class="search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="searchInput" class="search-input" placeholder="Hľadať nástroj...">
+                    <div class="title">PDF Compressor</div>
+                    <div class="desc">Inteligentná kompresia dokumentov pre zmenšenie veľkosti bez straty čitateľnosti.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="pdf-ocr.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">👁️</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                </div>
+                    <div class="title">PDF OCR</div>
+                    <div class="desc">Rozpoznávanie textu v naskenovaných dokumentoch a prevod na prehľadávateľný text.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                <div class="app-grid" id="appGrid">
-                    
-                    <a href="pdf-compressor.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">📉</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF Compressor</div>
-                        <div class="desc">Inteligentná kompresia dokumentov pre zmenšenie veľkosti bez straty čitateľnosti.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                
+                <a href="pdfmerger.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">📑</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">PDF Merger</div>
+                    <div class="desc">Spojenie viacerých PDF súborov do jedného organizovaného dokumentu.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="pdf-ocr.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">👁️</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF OCR</div>
-                        <div class="desc">Rozpoznávanie textu v naskenovaných dokumentoch a prevod na prehľadávateľný text.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="pdf replacer.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">🔄</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">PDF Replacer</div>
+                    <div class="desc">Rýchla výmena konkrétnych strán v dokumente za nové verzie.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="pdfmerger.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">📑</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF Merger</div>
-                        <div class="desc">Spojenie viacerých PDF súborov do jedného organizovaného dokumentu.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="pdfsplitter.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">✂️</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">PDF Splitter</div>
+                    <div class="desc">Extrahovanie strán alebo rozdelenie veľkého dokumentu na menšie časti.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="pdfsplitter.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">✂️</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF Splitter</div>
-                        <div class="desc">Extrahovanie jednotlivých strán alebo rozdelenie veľkého dokumentu na menšie časti.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="pdfimageconverter.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">🖼️</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">PDF to Image</div>
+                    <div class="desc">Obojsmerná konverzia medzi PDF dokumentmi a obrázkami (JPG/PNG).</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="pdf replacer.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">🔄</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF Replacer</div>
-                        <div class="desc">Rýchla výmena konkrétnych strán v dokumente za nové verzie.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="imageresizer.html" class="app-card cat-img">
+                    <div class="card-header">
+                        <div class="card-icon-box">📐</div>
+                        <span class="card-badge">IMG</span>
+                    </div>
+                    <div class="title">Image Resizer</div>
+                    <div class="desc">Hromadná zmena rozlíšenia obrázkov s podporou moderného formátu HEIC.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    
+                <a href="image-converter.html" class="app-card cat-img">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎨</div>
+                        <span class="card-badge">IMG</span>
+                    </div>
+                    <div class="title">Image Converter</div>
+                    <div class="desc">Profesionálny prevod formátov: HEIC, WEBP, PNG, JPG, TIFF a BMP.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="pdfimageconverter.html" class="app-card cat-pdf">
-                        <div class="card-header">
-                            <div class="card-icon-box">🖼️</div>
-                            <span class="card-badge">PDF</span>
-                        </div>
-                        <div class="title">PDF to Image</div>
-                        <div class="desc">Obojsmerný konvertér medzi PDF dokumentmi a obrázkami (JPG/PNG).</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="screen-recorder.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎥</div>
+                        <span class="card-badge">Video</span>
+                    </div>
+                    <div class="title">Screen Recorder</div>
+                    <div class="desc">Nahrávanie obrazovky počítača a mikrofónu priamo z prehliadača.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="imageresizer.html" class="app-card cat-img">
-                        <div class="card-header">
-                            <div class="card-icon-box">📐</div>
-                            <span class="card-badge">IMG</span>
-                        </div>
-                        <div class="title">Image Resizer</div>
-                        <div class="desc">Hromadná zmena rozlíšenia obrázkov s podporou moderného formátu HEIC.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="av-converter.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">📼</div>
+                        <span class="card-badge">A/V</span>
+                    </div>
+                    <div class="title">A/V Converter</div>
+                    <div class="desc">Univerzálny konvertor multimediálnych súborov do MP4, MP3 a ďalších.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="image-converter.html" class="app-card cat-img">
-                        <div class="card-header">
-                            <div class="card-icon-box">🎨</div>
-                            <span class="card-badge">IMG</span>
-                        </div>
-                        <div class="title">Image Converter</div>
-                        <div class="desc">Profesionálny prevod formátov: HEIC, WEBP, PNG, JPG, TIFF a BMP.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="av-cutter.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎞️</div>
+                        <span class="card-badge">A/V</span>
+                    </div>
+                    <div class="title">A/V Cutter</div>
+                    <div class="desc">Presné strihanie videa a audia s možnosťou Fade In/Out efektov.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="photo-editor.html" class="app-card cat-img">
-                        <div class="card-header">
-                            <div class="card-icon-box">✂️</div>
-                            <span class="card-badge">IMG</span>
-                        </div>
-                        <div class="title">Photo Editor</div>
-                        <div class="desc">Jednoduché orezanie a otočenie fotiek |zmena pomeru strán.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="text-cleaner.html" class="app-card cat-util">
+                    <div class="card-header">
+                        <div class="card-icon-box">🧹</div>
+                        <span class="card-badge">Nástroj</span>
+                    </div>
+                    <div class="title">Text Cleaner</div>
+                    <div class="desc">Okamžité vyčistenie formátovania, medzier a diakritiky z textov.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="screen-recorder.html" class="app-card cat-av">
-                        <div class="card-header">
-                            <div class="card-icon-box">🎥</div>
-                            <span class="card-badge">Video</span>
-                        </div>
-                        <div class="title">Screen Recorder</div>
-                        <div class="desc">Nahrávanie obrazovky počítača a mikrofónu priamo z prehliadača.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="qr-generator.html" class="app-card cat-util">
+                    <div class="card-header">
+                        <div class="card-icon-box">📱</div>
+                        <span class="card-badge">Nástroj</span>
+                    </div>
+                    <div class="title">QR Generator</div>
+                    <div class="desc">Generovanie QR kódov pre URL, WiFi, vizitky alebo text.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="av-converter.html" class="app-card cat-av">
-                        <div class="card-header">
-                            <div class="card-icon-box">📼</div>
-                            <span class="card-badge">A/V</span>
-                        </div>
-                        <div class="title">Audio/Video Converter</div>
-                        <div class="desc">Univerzálny konvertor multimediálnych súborov do MP4, MP3 a ďalších.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
+                <a href="finstat-dashboard.html" class="app-card cat-data">
+                    <div class="card-header">
+                        <div class="card-icon-box">📈</div>
+                        <span class="card-badge">Dáta</span>
+                    </div>
+                    <div class="title">Finstat Dashboard</div>
+                    <div class="desc">Analytický nástroj na spracovanie a vizualizáciu firemných dát.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                    <a href="av-cutter.html" class="app-card cat-av">
-                        <div class="card-header">
-                            <div class="card-icon-box">🎞️</div>
-                            <span class="card-badge">A/V</span>
-                        </div>
-                        <div class="title">A/V Cutter</div>
-                        <div class="desc">Presné strihanie (aj hromadné) videa a audia s možnosťou Fade In/Out efektov.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
-
-                    <a href="text-cleaner.html" class="app-card cat-util">
-                        <div class="card-header">
-                            <div class="card-icon-box">🧹</div>
-                            <span class="card-badge">Nástroj</span>
-                        </div>
-                        <div class="title">Text Cleaner</div>
-                        <div class="desc">Okamžité vyčistenie formátovania, medzier a diakritiky z textov.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
-
-                    <a href="qr-generator.html" class="app-card cat-util">
-                        <div class="card-header">
-                            <div class="card-icon-box">📱</div>
-                            <span class="card-badge">Nástroj</span>
-                        </div>
-                        <div class="title">QR Generator</div>
-                        <div class="desc">Generovanie QR kódov pre URL, WiFi, vizitky alebo text.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
-
-                    <a href="zip-manager.html" class="app-card cat-util">
-                        <div class="card-header">
-                            <div class="card-icon-box">📦</div>
-                            <span class="card-badge">Nástroj</span>
-                        </div>
-                        <div class="title">ZIP Manager</div>
-                        <div class="desc">Rýchle zbalenie a rozbalenie súborov. Efektívna správa archívov.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
-
-                    <a href="finstat-dashboard.html" class="app-card cat-data">
-                        <div class="card-header">
-                            <div class="card-icon-box">📈</div>
-                            <span class="card-badge">Dáta</span>
-                        </div>
-                        <div class="title">Finstat Dashboard</div>
-                        <div class="desc">Analytický nástroj na spracovanie a vizualizáciu firemných dát.</div>
-                        <div class="card-arrow">Otvoriť nástroj →</div>
-                    </a>
-
-                </div>
             </div>
-        </main>
-    </div> <script>
+        </div>
+    </main>
+
+    <script>
         const grid = document.getElementById('appGrid');
         const cards = grid.querySelectorAll('.app-card');
         const titleEl = document.getElementById('pageTitle');
         const searchInput = document.getElementById('searchInput');
-        
-        // Logika pre fallback logo
-        document.querySelector('.logo-icon-img').addEventListener('error', function() {
-            this.style.display = 'none';
-            document.getElementById('fallback-icon').style.display = 'inline-block';
-        });
 
         function filterApps(category, btnElement) {
             // Update tlačidiel
@@ -719,22 +536,6 @@
                 }
             });
         });
-
-        // Jednoduchá detekcia pre mobilné menu (ak bude treba)
-        if (window.innerWidth <= 900) {
-            const sidebar = document.querySelector('.sidebar');
-            const mobileMenu = document.createElement('div');
-            mobileMenu.className = 'menu-mobile';
-            mobileMenu.innerHTML = `
-                <button onclick="filterApps('all', this)">🏠 Všetky</button>
-                <button onclick="filterApps('cat-pdf', this)">📄 PDF</button>
-                <button onclick="filterApps('cat-img', this)">🖼️ IMG</button>
-                <button onclick="filterApps('cat-av', this)">🎬 AV</button>
-                <button onclick="filterApps('cat-util', this)">🛠️ Util</button>
-            `;
-            // Vložíme za brand
-            sidebar.insertBefore(mobileMenu, sidebar.children[1]);
-        }
     </script>
 </body>
 </html>

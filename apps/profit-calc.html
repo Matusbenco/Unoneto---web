@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profit Calc Pro | Unoneto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; -webkit-tap-highlight-color: transparent; }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .section-title {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; 
+            color: #94a3b8; font-weight: 700; margin-bottom: 8px; display: block;
+        }
+
+        .custom-input {
+            width: 100%; background: #1e293b; border: 1px solid #475569;
+            color: white; padding: 12px; border-radius: 10px;
+            font-size: 1rem; font-weight: 500; transition: 0.2s;
+        }
+        .custom-input:focus { outline: none; border-color: #6366f1; background: #0f172a; }
+
+        .currency-select {
+            position: absolute; right: 2px; top: 2px; bottom: 2px;
+            background: #334155; border: none; color: white;
+            border-radius: 8px; padding: 0 10px; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; outline: none;
+        }
+
+        .vat-toggle {
+            display: flex; background: #334155; border-radius: 8px; padding: 2px;
+            margin-bottom: 8px; width: fit-content;
+        }
+        .vat-opt {
+            padding: 4px 12px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; transition: 0.2s; color: #94a3b8;
+        }
+        .vat-opt.active { background: #6366f1; color: white; font-weight: 600; }
+
+        /* Country Badges */
+        .country-btn {
+            padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+            border: 1px solid #475569; background: rgba(255,255,255,0.05); color: #cbd5e1;
+            cursor: pointer; transition: 0.2s; flex-shrink: 0;
+        }
+        .country-btn.active {
+            background: #6366f1; border-color: #6366f1; color: white;
+        }
+
+        /* Result Cards */
+        .result-card {
+            background: rgba(15, 23, 42, 0.6); border-radius: 12px; padding: 12px;
+            border: 1px solid rgba(255,255,255,0.05); text-align: center;
+        }
+        .result-val { font-size: 1.3rem; font-weight: 700; color: white; }
+        .result-lbl { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
+
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; height: 6px; background: #334155;
+            border-radius: 3px; outline: none; margin-top: 10px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+            border-radius: 50%; background: #6366f1; cursor: pointer; border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 bg-slate-900">
+
+    <div class="w-full max-w-lg flex items-center justify-between mb-5 pt-2">
+        <a href="index.html" class="flex items-center gap-2 text-slate-400 hover:text-white px-2 py-1 rounded-lg">
+            <span>←</span> Späť
+        </a>
+        <h1 class="font-bold text-lg text-white flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-indigo-400"></i> Profit Calc Pro
+        </h1>
+    </div>
+
+    <div class="w-full max-w-lg glass-panel p-5 space-y-6">
+
+        <div>
+            <div class="flex justify-between items-center mb-2">
+                <span class="section-title mb-0">Nastavenie DPH</span>
+                <span class="text-xs font-mono text-indigo-300 bg-indigo-500/20 px-2 rounded" id="vat-display">20%</span>
+            </div>
+            <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                <button class="country-btn active" onclick="setVat(20, this)">🇸🇰 SK</button>
+                <button class="country-btn" onclick="setVat(21, this)">🇨🇿 CZ</button>
+                <button class="country-btn" onclick="setVat(27, this)">🇭🇺 HU</button>
+                <button class="country-btn" onclick="setVat(23, this)">🇵🇱 PL</button>
+                <button class="country-btn" onclick="customVat(this)">✏️ Iné</button>
+            </div>
+        </div>
+
+        <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700 relative">
+            <span class="section-title">Nákupná cena (Import)</span>
+            
+            <div class="relative mb-3">
+                <input type="number" id="cost-input" class="custom-input text-blue-300 pr-24" placeholder="0.00" oninput="calc('cost')">
+                <select id="currency" class="currency-select" onchange="changeCurrency()">
+                    <option value="EUR">EUR €</option>
+                    <option value="USD">USD $</option>
+                    <option value="CZK">CZK Kč</option>
+                    <option value="PLN">PLN zł</option>
+                    <option value="HUF">HUF Ft</option>
+                </select>
+            </div>
+
+            <div id="fx-row" class="hidden flex justify-between items-center text-xs bg-slate-900/50 p-2 rounded-lg border border-slate-700">
+                <span class="text-slate-400">Kurz (1€ =):</span>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="fx-rate" class="bg-transparent text-right w-20 text-white font-mono focus:outline-none border-b border-slate-600 focus:border-indigo-500" value="1.00" oninput="calc('cost')">
+                    <span id="fx-symbol" class="text-slate-500">$</span>
+                </div>
+            </div>
+            
+            <div id="cost-in-eur-row" class="hidden mt-2 text-right">
+                <span class="text-xs text-slate-400">Nákup v EUR:</span>
+                <span id="cost-eur-display" class="font-bold text-white text-sm">0.00 €</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-5 gap-4">
+            <div class="col-span-2">
+                <span class="section-title">Marža %</span>
+                <div class="relative">
+                    <input type="number" id="margin" class="custom-input text-green-300 text-center" value="30" oninput="calc('margin')">
+                    <input type="range" id="margin-slider" min="0" max="90" value="30" step="0.5" oninput="syncMargin(this.value)">
+                </div>
+            </div>
+
+            <div class="col-span-3">
+                <div class="flex justify-between items-end mb-1">
+                    <span class="section-title mb-0">Predajná cena</span>
+                    <div class="vat-toggle">
+                        <div class="vat-opt active" id="mode-inc" onclick="setPriceMode('inc')">S DPH</div>
+                        <div class="vat-opt" id="mode-exc" onclick="setPriceMode('exc')">BEZ</div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <input type="number" id="sell-price" class="custom-input text-xl font-bold text-white pr-8" placeholder="0.00" oninput="calc('price')">
+                    <span class="absolute right-3 top-3.5 text-slate-500">€</span>
+                </div>
+                <div class="text-right mt-1">
+                    <span class="text-[10px] text-slate-500 uppercase" id="alt-price-lbl">Cena bez DPH:</span>
+                    <span class="text-xs font-mono text-slate-300" id="alt-price-val">0.00 €</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="result-card">
+                <div class="result-lbl">Zisk / ks</div>
+                <div class="result-val text-green-400" id="profit-unit">0.00 €</div>
+            </div>
+            <div class="result-card">
+                <div class="result-lbl">Prirážka (Markup)</div>
+                <div class="result-val text-blue-400" id="markup-val">0%</div>
+            </div>
+        </div>
+
+        <div class="border-t border-slate-700 pt-4">
+            <div class="flex items-center gap-2 mb-3 cursor-pointer text-slate-400 hover:text-white transition" onclick="document.getElementById('bulk-area').classList.toggle('hidden')">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span class="font-bold text-sm">Množstevné zľavy</span>
+                <i class="fa-solid fa-chevron-down text-xs ml-auto"></i>
+            </div>
+            
+            <div id="bulk-area" class="hidden space-y-3 animation-fade-in">
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <span class="section-title">Počet (ks)</span>
+                        <input type="number" id="qty" class="custom-input text-center p-2" value="1" oninput="calc('bulk')">
+                    </div>
+                    <div class="col-span-2">
+                        <span class="section-title">Zľava pre klienta %</span>
+                        <input type="number" id="discount" class="custom-input text-red-300 text-center p-2" value="0" placeholder="0" oninput="calc('bulk')">
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-sm">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-slate-400">Nová cena/ks (S DPH):</span>
+                        <span class="font-bold text-white" id="discounted-price">0.00 €</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-slate-400">Marža po zľave:</span>
+                        <span class="font-bold text-yellow-400" id="discounted-margin">0%</span>
+                    </div>
+                    <div class="h-px bg-slate-700 my-2"></div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-200 font-bold">Celkový čistý zisk:</span>
+                        <span class="text-xl font-bold text-green-400" id="total-profit">0.00 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // --- STAV APLIKÁCIE ---
+    let state = {
+        vat: 20,          // % DPH
+        fxRate: 1.00,     // Kurz cudzej meny voči EUR
+        currency: 'EUR',  // Aktuálna mena
+        priceMode: 'inc'  // 'inc' = s DPH, 'exc' = bez DPH
+    };
+
+    // --- MENA A KURZ ---
+    async function changeCurrency() {
+        const sel = document.getElementById('currency');
+        state.currency = sel.value;
+        const fxRow = document.getElementById('fx-row');
+        const costEurRow = document.getElementById('cost-in-eur-row');
+        const symbol = document.getElementById('fx-symbol');
+
+        if (state.currency === 'EUR') {
+            fxRow.classList.add('hidden');
+            costEurRow.classList.add('hidden');
+            state.fxRate = 1.0;
+        } else {
+            fxRow.classList.remove('hidden');
+            costEurRow.classList.remove('hidden');
+            symbol.innerText = state.currency;
+            
+            // Načítanie kurzu z API (Frankfurter - ECB dáta)
+            // Frankfurter vracia koľko dostanem CUDZEJ za 1 EUR.
+            // Napr. EURUSD = 1.05. Takže NákupV_EUR = NákupV_USD / 1.05
+            try {
+                const btn = sel;
+                btn.disabled = true; 
+                const res = await fetch(`https://api.frankfurter.app/latest?from=EUR&to=${state.currency}`);
+                const data = await res.json();
+                
+                if (data.rates[state.currency]) {
+                    state.fxRate = data.rates[state.currency];
+                    document.getElementById('fx-rate').value = state.fxRate;
+                }
+                btn.disabled = false;
+            } catch (e) {
+                console.error("API Error", e);
+                // Ak zlyhá, necháme 1.00 alebo poslednú hodnotu
+            }
+        }
+        calc('cost');
+    }
+
+    // --- DPH NASTAVENIA ---
+    function setVat(rate, btn) {
+        state.vat = rate;
+        document.getElementById('vat-display').innerText = rate + "%";
+        
+        document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        
+        calc('recalc');
+    }
+
+    function customVat(btn) {
+        let val = prompt("Sadzba DPH (%):", "20");
+        if(val) setVat(parseFloat(val), btn);
+    }
+
+    function setPriceMode(mode) {
+        state.priceMode = mode;
+        document.getElementById('mode-inc').className = `vat-opt ${mode==='inc'?'active':''}`;
+        document.getElementById('mode-exc').className = `vat-opt ${mode==='exc'?'active':''}`;
+        
+        // Zmeníme label pomocnej ceny
+        document.getElementById('alt-price-lbl').innerText = mode === 'inc' ? "Cena bez DPH:" : "Cena s DPH:";
+        
+        calc('price'); // Prepočítame maržu podľa nového nastavenia (hodnota v inpute ostáva)
+    }
+
+    function syncMargin(val) {
+        document.getElementById('margin').value = val;
+        calc('margin');
+    }
+
+    // --- HLAVNÝ VÝPOČET ---
+    function calc(source) {
+        // 1. Získanie vstupov
+        const costRaw = parseFloat(document.getElementById('cost-input').value) || 0;
+        let margin = parseFloat(document.getElementById('margin').value) || 0;
+        const sellInputVal = parseFloat(document.getElementById('sell-price').value) || 0;
+        const manualFx = parseFloat(document.getElementById('fx-rate').value) || 1.0; // Užívateľ môže prepísať kurz
+        
+        // 2. Prepočet nákupu na EUR
+        // Ak je mena EUR, fxRate je 1. Ak USD, fxRate je napr 1.05
+        // CostEUR = CostUSD / 1.05
+        let costEur = costRaw;
+        if (state.currency !== 'EUR') {
+            costEur = costRaw / manualFx;
+            document.getElementById('cost-eur-display').innerText = costEur.toFixed(2) + " €";
+        }
+
+        let sellPriceNoVat = 0; // Toto je náš svätý grál pre výpočet marže
+
+        // 3. Rozvetvenie logiky podľa toho, čo užívateľ mení
+        
+        if (source === 'cost' || source === 'margin' || source === 'recalc') {
+            // Počítame PREDAJNÚ CENU z nákladov a marže
+            if (margin >= 100) margin = 99.9;
+            
+            if(costEur > 0) {
+                sellPriceNoVat = costEur / (1 - (margin / 100));
+            }
+
+            // Čo zobrazíme do inputu?
+            let displayPrice = (state.priceMode === 'inc') 
+                ? sellPriceNoVat * (1 + state.vat/100) 
+                : sellPriceNoVat;
+            
+            document.getElementById('sell-price').value = displayPrice.toFixed(2);
+
+        } else if (source === 'price') {
+            // Počítame MARŽU z predajnej ceny
+            // Najprv zistíme základ dane
+            if (state.priceMode === 'inc') {
+                sellPriceNoVat = sellInputVal / (1 + state.vat/100);
+            } else {
+                sellPriceNoVat = sellInputVal;
+            }
+
+            // Marža = (PredajBezDPH - Nakup) / PredajBezDPH
+            if (sellPriceNoVat > 0) {
+                margin = ((sellPriceNoVat - costEur) / sellPriceNoVat) * 100;
+            } else {
+                margin = 0;
+            }
+            
+            document.getElementById('margin').value = margin.toFixed(1);
+            document.getElementById('margin-slider').value = margin.toFixed(1);
+        } else if (source === 'bulk') {
+            // Len prepočet spodnej časti, potrebujeme aktuálnu sellPriceNoVat
+            // Zoberieme ju z UI
+            let currentDisplay = parseFloat(document.getElementById('sell-price').value) || 0;
+            if (state.priceMode === 'inc') {
+                sellPriceNoVat = currentDisplay / (1 + state.vat/100);
+            } else {
+                sellPriceNoVat = currentDisplay;
+            }
+        }
+
+        // 4. Doplnenie UI hodnôt
+        
+        // Pomocná cena (Alt Price)
+        let altPrice = (state.priceMode === 'inc') 
+            ? sellPriceNoVat // Ak je hore s DPH, dole ukáž bez
+            : sellPriceNoVat * (1 + state.vat/100); // Ak je hore bez, dole ukáž s
+        document.getElementById('alt-price-val').innerText = altPrice.toFixed(2) + " €";
+
+        // Zisk na kus
+        let profit = sellPriceNoVat - costEur;
+        const profitEl = document.getElementById('profit-unit');
+        profitEl.innerText = profit.toFixed(2) + " €";
+        profitEl.className = "result-val " + (profit >= 0 ? "text-green-400" : "text-red-400");
+
+        // Prirážka (Markup)
+        let markup = 0;
+        if (costEur > 0) markup = ((sellPriceNoVat - costEur) / costEur) * 100;
+        document.getElementById('markup-val').innerText = markup.toFixed(1) + "%";
+
+        // 5. Množstevné výpočty
+        calcBulk(sellPriceNoVat, costEur);
+    }
+
+    function calcBulk(sellNoVat, cost) {
+        let qty = parseFloat(document.getElementById('qty').value) || 1;
+        let discount = parseFloat(document.getElementById('discount').value) || 0;
+
+        // Cena s DPH pred zľavou
+        let basePriceWithVat = sellNoVat * (1 + state.vat/100);
+        
+        // Cena s DPH po zľave (pre klienta)
+        let discountedPriceWithVat = basePriceWithVat * (1 - discount/100);
+        
+        // Cena bez DPH po zľave (náš príjem)
+        let discountedPriceNoVat = discountedPriceWithVat / (1 + state.vat/100);
+        
+        // Nová marža
+        let newMargin = 0;
+        if (discountedPriceNoVat > 0) {
+            newMargin = ((discountedPriceNoVat - cost) / discountedPriceNoVat) * 100;
+        }
+
+        // Celkový zisk
+        let totalProfit = (discountedPriceNoVat - cost) * qty;
+
+        // Výpis
+        document.getElementById('discounted-price').innerText = discountedPriceWithVat.toFixed(2) + " €";
+        document.getElementById('total-profit').innerText = totalProfit.toFixed(2) + " €";
+        
+        const mEl = document.getElementById('discounted-margin');
+        mEl.innerText = newMargin.toFixed(1) + "%";
+        
+        // Farby varovania
+        if(newMargin < 0) {
+            mEl.className = "font-bold text-red-500";
+            document.getElementById('total-profit').className = "text-xl font-bold text-red-500";
+        } else if (newMargin < 10) {
+            mEl.className = "font-bold text-orange-400"; // Nízka marža
+            document.getElementById('total-profit').className = "text-xl font-bold text-green-400";
+        } else {
+            mEl.className = "font-bold text-yellow-400";
+            document.getElementById('total-profit').className = "text-xl font-bold text-green-400";
+        }
+    }
+</script>
+</body>
+</html>
