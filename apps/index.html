@@ -3,620 +3,548 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fakturačný Expres v10.1 | Unoneto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Unoneto Nástroje</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
+        :root {
+            --bg-dark: #0f172a;
+            --bg-sidebar: #1e293b;
+            --accent: #6366f1; /* Indigo - Primary */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Glass Effect Colors */
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(51, 65, 85, 0.9);
+            
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; }
         
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            /* Moderný gradient na pozadí */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 50;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 10px;
+        }
+        
+        .brand-logo {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .menu { display: flex; flex-direction: column; gap: 6px; }
+
+        .menu-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin: 20px 0 10px 15px;
+            letter-spacing: 1px;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 12px 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
         }
 
-        .input-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 4px; letter-spacing: 0.05em; }
-        .std-input {
-            width: 100%; background: #1e293b; border: 1px solid #475569; color: white;
-            padding: 9px 12px; border-radius: 6px; font-size: 0.9rem; transition: 0.2s;
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.03);
+            color: white;
         }
-        .std-input:focus { border-color: #6366f1; outline: none; background: #0f172a; }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #818cf8); color: white;
-            padding: 12px; border-radius: 8px; font-weight: 600; text-align: center;
-            cursor: pointer; transition: 0.2s; border: none; width: 100%;
+        .menu-btn.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border-color: rgba(99, 102, 241, 0.2);
         }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
-        .template-card {
-            border: 2px solid #475569; border-radius: 8px; cursor: pointer; padding: 10px; opacity: 0.7; transition: 0.2s;
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 50px;
+            position: relative;
         }
-        .template-card.active { border-color: #6366f1; opacity: 1; background: rgba(99, 102, 241, 0.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+
+        .container { max-width: 1600px; margin: 0 auto; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 2.2rem; letter-spacing: -0.5px; }
+        .page-title p { margin: 6px 0 0 0; color: var(--text-muted); font-size: 1rem; }
+
+        .search-box { position: relative; width: 350px; }
+        .search-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            padding: 14px 20px 14px 45px;
+            border-radius: 14px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+        /* --- APP GRID (NO HOLES) --- */
+        .app-grid {
+            display: grid;
+            /* Responzívne stĺpce */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding-bottom: 100px;
+            /* Zarovnanie výšky kariet */
+            align-items: stretch; 
+        }
+
+        /* --- CARD STYLE --- */
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+            /* Kľúčové pre rovnakú výšku */
+            height: 100%; 
+            min-height: 200px;
+        }
+
+        .app-card:hover {
+            transform: translateY(-6px);
+            background: var(--card-hover);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Header karty */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        /* Ikony v boxoch pre jednotný štýl */
+        .card-icon-box {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .card-badge {
+            font-size: 0.65rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .title { 
+            font-family: 'Outfit', sans-serif; 
+            font-weight: 600; 
+            font-size: 1.15rem; 
+            margin-bottom: 8px; 
+            color: white;
+        }
         
-        .paper-preview {
-            background: white; color: #1e293b; padding: 0; 
-            width: 210mm; min-height: 297mm; 
-            margin: 0 auto;
-            font-size: 11px; position: relative; font-family: Arial, sans-serif;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-            transform-origin: top center;
+        .desc { 
+            font-size: 0.9rem; 
+            color: var(--text-muted); 
+            line-height: 1.6; 
+            flex-grow: 1; /* Tlačí obsah dole, aby karta bola plná */
         }
-        
-        .toggle-checkbox:checked { right: 0; border-color: #68D391; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        /* Šípka na hover */
+        .card-arrow {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: 0.3s;
+        }
+        .app-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+        /* Kategórie - Farby */
+        /* PDF: Cyan/Blue */
+        .cat-pdf .card-icon-box { background: rgba(34, 211, 238, 0.15); color: #22d3ee; }
+        .cat-pdf .card-badge { background: rgba(34, 211, 238, 0.1); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.2); }
+        
+        /* IMG: Purple */
+        .cat-img .card-icon-box { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+        .cat-img .card-badge { background: rgba(167, 139, 250, 0.1); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.2); }
+        
+        /* AV: Orange */
+        .cat-av .card-icon-box { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+        .cat-av .card-badge { background: rgba(251, 146, 60, 0.1); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.2); }
+        
+        /* DATA: Emerald */
+        .cat-data .card-icon-box { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+        .cat-data .card-badge { background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.2); }
+
+        /* UTILS: Pink/Gray */
+        .cat-util .card-icon-box { background: rgba(244, 114, 182, 0.15); color: #f472b6; }
+        .cat-util .card-badge { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid rgba(244, 114, 182, 0.2); }
+
+        .hidden { display: none !important; }
+
+        /* RESPONSIVITA */
+        @media (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            .sidebar {
+                width: 100%; border-right: none; border-bottom: 1px solid var(--card-border);
+                padding: 15px; position: sticky; top: 0; backdrop-filter: blur(15px);
+            }
+            .brand { margin-bottom: 0; font-size: 1.2rem; }
+            .menu { display: none; }
+            
+            .main-content { padding: 20px; }
+            .top-bar { flex-direction: column; align-items: flex-start; }
+            .search-box { width: 100%; }
+        }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body>
 
-    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-6 shrink-0 z-20 shadow-lg">
-        <div class="flex items-center gap-4">
-            <a href="index.html" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left"></i></a>
-            <h1 class="font-bold text-xl text-white flex items-center gap-2">
-                <i class="fa-solid fa-file-invoice text-indigo-400"></i> Fakturačný Expres v10.1
-            </h1>
+    <nav class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">⚡</div>
+            <span>Unoneto Suite</span>
         </div>
-        <div class="flex gap-2">
-             <button onclick="exportData()" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-download"></i> Záloha
-             </button>
-             <button onclick="document.getElementById('file-import').click()" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-upload"></i> Obnova
-             </button>
-             <input type="file" id="file-import" class="hidden" onchange="importData(this)">
+
+        <div class="menu">
+            <div class="menu-label">Prehľad</div>
+            <button class="menu-btn active" onclick="filterApps('all', this)">
+                <span>🏠</span> Dashboard
+            </button>
+
+            <div class="menu-label">Kategórie</div>
+            <button class="menu-btn" onclick="filterApps('cat-pdf', this)">
+                <span>📄</span> PDF Dokumenty
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-img', this)">
+                <span>🖼️</span> Grafika
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-av', this)">
+                <span>🎬</span> Audio & Video
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-util', this)">
+                <span>🛠️</span> Utility
+            </button>
+            <button class="menu-btn" onclick="filterApps('cat-data', this)">
+                <span>📊</span> Dáta & Biznis
+            </button>
         </div>
-    </div>
+    </nav>
 
-    <div class="flex-1 flex overflow-hidden">
-
-        <div class="w-[45%] min-w-[600px] bg-slate-900 border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 p-6 gap-6 custom-scrollbar">
+    <main class="main-content">
+        <div class="container">
             
-            <div class="glass-panel p-5 bg-slate-800/80 border-l-4 border-indigo-500">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-xs font-bold uppercase text-white tracking-wider">Nastavenia</span>
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1 id="pageTitle">Všetky nástroje</h1>
+                    <p>Bezpečná práca so súbormi priamo vo vašom prehliadači.</p>
                 </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Hľadať nástroj...">
+                </div>
+            </div>
+
+            <div class="app-grid" id="appGrid">
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="input-label">Typ Dokladu</label>
-                        <select id="doc-type" class="std-input cursor-pointer" onchange="updatePreview()">
-                            <option value="invoice">Faktúra</option>
-                            <option value="proforma">Zálohová faktúra</option>
-                            <option value="quote">Cenová ponuka</option>
-                            <option value="order">Objednávka</option>
-                        </select>
+                <a href="invoice-app.html" class="app-card cat-data">
+                    <div class="card-header">
+                        <div class="card-icon-box">🧾</div>
+                        <span class="card-badge">Biznis</span>
                     </div>
-                    <div>
-                        <label class="input-label">Mena</label>
-                        <select id="currency" class="std-input cursor-pointer" onchange="updatePreview()">
-                            <option value="EUR">EUR (€)</option>
-                            <option value="CZK">CZK (Kč)</option>
-                            <option value="USD">USD ($)</option>
-                            <option value="GBP">GBP (£)</option>
-                            <option value="HUF">HUF (Ft)</option>
-                            <option value="PLN">PLN (zł)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+                    <div class="title">Fakturácia & Doklad</div>
+                    <div class="desc">Rýchla tvorba faktúr, cenových ponúk a objednávok s QR kódom (PAY by square).</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-            <div class="glass-panel p-5">
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="template-card active" onclick="setTemplate('pro', this)">
-                        <div class="h-6 bg-blue-600 mb-2 rounded-sm w-full"></div>
-                        <div class="text-xs text-center font-bold text-white">PRO</div>
+                <a href="profit-calc.html" class="app-card cat-data">
+                    <div class="card-header">
+                        <div class="card-icon-box">💰</div>
+                        <span class="card-badge">Biznis</span>
                     </div>
-                    <div class="template-card" onclick="setTemplate('elegant', this)">
-                        <div class="h-6 bg-white border border-gray-300 mb-2 rounded-sm w-full relative"><span class="absolute top-1 left-2 text-[8px] text-black font-serif font-bold">F</span></div>
-                        <div class="text-xs text-center font-bold text-white">ELEGANT</div>
-                    </div>
-                    <div class="template-card" onclick="setTemplate('fresh', this)">
-                        <div class="h-6 bg-emerald-500 mb-2 rounded-sm w-full"></div>
-                        <div class="text-xs text-center font-bold text-white">FRESH</div>
-                    </div>
-                </div>
-            </div>
+                    <div class="title">Kalkulačka Marže</div>
+                    <div class="desc">Výpočet zisku, marže, rabatu a DPH pre správne nastavenie cien tovarov.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-            <div class="glass-panel p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-indigo-300 text-sm uppercase flex items-center gap-2"><i class="fa-solid fa-building"></i> Dodávateľ</h2>
-                    <div class="flex items-center gap-3 bg-slate-800 p-1.5 px-3 rounded-lg border border-slate-700">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">DPH:</span>
-                        <div class="relative inline-block w-8 h-4 align-middle select-none">
-                            <input type="checkbox" id="vat-toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer right-4 transition-all duration-300" oninput="updatePreview()"/>
-                            <label for="vat-toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
-                        </div>
-                        <span class="text-[10px] font-bold text-white min-w-[60px]" id="vat-label-text">Neplatca</span>
+                <a href="finstat-dashboard.html" class="app-card cat-data">
+                    <div class="card-header">
+                        <div class="card-icon-box">📈</div>
+                        <span class="card-badge">Dáta</span>
                     </div>
-                </div>
+                    <div class="title">Finstat Prehľad</div>
+                    <div class="desc">Analytický nástroj na spracovanie a vizualizáciu firemných dát.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="pdf-compressor.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">📉</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">Kompresia PDF</div>
+                    <div class="desc">Inteligentné zmenšenie veľkosti dokumentov bez straty čitateľnosti.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="pdf-ocr.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">👁️</div>
+                        <span class="card-badge">PDF</span>
+                    </div>
+                    <div class="title">Rozpoznanie Textu (OCR)</div>
+                    <div class="desc">Prevod naskenovaných dokumentov na text, v ktorom sa dá vyhľadávať.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
                 
-                <div class="space-y-3">
-                    <input type="text" id="sup-name" class="std-input font-bold" placeholder="Moja Firma" oninput="updatePreview()">
-                    <div class="grid grid-cols-3 gap-3">
-                        <div><label class="input-label">IČO</label><input type="text" id="sup-ico" class="std-input" oninput="updatePreview()"></div>
-                        <div><label class="input-label">DIČ</label><input type="text" id="sup-dic" class="std-input" oninput="updatePreview()"></div>
-                        <div class="vat-field hidden"><label class="input-label text-green-400">IČ DPH</label><input type="text" id="sup-icdph" class="std-input border-green-800" placeholder="SK..." oninput="updatePreview()"></div>
+                <a href="pdfmerger.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">📑</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                         <div><label class="input-label">Ulica</label><input type="text" id="sup-street" class="std-input" oninput="updatePreview()"></div>
-                         <div><label class="input-label">Mesto / PSČ</label><input type="text" id="sup-city" class="std-input" oninput="updatePreview()"></div>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 p-3 rounded border border-slate-700">
-                        <label class="input-label">IBAN (S medzerami aj bez)</label>
-                        <input type="text" id="sup-iban" class="std-input font-mono mb-2" placeholder="SK00 0000 0000 0000 0000 0000" oninput="updatePreview()">
-                        
-                        <button onclick="manualGenerateQR()" class="w-full text-xs bg-blue-600 hover:bg-blue-500 text-white py-2 rounded flex items-center justify-center gap-2 transition font-bold shadow">
-                            <i class="fa-solid fa-qrcode"></i> Generovať QR kód (Pay by square)
-                        </button>
-                    </div>
-                    
-                    <div class="pt-2">
-                        <input type="file" id="logo-upload" class="hidden" accept="image/*" onchange="handleLogoUpload(this)">
-                        <label for="logo-upload" class="cursor-pointer text-xs text-indigo-400 hover:text-white flex items-center gap-2 border border-slate-700 border-dashed p-2 rounded justify-center">
-                            <i class="fa-solid fa-image"></i> Nahrať logo
-                        </label>
-                    </div>
-                    <div class="text-right"><button onclick="saveProfile()" class="text-[10px] text-slate-500 hover:text-white uppercase font-bold">Uložiť profil</button></div>
-                </div>
-            </div>
+                    <div class="title">Spájanie PDF</div>
+                    <div class="desc">Zlúčenie viacerých PDF súborov do jedného organizovaného dokumentu.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-            <div class="glass-panel p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-green-400 text-sm uppercase flex items-center gap-2"><i class="fa-solid fa-user-tie"></i> Odberateľ</h2>
-                    <div class="flex gap-2 relative">
-                        <input list="clients-datalist" id="client-search" class="bg-slate-800 text-white text-xs p-1.5 px-3 rounded border border-slate-600 w-48 focus:border-green-500 focus:outline-none" placeholder="Vybrať zo zoznamu..." oninput="checkClientAutofill(this)">
-                        <datalist id="clients-datalist"></datalist>
+                <a href="pdf replacer.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">🔄</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                </div>
+                    <div class="title">Výmena Strán PDF</div>
+                    <div class="desc">Rýchle nahradenie konkrétnych strán v dokumente za nové verzie.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                <div class="space-y-3">
-                    <input type="text" id="cli-name" class="std-input font-bold" placeholder="Klient" oninput="updatePreview()">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div><label class="input-label">IČO</label><input type="text" id="cli-ico" class="std-input" oninput="updatePreview()"></div>
-                        <div><label class="input-label">DIČ / IČ DPH</label><input type="text" id="cli-dic" class="std-input" oninput="updatePreview()"></div>
+                <a href="pdfsplitter.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">✂️</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                         <div><label class="input-label">Ulica</label><input type="text" id="cli-street" class="std-input" oninput="updatePreview()"></div>
-                         <div><label class="input-label">Mesto / PSČ</label><input type="text" id="cli-city" class="std-input" oninput="updatePreview()"></div>
+                    <div class="title">Rozdelenie PDF</div>
+                    <div class="desc">Extrahovanie strán alebo rozdelenie veľkého dokumentu na menšie časti.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="pdfimageconverter.html" class="app-card cat-pdf">
+                    <div class="card-header">
+                        <div class="card-icon-box">🖼️</div>
+                        <span class="card-badge">PDF</span>
                     </div>
-                    <div class="text-right"><button onclick="saveClient()" class="text-[10px] text-slate-500 hover:text-white uppercase font-bold">Uložiť klienta</button></div>
-                </div>
-            </div>
+                    <div class="title">PDF na Obrázky</div>
+                    <div class="desc">Obojsmerná konverzia medzi PDF dokumentmi a formátmi JPG/PNG.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-            <div class="glass-panel p-5">
-                <div class="grid grid-cols-3 gap-3">
-                    <div><label class="input-label">Vystavenie</label><input type="date" id="date-issue" class="std-input" oninput="updatePreview()"></div>
-                    <div><label class="input-label" id="lbl-due">Splatnosť</label><input type="date" id="date-due" class="std-input" oninput="updatePreview()"></div>
-                    <div><label class="input-label">Var. Symbol</label><input type="text" id="var-sym" class="std-input font-mono" oninput="updatePreview()"></div>
-                </div>
-            </div>
+                <a href="imageresizer.html" class="app-card cat-img">
+                    <div class="card-header">
+                        <div class="card-icon-box">📐</div>
+                        <span class="card-badge">IMG</span>
+                    </div>
+                    <div class="title">Zmena Rozmerov</div>
+                    <div class="desc">Hromadná zmena veľkosti obrázkov s podporou moderného formátu HEIC.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-            <div class="glass-panel p-5">
-                <h2 class="font-bold text-white mb-3 text-sm uppercase flex justify-between items-center">
-                    <span>Položky</span>
-                    <span class="text-[10px] text-slate-400 font-normal">Ceny bez DPH</span>
-                </h2>
-                
-                <div class="grid grid-cols-12 gap-2 mb-2 px-1 pb-1 border-b border-slate-700">
-                    <div class="col-span-4 text-[9px] text-slate-400 font-bold uppercase tracking-wider">Názov</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider">Mn. / MJ</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Cena/j</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider vat-col hidden">DPH %</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Spolu</div>
-                </div>
+                <a href="image-converter.html" class="app-card cat-img">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎨</div>
+                        <span class="card-badge">IMG</span>
+                    </div>
+                    <div class="title">Konvertor Obrázkov</div>
+                    <div class="desc">Profesionálny prevod formátov: HEIC, WEBP, PNG, JPG, TIFF a BMP.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
-                <div id="items-container" class="space-y-3"></div>
-                
-                <button onclick="addItemRow()" class="btn-primary mt-5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-sm py-3 flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-plus"></i> Pridať riadok
-                </button>
-            </div>
-            
-             <div class="glass-panel p-5 mb-10">
-                <label class="input-label">Záverečná poznámka</label>
-                <textarea id="note" class="std-input h-24 resize-none" placeholder="Text..." oninput="updatePreview()"></textarea>
+                <a href="screen-recorder.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎥</div>
+                        <span class="card-badge">Video</span>
+                    </div>
+                    <div class="title">Nahrávanie Obrazovky</div>
+                    <div class="desc">Záznam obrazovky počítača a mikrofónu priamo cez prehliadač.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="av-converter.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">📼</div>
+                        <span class="card-badge">A/V</span>
+                    </div>
+                    <div class="title">Konvertor Videa</div>
+                    <div class="desc">Univerzálny prevod multimediálnych súborov do MP4, MP3 a ďalších.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="av-cutter.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">🎞️</div>
+                        <span class="card-badge">A/V</span>
+                    </div>
+                    <div class="title">Rýchle Strihanie audia a videa</div>
+                    <div class="desc">Presné skracovanie videa a audia s možnosťou Fade In/Out efektov.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="text-cleaner.html" class="app-card cat-util">
+                    <div class="card-header">
+                        <div class="card-icon-box">🧹</div>
+                        <span class="card-badge">Nástroj</span>
+                    </div>
+                    <div class="title">Čistič Textu</div>
+                    <div class="desc">Okamžité odstránenie formátovania, medzier a diakritiky z textov.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="qr-generator.html" class="app-card cat-util">
+                    <div class="card-header">
+                        <div class="card-icon-box">📱</div>
+                        <span class="card-badge">Nástroj</span>
+                    </div>
+                    <div class="title">Generátor QR</div>
+                    <div class="desc">Tvorba QR kódov pre webstránky, WiFi, vizitky alebo text.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
             </div>
         </div>
+    </main>
 
-        <div class="flex-1 bg-slate-800 relative flex flex-col min-w-[700px]">
-            <div class="h-16 flex items-center justify-between px-8 bg-slate-800 border-b border-slate-700 shrink-0 shadow-md z-10">
-                <div class="flex flex-col">
-                    <span class="text-white text-sm font-bold tracking-wide">Náhľad Dokumentu</span>
-                    <span class="text-slate-500 text-[10px] uppercase">Formát A4 • Optimalizované PDF</span>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <div id="pdf-spinner" class="hidden text-indigo-400 text-xs font-bold animate-pulse flex items-center gap-2">
-                        <i class="fa-solid fa-circle-notch fa-spin"></i> Generujem...
-                    </div>
-                    <button onclick="generatePDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-lg shadow-lg font-bold text-sm flex items-center gap-2 transition-transform hover:scale-105">
-                        <i class="fa-solid fa-file-pdf"></i> STIAHNUŤ PDF
-                    </button>
-                </div>
-            </div>
+    <script>
+        const grid = document.getElementById('appGrid');
+        const cards = grid.querySelectorAll('.app-card');
+        const titleEl = document.getElementById('pageTitle');
+        const searchInput = document.getElementById('searchInput');
 
-            <div class="flex-1 overflow-auto bg-slate-700/50 p-8 flex justify-center items-start custom-scrollbar">
-                <div id="invoice-preview" class="paper-preview">
-                    </div>
-            </div>
-        </div>
-    </div>
-
-<script>
-    // --- KONFIGURÁCIA ---
-    let state = {
-        isVatPayer: false,
-        template: 'pro',
-        logo: "",
-        showQR: false // Defaultne skryty
-    };
-
-    const t = { sk: { invoice: "FAKTÚRA", proforma: "ZÁLOHOVÁ FAKTÚRA", quote: "CENOVÁ PONUKA", order: "OBJEDNÁVKA" } };
-
-    window.onload = function() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date-issue').value = today;
-        const due = new Date();
-        due.setDate(due.getDate() + 14);
-        document.getElementById('date-due').value = due.toISOString().split('T')[0];
-        document.getElementById('var-sym').value = new Date().getFullYear() + "001";
-
-        loadProfile();
-        loadClientsDatalist();
-        addItemRow(); 
-        updatePreview();
-    };
-
-    function setTemplate(tpl, el) {
-        state.template = tpl;
-        document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
-        if(el) el.classList.add('active');
-        updatePreview();
-    }
-
-    // --- MANUÁLNE GENEROVANIE QR (LOGIKA) ---
-    function manualGenerateQR() {
-        const iban = document.getElementById('sup-iban').value;
-        // Skontrolujeme sumu
-        // Musíme ju vypočítať znova, lebo v DOMe je formátovaná
-        let total = 0;
-        document.querySelectorAll('.item-row').forEach(row => {
-            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
-            const price = parseFloat(row.querySelector('.item-price').value) || 0;
-            const vat = document.getElementById('vat-toggle').checked ? (parseFloat(row.querySelector('.item-vat').value) || 0) : 0;
-            total += (qty * price) * (1 + vat/100);
-        });
-
-        if(!iban) return alert("Prosím, zadajte najskôr IBAN.");
-        if(total <= 0) return alert("Suma faktúry musí byť vyššia ako 0, aby sa dal vygenerovať platobný QR kód.");
-
-        state.showQR = true;
-        updatePreview();
-        alert("QR kód bol pridaný na faktúru (vpravo dole).");
-    }
-
-    // --- RENDER ENGINE ---
-    function updatePreview() {
-        const preview = document.getElementById('invoice-preview');
-        const tpl = state.template;
-        
-        // Zber vstupov
-        const docType = document.getElementById('doc-type').value;
-        const curr = document.getElementById('currency').value;
-        const symbol = getCurrencySymbol(curr);
-        
-        document.getElementById('lbl-due').innerText = (docType === 'quote') ? "Platnosť do" : "Splatnosť";
-
-        const titleMap = { 'invoice': 'FAKTÚRA', 'proforma': 'ZÁLOHOVÁ FAKTÚRA', 'quote': 'CENOVÁ PONUKA', 'order': 'OBJEDNÁVKA' };
-
-        const data = {
-            title: titleMap[docType],
-            sup: {
-                name: val('sup-name') || "Moja Firma",
-                ico: val('sup-ico'), dic: val('sup-dic'), icdph: val('sup-icdph'),
-                address: `${val('sup-street')}<br>${val('sup-city')}`,
-                iban: val('sup-iban')
-            },
-            cli: {
-                name: val('cli-name') || "Klient",
-                ico: val('cli-ico'), dic: val('cli-dic'),
-                address: `${val('cli-street')}<br>${val('cli-city')}`
-            },
-            meta: {
-                issue: val('date-issue'), due: val('date-due'), vs: val('var-sym'),
-                note: val('note')
+        function filterApps(category, btnElement) {
+            // Update tlačidiel
+            if (btnElement) {
+                document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
             }
-        };
 
-        state.isVatPayer = document.getElementById('vat-toggle').checked;
-        document.getElementById('vat-label-text').innerText = state.isVatPayer ? "Platca DPH" : "Neplatca";
-        document.getElementById('vat-label-text').className = state.isVatPayer ? "text-[11px] font-bold text-green-400 min-w-[60px]" : "text-[11px] font-bold text-white min-w-[60px]";
-        
-        document.querySelectorAll('.vat-field').forEach(e => e.classList.toggle('hidden', !state.isVatPayer));
-        document.querySelectorAll('.vat-col').forEach(e => e.classList.toggle('hidden', !state.isVatPayer));
+            // Update nadpisu
+            const titles = {
+                'all': 'Všetky nástroje',
+                'cat-pdf': 'PDF Nástroje',
+                'cat-img': 'Grafika a Obrázky',
+                'cat-av': 'Audio a Video',
+                'cat-util': 'Užitočné nástroje',
+                'cat-data': 'Dáta a Biznis'
+            };
+            titleEl.innerText = titles[category] || 'Nástroje';
 
-        const logoHtml = state.logo ? `<img src="${state.logo}" style="max-height: 80px; max-width: 200px; object-fit: contain;">` : '';
-        
-        // Items Calculation
-        let itemsHtml = '';
-        let totalBase = 0, totalTax = 0, grandTotal = 0;
-
-        document.querySelectorAll('.item-row').forEach(row => {
-            const desc = row.querySelector('.item-desc').value;
-            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
-            const unit = row.querySelector('.item-unit').value || '';
-            const price = parseFloat(row.querySelector('.item-price').value) || 0;
-            const vat = state.isVatPayer ? (parseFloat(row.querySelector('.item-vat').value) || 0) : 0;
-
-            const lineBase = qty * price;
-            const lineTax = lineBase * (vat/100);
-            const lineTotal = lineBase + lineTax;
-
-            const totalDisplay = row.querySelector('.item-total-display');
-            if(totalDisplay) totalDisplay.innerText = formatMoney(lineTotal, symbol);
-
-            totalBase += lineBase; totalTax += lineTax; grandTotal += lineTotal;
-
-            if(desc || price > 0) {
-                itemsHtml += `
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 12px 8px;">${desc}</td>
-                    <td style="text-align: right; padding: 12px 8px;">${qty} ${unit}</td>
-                    <td style="text-align: right; padding: 12px 8px;">${formatMoney(price, symbol)}</td>
-                    ${state.isVatPayer ? `<td style="text-align: right; padding: 12px 8px;">${vat}%<br><span style="font-size:9px; color:#94a3b8;">(${formatMoney(lineTax, symbol)})</span></td>` : ''}
-                    <td style="text-align: right; padding: 12px 8px; font-weight: bold;">${formatMoney(lineTotal, symbol)}</td>
-                </tr>`;
-            }
-        });
-
-        // QR Validation
-        const ibanClean = data.sup.iban.replace(/\s/g, '');
-        // Zobrazíme QR iba ak: 1. Je zapnutý manuálne, 2. Máme IBAN, 3. Suma > 0
-        const qrDisplay = (state.showQR && ibanClean && grandTotal > 0) ? 'block' : 'none';
-
-        // --- TEMPLATES ---
-        
-        if (tpl === 'pro') {
-            preview.innerHTML = `
-                <div style="height: 12px; background: #2563eb;"></div>
-                <div style="padding: 40px 50px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
-                        <div>${logoHtml}</div>
-                        <div style="text-align: right;">
-                            <h1 style="font-size: 32px; font-weight: 800; color: #1e293b; margin: 0; letter-spacing: -0.5px;">${data.title}</h1>
-                            <p style="color: #64748b; margin-top: 5px; font-size: 14px;"># <strong style="color: #2563eb;">${data.meta.vs}</strong></p>
-                        </div>
-                    </div>
-                    <div style="display: flex; margin-bottom: 40px; gap: 40px;">
-                        <div style="width: 50%;">
-                            <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Dodávateľ</p>
-                            <h3 style="font-weight: bold; font-size: 16px; margin: 0 0 5px 0; color: #0f172a;">${data.sup.name}</h3>
-                            <div style="font-size: 13px; color: #475569; line-height: 1.6;">${data.sup.address}<br><div style="margin-top: 8px;">IČO: <strong>${data.sup.ico}</strong><br>DIČ: ${data.sup.dic} ${state.isVatPayer ? `<br>IČ DPH: ${data.sup.icdph}` : ''}</div></div>
-                        </div>
-                        <div style="width: 50%;">
-                            <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Odberateľ</p>
-                            <h3 style="font-weight: bold; font-size: 16px; margin: 0 0 5px 0; color: #0f172a;">${data.cli.name}</h3>
-                            <div style="font-size: 13px; color: #475569; line-height: 1.6;">${data.cli.address}<br><div style="margin-top: 8px;">IČO: <strong>${data.cli.ico}</strong><br>DIČ: ${data.cli.dic}</div></div>
-                        </div>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px 25px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 40px;">
-                        <div><span style="display: block; color: #64748b; font-size: 10px; text-transform: uppercase; font-weight: bold; margin-bottom: 4px;">Dátum vystavenia</span><span style="font-weight: bold; font-size: 13px;">${data.meta.issue}</span></div>
-                        <div><span style="display: block; color: #64748b; font-size: 10px; text-transform: uppercase; font-weight: bold; margin-bottom: 4px;">Splatnosť</span><span style="font-weight: bold; font-size: 13px; color: #dc2626;">${data.meta.due}</span></div>
-                        <div><span style="display: block; color: #64748b; font-size: 10px; text-transform: uppercase; font-weight: bold; margin-bottom: 4px;">Úhrada</span><span style="font-weight: bold; font-size: 13px;">Prevodom</span></div>
-                        <div><span style="display: block; color: #64748b; font-size: 10px; text-transform: uppercase; font-weight: bold; margin-bottom: 4px;">IBAN</span><span style="font-family: monospace; font-weight: bold; font-size: 13px;">${data.sup.iban}</span></div>
-                    </div>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 30px;">
-                        <thead><tr style="border-bottom: 2px solid #2563eb; color: #2563eb;"><th style="text-align: left; padding: 10px 8px;">POLOŽKA</th><th style="text-align: right; padding: 10px 8px;">MN.</th><th style="text-align: right; padding: 10px 8px;">CENA</th>${state.isVatPayer ? `<th style="text-align: right; padding: 10px 8px;">DPH</th>` : ''}<th style="text-align: right; padding: 10px 8px;">SPOLU</th></tr></thead>
-                        <tbody>${itemsHtml}</tbody>
-                    </table>
-                    <div style="display: flex; justify-content: flex-end; margin-top: 20px;"><div style="width: 250px; text-align: right;">${state.isVatPayer ? `<div style="font-size: 12px; color: #64748b; margin-bottom: 5px;">Základ: ${formatMoney(totalBase, symbol)}</div><div style="font-size: 12px; color: #64748b; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">DPH: ${formatMoney(totalTax, symbol)}</div>` : `<div style="font-size: 11px; color: #94a3b8; font-style: italic; margin-bottom: 10px;">Dodávateľ nie je platcom DPH</div>`}<div style="background: #2563eb; padding: 10px 15px; border-radius: 6px; color: white;"><span style="font-weight: bold; font-size: 14px;">K ÚHRADE:</span> <span style="font-size: 18px; font-weight: bold;">${formatMoney(grandTotal, symbol)}</span></div></div></div>
-                    <div style="position: absolute; bottom: 50px; left: 50px; right: 50px; border-top: 1px solid #e2e8f0; padding-top: 20px; display: flex; justify-content: space-between; align-items: flex-end;"><p style="font-size: 11px; color: #64748b; max-width: 60%;">${data.meta.note}</p><div style="display: ${qrDisplay}; text-align: center;"><canvas id="qr-canvas"></canvas><div style="font-size: 9px; color: #94a3b8; margin-top: 4px;">PAY by square</div></div></div>
-                </div>`;
-        }
-        else if (tpl === 'elegant') {
-            preview.innerHTML = `
-                <div style="padding: 60px; font-family: 'Playfair Display', serif;">
-                    <div style="text-align: center; margin-bottom: 60px; border-bottom: 1px solid #000; padding-bottom: 20px;">${logoHtml ? `<div style="margin-bottom: 15px;">${logoHtml}</div>` : ''}<h1 style="font-size: 42px; margin: 0; color: #000; letter-spacing: 2px;">${data.title}</h1><p style="font-family: 'Inter', sans-serif; font-size: 12px; color: #333; margin-top: 5px;"># <strong>${data.meta.vs}</strong></p></div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 50px; font-family: 'Inter', sans-serif;"><div style="width: 45%;"><div style="font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 2px;">Dodávateľ</div><div style="font-size: 15px; font-weight: bold; color: #000;">${data.sup.name}</div><div style="font-size: 13px; margin-top: 5px; color: #333; line-height: 1.5;">${data.sup.address}<br>IČO: ${data.sup.ico}, DIČ: ${data.sup.dic}</div></div><div style="width: 45%;"><div style="font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 2px;">Odberateľ</div><div style="font-size: 15px; font-weight: bold; color: #000;">${data.cli.name}</div><div style="font-size: 13px; margin-top: 5px; color: #333; line-height: 1.5;">${data.cli.address}<br>IČO: ${data.cli.ico}</div></div></div>
-                    <div style="display: flex; gap: 40px; margin-bottom: 40px; font-family: 'Inter', sans-serif; font-size: 13px; background: #f9f9f9; padding: 15px;"><div><span style="color: #666;">Vystavené:</span> <span style="font-weight: bold;">${data.meta.issue}</span></div><div><span style="color: #666;">Splatnosť:</span> <span style="font-weight: bold;">${data.meta.due}</span></div><div><span style="color: #666;">IBAN:</span> <span style="font-family: monospace;">${data.sup.iban}</span></div></div>
-                    <table style="width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 12px; margin-bottom: 40px;"><thead><tr style="border-bottom: 2px solid #000;"><th style="text-align: left; padding: 12px 5px; font-weight: bold;">POLOŽKA</th><th style="text-align: right; padding: 12px 5px; font-weight: bold;">MN.</th><th style="text-align: right; padding: 12px 5px; font-weight: bold;">CENA</th>${state.isVatPayer ? `<th style="text-align: right; padding: 12px 5px; font-weight: bold;">DPH</th>` : ''}<th style="text-align: right; padding: 12px 5px; font-weight: bold;">SPOLU</th></tr></thead><tbody>${itemsHtml}</tbody></table>
-                    <div style="text-align: right; font-family: 'Inter', sans-serif; border-top: 1px solid #000; padding-top: 20px;"><p style="font-size: 12px; color: #333; margin-bottom: 5px;">Celkom k úhrade</p><div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: bold;">${formatMoney(grandTotal, symbol)}</div></div>
-                    <div style="position: absolute; bottom: 50px; left: 60px; right: 60px; display: flex; justify-content: space-between; align-items: flex-end;"><p style="font-family: 'Inter', sans-serif; font-size: 11px; color: #666; width: 60%; font-style: italic;">${data.meta.note}</p><div style="display: ${qrDisplay};"><canvas id="qr-canvas"></canvas></div></div>
-                </div>`;
-        } else {
-             preview.innerHTML = `
-                <div style="padding: 40px;">
-                    <div style="border-bottom: 3px solid #10b981; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;"><div>${logoHtml}</div><h1 style="font-size: 26px; color: #10b981; font-weight: 800; letter-spacing: 0.5px;">${data.title} ${data.meta.vs}</h1></div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;"><div style="background: #f0fdf4; padding: 25px; border-radius: 12px; border: 1px solid #dcfce7;"><div style="font-size: 11px; font-weight: bold; color: #15803d; text-transform: uppercase; margin-bottom: 10px;">Dodávateľ</div><div style="font-weight: bold; font-size: 15px; color: #064e3b;">${data.sup.name}</div><div style="font-size: 13px; color: #374151; margin-top: 5px; line-height: 1.5;">${data.sup.address}<br><span style="display: inline-block; margin-top: 8px; background: #fff; padding: 4px 8px; border-radius: 6px; border: 1px solid #bbf7d0; font-size: 11px; font-weight: bold; color: #166534;">IČO: ${data.sup.ico}</span></div></div><div style="padding-top: 10px;"><div style="font-size: 11px; font-weight: bold; color: #6b7280; text-transform: uppercase; margin-bottom: 10px; padding-left: 15px;">Odberateľ</div><div style="padding-left: 15px; border-left: 3px solid #e5e7eb;"><div style="font-weight: bold; font-size: 15px; color: #111827;">${data.cli.name}</div><div style="font-size: 13px; color: #4b5563; margin-top: 5px; line-height: 1.5;">${data.cli.address}<br>IČO: ${data.cli.ico}</div></div></div></div>
-                    <div style="display: flex; gap: 15px; margin-bottom: 40px; font-size: 12px;"><div style="flex: 1; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; text-align: center;"><span style="display: block; color: #9ca3af; font-size: 10px; text-transform: uppercase; font-weight: bold;">Dátum vystavenia</span><span style="font-weight: bold; font-size: 13px; color: #374151;">${data.meta.issue}</span></div><div style="flex: 1; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; text-align: center;"><span style="display: block; color: #9ca3af; font-size: 10px; text-transform: uppercase; font-weight: bold;">Dátum splatnosti</span><span style="font-weight: bold; font-size: 13px; color: #059669;">${data.meta.due}</span></div><div style="flex: 2; border: 1px solid #e5e7eb; padding: 12px; border-radius: 8px; background: #f9fafb;"><span style="display: block; color: #9ca3af; font-size: 10px; text-transform: uppercase; font-weight: bold;">IBAN</span><span style="font-family: monospace; font-weight: bold; font-size: 14px; color: #374151;">${data.sup.iban}</span></div></div>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"><thead style="background: #10b981; color: white;"><tr><th style="text-align: left; padding: 12px 15px; border-radius: 8px 0 0 8px;">Položka</th><th style="text-align: right; padding: 12px 15px;">Mn.</th><th style="text-align: right; padding: 12px 15px;">Cena</th>${state.isVatPayer ? `<th style="text-align: right; padding: 12px 15px;">DPH</th>` : ''}<th style="text-align: right; padding: 12px 15px; border-radius: 0 8px 8px 0;">Spolu</th></tr></thead><tbody>${itemsHtml}</tbody></table>
-                    <div style="display: flex; justify-content: flex-end;"><div style="background: #064e3b; color: white; padding: 20px 40px; border-radius: 12px; text-align: right; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);"><div style="font-size: 12px; opacity: 0.8; margin-bottom: 5px;">K úhrade</div><div style="font-size: 28px; font-weight: bold;">${formatMoney(grandTotal, symbol)}</div></div></div>
-                    <div style="position: absolute; bottom: 50px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: flex-end;"><p style="font-size: 11px; color: #6b7280; width: 60%; line-height: 1.4;"><strong>Poznámka:</strong><br>${data.meta.note}</p><div style="display: ${qrDisplay};"><canvas id="qr-canvas"></canvas></div></div>
-                </div>`;
-        }
-
-        // GENERATE QR
-        if (state.showQR && ibanClean && grandTotal > 0) {
-            // Bezpečné volanie po vykreslení DOMu
-            setTimeout(() => {
-                const qrCanvas = document.getElementById('qr-canvas');
-                if(qrCanvas) {
-                    const qrString = `BCD\n002\n1\nSCT\n\n${data.sup.name}\n${ibanClean}\n${curr}${grandTotal.toFixed(2)}\n\n\n${data.meta.vs}`;
-                    new QRious({ element: qrCanvas, value: qrString, size: 80 });
+            // Filter kariet
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
                 }
-            }, 50);
+            });
         }
-    }
 
-    // --- PDF GENERATOR ---
-    async function generatePDF() {
-        const element = document.getElementById('invoice-preview');
-        const btn = document.querySelector('button[onclick="generatePDF()"]');
-        const spinner = document.getElementById('pdf-spinner');
-        
-        btn.disabled = true;
-        spinner.classList.remove('hidden');
-
-        try {
-            const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
-            const imgData = canvas.toDataURL('image/jpeg', 0.75); // Kompresia
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const w = pdf.internal.pageSize.getWidth();
-            const h = pdf.internal.pageSize.getHeight();
+        // Search logika
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
             
-            pdf.addImage(imgData, 'JPEG', 0, 0, w, h);
-            pdf.save(`${val('var-sym')}.pdf`);
-        } catch(err) {
-            alert("Chyba: " + err);
-        } finally {
-            btn.disabled = false;
-            spinner.classList.add('hidden');
-        }
-    }
+            // Reset active menu state pri hladani
+            if(term.length > 0) document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
 
-    // --- UTILS ---
-    function val(id) { return document.getElementById(id).value; }
-    function setText(id, txt) { const el = document.getElementById(id); if(el) el.innerText = txt; }
-    function getCurrencySymbol(code) { const s = { 'EUR': '€', 'USD': '$', 'CZK': 'Kč', 'GBP': '£', 'HUF': 'Ft', 'PLN': 'zł' }; return s[code] || code; }
-    function formatMoney(amount, symbol) { return amount.toFixed(2) + " " + symbol; }
+            cards.forEach(card => {
+                const title = card.querySelector('.title').innerText.toLowerCase();
+                const desc = card.querySelector('.desc').innerText.toLowerCase();
+                // Hladame aj v triedach (kategoriach)
+                const classes = card.className.toLowerCase();
 
-    function addItemRow() {
-        const div = document.createElement('div');
-        div.className = "grid grid-cols-12 gap-2 item-row items-center border-b border-slate-700 pb-2 mb-2";
-        const vatDisplay = state.isVatPayer ? '' : 'hidden';
-        
-        div.innerHTML = `
-            <div class="col-span-4"><input type="text" class="std-input item-desc" placeholder="Názov položky" oninput="updatePreview()"></div>
-            <div class="col-span-2 flex gap-1">
-                <input type="number" class="std-input item-qty w-2/3" value="1" oninput="updatePreview()">
-                <input type="text" class="std-input item-unit w-1/3" value="ks" oninput="updatePreview()">
-            </div>
-            <div class="col-span-2"><input type="number" class="std-input item-price" placeholder="0.00" oninput="updatePreview()"></div>
-            <div class="col-span-2 vat-col ${vatDisplay}"><input type="number" class="std-input item-vat" value="23" oninput="updatePreview()"></div>
-            
-            <div class="col-span-2 flex items-center justify-between pl-2">
-                <div class="text-right w-full">
-                    <span class="text-xs font-bold text-white item-total-display block">0.00 €</span>
-                    <span class="text-[9px] text-slate-400 block">s DPH</span>
-                </div>
-                <button onclick="this.closest('.item-row').remove(); updatePreview()" class="text-red-400 hover:text-red-300 ml-2 px-2 py-1 rounded hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        `;
-        document.getElementById('items-container').appendChild(div);
-        updatePreview();
-    }
-
-    function handleLogoUpload(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) { state.logo = e.target.result; updatePreview(); }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // --- DATA ---
-    function exportData() {
-        const backup = {
-            profile: localStorage.getItem('inv_v10_prof'),
-            clients: localStorage.getItem('inv_v10_clients'),
-            date: new Date().toISOString()
-        };
-        const blob = new Blob([JSON.stringify(backup, null, 2)], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `zaloha_faktura_${new Date().toISOString().slice(0,10)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    function importData(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (data.profile) localStorage.setItem('inv_v10_prof', data.profile);
-                if (data.clients) localStorage.setItem('inv_v10_clients', data.clients);
-                alert("Dáta obnovené! Stránka sa obnoví.");
-                location.reload();
-            } catch (err) { alert("Chyba: " + err); }
-        };
-        reader.readAsText(file);
-    }
-
-    function saveProfile() { localStorage.setItem('inv_v10_prof', JSON.stringify({ 
-        name: val('sup-name'), ico: val('sup-ico'), dic: val('sup-dic'), street: val('sup-street'), city: val('sup-city'), iban: val('sup-iban'), icdph: val('sup-icdph'), isVat: state.isVatPayer
-    })); alert("Profil uložený!"); }
-    
-    function loadProfile() { 
-        const d = JSON.parse(localStorage.getItem('inv_v10_prof')); 
-        if(d) { 
-            document.getElementById('sup-name').value = d.name || ''; 
-            document.getElementById('sup-ico').value = d.ico || '';
-            document.getElementById('sup-dic').value = d.dic || '';
-            document.getElementById('sup-street').value = d.street || '';
-            document.getElementById('sup-city').value = d.city || '';
-            document.getElementById('sup-iban').value = d.iban || '';
-            document.getElementById('sup-icdph').value = d.icdph || '';
-            if (d.isVat) {
-                document.getElementById('vat-toggle').checked = true;
-                state.isVatPayer = true;
-            }
-            updatePreview(); 
-        } 
-    }
-    
-    function saveClient() { 
-        const client = {name: val('cli-name'), ico: val('cli-ico'), dic: val('cli-dic'), street: val('cli-street'), city: val('cli-city')};
-        let clients = JSON.parse(localStorage.getItem('inv_v10_clients') || "[]");
-        clients.push(client);
-        localStorage.setItem('inv_v10_clients', JSON.stringify(clients));
-        loadClientsDatalist();
-        alert("Klient uložený."); 
-    }
-    
-    function loadClientsDatalist() {
-        const clients = JSON.parse(localStorage.getItem('inv_v10_clients') || "[]");
-        const dl = document.getElementById('clients-datalist');
-        dl.innerHTML = '';
-        clients.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c.name;
-            dl.appendChild(opt);
+                if (title.includes(term) || desc.includes(term) || classes.includes(term)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
         });
-    }
-    
-    function checkClientAutofill(input) {
-        const val = input.value;
-        const clients = JSON.parse(localStorage.getItem('inv_v10_clients') || "[]");
-        const found = clients.find(c => c.name === val);
-        if(found) {
-            document.getElementById('cli-name').value = found.name;
-            document.getElementById('cli-ico').value = found.ico;
-            document.getElementById('cli-dic').value = found.dic;
-            document.getElementById('cli-street').value = found.street;
-            document.getElementById('cli-city').value = found.city;
-            updatePreview();
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
