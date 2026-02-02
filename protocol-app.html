@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protokol UnoExpres | Unoneto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
+        
+        .glass-panel { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .input-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 4px; letter-spacing: 0.05em; }
+        .std-input { width: 100%; background: #1e293b; border: 1px solid #475569; color: white; padding: 10px; border-radius: 6px; font-size: 0.9rem; transition: 0.2s; }
+        .std-input:focus { border-color: #6366f1; outline: none; background: #0f172a; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #818cf8); color: white; padding: 12px; border-radius: 8px; font-weight: 600; text-align: center; cursor: pointer; border: none; width: 100%; transition: 0.2s; }
+        
+        /* A4 Preview */
+        .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; padding: 20px; background: #334155; }
+        .paper-preview { background: white; color: #1e293b; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 0; box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative; font-family: Arial, sans-serif; transform-origin: top center; }
+        
+        /* Buttons */
+        .type-btn { padding: 10px; border: 1px solid #475569; border-radius: 8px; cursor: pointer; color: #94a3b8; font-size: 0.85rem; background: transparent; transition: 0.2s; flex: 1; text-align: center; font-weight: 500; }
+        .type-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .type-btn.active { background: #6366f1; color: white; border-color: #6366f1; font-weight: bold; }
+        
+        .hidden { display: none !important; }
+
+        @media (max-width: 1024px) {
+            .main-layout { flex-direction: column; overflow-y: auto !important; height: auto !important; }
+            .editor-col { width: 100% !important; border-right: none; border-bottom: 1px solid #334155; }
+            .preview-col { width: 100% !important; min-height: 500px; }
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-slate-900">
+
+    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-4 lg:px-6 shrink-0 z-20 shadow-lg">
+        <div class="flex items-center gap-3">
+            <a href="index.html" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left"></i></a>
+            <h1 class="font-bold text-lg lg:text-xl text-white flex items-center gap-2 truncate">
+                <i class="fa-solid fa-file-contract text-indigo-400"></i> Protokol Expres
+            </h1>
+        </div>
+        <div>
+             <button onclick="generatePDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg shadow-lg font-bold text-xs lg:text-sm flex items-center gap-2 transition transform hover:scale-105">
+                <i class="fa-solid fa-file-pdf"></i> <span class="hidden sm:inline">Stiahnuť PDF</span><span class="sm:hidden">PDF</span>
+             </button>
+        </div>
+    </div>
+
+    <div class="main-layout flex-1 flex overflow-hidden">
+        
+        <div class="editor-col w-[40%] min-w-[350px] bg-slate-900 border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 p-4 lg:p-6 gap-6 custom-scrollbar">
+            
+            <div class="glass-panel p-4 bg-slate-800/80">
+                <label class="input-label mb-2">Typ dokumentu</label>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <button class="type-btn active" onclick="setType('rental', this)">🤝 Zápožička</button>
+                    <button class="type-btn" onclick="setType('handover', this)">📦 Preberací</button>
+                    <button class="type-btn" onclick="setType('worklog', this)">🛠 Pracovný</button>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5">
+                <h2 class="font-bold text-indigo-300 text-sm uppercase mb-4">Strany</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label" id="lbl-party1">Odovzdávajúci</label>
+                        <input type="text" id="p1-name" class="std-input font-bold" placeholder="Firma / Meno" oninput="updatePreview()">
+                        <textarea id="p1-details" class="std-input mt-2 h-16 text-xs" placeholder="Adresa, IČO, Tel..." oninput="updatePreview()"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-label" id="lbl-party2">Preberajúci</label>
+                        <input type="text" id="p2-name" class="std-input font-bold" placeholder="Klient / Meno" oninput="updatePreview()">
+                        <textarea id="p2-details" class="std-input mt-2 h-16 text-xs" placeholder="Adresa, Kontakt..." oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="input-label">Dátum</label><input type="date" id="doc-date" class="std-input" oninput="updatePreview()"></div>
+                    <div><label class="input-label">Miesto</label><input type="text" id="doc-place" class="std-input" placeholder="Mesto" oninput="updatePreview()"></div>
+                    <div class="col-span-2"><label class="input-label">Číslo dokladu</label><input type="text" id="doc-number" class="std-input" placeholder="2024/001" oninput="updatePreview()"></div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5">
+                <h2 class="font-bold text-white mb-3 text-sm uppercase flex justify-between">
+                    <span>Zoznam položiek</span>
+                </h2>
+                
+                <div class="grid grid-cols-12 gap-1 mb-2 px-1 text-[9px] text-slate-400 font-bold uppercase" id="items-header">
+                    <div class="col-span-4">Názov</div>
+                    <div class="col-span-4">Popis / Stav</div>
+                    <div class="col-span-3 text-right">Hodnota €</div>
+                    <div class="col-span-1"></div>
+                </div>
+
+                <div id="items-container" class="space-y-2"></div>
+                
+                <button onclick="addItemRow()" class="btn-primary mt-4 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs py-2">+ Pridať riadok</button>
+            </div>
+
+            <div class="glass-panel p-5 mb-10">
+                <label class="input-label mb-2 block">Právna doložka / Podmienky</label>
+                <textarea id="doc-note" class="std-input h-32 text-xs leading-relaxed" placeholder="Text zmluvy..." oninput="updatePreview()"></textarea>
+                
+                <div class="mt-4 border-t border-slate-700 pt-3">
+                    <div id="photo-controls">
+                        <label class="input-label">Fotodokumentácia</label>
+                        <input type="file" id="photo-upload" class="hidden" accept="image/*" onchange="handlePhoto(this)">
+                        <label for="photo-upload" class="cursor-pointer text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 px-3 rounded flex items-center justify-center gap-2 border border-slate-600 border-dashed transition">
+                            <i class="fa-solid fa-camera"></i> Nahrať fotku
+                        </label>
+                    </div>
+                    
+                    <div id="photo-remove-box" class="hidden mt-2">
+                        <button onclick="removePhoto()" class="text-xs bg-red-900/50 hover:bg-red-900 text-red-200 py-2 px-3 rounded w-full flex items-center justify-center gap-2 border border-red-800 transition">
+                            <i class="fa-solid fa-trash"></i> Zmazať fotku
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-col flex-1 bg-slate-800 relative flex justify-center custom-scrollbar">
+            <div class="preview-wrapper">
+                <div id="protocol-preview" class="paper-preview">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- KONFIGURÁCIA ---
+    let state = {
+        type: 'rental',
+        photo: null
+    };
+
+    // Texty a ZÁKONY
+    const config = {
+        rental: {
+            title: "ZMLUVA O VÝPOŽIČKE (REVERZ)",
+            party1: "Požičiavateľ",
+            party2: "Vypožičiavateľ",
+            col1: "Predmet zápožičky",
+            col2: "Príslušenstvo / S.Č.",
+            col3: "Hodnota (€)",
+            legal: "Zmluva uzatvorená v zmysle § 659 a nasl. Občianskeho zákonníka.\n\n1. Požičiavateľ prenecháva vypožičiavateľovi veci uvedené v zozname do bezplatného dočasného užívania.\n2. Vypožičiavateľ potvrdzuje prevzatie predmetov v uvedenom stave a zaväzuje sa ich vrátiť nepoškodené do dohodnutého termínu.\n3. V prípade poškodenia, straty alebo zničenia sa vypožičiavateľ zaväzuje uhradiť škodu v plnej výške uvedenej hodnoty."
+        },
+        handover: {
+            title: "PREBERACÍ PROTOKOL",
+            party1: "Odovzdávajúci",
+            party2: "Preberajúci",
+            col1: "Predmet odovzdania",
+            col2: "Stav / Poznámka",
+            col3: "Cena (€)",
+            legal: "Preberajúci potvrdzuje, že si predmety riadne prezrel, vyskúšal ich funkčnosť a preberá ich bez výhrad (ak nie je v poznámke uvedené inak).\n\nTýmto okamihom prechádza nebezpečenstvo škody na veci na preberajúceho."
+        },
+        worklog: {
+            title: "PRACOVNÝ VÝKAZ",
+            party1: "Zhotoviteľ",
+            party2: "Objednávateľ",
+            col1: "Dátum / Činnosť",
+            col2: "Popis prác",
+            col3: "Sadzba (€)",
+            legal: "Práce boli vykonané v dohodnutom rozsahu a kvalite.\nObjednávateľ svojím podpisom potvrdzuje správnosť uvedených údajov a súhlasí s fakturáciou podľa tohto výkazu."
+        }
+    };
+
+    window.onload = function() {
+        document.getElementById('doc-date').value = new Date().toISOString().split('T')[0];
+        
+        // Auto-load firmy
+        const saved = JSON.parse(localStorage.getItem('inv_v10_prof'));
+        if(saved) {
+            document.getElementById('p1-name').value = saved.name || '';
+            let det = '';
+            if(saved.street) det += saved.street + ', ' + saved.city + '\n';
+            if(saved.ico) det += 'IČO: ' + saved.ico;
+            document.getElementById('p1-details').value = det;
+        }
+
+        window.addEventListener('resize', scalePreview);
+        setType('rental', document.querySelector('.type-btn'));
+        addItemRow();
+        scalePreview();
+    };
+
+    // --- LOGIKA ---
+    function setType(type, btn) {
+        state.type = type;
+        
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+
+        const c = config[type];
+        document.getElementById('lbl-party1').innerText = c.party1;
+        document.getElementById('lbl-party2').innerText = c.party2;
+        
+        // Auto-Fill Legal Text (ak je prázdny alebo obsahuje text z iného typu)
+        const noteEl = document.getElementById('doc-note');
+        const currentNote = noteEl.value;
+        const isDefault = Object.values(config).some(cfg => cfg.legal === currentNote);
+        
+        if (!currentNote || isDefault) {
+            noteEl.value = c.legal;
+        }
+        
+        // Header update
+        const header = document.getElementById('items-header');
+        header.innerHTML = `
+            <div class="col-span-4">${c.col1}</div>
+            <div class="col-span-4">${c.col2}</div>
+            <div class="col-span-3 text-right">${c.col3}</div>
+            <div class="col-span-1"></div>
+        `;
+
+        updatePreview();
+    }
+
+    function scalePreview() {
+        const wrapper = document.querySelector('.preview-wrapper');
+        const preview = document.querySelector('.paper-preview');
+        if (!wrapper || !preview) return;
+        const wrapperWidth = wrapper.clientWidth - 40;
+        const a4Width = 794; 
+        if (wrapperWidth < a4Width) {
+            const scale = wrapperWidth / a4Width;
+            preview.style.transform = `scale(${scale})`;
+            preview.style.marginBottom = `-${(1 - scale) * 1123}px`;
+        } else {
+            preview.style.transform = 'scale(1)';
+            preview.style.marginBottom = '0';
+        }
+    }
+
+    // --- FOTO ---
+    function handlePhoto(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                state.photo = e.target.result;
+                document.getElementById('photo-remove-box').classList.remove('hidden'); // Show delete btn
+                updatePreview();
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function removePhoto() {
+        state.photo = null;
+        document.getElementById('photo-upload').value = ""; // Reset input
+        document.getElementById('photo-remove-box').classList.add('hidden'); // Hide delete btn
+        updatePreview();
+    }
+
+    // --- RENDER ---
+    function updatePreview() {
+        const c = config[state.type];
+        const preview = document.getElementById('protocol-preview');
+        
+        const p1Name = document.getElementById('p1-name').value || c.party1;
+        const p1Det = document.getElementById('p1-details').value.replace(/\n/g, '<br>') || "";
+        const p2Name = document.getElementById('p2-name').value || c.party2;
+        const p2Det = document.getElementById('p2-details').value.replace(/\n/g, '<br>') || "";
+        const date = document.getElementById('doc-date').value;
+        const place = document.getElementById('doc-place').value;
+        const num = document.getElementById('doc-number').value;
+        const note = document.getElementById('doc-note').value.replace(/\n/g, '<br>');
+
+        let rowsHtml = '';
+        let totalValue = 0;
+        
+        document.querySelectorAll('.item-row').forEach(row => {
+            const v1 = row.querySelector('.i-col1').value;
+            const v2 = row.querySelector('.i-col2').value;
+            // Oprava parsovania čísel (čiarka na bodku)
+            const rawPrice = row.querySelector('.i-col3').value.replace(',', '.');
+            const v3 = parseFloat(rawPrice) || 0;
+            
+            if (v1 || v2) {
+                rowsHtml += `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 10px; font-weight:bold; color:#1e293b;">${v1}</td>
+                    <td style="padding: 10px; color:#475569; font-size:11px;">${v2}</td>
+                    <td style="padding: 10px; text-align:right; font-weight:bold;">${v3 > 0 ? v3.toFixed(2) + ' €' : '-'}</td>
+                </tr>`;
+                totalValue += v3;
+            }
+        });
+
+        preview.innerHTML = `
+            <div style="padding: 50px;">
+                <div style="border-bottom: 3px solid #334155; padding-bottom: 20px; margin-bottom: 40px; display:flex; justify-content:space-between; align-items:end;">
+                    <div style="width: 70%;">
+                        <h1 style="font-size: 28px; font-weight: 800; color: #1e293b; margin: 0; line-height:1.2; text-transform:uppercase;">${c.title}</h1>
+                        <p style="color: #64748b; font-size: 14px; margin-top:5px;">Číslo: <strong>${num}</strong></p>
+                    </div>
+                    <div style="text-align:right; font-size:12px; color:#64748b;">
+                        Dátum: <strong>${date}</strong><br>Miesto: <strong>${place}</strong>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 30px; margin-bottom: 40px;">
+                    <div style="flex:1; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">${c.party1}</div>
+                        <div style="font-weight: bold; font-size: 15px; margin-bottom:5px; color:#0f172a;">${p1Name}</div>
+                        <div style="font-size: 11px; color: #475569; line-height: 1.5;">${p1Det}</div>
+                    </div>
+                    <div style="flex:1; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">${c.party2}</div>
+                        <div style="font-weight: bold; font-size: 15px; margin-bottom:5px; color:#0f172a;">${p2Name}</div>
+                        <div style="font-size: 11px; color: #475569; line-height: 1.5;">${p2Det}</div>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background: #334155; color: white;">
+                            <th style="text-align: left; padding: 12px 10px; width:35%;">${c.col1}</th>
+                            <th style="text-align: left; padding: 12px 10px; width:45%;">${c.col2}</th>
+                            <th style="text-align: right; padding: 12px 10px; width:20%;">${c.col3}</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+
+                ${totalValue > 0 ? `
+                <div style="text-align: right; margin-bottom: 40px; padding-top: 10px; border-top: 2px solid #e2e8f0;">
+                    <span style="font-size: 12px; color: #64748b; margin-right: 15px;">CELKOM:</span>
+                    <span style="font-size: 18px; font-weight: bold; color: #1e293b;">${totalValue.toFixed(2)} €</span>
+                </div>` : '<div style="margin-bottom: 40px;"></div>'}
+
+                <div style="margin-bottom: 30px;">
+                    <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px;">Podmienky</p>
+                    <div style="font-size: 11px; color: #334155; line-height: 1.6; text-align: justify;">${note}</div>
+                </div>
+
+                ${state.photo ? `
+                <div style="margin-bottom: 30px; text-align:center;">
+                    <img src="${state.photo}" style="max-width: 100%; max-height: 250px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                    <p style="font-size: 9px; color: #94a3b8; margin-top: 5px;">Fotodokumentácia</p>
+                </div>` : ''}
+
+                <div style="display: flex; justify-content: space-between; margin-top: 60px; page-break-inside: avoid;">
+                    <div style="width: 40%; text-align: center;">
+                        <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 10px;"></div>
+                        <div style="font-size: 11px; font-weight: bold;">${c.party1}</div>
+                    </div>
+                    <div style="width: 40%; text-align: center;">
+                        <div style="border-bottom: 1px solid #000; height: 40px; margin-bottom: 10px;"></div>
+                        <div style="font-size: 11px; font-weight: bold;">${c.party2}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function addItemRow() {
+        const div = document.createElement('div');
+        div.className = "grid grid-cols-12 gap-2 item-row items-center border-b border-slate-700 pb-2 mb-2 relative";
+        div.innerHTML = `
+            <div class="col-span-4"><input type="text" class="std-input i-col1" placeholder="..." oninput="updatePreview()"></div>
+            <div class="col-span-4"><input type="text" class="std-input i-col2" placeholder="..." oninput="updatePreview()"></div>
+            <div class="col-span-3"><input type="text" class="std-input i-col3 text-right" placeholder="0,00" oninput="updatePreview()"></div>
+            <div class="col-span-1 flex justify-end">
+                 <button onclick="this.closest('.item-row').remove(); updatePreview()" class="text-red-400 hover:text-red-300 px-2"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        `;
+        document.getElementById('items-container').appendChild(div);
+        updatePreview();
+    }
+
+    async function generatePDF() {
+        const element = document.getElementById('protocol-preview');
+        element.style.transform = 'scale(1)';
+        element.style.marginBottom = '0';
+        try {
+            const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+            const imgData = canvas.toDataURL('image/jpeg', 0.8);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const w = pdf.internal.pageSize.getWidth();
+            const h = pdf.internal.pageSize.getHeight();
+            pdf.addImage(imgData, 'JPEG', 0, 0, w, h);
+            pdf.save(`protokol_${state.type}.pdf`);
+        } catch(err) { alert("Chyba: " + err); } finally { scalePreview(); }
+    }
+</script>
+</body>
+</html>
