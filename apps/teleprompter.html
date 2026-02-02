@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleprompter Pro v4 | Unoneto</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- SETUP OBRAZOVKA --- */
+        .setup-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; color: var(--primary); font-size: 1.8rem; }
+        .back-link { color: #94a3b8; text-decoration: none; font-size: 0.9rem; border: 1px solid var(--border); padding: 5px 10px; border-radius: 6px;}
+
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            min-height: 400px;
+        }
+
+        textarea {
+            flex: 3;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            resize: none;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
+
+        .sidebar-controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            min-width: 280px;
+        }
+
+        .control-group { margin-bottom: 10px; }
+        .control-group label { display: block; font-size: 0.85rem; color: #94a3b8; font-weight: bold; margin-bottom: 5px; }
+        
+        input[type="range"] { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .checkbox-wrapper input { width: 20px; height: 20px; accent-color: var(--primary); }
+
+        .btn-start {
+            background: var(--primary); color: white; border: none; padding: 15px;
+            border-radius: 8px; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+            transition: 0.2s; margin-top: auto;
+        }
+        .btn-start:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* --- PROMPTER REŽIM (FULLSCREEN) --- */
+        #prompter-view {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 100; display: none;
+        }
+
+        #scrolling-content {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            line-height: 1.5;
+            padding: 0 20px;
+            box-sizing: border-box;
+            will-change: transform;
+            max-width: 100%;
+        }
+
+        .text-block {
+            margin-bottom: 30vh;
+            display: block;
+        }
+
+        /* OPRAVENÁ VODIACA ČIARA (Čitateľnosť) */
+        .guide-container {
+            position: absolute; 
+            top: 40%; /* Pozícia na obrazovke */
+            left: 0; 
+            width: 100%; 
+            height: 160px; /* Zväčšená výška pre lepšiu čitateľnosť */
+            transform: translateY(-50%); /* Centrovanie */
+            
+            /* Len jemné čiary, žiadne tmavé pozadie */
+            border-top: 2px dashed rgba(255, 0, 0, 0.4);
+            border-bottom: 2px dashed rgba(255, 0, 0, 0.4);
+            background: transparent; /* Priehľadné! */
+            
+            pointer-events: none; z-index: 150;
+            display: flex; align-items: center;
+        }
+        
+        /* Šípka na boku */
+        .guide-arrow { 
+            color: #ef4444; 
+            font-size: 40px; 
+            margin-left: 20px; 
+            opacity: 0.8;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        /* Maska pre zbytok obrazovky (aby vynikol stred) - Voliteľné */
+        /* Ak to chcete zapnúť, odkomentujte tento blok: */
+        /*
+        .dim-overlay {
+            position: absolute; width: 100%; height: 40%; 
+            background: rgba(0,0,0,0.4); pointer-events: none; z-index: 140;
+        }
+        .dim-top { top: 0; }
+        .dim-bottom { bottom: 0; height: 60%; } /* Zvyšok dola */
+        */
+
+        /* HUD OVLÁDANIE */
+        .hud {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, black, transparent);
+            padding: 30px;
+            display: flex; justify-content: center; gap: 30px;
+            opacity: 0; transition: opacity 0.3s;
+            z-index: 200;
+        }
+        #prompter-view:hover .hud { opacity: 1; }
+
+        .hud-btn {
+            background: #334155; color: white; border: none; width: 60px; height: 60px;
+            border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #475569; position: relative;
+        }
+        .hud-btn:hover { background: var(--primary); border-color: white; }
+        .hud-btn.danger { background: #7f1d1d; border-color: #ef4444; }
+        
+        .key-hint {
+            position: absolute; bottom: -25px; font-size: 0.7rem; 
+            background: #000; padding: 2px 6px; border-radius: 4px; opacity: 0.7; white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="setup-container" id="setup-screen">
+        <div class="header">
+            <h1>🗣️ Teleprompter Pro</h1>
+            <a href="index.html" class="back-link">Zavrieť</a>
+        </div>
+
+        <div class="editor-wrapper">
+            <textarea id="script-input" placeholder="Sem vlož text svojho videa..."></textarea>
+            
+            <div class="sidebar-controls">
+                
+                <div class="control-group">
+                    <label>Veľkosť písma: <span id="font-val">70px</span></label>
+                    <input type="range" id="font-size" min="30" max="150" value="70">
+                </div>
+
+                <div class="control-group">
+                    <label>Rýchlosť posunu: <span id="speed-val">2</span></label>
+                    <input type="range" id="scroll-speed" min="0" max="15" step="1" value="2">
+                </div>
+
+                <div class="control-group">
+                    <label>Šírka textu: <span id="width-val">90%</span></label>
+                    <input type="range" id="text-width" min="40" max="98" value="90">
+                </div>
+
+                <hr style="border-color: var(--border); width: 100%;">
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="use-blocks">
+                    <div>
+                        <strong>Režim Blokov (Strofy)</strong><br>
+                        <small style="color: #94a3b8;">Rozdelí text podľa odsekov.</small>
+                    </div>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="mirror-mode">
+                    <div>
+                        <strong>Zrkadlenie (Mirror)</strong><br>
+                        <small style="color: #94a3b8;">Pre čítacie sklo.</small>
+                    </div>
+                </label>
+
+                <button class="btn-start" onclick="startPrompter()">SPUSTIŤ PREZENTÁCIU</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="prompter-view">
+        <div class="guide-container">
+            <span class="guide-arrow">▶</span>
+        </div>
+        
+        <div id="scrolling-content"></div>
+
+        <div class="hud">
+            <button class="hud-btn" onclick="adjustSpeed(-1)">🐢<span class="key-hint">Vľavo</span></button>
+            <button class="hud-btn" onclick="manualMove(-200)">🔼<span class="key-hint">Hore</span></button>
+            <button class="hud-btn" id="play-pause-btn" onclick="togglePlay()">⏸<span class="key-hint">Medzera</span></button>
+            <button class="hud-btn" onclick="manualMove(200)">🔽<span class="key-hint">Dole</span></button>
+            <button class="hud-btn" onclick="adjustSpeed(1)">🐇<span class="key-hint">Vpravo</span></button>
+            <button class="hud-btn danger" onclick="stopPrompter()">❌<span class="key-hint">Esc</span></button>
+        </div>
+    </div>
+
+<script>
+    const setupScreen = document.getElementById('setup-screen');
+    const prompterView = document.getElementById('prompter-view');
+    const scriptInput = document.getElementById('script-input');
+    const content = document.getElementById('scrolling-content');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+
+    let isPlaying = false;
+    let speed = 2; 
+    let positionY = 0; 
+    let animationFrame;
+    
+    // UI LISTENERS
+    document.getElementById('font-size').addEventListener('input', (e) => {
+        content.style.fontSize = e.target.value + 'px';
+        document.getElementById('font-val').innerText = e.target.value + 'px';
+    });
+    document.getElementById('scroll-speed').addEventListener('input', (e) => {
+        speed = parseInt(e.target.value);
+        document.getElementById('speed-val').innerText = speed;
+    });
+    document.getElementById('text-width').addEventListener('input', (e) => {
+        content.style.width = e.target.value + '%';
+        content.style.left = ((100 - e.target.value) / 2) + '%'; 
+        document.getElementById('width-val').innerText = e.target.value + '%';
+    });
+
+    // ŠTART
+    function startPrompter() {
+        const rawText = scriptInput.value.trim();
+        if(!rawText) return alert("Najprv napíšte nejaký text!");
+
+        const useBlocks = document.getElementById('use-blocks').checked;
+        const useMirror = document.getElementById('mirror-mode').checked;
+
+        if (useBlocks) {
+            const blocks = rawText.split(/\n\s*\n/);
+            let html = "";
+            blocks.forEach(block => {
+                let cleanBlock = block.replace(/\n/g, '<br>');
+                html += `<div class="text-block">${cleanBlock}</div>`;
+            });
+            content.innerHTML = html;
+        } else {
+            content.innerHTML = rawText.replace(/\n/g, '<br>');
+        }
+
+        if(useMirror) {
+            content.style.transform = "scaleX(-1)";
+            content.style.direction = "rtl"; 
+        } else {
+            content.style.transform = "none";
+            content.style.direction = "ltr";
+        }
+
+        // Začiatočná pozícia (stred vodiacej čiary)
+        const startOffset = window.innerHeight * 0.4;
+        positionY = startOffset;
+        updateTransform();
+
+        setupScreen.style.display = 'none';
+        prompterView.style.display = 'block';
+
+        isPlaying = true;
+        playPauseBtn.innerText = "⏸";
+        requestAnimationFrame(gameLoop);
+    }
+
+    // SLUČKA
+    function gameLoop() {
+        if (!isPlaying) return;
+
+        positionY -= speed * 0.5; // Automatický posun
+        updateTransform();
+
+        const contentHeight = content.offsetHeight;
+        if (positionY < -(contentHeight + 500)) {
+            isPlaying = false;
+            playPauseBtn.innerText = "↺";
+        } else {
+            animationFrame = requestAnimationFrame(gameLoop);
+        }
+    }
+
+    function updateTransform() {
+        const useMirror = document.getElementById('mirror-mode').checked;
+        const mirrorStr = useMirror ? "scaleX(-1)" : "";
+        content.style.transform = `${mirrorStr} translateY(${positionY}px)`;
+    }
+
+    // OVLÁDANIE
+    function stopPrompter() {
+        isPlaying = false;
+        cancelAnimationFrame(animationFrame);
+        prompterView.style.display = 'none';
+        setupScreen.style.display = 'flex';
+    }
+
+    function togglePlay() {
+        if (playPauseBtn.innerText === "↺") {
+            positionY = window.innerHeight * 0.4;
+            updateTransform();
+            playPauseBtn.innerText = "⏸";
+            isPlaying = true;
+            requestAnimationFrame(gameLoop);
+            return;
+        }
+        isPlaying = !isPlaying;
+        playPauseBtn.innerText = isPlaying ? "⏸" : "▶";
+        if(isPlaying) requestAnimationFrame(gameLoop);
+    }
+
+    function adjustSpeed(delta) {
+        speed += delta;
+        if(speed < 0) speed = 0;
+        if(speed > 20) speed = 20;
+        document.getElementById('scroll-speed').value = speed;
+        document.getElementById('speed-val').innerText = speed;
+    }
+
+    // MANUÁLNY POSUN
+    function manualMove(pixels) {
+        positionY += pixels;
+        updateTransform();
+    }
+
+    // KLÁVESNICA (Opravené šípky)
+    document.addEventListener('keydown', (e) => {
+        if(prompterView.style.display === 'block') {
+            switch(e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case 'ArrowRight': // Zrýchliť
+                    adjustSpeed(1);
+                    break;
+                case 'ArrowLeft': // Spomaliť
+                    adjustSpeed(-1);
+                    break;
+                case 'ArrowUp': 
+                    // Pôvodne to vracalo text späť, ale chceli ste to naopak.
+                    // Teraz šípka HORE posunie text HORE (čiže preskočíte dopredu/zrýchlite posun)
+                    e.preventDefault();
+                    // Ak chcem text posunúť hore, musím zmenšiť Y (do mínusu)
+                    manualMove(-200); 
+                    break;
+                case 'ArrowDown': 
+                    // Teraz šípka DOLE posunie text DOLE (vrátite sa späť)
+                    e.preventDefault();
+                    // Ak chcem text posunúť dole, musím zväčšiť Y (do plusu)
+                    manualMove(200);
+                    break;
+                case 'Escape':
+                    stopPrompter();
+                    break;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -150,14 +150,12 @@
         .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* --- APP GRID (NO HOLES) --- */
+        /* --- APP GRID --- */
         .app-grid {
             display: grid;
-            /* Responzívne stĺpce */
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
-            padding-bottom: 100px;
-            /* Zarovnanie výšky kariet */
+            padding-bottom: 40px;
             align-items: stretch; 
         }
 
@@ -174,7 +172,6 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             backdrop-filter: blur(10px);
-            /* Kľúčové pre rovnakú výšku */
             height: 100%; 
             min-height: 200px;
         }
@@ -186,7 +183,6 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
-        /* Header karty */
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -194,7 +190,6 @@
             margin-bottom: 15px;
         }
 
-        /* Ikony v boxoch pre jednotný štýl */
         .card-icon-box {
             width: 48px; height: 48px;
             border-radius: 14px;
@@ -224,10 +219,9 @@
             font-size: 0.9rem; 
             color: var(--text-muted); 
             line-height: 1.6; 
-            flex-grow: 1; /* Tlačí obsah dole, aby karta bola plná */
+            flex-grow: 1;
         }
 
-        /* Šípka na hover */
         .card-arrow {
             margin-top: 15px;
             font-size: 0.9rem;
@@ -240,29 +234,23 @@
         .app-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
         /* Kategórie - Farby */
-        /* PDF: Cyan/Blue */
         .cat-pdf .card-icon-box { background: rgba(34, 211, 238, 0.15); color: #22d3ee; }
         .cat-pdf .card-badge { background: rgba(34, 211, 238, 0.1); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.2); }
         
-        /* IMG: Purple */
         .cat-img .card-icon-box { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
         .cat-img .card-badge { background: rgba(167, 139, 250, 0.1); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.2); }
         
-        /* AV: Orange */
         .cat-av .card-icon-box { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
         .cat-av .card-badge { background: rgba(251, 146, 60, 0.1); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.2); }
         
-        /* DATA: Emerald */
         .cat-data .card-icon-box { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
         .cat-data .card-badge { background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.2); }
 
-        /* UTILS: Pink/Gray */
         .cat-util .card-icon-box { background: rgba(244, 114, 182, 0.15); color: #f472b6; }
         .cat-util .card-badge { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid rgba(244, 114, 182, 0.2); }
 
         .hidden { display: none !important; }
 
-        /* RESPONSIVITA */
         @media (max-width: 900px) {
             body { flex-direction: column; height: auto; overflow: auto; }
             .sidebar {
@@ -271,7 +259,6 @@
             }
             .brand { margin-bottom: 0; font-size: 1.2rem; }
             .menu { display: none; }
-            
             .main-content { padding: 20px; }
             .top-bar { flex-direction: column; align-items: flex-start; }
             .search-box { width: 100%; }
@@ -348,14 +335,14 @@
                 </a>
 
                 <a href="protocol-app.html" class="app-card cat-data">
-    <div class="card-header">
-        <div class="card-icon-box" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">📝</div>
-        <span class="card-badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);">Biznis</span>
-    </div>
-    <div class="title">Protokoly & Výkazy</div>
-    <div class="desc">Tvorba preberacích protokolov, pracovných výkazov a zmlúv o zápožičke.</div>
-    <div class="card-arrow">Otvoriť nástroj →</div>
-</a>
+                    <div class="card-header">
+                        <div class="card-icon-box" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">📝</div>
+                        <span class="card-badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);">Biznis</span>
+                    </div>
+                    <div class="title">Protokoly & Výkazy</div>
+                    <div class="desc">Tvorba preberacích protokolov, pracovných výkazov a zmlúv o zápožičke.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
 
                 <a href="finstat-dashboard.html" class="app-card cat-data">
                     <div class="card-header">
@@ -476,6 +463,7 @@
                     <div class="desc">Presné skracovanie videa a audia s možnosťou Fade In/Out efektov.</div>
                     <div class="card-arrow">Otvoriť nástroj →</div>
                 </a>
+
                 <a href="stiahnito.html" class="app-card cat-av">
                     <div class="card-header">
                         <div class="card-icon-box">📥</div>
@@ -483,6 +471,16 @@
                     </div>
                     <div class="title">Univerzálny Sťahovač</div>
                     <div class="desc">Generátor príkazov na sťahovanie videí z YouTube, sociálnych sietí a streamov v najvyššej kvalite.</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+                <a href="teleprompter.html" class="app-card cat-av">
+                    <div class="card-header">
+                        <div class="card-icon-box">🗣️</div>
+                        <span class="card-badge">Video</span>
+                    </div>
+                    <div class="title">Profesionálna Čítačka</div>
+                    <div class="desc">Teleprompter pre nahrávanie videí. Podporuje zrkadlenie, ovládanie rýchlosti a inteligentné strofy.</div>
                     <div class="card-arrow">Otvoriť nástroj →</div>
                 </a>
 
@@ -506,9 +504,21 @@
                     <div class="card-arrow">Otvoriť nástroj →</div>
                 </a>
 
-            </div>
-        </div>
-    </main>
+                <a href="filedrop.html" class="app-card cat-util">
+                    <div class="card-header">
+                        <div class="card-icon-box">📡</div>
+                        <span class="card-badge">Nástroj</span>
+                    </div>
+                    <div class="title">Bleskový Prenos (P2P)</div>
+                    <div class="desc">Bezpečné posielanie neobmedzene veľkých súborov priamo medzi mobilom a PC (bez servera).</div>
+                    <div class="card-arrow">Otvoriť nástroj →</div>
+                </a>
+
+            </div> <footer style="text-align: center; padding: 40px 0; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+                Vytvoril: <span style="color: #f8fafc; font-weight: 600;">Matúš Benčo</span> | <span style="color: #6366f1;">Unoneto s.r.o.</span>
+            </footer>
+
+        </div> </main>
 
     <script>
         const grid = document.getElementById('appGrid');

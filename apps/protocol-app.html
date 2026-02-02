@@ -21,8 +21,20 @@
         .btn-primary { background: linear-gradient(135deg, #6366f1, #818cf8); color: white; padding: 12px; border-radius: 8px; font-weight: 600; text-align: center; cursor: pointer; border: none; width: 100%; transition: 0.2s; }
         
         /* A4 Preview */
-        .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; padding: 20px; background: #334155; }
-        .paper-preview { background: white; color: #1e293b; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 0; box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative; font-family: Arial, sans-serif; transform-origin: top center; }
+        .preview-wrapper { width: 100%; overflow: hidden; display: flex; justify-content: center; padding: 40px 20px; background: #334155; }
+        .paper-preview { 
+            background: white; 
+            color: #1e293b; 
+            width: 210mm; 
+            min-height: 297mm; 
+            margin: 0 auto; 
+            padding: 0; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.5); 
+            position: relative; 
+            font-family: Arial, sans-serif; 
+            transform-origin: top center; 
+            transition: transform 0.2s;
+        }
         
         /* Buttons */
         .type-btn { padding: 10px; border: 1px solid #475569; border-radius: 8px; cursor: pointer; color: #94a3b8; font-size: 0.85rem; background: transparent; transition: 0.2s; flex: 1; text-align: center; font-weight: 500; }
@@ -34,7 +46,7 @@
         @media (max-width: 1024px) {
             .main-layout { flex-direction: column; overflow-y: auto !important; height: auto !important; }
             .editor-col { width: 100% !important; border-right: none; border-bottom: 1px solid #334155; }
-            .preview-col { width: 100% !important; min-height: 500px; }
+            .preview-col { width: 100% !important; min-height: 500px; padding: 20px; }
         }
     </style>
 </head>
@@ -179,15 +191,17 @@
     window.onload = function() {
         document.getElementById('doc-date').value = new Date().toISOString().split('T')[0];
         
-        // Auto-load firmy
-        const saved = JSON.parse(localStorage.getItem('inv_v10_prof'));
-        if(saved) {
-            document.getElementById('p1-name').value = saved.name || '';
-            let det = '';
-            if(saved.street) det += saved.street + ', ' + saved.city + '\n';
-            if(saved.ico) det += 'IČO: ' + saved.ico;
-            document.getElementById('p1-details').value = det;
-        }
+        // Auto-load firmy (ošetrené voči chybám)
+        try {
+            const saved = JSON.parse(localStorage.getItem('inv_v10_prof'));
+            if(saved) {
+                document.getElementById('p1-name').value = saved.name || '';
+                let det = '';
+                if(saved.street) det += saved.street + ', ' + saved.city + '\n';
+                if(saved.ico) det += 'IČO: ' + saved.ico;
+                document.getElementById('p1-details').value = det;
+            }
+        } catch(e) { console.log('No saved data found'); }
 
         window.addEventListener('resize', scalePreview);
         setType('rental', document.querySelector('.type-btn'));
@@ -232,7 +246,8 @@
         const preview = document.querySelector('.paper-preview');
         if (!wrapper || !preview) return;
         const wrapperWidth = wrapper.clientWidth - 40;
-        const a4Width = 794; 
+        const a4Width = 794; // approx width for A4 at 96dpi
+        
         if (wrapperWidth < a4Width) {
             const scale = wrapperWidth / a4Width;
             preview.style.transform = `scale(${scale})`;
