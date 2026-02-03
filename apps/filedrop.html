@@ -62,7 +62,7 @@
         .drop-zone:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
         .drop-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; }
 
-        /* FILE LIST (PREVIEW) */
+        /* FILE LIST */
         .file-list { margin-top: 20px; text-align: left; }
         .file-item { 
             background: #0f172a; padding: 10px; border-radius: 6px; margin-bottom: 5px; 
@@ -84,20 +84,26 @@
         }
         .link-text {
             font-family: monospace; color: var(--success); overflow: hidden;
-            text-overflow: ellipsis; white-space: nowrap;
+            text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem;
         }
         
-        .btn { border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; }
+        .btn { border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; margin-top: 15px; }
-        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        
+        .btn-download { background: var(--success); color: #000; margin-top: 20px; font-size: 1.1rem; display: none; }
+        .btn-download:hover { filter: brightness(1.1); transform: scale(1.02); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
         .btn-copy { background: var(--success); color: #000; width: auto; padding: 8px 15px; font-size: 0.9rem;}
 
         /* PROGRESS */
         .progress-box { margin-top: 20px; display: none; }
-        .progress-bar { height: 6px; background: #334155; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+        .progress-bar { height: 8px; background: #334155; border-radius: 4px; margin-top: 8px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.2s; }
 
+        /* NOTES */
         .info-note { font-size: 0.85rem; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 10px; border-radius: 6px; margin-top: 15px; text-align: center; border: 1px solid rgba(251, 191, 36, 0.2); }
+        .error-note { font-size: 0.85rem; color: #fca5a5; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 6px; margin-top: 15px; text-align: center; border: 1px solid rgba(239, 68, 68, 0.2); display: none; }
         
         .back-link { display: block; text-align: center; margin-top: 30px; color: var(--text-muted); text-decoration: none; }
         .back-link:hover { color: white; }
@@ -111,12 +117,18 @@
         <p>Bezpečný prenos súborov (Serverless)</p>
     </div>
 
+    <div id="global-error" class="error-note" style="margin-bottom: 20px;"></div>
+
     <div id="view-receiver" class="card stage">
         <div style="text-align: center;">
             <div class="drop-icon">⬇️</div>
-            <h2>Pripájam sa k odosielateľovi...</h2>
-            <p style="color: var(--text-muted)">Prosím čakajte, sťahovanie začne automaticky.</p>
+            <h2 id="recv-title">Pripájam sa...</h2>
+            <p id="recv-desc" style="color: var(--text-muted)">Čakám na spojenie s odosielateľom...</p>
             
+            <button id="btn-start-download" class="btn btn-download" onclick="requestDownload()">
+                📥 STIAHNUŤ SÚBORY
+            </button>
+
             <div id="recv-progress" class="progress-box">
                 <div style="display:flex; justify-content:space-between; font-size: 0.9rem;">
                     <span id="recv-filename">Sťahujem...</span>
@@ -141,17 +153,23 @@
     <div id="view-share" class="card stage">
         <div style="text-align: center;">
             <span class="drop-icon">✅</span>
-            <h3>Súbory sú pripravené!</h3>
-            <p style="color: var(--text-muted)">Pošli tento odkaz príjemcovi.</p>
+            <h3>2. KROK: Pošli odkaz</h3>
+            <p style="color: var(--text-muted)">Súbory sú pripravené.</p>
             
             <div class="link-box">
-                <span id="share-link" class="link-text">...</span>
+                <span id="share-link" class="link-text">Generujem...</span>
                 <button class="btn btn-copy" onclick="copyLink()">Kopírovať</button>
+            </div>
+
+            <div id="localhost-warning" class="error-note" style="display:none;">
+                ⚠️ <b>POZOR: Bežíš na "localhost"!</b><br>
+                Tento odkaz nebude fungovať na inom zariadení (mobil).<br>
+                Použi lokálnu IP adresu alebo nahraj stránku na hosting.
             </div>
 
             <div class="info-note">
                 ⚠️ <b>NEZATVÁRAJ TOTO OKNO!</b><br>
-                Súbory sa začnú odosielať až keď príjemca klikne na odkaz.
+                Súbory sa začnú odosielať priamo z tvojho zariadenia až vtedy, keď príjemca klikne na "Stiahnuť".
             </div>
 
             <div id="send-progress" class="progress-box">
@@ -166,30 +184,32 @@
 </div>
 
 <script>
-    // --- STAV A PREMENNÉ ---
     const urlParams = new URLSearchParams(window.location.search);
-    const targetPeerId = urlParams.get('id'); // Ak sme príjemca
+    const targetPeerId = urlParams.get('id'); 
     let peer = null;
     let conn = null;
-    let filesBuffer = []; // Tu držíme vybrané súbory
+    let filesBuffer = []; 
 
-    // UI Elementy
     const views = {
         receiver: document.getElementById('view-receiver'),
         upload: document.getElementById('view-upload'),
         share: document.getElementById('view-share')
     };
 
-    // --- ŠTART APLIKÁCIE ---
     window.onload = () => {
+        // Kontrola localhost (pre odosielateľa)
+        const host = window.location.hostname;
+        if (!targetPeerId && (host === 'localhost' || host === '127.0.0.1')) {
+            document.getElementById('localhost-warning').style.display = 'block';
+        }
+
         if (targetPeerId) {
-            // Sme PRÍJEMCA
+            // PRÍJEMCA
             switchView('receiver');
-            initPeer(null, true); // true = sme receiver
+            initPeer(null, true); 
         } else {
-            // Sme ODOSIELATEĽ
+            // ODOSIELATEĽ
             switchView('upload');
-            // Inicializujeme Peer hneď na pozadí, aby sme mali ID pripravené
             initPeer(); 
             setupDragDrop();
         }
@@ -200,45 +220,87 @@
         views[name].classList.add('active');
     }
 
-   function initPeer(customId = null, isReceiver = false) {
+    // --- PEERJS LOGIKA ---
+    function initPeer(customId = null, isReceiver = false) {
+        // Inicializácia P2P siete
         peer = new Peer(customId);
 
         peer.on('open', (id) => {
+            console.log('Moje ID:', id);
             if (isReceiver) {
                 connectToSender();
             } else {
-                // Sme odosielateľ: Vygenerujeme link
-                const currentUrl = window.location.href.split('?')[0];
-                const link = `${currentUrl}?id=${id}`;
+                // Odosielateľ: Vygenerujeme link
+                const link = `${window.location.href.split('?')[0]}?id=${id}`;
                 document.getElementById('share-link').innerText = link;
-
-                // --- NOVÉ: KONTROLA LOCALHOST ---
-                const hostname = window.location.hostname;
-                if (hostname === '127.0.0.1' || hostname === 'localhost' || hostname.includes('192.168.')) {
-                    const note = document.querySelector('.info-note');
-                    note.innerHTML = `
-                        ⚠️ <b>POZOR: Bežíš na lokálnom serveri (${hostname})!</b><br>
-                        Tento link bude fungovať len na zariadeniach v tej istej WiFi sieti.<br>
-                        Aby to fungovalo cez internet (iné mesto), musíš stránku nahrať na webhosting.
-                    `;
-                    note.style.background = "rgba(239, 68, 68, 0.2)";
-                    note.style.color = "#fca5a5";
-                    note.style.borderColor = "#ef4444";
-                }
             }
         });
 
         peer.on('connection', (c) => {
+            // Odosielateľ: Niekto sa pripojil
             conn = c;
             setupSenderEvents();
         });
 
-        peer.on('error', err => alert("Chyba spojenia: " + err.type));
+        peer.on('error', err => {
+            const errBox = document.getElementById('global-error');
+            errBox.style.display = 'block';
+            errBox.innerText = "Chyba spojenia: " + err.type;
+            console.error(err);
+        });
     }
 
-    // --- 2. LOGIKA ODOSIELATEĽA (Výber súborov) ---
-    const fileInput = document.getElementById('fileInput');
+    function connectToSender() {
+        if (!peer || !targetPeerId) return;
+        conn = peer.connect(targetPeerId);
+        setupReceiverEvents();
+    }
+
+    // --- LOGIKA ODOSIELATEĽA ---
+    function setupSenderEvents() {
+        conn.on('open', () => {
+            document.getElementById('send-status').innerText = "👤 Príjemca pripojený. Čakám na potvrdenie...";
+        });
+
+        conn.on('data', (data) => {
+            if (data && data.type === 'START_DOWNLOAD') {
+                startUpload();
+            }
+        });
+
+        conn.on('close', () => {
+            document.getElementById('send-status').innerText = "❌ Spojenie prerušené.";
+        });
+    }
+
+    // --- LOGIKA PRÍJEMCU ---
+    function setupReceiverEvents() {
+        conn.on('open', () => {
+            document.getElementById('recv-title').innerText = "Spojenie úspešné!";
+            document.getElementById('recv-desc').innerText = "Súbory sú pripravené na stiahnutie.";
+            document.getElementById('btn-start-download').style.display = 'block';
+        });
+
+        conn.on('data', (data) => handleIncomingData(data));
+        
+        conn.on('close', () => {
+            document.getElementById('recv-title').innerText = "Spojenie prerušené";
+            document.getElementById('recv-desc').style.color = "red";
+        });
+    }
+
+    function requestDownload() {
+        if (conn) {
+            conn.send({ type: 'START_DOWNLOAD' });
+            document.getElementById('btn-start-download').style.display = 'none';
+            document.getElementById('recv-desc').innerText = "Sťahovanie začalo...";
+        }
+    }
+
+    // --- LOGIKA PRENOSU ---
     
+    // 1. Výber súborov
+    const fileInput = document.getElementById('fileInput');
     fileInput.addEventListener('change', (e) => addFiles(e.target.files));
 
     function setupDragDrop() {
@@ -254,9 +316,8 @@
 
     function addFiles(files) {
         if (files.length === 0) return;
-        filesBuffer = Array.from(files); // Uložíme do pamäte
+        filesBuffer = Array.from(files);
         
-        // Zobrazíme preview
         const list = document.getElementById('file-preview');
         list.innerHTML = '';
         filesBuffer.forEach(f => {
@@ -274,45 +335,38 @@
         switchView('share');
     }
 
-    async function uploadFiles() {
+    // 2. Odosielanie
+    async function startUpload() {
         if (!conn) return;
         
-        const totalFiles = filesBuffer.length;
+        document.getElementById('send-progress').style.display = 'block';
         const progressBar = document.getElementById('send-fill');
+        const totalFiles = filesBuffer.length;
 
         for (let i = 0; i < totalFiles; i++) {
             const file = filesBuffer[i];
             
-            // 1. Hlavička
-            conn.send({
-                type: 'header',
-                name: file.name,
-                size: file.size,
-                mime: file.type
-            });
-
-            // Pauza pre stabilitu
+            // Hlavička
+            conn.send({ type: 'header', name: file.name, size: file.size, mime: file.type });
             await new Promise(r => setTimeout(r, 100));
 
-            // 2. Dáta
+            // Telo
             conn.send(file);
             
-            // UI Update
+            // UI
             progressBar.style.width = ((i + 1) / totalFiles * 100) + '%';
             document.getElementById('send-status').innerText = `Odosielam ${i+1}/${totalFiles}: ${file.name}`;
             
-            // Pauza pred ďalším
             await new Promise(r => setTimeout(r, 500));
         }
         
         document.getElementById('send-status').innerText = "✅ Všetky súbory odoslané!";
     }
 
-    // --- 3. LOGIKA PRÍJEMCU (Sťahovanie) ---
+    // 3. Prijímanie
     let incomingFileInfo = null;
 
     function handleIncomingData(data) {
-        // UI pre príjemcu
         const pBox = document.getElementById('recv-progress');
         const pName = document.getElementById('recv-filename');
         const pFill = document.getElementById('recv-fill');
@@ -347,14 +401,12 @@
         }, 100);
     }
 
-    // --- OSTATNÉ ---
     function copyLink() {
         const text = document.getElementById('share-link').innerText;
         navigator.clipboard.writeText(text);
         const btn = document.querySelector('.btn-copy');
-        const orig = btn.innerText;
         btn.innerText = "OK!";
-        setTimeout(() => btn.innerText = orig, 1500);
+        setTimeout(() => btn.innerText = "Kopírovať", 1500);
     }
 </script>
 
