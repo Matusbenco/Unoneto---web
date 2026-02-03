@@ -2,8 +2,9 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PriceList Creator 4.0 | Unoneto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Generátor Cenníkov | Unoneto</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,47 +14,20 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-action {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem;
-            transition: all 0.2s; cursor: pointer; border: 1px solid transparent;
-        }
+        .glass-panel { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .btn-action { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
         .btn-primary { background: #6366f1; color: white; }
         .btn-primary:hover { background: #4f46e5; }
         .btn-secondary { background: #1e293b; color: #cbd5e1; border-color: #334155; }
         .btn-secondary:hover { background: #334155; color: white; }
-
-        .input-dark {
-            background: #0f172a; border: 1px solid #334155; color: white; padding: 8px;
-            border-radius: 6px; font-size: 0.85rem; width: 100%;
-        }
+        .input-dark { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-size: 0.85rem; width: 100%; transition: border-color 0.2s; }
         .input-dark:focus { border-color: #6366f1; outline: none; }
-
-        .textarea-dark {
-            background: #0f172a; border: 1px solid #334155; color: white; padding: 8px;
-            border-radius: 6px; font-size: 0.85rem; width: 100%; min-height: 80px; resize: vertical;
-        }
-
-        /* A4 PREVIEW */
-        .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; padding: 40px; background: #334155; }
-        .print-area {
-            background: white; color: #1e293b; width: 210mm; min-height: 297mm;
-            margin: 0 auto; padding: 10mm; box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            font-family: 'Inter', sans-serif; position: relative;
-            display: flex; flex-direction: column;
-        }
-
-        /* --- ŠABLÓNY --- */
+        .textarea-dark { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-size: 0.85rem; width: 100%; min-height: 80px; resize: vertical; }
         
-        /* 1. CORPORATE (Tabuľková) */
+        .print-area { background: white; color: #1e293b; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 10mm; box-shadow: 0 0 40px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; position: relative; display: flex; flex-direction: column; transform-origin: top center; }
+        @media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; box-shadow: none; height: auto; transform: none !important; } ::-webkit-scrollbar { display: none; } }
+
+        /* TPL */
         .tpl-corporate header { border-bottom: 2px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
         .tpl-corporate h1 { color: #1e3a8a; font-size: 20pt; font-weight: 800; text-transform: uppercase; margin: 0; line-height: 1; }
         .tpl-corporate table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 20px; }
@@ -62,9 +36,9 @@
         .tpl-corporate .price-highlight { font-weight: 800; color: #1e3a8a; font-size: 9pt; }
         .tpl-corporate .gift-badge { background: #fee2e2; color: #991b1b; padding: 2px 4px; border-radius: 3px; font-size: 6pt; font-weight: bold; display: inline-block; margin-top: 2px; }
         .tpl-corporate .desc-text { color: #64748b; font-size: 7pt; margin-top: 2px; line-height: 1.2; display: block; max-width: 300px; }
+        .tpl-corporate .bulk-text { color: #059669; font-weight: bold; font-size: 7pt; display: block; margin-top: 2px; }
         .tpl-corporate .footer-note { border-top: 2px solid #1e3a8a; padding-top: 10px; margin-top: auto; font-size: 8pt; color: #475569; text-align: center; white-space: pre-wrap; }
 
-        /* 2. MODERN (Karty) */
         .tpl-modern header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
         .tpl-modern h1 { font-family: 'Outfit', sans-serif; font-size: 26pt; color: #0f172a; margin: 0; }
         .tpl-modern .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
@@ -76,7 +50,6 @@
         .tpl-modern .main-price { font-size: 12pt; font-weight: 800; color: #0f172a; }
         .tpl-modern .footer-note { background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: auto; font-size: 9pt; color: #334155; text-align: center; font-weight: 500; white-space: pre-wrap; }
 
-        /* 3. BOLD (Leták) */
         .tpl-bold header { background: #000; color: #facc15; padding: 20px; margin: -10mm -10mm 20px -10mm; text-align: center; }
         .tpl-bold h1 { font-weight: 900; text-transform: uppercase; font-size: 24pt; margin: 0; }
         .tpl-bold .row { border-bottom: 4px solid #000; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; page-break-inside: avoid; }
@@ -84,47 +57,41 @@
         .tpl-bold .vo-price { font-size: 9pt; color: #64748b; font-weight: bold; margin-bottom: 2px; }
         .tpl-bold .footer-note { background: #000; color: #facc15; padding: 15px; margin: auto -10mm -10mm -10mm; font-size: 10pt; font-weight: bold; text-align: center; text-transform: uppercase; white-space: pre-wrap; }
 
-        @media print {
-            body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; }
-            #printArea { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; box-shadow: none; min-height: 100%; height: auto; }
-            ::-webkit-scrollbar { display: none; }
-        }
-
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body class="h-screen flex flex-col overflow-hidden text-sm">
 
-    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-6 shrink-0 z-50">
+    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-4 shrink-0 z-50">
         <div class="flex items-center gap-3">
             <a href="index.html" class="text-slate-400 hover:text-white"><i class="fa-solid fa-arrow-left"></i></a>
-            <h1 class="font-bold text-lg text-white">PriceList <span class="text-indigo-400">Creator 4.0</span></h1>
+            <h1 class="font-bold text-white hidden sm:block">Generátor <span class="text-indigo-400">Cenníkov</span></h1>
+            <h1 class="font-bold text-white sm:hidden">Cenníky</h1>
         </div>
         <div class="flex gap-2">
-            <button onclick="exportToXLSX()" class="btn-action btn-secondary text-xs">
-                <i class="fa-solid fa-file-excel text-green-500"></i> Export XLSX
+            <button onclick="exportToXLSX()" class="btn-action btn-secondary" title="Exportovať do Excelu">
+                <i class="fa-solid fa-file-excel text-green-500"></i> <span class="hidden sm:inline">Export</span>
             </button>
-            <button onclick="window.print()" class="btn-action btn-primary">
-                <i class="fa-solid fa-print"></i> Tlačiť PDF
+            <button onclick="window.print()" class="btn-action btn-primary" title="Tlačiť PDF">
+                <i class="fa-solid fa-print"></i> <span class="hidden sm:inline">PDF</span>
             </button>
         </div>
     </div>
 
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <div class="w-[450px] bg-slate-900 border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 custom-scrollbar">
+        <div class="w-full lg:w-[480px] bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 custom-scrollbar h-[55vh] lg:h-auto">
             
-            <div class="p-5 border-b border-slate-800">
+            <div class="p-4 border-b border-slate-800">
                 <h3 class="text-xs font-bold text-slate-400 uppercase mb-3">1. Produkty</h3>
                 <div class="grid grid-cols-2 gap-2 mb-3">
                     <button onclick="addEmptyRow()" class="btn-action btn-secondary bg-slate-800 border-slate-700">
-                        <i class="fa-solid fa-plus"></i> Nový produkt
+                        <i class="fa-solid fa-plus"></i> Nový
                     </button>
                     <label class="btn-action btn-secondary bg-slate-800 border-slate-700 cursor-pointer">
-                        <i class="fa-solid fa-file-import"></i> Import (Excel/CSV)
+                        <i class="fa-solid fa-file-import"></i> Import
                         <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" class="hidden" onchange="handleFile(this)">
                     </label>
                 </div>
@@ -134,77 +101,79 @@
                 </div>
             </div>
 
-            <div class="p-5 border-b border-slate-800 space-y-4">
-                <h3 class="text-xs font-bold text-slate-400 uppercase">2. Nastavenia Cenníka</h3>
+            <div class="p-4 border-b border-slate-800 space-y-3">
+                <h3 class="text-xs font-bold text-slate-400 uppercase cursor-pointer flex justify-between items-center" onclick="toggleSettings()">
+                    2. Nastavenia <i class="fa-solid fa-chevron-down text-slate-600"></i>
+                </h3>
                 
-                <div>
-                    <label class="text-xs text-slate-500 block mb-1">Názov Cenníka</label>
-                    <input type="text" id="list-title" class="input-dark font-bold" value="Cenník 2026" oninput="saveAndRender()">
-                </div>
-
-                <div>
-                    <label class="text-xs text-slate-500 block mb-1">Text v hlavičke (Editovateľné)</label>
-                    <input type="text" id="header-note" class="input-dark text-xs text-yellow-400" oninput="saveAndRender()">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-3">
+                <div id="settings-content" class="space-y-3">
                     <div>
-                        <label class="text-xs text-slate-500 block mb-1">Mena</label>
-                        <select id="currency" class="input-dark cursor-pointer" onchange="saveAndRender()">
-                            <option value="€">EUR (€)</option>
-                            <option value="Kč">CZK (Kč)</option>
-                            <option value="$">USD ($)</option>
-                            <option value="zł">PLN (zł)</option>
-                            <option value="Ft">HUF (Ft)</option>
-                            <option value="£">GBP (£)</option>
-                        </select>
+                        <label class="text-[10px] text-slate-500 block mb-1">Názov Cenníka</label>
+                        <input type="text" id="list-title" class="input-dark font-bold" value="Cenník 2026" oninput="saveAndRender()">
                     </div>
                     <div>
-                        <label class="text-xs text-slate-500 block mb-1">DPH % (Manuálne)</label>
-                        <div class="flex gap-1">
-                            <input type="number" id="vat-rate" class="input-dark w-1/2 text-center font-bold" value="23" oninput="saveAndRender()">
-                            <select class="input-dark w-1/2 text-xs" onchange="document.getElementById('vat-rate').value=this.value; saveAndRender()">
-                                <option value="23">SK</option>
-                                <option value="21">CZ</option>
-                                <option value="27">HU</option>
-                                <option value="23">PL</option>
-                                <option value="0">0%</option>
+                        <label class="text-[10px] text-slate-500 block mb-1">Text v hlavičke</label>
+                        <input type="text" id="header-note" class="input-dark text-xs text-yellow-400" oninput="saveAndRender()">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-slate-500 block mb-1">Mena</label>
+                            <select id="currency" class="input-dark cursor-pointer" onchange="saveAndRender()">
+                                <option value="€">EUR (€)</option>
+                                <option value="Kč">CZK (Kč)</option>
+                                <option value="$">USD ($)</option>
+                                <option value="zł">PLN (zł)</option>
+                                <option value="Ft">HUF (Ft)</option>
+                                <option value="£">GBP (£)</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 block mb-1">DPH %</label>
+                            <div class="flex gap-1">
+                                <input type="number" id="vat-rate" class="input-dark w-1/2 text-center font-bold" value="23" oninput="saveAndRender()">
+                                <select class="input-dark w-1/2 text-[10px]" onchange="document.getElementById('vat-rate').value=this.value; saveAndRender()">
+                                    <option value="23">SK (23)</option>
+                                    <option value="21">CZ (21)</option>
+                                    <option value="20">Iné (20)</option>
+                                    <option value="0">0%</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs text-slate-500 block mb-1">Šablóna</label>
-                        <select id="tpl-select" class="input-dark cursor-pointer" onchange="config.template = this.value; saveAndRender()">
-                            <option value="corporate">Corporate (Tabuľka)</option>
-                            <option value="modern">Modern (Karty)</option>
-                            <option value="bold">Bold (Leták)</option>
-                        </select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-slate-500 block mb-1">Šablóna</label>
+                            <select id="tpl-select" class="input-dark cursor-pointer" onchange="config.template = this.value; saveAndRender()">
+                                <option value="corporate">Tabuľka</option>
+                                <option value="modern">Karty</option>
+                                <option value="bold">Leták</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-500 block mb-1">Logo</label>
+                            <button onclick="document.getElementById('logoInput').click()" class="input-dark text-left text-[10px] flex items-center gap-2 hover:bg-slate-800 cursor-pointer overflow-hidden whitespace-nowrap">
+                                <i class="fa-regular fa-image"></i> Zmeniť...
+                            </button>
+                            <input type="file" id="logoInput" class="hidden" accept="image/*" onchange="handleLogo(this)">
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-xs text-slate-500 block mb-1">Logo</label>
-                        <button onclick="document.getElementById('logoInput').click()" class="input-dark text-left text-xs flex items-center gap-2 hover:bg-slate-800 cursor-pointer">
-                            <i class="fa-regular fa-image"></i> Nahrať...
-                        </button>
-                        <input type="file" id="logoInput" class="hidden" accept="image/*" onchange="handleLogo(this)">
-                    </div>
-                </div>
 
-                <div>
-                    <label class="text-xs text-slate-500 block mb-1">Pätička / Poznámka dole</label>
-                    <textarea id="footer-note" class="textarea-dark" oninput="saveAndRender()" placeholder="Napr. Obchodné podmienky, kontakt, platnosť cien..."></textarea>
+                    <div>
+                        <label class="text-[10px] text-slate-500 block mb-1">Pätička</label>
+                        <textarea id="footer-note" class="textarea-dark h-16" oninput="saveAndRender()" placeholder="Poznámka dole..."></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-2 flex-1 bg-slate-900">
+            <div class="p-2 flex-1 bg-slate-900 overflow-y-auto">
                 <div id="editor-rows" class="space-y-2 pb-10"></div>
             </div>
         </div>
 
-        <div class="flex-1 bg-slate-800 overflow-auto flex justify-center p-10 custom-scrollbar">
-            <div id="printArea" class="print-area tpl-corporate">
+        <div class="flex-1 bg-slate-800 overflow-auto flex justify-center p-4 lg:p-10 custom-scrollbar h-[45vh] lg:h-auto border-t border-slate-700 lg:border-t-0">
+            <div id="printArea" class="print-area tpl-corporate transform scale-[0.5] origin-top lg:scale-100 lg:origin-top-center">
                 </div>
         </div>
 
@@ -213,39 +182,36 @@
 <script>
     // --- DATA ---
     let products = [];
-    let config = {
-        template: 'corporate',
-        logo: null,
-        currency: '€'
-    };
+    let config = { template: 'corporate', logo: null, currency: '€' };
 
     // --- INIT ---
-    window.onload = () => { 
-        loadData();
-    };
+    window.onload = () => { loadData(); };
 
-    // --- STORAGE & PERSISTENCE ---
+    function toggleSettings() {
+        const el = document.getElementById('settings-content');
+        el.classList.toggle('hidden');
+    }
+
+    // --- STORAGE ---
     function saveData() {
         const dataToSave = {
-            products: products,
-            config: config,
+            products, config,
             title: document.getElementById('list-title').value,
             headerNote: document.getElementById('header-note').value,
             footerNote: document.getElementById('footer-note').value,
             vatRate: document.getElementById('vat-rate').value,
             currency: document.getElementById('currency').value
         };
-        localStorage.setItem('pricelist_data_v4', JSON.stringify(dataToSave));
+        localStorage.setItem('pricelist_data_v7', JSON.stringify(dataToSave));
     }
 
     function loadData() {
-        const saved = localStorage.getItem('pricelist_data_v4');
+        const saved = localStorage.getItem('pricelist_data_v7');
         if (saved) {
             const data = JSON.parse(saved);
             products = data.products || [];
             config = data.config || config;
             
-            // Restore inputs
             if (data.title) document.getElementById('list-title').value = data.title;
             if (data.headerNote) document.getElementById('header-note').value = data.headerNote;
             if (data.footerNote) document.getElementById('footer-note').value = data.footerNote;
@@ -256,56 +222,97 @@
             renderEditor();
             render();
         } else {
-            // Defaults
             const date = new Date().toLocaleDateString('sk-SK');
             document.getElementById('header-note').value = `Platnosť od: ${date} • Ceny sú uvedené s DPH`;
-            document.getElementById('footer-note').value = "Objednávky prijímame na info@firma.sk.\nCeny platia do vypredania zásob.";
+            document.getElementById('footer-note').value = "Kontakt: info@firma.sk\nCeny platia do vypredania zásob.";
             loadDemoData(); 
         }
     }
 
-    function saveAndRender() {
-        render();
-        saveData();
-    }
+    function saveAndRender() { render(); saveData(); }
 
     // --- LOGIC ---
     function addEmptyRow() {
-        products.push({
-            code: '', brand: '', name: 'Nový produkt', desc: '', 
-            vo_price: 0, margin: 0, stock: 'Skladom', 
-            gift: false, gift_desc: '', bulk_disc: 0
-        });
-        renderEditor();
-        saveAndRender();
+        products.push({ code: '', brand: '', name: 'Nový', desc: '', vo_price: 0, margin: 0, moc_price: 0, stock: 'Skladom', gift: false, gift_desc: '', bulk_disc: 0 });
+        renderEditor(); saveAndRender();
     }
 
     function loadDemoData() {
         products = [
-            { code: 'LPT-01', brand: 'Lenovo', name: 'ThinkPad X1 Carbon', desc: 'i7, 16GB RAM, 512GB SSD', vo_price: 1200, margin: 20, stock: '5 ks', gift: true, gift_desc: '+ Taška', bulk_disc: 0 },
-            { code: 'MOB-55', brand: 'Samsung', name: 'Galaxy S24 Ultra', desc: '512GB, Titanium Grey', vo_price: 900, margin: 15, stock: 'Na objednávku', gift: false, gift_desc: '', bulk_disc: 5 },
-            { code: 'AUD-99', brand: 'JBL', name: 'Charge 5 Speaker', desc: 'Bluetooth, Waterproof', vo_price: 110, margin: 35, stock: 'Skladom', gift: false, gift_desc: '', bulk_disc: 10 }
+            { code: 'LPT-01', brand: 'Lenovo', name: 'ThinkPad X1', desc: 'i7, 16GB RAM', vo_price: 1000, margin: 20, moc_price: 1200, stock: '5 ks', gift: true, gift_desc: '+ Taška', bulk_disc: 0 },
+            { code: 'MOB-55', brand: 'Samsung', name: 'S24 Ultra', desc: '512GB Grey', vo_price: 900, margin: 15, moc_price: 1035, stock: 'Na obj.', gift: false, gift_desc: '', bulk_disc: 5 }
         ];
-        renderEditor();
-        saveAndRender();
+        renderEditor(); saveAndRender();
     }
 
     function clearAll() {
-        if(confirm("Naozaj vymazať všetky produkty?")) {
-            products = [];
-            renderEditor();
-            saveAndRender();
+        if(confirm("Vymazať všetko?")) { products = []; renderEditor(); saveAndRender(); }
+    }
+
+    // --- UPDATE LOGIC (ZMENENÉ: Fixná MOC pri zmene VO) ---
+    function updateProd(idx, key, val) {
+        if (['vo_price', 'margin', 'bulk_disc', 'moc_price'].includes(key)) val = parseFloat(val) || 0;
+        
+        const p = products[idx];
+        p[key] = val;
+
+        // Obojsmerný prepočet
+        if (key === 'vo_price') {
+            // Zmenil som VO (dodávateľ) -> MOC (predaj) ostáva fixná -> Prepočítaj Maržu
+            if (p.vo_price > 0 && p.moc_price > 0) {
+                p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
+            } else if (p.moc_price === 0) {
+                // Ak MOC ešte nebola nastavená, nastav ju podľa default marže
+                p.moc_price = p.vo_price * (1 + p.margin / 100);
+            }
+        } 
+        else if (key === 'moc_price') {
+            // Zmenil som MOC (chcem predať za X) -> Prepočíta Maržu (ak mám VO)
+            if (p.vo_price > 0) {
+                p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
+            }
         }
+        else if (key === 'margin') {
+            // Zmenil som Maržu -> Ale MOC chcem fixnú -> Musím zmeniť VO (nákup)
+            // VO = MOC / (1 + Margin/100)
+            if (p.moc_price > 0) {
+                p.vo_price = p.moc_price / (1 + p.margin / 100);
+            } else {
+                // Ak nemám MOC, tak ju vypočítam z VO
+                p.moc_price = p.vo_price * (1 + p.margin / 100);
+            }
+        }
+
+        // Aktualizácia UI inputov (aby sedeli s dátami)
+        const voInput = document.getElementById(`vo-${idx}`);
+        const mocInput = document.getElementById(`moc-${idx}`);
+        const marInput = document.getElementById(`mar-${idx}`);
+        
+        if (voInput && document.activeElement !== voInput) voInput.value = p.vo_price.toFixed(2);
+        if (mocInput && document.activeElement !== mocInput) mocInput.value = p.moc_price.toFixed(2);
+        if (marInput && document.activeElement !== marInput) marInput.value = p.margin.toFixed(2);
+
+        saveAndRender();
+    }
+
+    function removeProd(idx) { products.splice(idx, 1); renderEditor(); saveAndRender(); }
+
+    function calcPrices(p) {
+        const vat = parseFloat(document.getElementById('vat-rate').value) || 0;
+        const vo = p.vo_price;
+        // Používame uloženú moc_price, ktorá je bez DPH
+        const mocNoVat = p.moc_price;
+        const mocWithVat = mocNoVat * (1 + vat / 100);
+        return { vo: vo.toFixed(2), mocNoVat: mocNoVat.toFixed(2), mocWithVat: mocWithVat.toFixed(2) };
     }
 
     // --- EDITOR UI ---
     function renderEditor() {
         const container = document.getElementById('editor-rows');
         container.innerHTML = '';
-
         products.forEach((p, index) => {
             const div = document.createElement('div');
-            div.className = 'bg-slate-800 p-3 rounded border border-slate-700 text-xs space-y-2 group hover:border-indigo-500 transition';
+            div.className = 'bg-slate-800 p-3 rounded border border-slate-700 text-xs space-y-2';
             div.innerHTML = `
                 <div class="flex gap-2">
                     <input type="text" class="input-dark w-1/4 font-mono text-yellow-400" placeholder="Kód" value="${p.code}" onchange="updateProd(${index}, 'code', this.value)">
@@ -313,32 +320,33 @@
                     <input type="text" class="input-dark w-1/2 font-bold text-white" placeholder="Názov" value="${p.name}" onchange="updateProd(${index}, 'name', this.value)">
                     <button onclick="removeProd(${index})" class="text-red-500 hover:text-red-400 px-1"><i class="fa-solid fa-trash"></i></button>
                 </div>
-                <input type="text" class="input-dark text-slate-400" placeholder="Krátky popis (napr. farba, rozmer)..." value="${p.desc}" onchange="updateProd(${index}, 'desc', this.value)">
+                <input type="text" class="input-dark text-slate-400" placeholder="Popis..." value="${p.desc}" onchange="updateProd(${index}, 'desc', this.value)">
                 
                 <div class="grid grid-cols-4 gap-2 bg-slate-900/50 p-2 rounded border border-slate-700">
-                    <div class="col-span-2">
-                        <label class="text-[9px] text-slate-500 block uppercase">VO (bez DPH)</label>
-                        <input type="number" class="bg-transparent text-white w-full border-b border-slate-600 focus:border-indigo-500 outline-none" value="${p.vo_price}" onchange="updateProd(${index}, 'vo_price', this.value)">
+                    <div class="col-span-1">
+                        <label class="text-[9px] text-slate-500 block">VO (bez DPH)</label>
+                        <input type="number" id="vo-${index}" class="bg-transparent text-white w-full border-b border-slate-600 outline-none focus:border-blue-500" value="${p.vo_price.toFixed(2)}" onchange="updateProd(${index}, 'vo_price', this.value)">
                     </div>
-                    <div>
-                        <label class="text-[9px] text-slate-500 block uppercase">Marža %</label>
-                        <input type="number" class="bg-transparent text-green-400 w-full border-b border-slate-600 focus:border-indigo-500 outline-none" value="${p.margin}" onchange="updateProd(${index}, 'margin', this.value)">
+                    <div class="col-span-1">
+                        <label class="text-[9px] text-slate-500 block">Marža %</label>
+                        <input type="number" id="mar-${index}" class="bg-transparent text-green-400 w-full border-b border-slate-600 outline-none focus:border-green-500" value="${p.margin.toFixed(2)}" onchange="updateProd(${index}, 'margin', this.value)">
                     </div>
-                    <div>
-                        <label class="text-[9px] text-slate-500 block uppercase">Dostupnosť</label>
-                        <input type="text" class="bg-transparent text-slate-300 w-full border-b border-slate-600 focus:border-indigo-500 outline-none" value="${p.stock}" onchange="updateProd(${index}, 'stock', this.value)">
+                    <div class="col-span-1">
+                        <label class="text-[9px] text-slate-500 block text-yellow-400 font-bold">MOC (bez DPH)</label>
+                        <input type="number" id="moc-${index}" class="bg-transparent text-yellow-400 font-bold w-full border-b border-slate-600 outline-none focus:border-yellow-500" value="${p.moc_price.toFixed(2)}" onchange="updateProd(${index}, 'moc_price', this.value)">
+                    </div>
+                    <div class="col-span-1">
+                        <label class="text-[9px] text-slate-500 block">Sklad</label>
+                        <input type="text" class="bg-transparent text-slate-300 w-full border-b border-slate-600 outline-none" value="${p.stock}" onchange="updateProd(${index}, 'stock', this.value)">
                     </div>
                 </div>
-
                 <div class="flex items-center gap-3 pt-1">
-                    <label class="flex items-center gap-1 text-slate-400 cursor-pointer">
-                        <input type="checkbox" ${p.gift ? 'checked' : ''} onchange="updateProd(${index}, 'gift', this.checked)"> 🎁 Darček
-                    </label>
-                    <input type="text" class="input-dark py-1 px-2 ${p.gift ? '' : 'hidden'}" placeholder="Čo je darček? (napr. + USB)" value="${p.gift_desc}" onchange="updateProd(${index}, 'gift_desc', this.value)">
+                    <label class="flex items-center gap-1 text-slate-400 cursor-pointer"><input type="checkbox" ${p.gift ? 'checked' : ''} onchange="updateProd(${index}, 'gift', this.checked)"> 🎁</label>
+                    <input type="text" class="input-dark py-1 px-2 ${p.gift ? '' : 'hidden'}" placeholder="Darček?" value="${p.gift_desc}" onchange="updateProd(${index}, 'gift_desc', this.value)">
                     
-                    <div class="flex-1 text-right">
-                        <span class="text-[10px] text-slate-500">Množstevná zľava:</span>
-                        <input type="number" class="bg-slate-900 text-white w-10 border border-slate-600 rounded text-center ml-1" value="${p.bulk_disc}" onchange="updateProd(${index}, 'bulk_disc', this.value)"> %
+                    <div class="flex-1 text-right flex items-center justify-end gap-1">
+                        <span class="text-[9px] text-slate-500">Množst. zľava:</span>
+                        <input type="number" class="bg-slate-900 text-white w-10 border border-slate-600 rounded text-center ml-1 text-[10px]" value="${p.bulk_disc}" onchange="updateProd(${index}, 'bulk_disc', this.value)"> %
                     </div>
                 </div>
             `;
@@ -346,259 +354,100 @@
         });
     }
 
-    function updateProd(index, key, val) {
-        if (['vo_price', 'margin', 'bulk_disc'].includes(key)) val = parseFloat(val) || 0;
-        products[index][key] = val;
-        saveAndRender(); 
-    }
-
-    function removeProd(index) {
-        products.splice(index, 1);
-        renderEditor();
-        saveAndRender();
-    }
-
-    // --- CALCULATION ---
-    function calcPrices(p) {
-        const vatRate = parseFloat(document.getElementById('vat-rate').value) || 0;
-        
-        // VO (Nákup)
-        const vo = p.vo_price;
-        
-        // MOC bez DPH (Nákup + Marža)
-        const mocNoVat = vo * (1 + p.margin / 100);
-        
-        // MOC s DPH
-        const mocWithVat = mocNoVat * (1 + vatRate / 100);
-
-        return {
-            vo: vo.toFixed(2),
-            mocNoVat: mocNoVat.toFixed(2),
-            mocWithVat: mocWithVat.toFixed(2)
-        };
-    }
-
-    // --- PREVIEW RENDER ---
+    // --- RENDER PREVIEW (HTML) ---
     function render() {
         const area = document.getElementById('printArea');
         const title = document.getElementById('list-title').value;
         const curr = document.getElementById('currency').value;
         const headerNote = document.getElementById('header-note').value;
         const footerNote = document.getElementById('footer-note').value;
-
-        // Reset class
         area.className = `print-area tpl-${config.template}`;
 
         let logoHtml = config.logo ? `<img src="${config.logo}" style="height: 60px; max-width: 250px; object-fit: contain;">` : '';
         let html = '';
 
-        // --- 1. CORPORATE (Tabuľka - podrobná) ---
         if (config.template === 'corporate') {
-            html += `
-                <header>
-                    <div>${logoHtml}</div>
-                    <div style="text-align:right;">
-                        <h1>${title}</h1>
-                        <div style="font-size:9pt; color:#64748b; margin-top:5px;">
-                            ${headerNote}
-                        </div>
-                    </div>
-                </header>
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="10%">Kód</th>
-                            <th width="12%">Značka</th>
-                            <th width="28%">Produkt / Popis</th>
-                            <th width="8%">Sklad</th>
-                            <th width="10%" style="text-align:right">VO<br><span style="font-size:6pt;font-weight:normal">(bez DPH)</span></th>
-                            <th width="8%" style="text-align:right">Marža</th>
-                            <th width="10%" style="text-align:right">MOC<br><span style="font-size:6pt;font-weight:normal">(bez DPH)</span></th>
-                            <th width="12%" style="text-align:right">MOC<br><span style="font-size:6pt;font-weight:normal">(s DPH)</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+            html += `<header><div>${logoHtml}</div><div style="text-align:right;"><h1>${title}</h1><div style="font-size:9pt;color:#64748b;margin-top:5px;">${headerNote}</div></div></header><table><thead><tr><th width="10%">Kód</th><th width="12%">Značka</th><th width="28%">Produkt</th><th width="8%">Sklad</th><th width="10%" style="text-align:right">VO<br><span style="font-size:6pt">(bez DPH)</span></th><th width="8%" style="text-align:right">Marža</th><th width="10%" style="text-align:right">MOC<br><span style="font-size:6pt">(bez DPH)</span></th><th width="12%" style="text-align:right">MOC<br><span style="font-size:6pt">(s DPH)</span></th></tr></thead><tbody>`;
             products.forEach(p => {
-                const prices = calcPrices(p);
-                html += `
-                    <tr>
-                        <td style="color:#64748b; font-family:monospace;">${p.code}</td>
-                        <td style="font-weight:bold;">${p.brand}</td>
-                        <td>
-                            <div style="font-weight:bold; color:#0f172a;">${p.name}</div>
-                            ${p.desc ? `<span class="desc-text">${p.desc}</span>` : ''}
-                            ${p.gift ? `<div class="gift-badge">🎁 ${p.gift_desc || 'Darček'}</div>` : ''}
-                            ${p.bulk_disc > 0 ? `<div style="font-size:7pt; color:#059669;">Odber: -${p.bulk_disc}%</div>` : ''}
-                        </td>
-                        <td><span style="font-size:7pt; background:#f1f5f9; padding:2px 4px; border-radius:3px;">${p.stock}</span></td>
-                        <td style="text-align:right; color:#64748b;">${prices.vo} ${curr}</td>
-                        <td style="text-align:right; color:#64748b;">${p.margin}%</td>
-                        <td style="text-align:right; color:#475569;">${prices.mocNoVat} ${curr}</td>
-                        <td style="text-align:right;" class="price-highlight">${prices.mocWithVat} ${curr}</td>
-                    </tr>
-                `;
+                const pr = calcPrices(p);
+                html += `<tr><td style="color:#64748b;font-family:monospace;">${p.code}</td><td style="font-weight:bold;">${p.brand}</td><td><div style="font-weight:bold;color:#0f172a;">${p.name}</div>${p.desc?`<span class="desc-text">${p.desc}</span>`:''}${p.gift?`<div class="gift-badge">🎁 ${p.gift_desc||'Darček'}</div>`:''}${p.bulk_disc>0?`<span class="bulk-text">Zľava ${p.bulk_disc}% pri odbere</span>`:''}</td><td><span style="font-size:7pt;background:#f1f5f9;padding:2px 4px;border-radius:3px;">${p.stock}</span></td><td style="text-align:right;color:#64748b;">${pr.vo} ${curr}</td><td style="text-align:right;color:#64748b;">${p.margin.toFixed(1)}%</td><td style="text-align:right;color:#475569;">${pr.mocNoVat} ${curr}</td><td style="text-align:right;" class="price-highlight">${pr.mocWithVat} ${curr}</td></tr>`;
             });
-            html += `</tbody></table>`;
-            if(footerNote) html += `<div class="footer-note">${footerNote}</div>`;
-        }
-
-        // --- 2. MODERN (Karty) ---
-        else if (config.template === 'modern') {
-            html += `
-                <header>
-                    ${logoHtml ? `<div style="margin-bottom:10px;">${logoHtml}</div>` : ''}
-                    <h1>${title}</h1>
-                    <div style="font-size:9pt; color:#64748b; margin-top:5px; text-transform:uppercase; letter-spacing:1px;">
-                        ${headerNote}
-                    </div>
-                </header>
-                <div class="prod-grid">
-            `;
+            html += `</tbody></table><div class="footer-note">${footerNote}</div>`;
+        } else if (config.template === 'modern') {
+            html += `<header>${logoHtml?`<div style="margin-bottom:10px;">${logoHtml}</div>`:''}<h1>${title}</h1><div style="font-size:9pt;color:#64748b;margin-top:5px;text-transform:uppercase;">${headerNote}</div></header><div class="prod-grid">`;
             products.forEach(p => {
-                const prices = calcPrices(p);
-                html += `
-                    <div class="card">
-                        <div class="card-head">
-                            <span>${p.brand}</span>
-                            <span style="font-family:monospace;">${p.code}</span>
-                        </div>
-                        <div class="card-title">${p.name}</div>
-                        ${p.desc ? `<div class="card-desc">${p.desc}</div>` : ''}
-                        
-                        ${p.gift ? `<div style="font-size:8pt; color:#dc2626; font-weight:bold; margin-top:5px;">🎁 ${p.gift_desc || 'DARČEK'}</div>` : ''}
-
-                        <div class="card-price-box">
-                            <div style="font-size:8pt; color:#64748b;">
-                                <div>VO bez DPH: ${prices.vo} ${curr}</div>
-                            </div>
-                            <div class="main-price">${prices.mocWithVat} ${curr}<span style="font-size:8pt; font-weight:normal; color:#64748b;"> s DPH</span></div>
-                        </div>
-                    </div>
-                `;
+                const pr = calcPrices(p);
+                html += `<div class="card"><div class="card-head"><span>${p.brand}</span><span style="font-family:monospace;">${p.code}</span></div><div class="card-title">${p.name}</div>${p.desc?`<div class="card-desc">${p.desc}</div>`:''}${p.gift?`<div style="font-size:8pt;color:#dc2626;font-weight:bold;margin-top:5px;">🎁 ${p.gift_desc||'DARČEK'}</div>`:''}${p.bulk_disc>0?`<div style="font-size:8pt;color:#059669;font-weight:bold;margin-top:2px;">Množstevná zľava: ${p.bulk_disc}%</div>`:''}<div class="card-price-box"><div style="font-size:8pt;color:#64748b;">VO: ${pr.vo} ${curr}</div><div class="main-price">${pr.mocWithVat} ${curr}<span style="font-size:8pt;font-weight:normal;color:#64748b;"> s DPH</span></div></div></div>`;
             });
-            html += `</div>`;
-            if(footerNote) html += `<div class="footer-note">${footerNote}</div>`;
-        }
-
-        // --- 3. BOLD (Leták) ---
-        else if (config.template === 'bold') {
-            html += `
-                <header>
-                    ${logoHtml ? `<div style="margin-bottom:15px; filter:invert(1) brightness(2);">${logoHtml}</div>` : ''}
-                    <h1>${title}</h1>
-                    <div style="font-size:12pt; font-weight:bold; margin-top:10px; border-top:1px solid #333; display:inline-block; padding-top:5px;">
-                        ${headerNote}
-                    </div>
-                </header>
-            `;
+            html += `</div><div class="footer-note">${footerNote}</div>`;
+        } else if (config.template === 'bold') {
+            html += `<header>${logoHtml?`<div style="margin-bottom:15px;filter:invert(1) brightness(2);">${logoHtml}</div>`:''}<h1>${title}</h1><div style="font-size:12pt;font-weight:bold;margin-top:10px;border-top:1px solid #333;display:inline-block;padding-top:5px;">${headerNote}</div></header>`;
             products.forEach(p => {
-                const prices = calcPrices(p);
-                html += `
-                    <div class="row">
-                        <div style="flex:1;">
-                            <div style="font-size:9pt; font-weight:bold; color:#64748b; text-transform:uppercase;">${p.brand} • ${p.code}</div>
-                            <div style="font-size:16pt; font-weight:900; color:#0f172a; line-height:1.2;">${p.name}</div>
-                            ${p.desc ? `<div style="font-size:10pt; color:#334155; margin-top:3px;">${p.desc}</div>` : ''}
-                            ${p.gift ? `<div style="background:#ef4444; color:white; display:inline-block; padding:3px 8px; font-size:8pt; font-weight:bold; margin-top:5px; transform:rotate(-1deg);">+ ${p.gift_desc || 'DARČEK'}</div>` : ''}
-                        </div>
-                        <div style="text-align:right;">
-                            <div class="vo-price">VO: ${prices.vo} ${curr}</div>
-                            <div class="big-price">${prices.mocWithVat} ${curr}</div>
-                            <div style="font-size:8pt; color:#64748b; font-weight:bold;">s DPH</div>
-                        </div>
-                    </div>
-                `;
+                const pr = calcPrices(p);
+                html += `<div class="row"><div style="flex:1;"><div style="font-size:9pt;font-weight:bold;color:#64748b;text-transform:uppercase;">${p.brand} • ${p.code}</div><div style="font-size:16pt;font-weight:900;color:#0f172a;line-height:1.2;">${p.name}</div>${p.desc?`<div style="font-size:10pt;color:#334155;margin-top:3px;">${p.desc}</div>`:''}${p.gift?`<div style="background:#ef4444;color:white;display:inline-block;padding:3px 8px;font-size:8pt;font-weight:bold;margin-top:5px;transform:rotate(-1deg);">+ ${p.gift_desc||'DARČEK'}</div>`:''}${p.bulk_disc>0?`<div style="color:#059669;font-size:9pt;font-weight:bold;margin-top:2px;">Pri väčšom odbere zľava ${p.bulk_disc}%</div>`:''}</div><div style="text-align:right;"><div class="vo-price">VO: ${pr.vo} ${curr}</div><div class="big-price">${pr.mocWithVat} ${curr}</div><div style="font-size:8pt;color:#64748b;font-weight:bold;">s DPH</div></div></div>`;
             });
-            if(footerNote) html += `<div class="footer-note">${footerNote}</div>`;
+            html += `<div class="footer-note">${footerNote}</div>`;
         }
-
         area.innerHTML = html;
     }
 
-    // --- IMPORT / EXPORT ---
-    
+    // --- IMPORT/EXPORT ---
     function handleFile(input) {
-        const file = input.files[0];
-        if(!file) return;
-
-        const reader = new FileReader();
-        
+        const file = input.files[0]; if(!file) return;
         if(file.name.endsWith('.csv')) {
-            Papa.parse(file, {
-                header: true, skipEmptyLines: true,
-                complete: (res) => processImportData(res.data)
-            });
+            Papa.parse(file, { header:true, skipEmptyLines:true, complete:(res)=>processImport(res.data) });
         } else {
+            const reader = new FileReader();
             reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-                processImportData(jsonData);
+                const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+                processImport(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
             };
             reader.readAsArrayBuffer(file);
         }
     }
 
-    function processImportData(data) {
-        // Robustnejšie mapovanie (hľadáme rôzne varianty názvov)
-        const newProds = data.map(row => ({
-            code: row['Kód'] || row['Code'] || row['kod'] || '',
-            brand: row['Značka'] || row['Brand'] || row['znacka'] || '',
-            name: row['Názov'] || row['Name'] || row['nazov'] || 'Produkt',
-            desc: row['Popis'] || row['Description'] || row['popis'] || '',
+    function processImport(data) {
+        products = data.map(row => {
+            const vo = parseFloat(row['VO (bez DPH)']||row['VO']||row['Price']||0);
+            const margin = parseFloat(row['Marža %']||row['Marža']||row['Margin']||20);
+            const moc = vo * (1 + margin / 100);
             
-            // Oprava pre ceny - hľadáme "VO (bez DPH)" aj čisté "VO"
-            vo_price: parseFloat(row['VO (bez DPH)'] || row['VO'] || row['Price'] || row['cena'] || 0),
-            
-            // Oprava pre maržu - hľadáme "Marža %" aj čistú "Marža"
-            margin: parseFloat(row['Marža %'] || row['Marža'] || row['Margin'] || 20),
-            
-            stock: row['Dostupnosť'] || row['Stock'] || 'Skladom',
-            gift: !!(row['Darček'] || row['Gift'] || row['darcek'] === 'Áno'),
-            gift_desc: row['Popis Darčeka'] || row['Gift Desc'] || '',
-            bulk_disc: parseFloat(row['Zľava'] || 0)
-        }));
-
-        products = newProds;
-        renderEditor();
-        saveAndRender();
+            return {
+                code: row['Kód']||row['Code']||'', brand: row['Značka']||row['Brand']||'',
+                name: row['Názov']||row['Name']||'Produkt', desc: row['Popis']||row['Description']||'',
+                vo_price: vo,
+                margin: margin,
+                moc_price: moc,
+                stock: row['Dostupnosť']||row['Stock']||'Skladom',
+                gift: !!(row['Darček']||row['Gift']||row['darcek']==='Áno'),
+                gift_desc: row['Popis Darčeka']||'', bulk_disc: parseFloat(row['Zľava']||0)
+            };
+        });
+        renderEditor(); saveAndRender();
         alert(`Načítaných ${products.length} produktov.`);
     }
 
     function exportToXLSX() {
         const wsData = products.map(p => {
-            const prices = calcPrices(p);
+            const pr = calcPrices(p);
             return {
-                "Kód": p.code,
-                "Značka": p.brand,
-                "Názov": p.name,
-                "Popis": p.desc,
-                "VO (bez DPH)": parseFloat(prices.vo),
-                "Marža %": p.margin,
-                "MOC (bez DPH)": parseFloat(prices.mocNoVat),
-                "MOC (s DPH)": parseFloat(prices.mocWithVat),
-                "Dostupnosť": p.stock,
-                "Darček": p.gift ? "Áno" : "Nie",
-                "Popis Darčeka": p.gift_desc
+                "Kód": p.code, "Značka": p.brand, "Názov": p.name, "Popis": p.desc,
+                "VO (bez DPH)": parseFloat(pr.vo), "Marža %": p.margin,
+                "MOC (bez DPH)": parseFloat(pr.mocNoVat), "MOC (s DPH)": parseFloat(pr.mocWithVat),
+                "Dostupnosť": p.stock, "Darček": p.gift?"Áno":"Nie", "Popis Darčeka": p.gift_desc,
+                "Zľava": p.bulk_disc
             };
         });
-
-        const ws = XLSX.utils.json_to_sheet(wsData);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Cenník");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(wsData), "Cenník");
         XLSX.writeFile(wb, "Cennik_Export.xlsx");
     }
 
     function handleLogo(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                config.logo = e.target.result;
-                saveAndRender();
-            }
-            reader.readAsDataURL(input.files[0]);
+        if (input.files[0]) {
+            const r = new FileReader();
+            r.onload = (e) => { config.logo = e.target.result; saveAndRender(); }
+            r.readAsDataURL(input.files[0]);
         }
     }
 </script>
