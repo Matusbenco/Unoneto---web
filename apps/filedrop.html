@@ -190,8 +190,7 @@
     let conn = null;
     let filesBuffer = []; 
 
-    // --- KONFIGURÁCIA STUN (PRE MOBILNÉ DÁTA) ---
-    // Toto je kľúčové pre fungovanie cez internet
+    // --- KONFIGURÁCIA STUN (KĽÚČOVÉ PRE SPOJENIE CEZ INTERNET) ---
     const peerConfig = {
         config: {
             'iceServers': [
@@ -223,8 +222,7 @@
         } else {
             // ODOSIELATEĽ
             switchView('upload');
-            // Inicializujeme Peer až pri generovaní linku alebo hneď,
-            // ale pre istotu hneď, aby sme chytili errory
+            // Inicializujeme Peer hneď
             initPeer(); 
             setupDragDrop();
         }
@@ -246,15 +244,13 @@
                 connectToSender();
             } else {
                 // Odosielateľ: Vygenerujeme link
-                // Odstránime prípadné predchádzajúce parametre z URL
-                const baseUrl = window.location.href.split('?')[0];
-                const link = `${baseUrl}?id=${id}`;
+                const currentUrl = window.location.href.split('?')[0];
+                const link = `${currentUrl}?id=${id}`;
                 document.getElementById('share-link').innerText = link;
             }
         });
 
         peer.on('connection', (c) => {
-            // Odosielateľ: Niekto sa pripojil
             conn = c;
             setupSenderEvents();
         });
@@ -262,19 +258,13 @@
         peer.on('error', err => {
             const errBox = document.getElementById('global-error');
             errBox.style.display = 'block';
-            
-            let msg = "Neznáma chyba";
-            if (err.type === 'peer-unavailable') msg = "Odosielateľ sa nenašiel. Možno už zatvoril stránku.";
-            else if (err.type === 'network') msg = "Chyba siete. Skontroluj internet/firewall.";
-            else msg = err.type;
-
+            let msg = "Chyba: " + err.type;
+            if (err.type === 'peer-unavailable') msg = "Odosielateľa sa nepodarilo nájsť. Skúste načítať stránku znova.";
             errBox.innerText = "❌ " + msg;
             console.error(err);
         });
         
         peer.on('disconnected', () => {
-             // Pokus o reconnect, ak len vypadla sieť
-             // peer.reconnect();
              console.log('Peer disconnected.');
         });
     }
@@ -318,7 +308,6 @@
         conn.on('data', (data) => handleIncomingData(data));
         
         conn.on('close', () => {
-            // Ak sa preruší spojenie
             if(document.getElementById('recv-fill').style.width !== '100%') {
                  document.getElementById('recv-title').innerText = "Spojenie prerušené";
                  document.getElementById('recv-desc').style.color = "#fca5a5";
@@ -338,8 +327,6 @@
     }
 
     // --- LOGIKA PRENOSU ---
-    
-    // 1. Výber súborov
     const fileInput = document.getElementById('fileInput');
     fileInput.addEventListener('change', (e) => addFiles(e.target.files));
 
@@ -375,7 +362,6 @@
         switchView('share');
     }
 
-    // 2. Odosielanie
     async function startUpload() {
         if (!conn) return;
         
@@ -385,25 +371,16 @@
 
         for (let i = 0; i < totalFiles; i++) {
             const file = filesBuffer[i];
-            
-            // Hlavička
             conn.send({ type: 'header', name: file.name, size: file.size, mime: file.type });
             await new Promise(r => setTimeout(r, 100));
-
-            // Telo
             conn.send(file);
-            
-            // UI
             progressBar.style.width = ((i + 1) / totalFiles * 100) + '%';
             document.getElementById('send-status').innerText = `Odosielam ${i+1}/${totalFiles}: ${file.name}`;
-            
             await new Promise(r => setTimeout(r, 500));
         }
-        
         document.getElementById('send-status').innerText = "✅ Všetky súbory odoslané!";
     }
 
-    // 3. Prijímanie
     let incomingFileInfo = null;
 
     function handleIncomingData(data) {
@@ -419,10 +396,8 @@
         } 
         else if (data instanceof Blob || data instanceof ArrayBuffer || data instanceof Uint8Array) {
              if (!incomingFileInfo) return;
-
              const blob = new Blob([data], { type: incomingFileInfo.mime });
              downloadBlob(blob, incomingFileInfo.name);
-             
              pFill.style.width = '100%';
              pName.innerText = "✅ Stiahnuté: " + incomingFileInfo.name;
         }
