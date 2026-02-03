@@ -3,188 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inteligentný OCR Skener | OfficeSuite</title>
+    <title>OCR Scanner Pro | Unoneto</title>
     
     <script src="coi-serviceworker.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
     <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 25px; }
-
-        /* ĽAVÝ PANEL */
-        .sidebar { background: white; padding: 20px; border-radius: 12px; height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         
-        .upload-area {
-            border: 2px dashed #cbd5e0; padding: 30px 20px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.2s; margin-bottom: 20px; background: #f7fafc;
-        }
-        .upload-area:hover { background: #ebf8ff; border-color: #3182ce; }
-
-        .btn-action {
-            padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; width: 100%; margin-bottom: 10px; font-size: 1rem;
-        }
-        .btn-start { background: #3182ce; }
-        .btn-start:hover { background: #2b6cb0; }
-        .btn-stop { background: #e53e3e; display: none; }
-        .btn-summary { background: #805ad5; display: none; } 
-        .btn-summary:hover { background: #6b46c1; }
-
-        label { font-size: 0.85em; font-weight: bold; color: #4a5568; margin-bottom: 5px; display: block; }
-        input[type="text"], select {
-            width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #cbd5e0; box-sizing: border-box; font-family: inherit;
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* Checkbox pre preprocessing */
-        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 0.9em; background: #edf2f7; padding: 10px; border-radius: 6px; }
-        .checkbox-group input { margin: 0; width: auto; }
-
-        /* PRAVÝ PANEL */
-        .main-content { display: flex; flex-direction: column; gap: 20px; height: calc(100vh - 40px); }
-
-        .summary-box {
-            background: linear-gradient(135deg, #fff 0%, #f3f0ff 100%);
-            border: 1px solid #d6bcfa; border-radius: 12px; padding: 20px;
-            display: none; 
-            box-shadow: 0 4px 10px rgba(128, 90, 213, 0.1);
+        .drop-zone {
+            border: 2px dashed #475569;
+            background: rgba(15, 23, 42, 0.6);
+            transition: all 0.3s ease;
         }
-        .summary-title { font-weight: bold; color: #553c9a; margin-bottom: 10px; }
-
-        .text-box {
-            background: white; border-radius: 12px; padding: 20px; flex: 1; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #3b82f6; /* Blue-500 */
+            background: rgba(59, 130, 246, 0.1);
+            transform: scale(1.01);
         }
-        
-        textarea {
-            flex: 1; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; resize: none;
-            font-family: 'Courier New', monospace; font-size: 1em; line-height: 1.5; margin-top: 10px;
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s;
         }
-        textarea:focus { outline: 2px solid #3182ce; border-color: transparent; }
+        .btn-primary:hover {
+            filter: brightness(1.1); transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.5);
+        }
+        .btn-primary:disabled { background: #475569; cursor: not-allowed; transform: none; filter: grayscale(1); }
 
-        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin-top: 10px; }
-        .progress-fill { height: 100%; background: #3182ce; width: 0%; transition: width 0.3s; }
+        .custom-input {
+            background-color: #1e293b; border: 1px solid #334155; color: white;
+            padding: 10px; border-radius: 8px; outline: none; width: 100%; font-size: 0.9rem;
+        }
+        .custom-input:focus { border-color: #3b82f6; }
 
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; height: auto; } }
+        /* Progress Bar */
+        .progress-bar { transition: width 0.3s ease; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <div class="container">
-        
-        <div class="sidebar">
-            <h2 style="margin-top:0; color:#2d3748;">OCR & Zhrnutie</h2>
+    <header class="h-20 border-b border-slate-700 flex items-center justify-between px-6 lg:px-10 shrink-0 bg-slate-900/90 backdrop-blur z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/20">
+                <i class="fa-solid fa-eye"></i>
+            </div>
+            <div>
+                <h1 class="font-outfit font-bold text-xl tracking-tight text-white">OCR Scanner <span class="text-blue-500">Pro</span></h1>
+                <p class="text-xs text-slate-400">PDF & Obrázky na Text</p>
+            </div>
+        </div>
+        <a href="index.html" class="text-slate-400 hover:text-white transition font-medium flex items-center gap-2 text-sm bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-500">
+            <i class="fa-solid fa-arrow-left"></i> Späť
+        </a>
+    </header>
+
+    <main class="flex-1 w-full max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-1 space-y-6">
             
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div>📄 Klikni pre výber PDF/Foto</div>
-                <input type="file" id="fileInput" accept="application/pdf, image/*" style="display:none">
-            </div>
-
-            <label>Jazyk dokumentu:</label>
-            <select id="langSelect">
-                <option value="slk">Slovenčina 🇸🇰</option>
-                <option value="eng">Angličtina 🇺🇸</option>
-                <option value="ces">Čeština 🇨🇿</option>
-                <option value="deu">Nemčina 🇩🇪</option>
-            </select>
-
-            <label>Strany na skenovanie:</label>
-            <input type="text" id="pageRange" placeholder="napr. 1, 3-5 (prázdne = všetky)">
-
-            <div class="checkbox-group">
-                <input type="checkbox" id="preprocessCheck" checked>
-                <label for="preprocessCheck" style="margin:0; font-weight:normal;">Vylepšiť kvalitu (pre bločky)</label>
-            </div>
-
-            <button class="btn-action btn-start" id="btnProcess" disabled>⚡ Spustiť skenovanie</button>
-            <button class="btn-action btn-stop" id="btnStop">⏹ Zastaviť</button>
-            <button class="btn-action btn-summary" id="btnSummarize">📝 Vygenerovať zhrnutie</button>
-
-            <div id="statusBox" style="margin-top:15px; font-size:0.9em; color:#718096;">
-                <div id="statusLabel">Pripravené</div>
-                <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
-            </div>
-
-            <div id="previewContainer" style="margin-top:20px; overflow-y:auto; flex:1;"></div>
-        </div>
-
-        <div class="main-content">
-            <div class="summary-box" id="summaryBox">
-                <div class="summary-title">✨ Inteligentné zhrnutie</div>
-                <div id="summaryText" style="color: #4a5568; line-height: 1.6;"></div>
-            </div>
-
-            <div class="text-box">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>Rozpoznaný text</strong>
-                    <button onclick="copyText()" style="background:none; border:1px solid #cbd5e0; padding:5px 10px; border-radius:5px; cursor:pointer;">Kopírovať</button>
+            <div class="drop-zone rounded-2xl p-8 text-center cursor-pointer group" id="dropArea">
+                <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mb-3 mx-auto group-hover:text-blue-400 transition">
+                    <i class="fa-solid fa-file-import"></i>
                 </div>
-                <textarea id="outputText" placeholder="Výsledok skenovania..."></textarea>
+                <h3 class="font-bold text-white mb-1">Nahraj súbor</h3>
+                <p class="text-xs text-slate-400">PDF dokument alebo Fotka (JPG, PNG)</p>
+                <input type="file" id="fileInput" accept="application/pdf, image/*" class="hidden">
             </div>
+
+            <div class="glass-panel p-5 space-y-4">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nastavenia Skenovania</h3>
+                
+                <div>
+                    <label class="text-sm text-slate-300 block mb-1">Jazyk textu</label>
+                    <select id="langSelect" class="custom-input">
+                        <option value="slk">Slovenčina 🇸🇰</option>
+                        <option value="eng">Angličtina 🇺🇸</option>
+                        <option value="ces">Čeština 🇨🇿</option>
+                        <option value="deu">Nemčina 🇩🇪</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm text-slate-300 block mb-1">Strany (len pre PDF)</label>
+                    <input type="text" id="pageRange" class="custom-input" placeholder="napr. 1, 3-5 (všetky)">
+                </div>
+
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-sm font-bold text-blue-300 flex items-center gap-2">
+                            <input type="checkbox" id="preprocessCheck" checked class="accent-blue-500 w-4 h-4">
+                            Vylepšiť čitateľnosť
+                        </label>
+                        <i class="fa-solid fa-wand-magic-sparkles text-blue-500 text-xs"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>Kontrast (Prah)</span>
+                            <span id="threshVal">160</span>
+                        </div>
+                        <input type="range" id="thresholdRange" min="100" max="220" value="160" class="w-full accent-blue-500 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('threshVal').innerText = this.value">
+                        <p class="text-[10px] text-slate-500">Zvýš, ak je text bledý. Zníž, ak je pozadie tmavé.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 mt-2">
+                    <label class="text-sm text-slate-300 flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="noiseFilter" checked class="accent-green-500 w-4 h-4">
+                        <span>Filter šumu </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button id="btnProcess" class="btn-primary w-full py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50" disabled>
+                    <i class="fa-solid fa-bolt"></i> Spustiť OCR
+                </button>
+                <button id="btnStop" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 border border-red-500/50 font-bold hover:bg-red-500/30 transition hidden">
+                    <i class="fa-solid fa-stop"></i> Zastaviť
+                </button>
+            </div>
+
+            <div id="statusBox" class="text-center hidden">
+                <div class="text-xs font-bold text-blue-400 mb-1" id="statusLabel">Pripravujem...</div>
+                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-blue-500 h-full progress-bar" id="progFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="previewContainer" class="bg-slate-900 rounded-xl border border-slate-800 p-2 min-h-[150px] max-h-[300px] overflow-auto flex flex-col items-center justify-center text-slate-600 text-xs">
+                <span>Náhľad dokumentu</span>
+            </div>
+
         </div>
 
-    </div>
+        <div class="lg:col-span-2 flex flex-col h-full gap-6">
+            
+            <div class="glass-panel flex-1 flex flex-col p-1 overflow-hidden h-[500px] lg:h-auto relative">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700/50 bg-slate-800/30">
+                    <h3 class="font-bold text-white text-sm"><i class="fa-regular fa-file-lines mr-2"></i> Rozpoznaný text</h3>
+                    <div class="flex gap-2">
+                        <button onclick="summarizeText()" class="text-xs bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 px-3 py-1.5 rounded border border-purple-500/30 transition hidden" id="btnSummarize">
+                            ✨ AI Zhrnutie
+                        </button>
+                        <button onclick="copyText()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded transition">
+                            <i class="fa-regular fa-copy"></i> Kopírovať
+                        </button>
+                    </div>
+                </div>
+                <textarea id="outputText" class="flex-1 bg-transparent text-slate-300 p-5 resize-none outline-none font-mono text-sm leading-relaxed custom-scrollbar" placeholder="Tu sa objaví text po naskenovaní..."></textarea>
+            </div>
+
+            <div id="summaryBox" class="glass-panel p-5 bg-gradient-to-br from-purple-900/40 to-slate-900 border-l-4 border-purple-500 hidden animation-fade-in">
+                <h4 class="font-bold text-purple-300 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Automatické zhrnutie
+                </h4>
+                <div id="summaryText" class="text-sm text-slate-300 leading-relaxed"></div>
+            </div>
+
+        </div>
+
+    </main>
 
 <script>
-    // === PREMENNÉ ===
+    // === UI PREMENNÉ ===
+    const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('fileInput');
     const btnProcess = document.getElementById('btnProcess');
-    const btnSummarize = document.getElementById('btnSummarize');
+    const btnStop = document.getElementById('btnStop');
     const outputText = document.getElementById('outputText');
-    const summaryBox = document.getElementById('summaryBox');
-    const summaryText = document.getElementById('summaryText');
+    const statusBox = document.getElementById('statusBox');
     const statusLabel = document.getElementById('statusLabel');
     const progFill = document.getElementById('progFill');
     const previewContainer = document.getElementById('previewContainer');
     const pageRangeInput = document.getElementById('pageRange');
     const preprocessCheck = document.getElementById('preprocessCheck');
+    const thresholdRange = document.getElementById('thresholdRange');
+    const btnSummarize = document.getElementById('btnSummarize');
+    const summaryBox = document.getElementById('summaryBox');
 
     let pdfDoc = null;
     let worker = null;
-    let fullRecognizedText = "";
     let isProcessing = false;
+    let fullRecognizedText = "";
 
-    // === 1. NAČÍTANIE SÚBORU ===
-    fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
+    // === DRAG & DROP ===
+    dropArea.addEventListener('click', () => fileInput.click());
+    dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', (e) => { 
+        e.preventDefault(); dropArea.classList.remove('dragover'); 
+        handleFile(e.dataTransfer.files[0]); 
+    });
+    fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+    function handleFile(file) {
         if (!file) return;
-
         resetUI();
-        
+
         if (file.type === 'application/pdf') {
-            await loadPDF(file);
+            loadPDF(file);
             pageRangeInput.disabled = false;
+            pageRangeInput.placeholder = "napr. 1, 3-5";
         } else {
-            await loadImage(file);
-            pageRangeInput.disabled = true; // Pri obrázku sa strany nevyberajú
-            pageRangeInput.placeholder = "Nedostupné pre obrázky";
+            loadImage(file);
+            pageRangeInput.disabled = true;
+            pageRangeInput.placeholder = "Obrázok (jedna strana)";
         }
         btnProcess.disabled = false;
-        statusLabel.innerText = "Súbor pripravený.";
-    });
+    }
 
     function resetUI() {
         previewContainer.innerHTML = '';
         outputText.value = '';
         fullRecognizedText = "";
-        summaryBox.style.display = 'none';
-        btnSummarize.style.display = 'none';
         progFill.style.width = "0%";
+        statusBox.classList.add('hidden');
+        summaryBox.classList.add('hidden');
+        btnSummarize.classList.add('hidden');
     }
 
+    // === NAČÍTANIE (PDF / IMG) ===
     async function loadPDF(file) {
         const arrayBuffer = await file.arrayBuffer();
         pdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
-        renderThumb(1);
-        statusLabel.innerText = `PDF: ${pdfDoc.numPages} strán`;
-        pageRangeInput.placeholder = `Rozsah 1-${pdfDoc.numPages} (napr. 1, 3-5)`;
+        renderThumb(1); // Render 1st page
     }
 
     async function loadImage(file) {
         const img = document.createElement('img');
         img.src = URL.createObjectURL(file);
-        img.style.maxWidth = '100%';
-        img.style.borderRadius = '5px';
+        img.className = "max-w-full rounded shadow-lg border border-slate-700";
+        previewContainer.innerHTML = '';
         previewContainer.appendChild(img);
         pdfDoc = null;
     }
@@ -195,75 +267,50 @@
         const canvas = document.createElement('canvas');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
+        canvas.className = "rounded shadow-lg border border-slate-700 max-w-full";
+        
         await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        previewContainer.innerHTML = '';
         previewContainer.appendChild(canvas);
+        
+        const info = document.createElement('div');
+        info.className = "mt-2 text-slate-500";
+        info.innerText = `PDF: ${pdfDoc.numPages} strán`;
+        previewContainer.appendChild(info);
     }
 
-    // === 2. POMOCNÉ FUNKCIE (Vylepšenie obrazu) ===
-    
-    // Funkcia na vyčistenie obrazu (Binarizácia / Kontrast)
+    // === PREPROCESSING (VYLEPŠENIE OBRAZU) ===
     function preprocessImage(canvas) {
         const ctx = canvas.getContext('2d');
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imageData.data;
-        
-        // Prahová hodnota pre čiernu/bielu
-        const threshold = 160; 
+        const threshold = parseInt(thresholdRange.value) || 160; 
 
         for (let i = 0; i < data.length; i += 4) {
-            // Prevod na odtiene sivej: (R + G + B) / 3
+            // Grayscale
             const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            
-            // Jednoduchá binarizácia: Ak je svetlý, daj bielu. Ak tmavý, daj čiernu.
-            // Toto pomáha odstrániť šum z papiera účteniek.
+            // Contrast / Binarization (Hard threshold)
             const color = avg > threshold ? 255 : 0;
             
-            data[i] = color;     // R
-            data[i + 1] = color; // G
-            data[i + 2] = color; // B
+            data[i] = color; 
+            data[i + 1] = color; 
+            data[i + 2] = color; 
         }
         ctx.putImageData(imageData, 0, 0);
         return canvas;
     }
 
-    // Funkcia na parsovanie strán (napr. "1, 3-5")
-    function getPagesToScan(totalPages) {
-        const input = pageRangeInput.value.trim();
-        if (!input) {
-            // Ak je prázdne, vráť všetky strany
-            return Array.from({length: totalPages}, (_, i) => i + 1);
-        }
-
-        const pages = new Set();
-        const parts = input.split(',');
-
-        parts.forEach(part => {
-            if (part.includes('-')) {
-                const [start, end] = part.split('-').map(Number);
-                if (!isNaN(start) && !isNaN(end)) {
-                    for (let i = start; i <= end; i++) {
-                        if (i >= 1 && i <= totalPages) pages.add(i);
-                    }
-                }
-            } else {
-                const num = Number(part);
-                if (!isNaN(num) && num >= 1 && num <= totalPages) {
-                    pages.add(num);
-                }
-            }
-        });
-
-        return Array.from(pages).sort((a, b) => a - b);
-    }
-
-    // === 3. OCR PROCES ===
+    // === OCR LOGIKA ===
     btnProcess.addEventListener('click', async () => {
         isProcessing = true;
-        btnProcess.style.display = 'none';
-        document.getElementById('btnStop').style.display = 'block';
+        btnProcess.classList.add('hidden');
+        btnStop.classList.remove('hidden');
+        statusBox.classList.remove('hidden');
         
         const lang = document.getElementById('langSelect').value;
         const doPreprocess = preprocessCheck.checked;
+        const noiseFilter = document.getElementById('noiseFilter').checked;
+        
         fullRecognizedText = "";
 
         try {
@@ -271,7 +318,7 @@
                 logger: m => {
                     if (m.status === 'recognizing text') {
                         progFill.style.width = (m.progress * 100) + "%";
-                        statusLabel.innerText = `Čítam text: ${Math.round(m.progress * 100)}%`;
+                        statusLabel.innerText = `Analyzujem... ${Math.round(m.progress * 100)}%`;
                     } else {
                         statusLabel.innerText = m.status;
                     }
@@ -282,42 +329,36 @@
             await worker.loadLanguage(lang);
             await worker.initialize(lang);
 
+            // 1. PDF SPRACOVANIE
             if (pdfDoc) {
-                // Získanie zoznamu strán na spracovanie
                 const pagesToScan = getPagesToScan(pdfDoc.numPages);
                 
-                if (pagesToScan.length === 0) {
-                    alert("Zadali ste neplatný rozsah strán.");
-                    throw new Error("Neplatné strany");
-                }
-
                 for (let i = 0; i < pagesToScan.length; i++) {
                     if (!isProcessing) break;
                     
                     const pageNum = pagesToScan[i];
-                    statusLabel.innerText = `Spracúvam stranu ${pageNum} (${i+1}/${pagesToScan.length})...`;
+                    statusLabel.innerText = `Strana ${pageNum} (${i+1}/${pagesToScan.length})`;
                     
                     const page = await pdfDoc.getPage(pageNum);
-                    // Vyššia scale = lepšia kvalita pre OCR (bločky potrebujú aspoň 2.5)
+                    // Vyššia scale (2.5) = lepšie OCR
                     const viewport = page.getViewport({ scale: 2.5 });
                     const canvas = document.createElement('canvas');
                     canvas.width = viewport.width;
                     canvas.height = viewport.height;
                     await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
                     
-                    // Vylepšenie kvality obrazu pred čítaním
-                    if (doPreprocess) {
-                        preprocessImage(canvas);
-                    }
+                    if (doPreprocess) preprocessImage(canvas);
 
                     const { data: { text } } = await worker.recognize(canvas);
-                    fullRecognizedText += `--- STRANA ${pageNum} ---\n${text}\n\n`;
+                    const cleaned = noiseFilter ? cleanOCRText(text) : text;
+                    
+                    fullRecognizedText += `--- Strana ${pageNum} ---\n${cleaned}\n\n`;
                     outputText.value = fullRecognizedText;
                     outputText.scrollTop = outputText.scrollHeight;
                 }
-            } else {
-                // Spracovanie obrázka
-                // Pre obrázky musíme najprv vytvoriť Canvas, aby sme ho mohli upraviť
+            } 
+            // 2. OBRÁZOK SPRACOVANIE
+            else {
                 const img = previewContainer.querySelector('img');
                 const canvas = document.createElement('canvas');
                 canvas.width = img.naturalWidth;
@@ -325,80 +366,107 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0);
 
-                if (doPreprocess) {
-                    statusLabel.innerText = "Vylepšujem kvalitu obrazu...";
-                    preprocessImage(canvas);
-                }
+                if (doPreprocess) preprocessImage(canvas);
 
-                statusLabel.innerText = "Čítam text z obrázka...";
                 const { data: { text } } = await worker.recognize(canvas);
-                fullRecognizedText = text;
-                outputText.value = text;
+                fullRecognizedText = noiseFilter ? cleanOCRText(text) : text;
+                outputText.value = fullRecognizedText;
             }
 
             statusLabel.innerText = "✅ Hotovo!";
             await worker.terminate();
             
-            document.getElementById('btnStop').style.display = 'none';
-            btnProcess.style.display = 'block';
-            btnSummarize.style.display = 'block';
+            btnStop.classList.add('hidden');
+            btnProcess.classList.remove('hidden');
+            btnSummarize.classList.remove('hidden');
 
         } catch (err) {
             console.error(err);
-            if (isProcessing) statusLabel.innerText = "Chyba: " + err.message;
+            statusLabel.innerText = "Chyba: " + err.message;
+            statusLabel.classList.add("text-red-500");
         }
     });
 
-    document.getElementById('btnStop').addEventListener('click', async () => {
+    btnStop.addEventListener('click', async () => {
         isProcessing = false;
         if (worker) await worker.terminate();
-        statusLabel.innerText = "Zastavené.";
-        document.getElementById('btnStop').style.display = 'none';
-        btnProcess.style.display = 'block';
+        statusLabel.innerText = "Zastavené užívateľom.";
+        btnStop.classList.add('hidden');
+        btnProcess.classList.remove('hidden');
     });
 
-    // === 4. ZHRNUTIE ===
-    btnSummarize.addEventListener('click', () => {
-        const text = fullRecognizedText;
-        if (!text || text.length < 30) {
-            alert("Text je príliš krátky na zhrnutie.");
-            return;
-        }
+    // === FILTER ŠUMU (ANTI-NONSENSE) ===
+    function cleanOCRText(text) {
+        // 1. Rozdelíme na riadky
+        const lines = text.split('\n');
+        const cleanLines = [];
 
-        const cleanText = text.replace(/\s+/g, ' ').trim();
-        const sentences = cleanText.match(/[^.!?]+[.!?]+(?=\s|$)/g) || [cleanText];
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (trimmed.length === 0) return;
 
-        if (sentences.length < 3) {
-            summaryText.innerHTML = cleanText;
-            summaryBox.style.display = 'block';
-            return;
-        }
+            // 2. Odstránime riadky, ktoré majú príliš veľa "smetia"
+            // Počítame alfanumerické znaky vs symboly
+            const alphaNumeric = trimmed.replace(/[^a-zA-Z0-9áäčďéíĺľňóôŕšťúýžÁÄČĎÉÍĹĽŇÓÔŔŠŤÚÝŽ]/g, "").length;
+            const symbols = trimmed.length - alphaNumeric;
+            
+            // Ak je riadok krátky a väčšina sú symboly (napr ";;..,,|"), vyhoď ho
+            if (trimmed.length < 5 && symbols > alphaNumeric) return;
+            
+            // Ak je riadok dlhší, ale 50% sú symboly, je to asi šum
+            if (trimmed.length > 5 && symbols > alphaNumeric * 1.5) return;
 
-        const wordFreq = {};
-        const stopWords = ["a","v","s","z","na","do","je","to","o","pre","po","ako","tak","ale","že","sa","si","aj","už","pri","od","ten","tá","sú","bude","by","čo","kde","kto","kedy","ty","ja","on","my","vy","oni", "eur", "dph", "celkom", "suma"];
+            // 3. Odstránenie osamotených divných znakov (napr " | " alebo " _ ")
+            let cleanLine = trimmed.replace(/\s[\|_]\s/g, " ");
+            
+            // 4. Fix medzier (OCR niekedy dáva extra medzery)
+            cleanLine = cleanLine.replace(/\s+/g, ' ');
+
+            cleanLines.push(cleanLine);
+        });
+
+        return cleanLines.join('\n');
+    }
+
+    // === ZHRNUTIE A UTILITKY ===
+    function getPagesToScan(total) {
+        const val = pageRangeInput.value.trim();
+        if (!val) return Array.from({length: total}, (_, i) => i + 1);
         
-        const words = cleanText.toLowerCase().split(/[\s,.]+/);
-        words.forEach(w => {
-            if (w.length > 3 && !stopWords.includes(w)) wordFreq[w] = (wordFreq[w] || 0) + 1;
+        const pages = new Set();
+        val.split(',').forEach(part => {
+            if (part.includes('-')) {
+                const [s, e] = part.split('-').map(Number);
+                if (!isNaN(s) && !isNaN(e)) for(let i=s; i<=e; i++) if(i>=1 && i<=total) pages.add(i);
+            } else {
+                const n = Number(part);
+                if (!isNaN(n) && n>=1 && n<=total) pages.add(n);
+            }
         });
+        return Array.from(pages).sort((a,b)=>a-b);
+    }
 
-        const sentenceScores = sentences.map((s, index) => {
-            let score = 0;
-            const sWords = s.toLowerCase().split(/[\s,.]+/);
-            sWords.forEach(w => { if (wordFreq[w]) score += wordFreq[w]; });
-            return { index, text: s, score: score / (sWords.length || 1) };
-        });
-
-        const topSentences = sentenceScores.sort((a, b) => b.score - a.score).slice(0, 5).sort((a, b) => a.index - b.index).map(s => s.text);
-
-        summaryText.innerHTML = `<ul>${topSentences.map(s => `<li>${s.trim()}</li>`).join('')}</ul>`;
-        summaryBox.style.display = 'block';
-        summaryBox.scrollIntoView({behavior: "smooth"});
-    });
+    function summarizeText() {
+        const text = outputText.value;
+        if (text.length < 50) return alert("Málo textu na zhrnutie.");
+        
+        // Jednoduchá extrakcia viet (Naivná AI)
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        const significant = sentences.filter(s => s.length > 20 && s.length < 150).slice(0, 5);
+        
+        summaryBox.classList.remove('hidden');
+        document.getElementById('summaryText').innerHTML = 
+            `<ul class="list-disc pl-5 space-y-1">${significant.map(s => `<li>${s.trim()}</li>`).join('')}</ul>`;
+    }
 
     function copyText() {
         outputText.select();
         document.execCommand('copy');
+        // Vizuálna spätná väzba
+        const btn = document.querySelector('button[onclick="copyText()"]');
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Skopírované`;
+        setTimeout(() => btn.innerHTML = orig, 1500);
     }
 </script>
 
