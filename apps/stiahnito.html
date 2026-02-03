@@ -250,16 +250,17 @@
             `;
         }
         else if (osName === 'android') {
-            html = `
-                <div class="how-to-open">
-                    ⚠️ Android nemá terminál. Musíš si stiahnuť aplikáciu <b>Termux</b>.<br>
-                    <span style="color:var(--muted)">Pozor: Verzia na Google Play nefunguje! Stiahni si ju tu:</span><br>
-                    👉 <a href="https://f-droid.org/repo/com.termux_118.apk" target="_blank">Stiahnuť Termux (APK)</a>
-                </div>
-                <div>Po inštalácii otvor Termux a vlož tento príkaz:</div>
-                ${createCodeBlock('pkg install python ffmpeg && pip install yt-dlp')}
-            `;
-        }
+        html = `
+            <div class="how-to-open">
+                1. Stiahni si <a href="https://f-droid.org/repo/com.termux_118.apk" target="_blank">Termux (APK)</a>.<br>
+                2. <b>DÔLEŽITÉ:</b> Aby sa videá uložili do galérie, vlož najprv tento príkaz a potvrď na mobile "Povoliť":
+            </div>
+            ${createCodeBlock('termux-setup-storage')}
+            
+            <div style="margin-top:15px">3. Potom nainštaluj nástroje (stačí raz):</div>
+            ${createCodeBlock('pkg install python ffmpeg && pip install yt-dlp')}
+        `;
+    }
         else if (osName === 'ios') {
             html = `
                 <div class="how-to-open">
@@ -367,6 +368,27 @@
         state.password = document.getElementById('video-pass').value.trim();
 
         let cmd = "yt-dlp";
+
+        // --- AUTOMATICKÉ CESTY K SÚBOROM ---
+        
+        // 🤖 ANDROID: Uložiť do galérie (zložka Download)
+        if (state.os === 'android') {
+            cmd += ' -P "/sdcard/Download"';
+        }
+        // 🍎 iOS (iPhone): Uložiť do dokumentov aplikácie a-Shell
+        else if (state.os === 'ios') {
+            cmd += ' -P "~/Documents"';
+        }
+        // 🪟 WINDOWS: Uložiť do priečinka Stiahnuté (Downloads)
+        else if (state.os === 'windows') {
+            cmd += ' -P "%USERPROFILE%/Downloads"';
+        }
+        // 🍎 macOS / 🐧 LINUX: Uložiť do ~/Downloads
+        else if (state.os === 'mac' || state.os === 'linux') {
+            cmd += ' -P "~/Downloads"';
+        }
+
+        // --- OSTATNÉ PARAMETRE ---
 
         if (state.audioOnly) cmd += " -x --audio-format mp3";
         if (state.password) cmd += ` --video-password "${state.password}"`;
