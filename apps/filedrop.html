@@ -44,7 +44,6 @@
             transition: all 0.3s;
         }
 
-        /* STAGES */
         .stage { display: none; animation: fadeIn 0.4s; }
         .stage.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -101,10 +100,14 @@
         .progress-bar { height: 8px; background: #334155; border-radius: 4px; margin-top: 8px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.2s; }
 
-        /* NOTES */
+        /* NOTES & DEBUG */
         .info-note { font-size: 0.85rem; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 10px; border-radius: 6px; margin-top: 15px; text-align: center; border: 1px solid rgba(251, 191, 36, 0.2); }
         .error-note { font-size: 0.85rem; color: #fca5a5; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 6px; margin-top: 15px; text-align: center; border: 1px solid rgba(239, 68, 68, 0.2); display: none; }
         
+        .debug-status {
+            font-size: 0.7rem; color: #64748b; margin-top: 10px; text-align: center; font-family: monospace;
+        }
+
         .back-link { display: block; text-align: center; margin-top: 30px; color: var(--text-muted); text-decoration: none; }
         .back-link:hover { color: white; }
     </style>
@@ -122,8 +125,9 @@
     <div id="view-receiver" class="card stage">
         <div style="text-align: center;">
             <div class="drop-icon">⬇️</div>
-            <h2 id="recv-title">Pripájam sa...</h2>
-            <p id="recv-desc" style="color: var(--text-muted)">Hľadám odosielateľa v sieti...</p>
+            <h2 id="recv-title">Hľadám spojenie...</h2>
+            <p id="recv-desc" style="color: var(--text-muted)">Vyjednávam cestu cez sieť...</p>
+            <div id="recv-debug" class="debug-status">ICE: Checking...</div>
             
             <button id="btn-start-download" class="btn btn-download" onclick="requestDownload()">
                 📥 STIAHNUŤ SÚBORY
@@ -163,8 +167,8 @@
 
             <div id="localhost-warning" class="error-note" style="display:none;">
                 ⚠️ <b>POZOR: Bežíš na "localhost"!</b><br>
-                Tento odkaz nebude fungovať na inom zariadení (mobil).<br>
-                Použi lokálnu IP adresu alebo nahraj stránku na hosting.
+                Tento odkaz nebude fungovať cez internet.<br>
+                Nahraj stránku na hosting.
             </div>
 
             <div class="info-note">
@@ -177,6 +181,8 @@
                 <div class="progress-bar"><div id="send-fill" class="progress-fill"></div></div>
                 <div id="send-status" style="margin-top:5px; font-size:0.8rem; color: var(--success);">Čakám na príjemcu...</div>
             </div>
+            
+            <div id="send-debug" class="debug-status">ICE: New</div>
         </div>
     </div>
 
@@ -190,16 +196,18 @@
     let conn = null;
     let filesBuffer = []; 
 
-    // --- KONFIGURÁCIA STUN (KĽÚČOVÉ PRE SPOJENIE CEZ INTERNET) ---
+    // --- ROZŠÍRENÁ KONFIGURÁCIA STUN ---
+    // Toto pomáha preraziť cez rôzne siete
     const peerConfig = {
         config: {
             'iceServers': [
                 { url: 'stun:stun.l.google.com:19302' },
                 { url: 'stun:stun1.l.google.com:19302' },
-                { url: 'stun:stun2.l.google.com:19302' }
+                { url: 'stun:stun2.l.google.com:19302' },
+                { url: 'stun:global.stun.twilio.com:3478' }
             ]
         },
-        debug: 1 // 0=none, 1=errors, 2=warnings, 3=all
+        debug: 1
     };
 
     const views = {
@@ -216,13 +224,10 @@
         }
 
         if (targetPeerId) {
-            // PRÍJEMCA
             switchView('receiver');
             initPeer(null, true); 
         } else {
-            // ODOSIELATEĽ
             switchView('upload');
-            // Inicializujeme Peer hneď
             initPeer(); 
             setupDragDrop();
         }
@@ -235,7 +240,6 @@
 
     // --- PEERJS LOGIKA ---
     function initPeer(customId = null, isReceiver = false) {
-        // Inicializácia P2P siete s STUN servermi
         peer = new Peer(customId, peerConfig);
 
         peer.on('open', (id) => {
@@ -252,6 +256,7 @@
 
         peer.on('connection', (c) => {
             conn = c;
+            monitorConnection(c, 'send-debug');
             setupSenderEvents();
         });
 
@@ -259,31 +264,45 @@
             const errBox = document.getElementById('global-error');
             errBox.style.display = 'block';
             let msg = "Chyba: " + err.type;
-            if (err.type === 'peer-unavailable') msg = "Odosielateľa sa nepodarilo nájsť. Skúste načítať stránku znova.";
+            if (err.type === 'peer-unavailable') msg = "Odosielateľa sa nepodarilo nájsť. Skontroluj link alebo či je online.";
             errBox.innerText = "❌ " + msg;
-            console.error(err);
-        });
-        
-        peer.on('disconnected', () => {
-             console.log('Peer disconnected.');
         });
     }
 
     function connectToSender() {
         if (!peer || !targetPeerId) return;
         
-        // Skúsime sa pripojiť s reliable: true
+        // Pripojenie s 'reliable' flagom
         conn = peer.connect(targetPeerId, {
             reliable: true
         });
         
+        monitorConnection(conn, 'recv-debug');
         setupReceiverEvents();
+    }
+
+    // --- MONITOR STAVU SPOJENIA (ICE) ---
+    function monitorConnection(connection, debugId) {
+        const el = document.getElementById(debugId);
+        
+        connection.peerConnection.oniceconnectionstatechange = () => {
+            const state = connection.peerConnection.iceConnectionState;
+            el.innerText = `Stav siete: ${state}`;
+            
+            if (state === 'disconnected' || state === 'failed') {
+                el.style.color = 'red';
+                document.getElementById('global-error').innerText = "❌ Spojenie zlyhalo. Asi blokovaný firewall.";
+                document.getElementById('global-error').style.display = 'block';
+            } else if (state === 'connected' || state === 'completed') {
+                el.style.color = 'green';
+            }
+        };
     }
 
     // --- LOGIKA ODOSIELATEĽA ---
     function setupSenderEvents() {
         conn.on('open', () => {
-            document.getElementById('send-status').innerText = "👤 Príjemca pripojený. Čakám na potvrdenie...";
+            document.getElementById('send-status').innerText = "👤 Príjemca nájdený. Čakám na potvrdenie...";
         });
 
         conn.on('data', (data) => {
@@ -311,7 +330,7 @@
             if(document.getElementById('recv-fill').style.width !== '100%') {
                  document.getElementById('recv-title').innerText = "Spojenie prerušené";
                  document.getElementById('recv-desc').style.color = "#fca5a5";
-                 document.getElementById('recv-desc').innerText = "Odosielateľ pravdepodobne zatvoril okno alebo vypadla sieť.";
+                 document.getElementById('recv-desc').innerText = "Odosielateľ zatvoril okno alebo vypadla sieť.";
             }
         });
     }
@@ -322,7 +341,7 @@
             document.getElementById('btn-start-download').style.display = 'none';
             document.getElementById('recv-desc').innerText = "Sťahovanie začalo...";
         } else {
-            alert("Spojenie ešte nie je aktívne. Čakaj chvíľu.");
+            alert("Spojenie ešte nie je aktívne. Čakaj chvíľu, kým naskočí 'Spojenie úspešné'.");
         }
     }
 
@@ -371,13 +390,21 @@
 
         for (let i = 0; i < totalFiles; i++) {
             const file = filesBuffer[i];
+            
+            // Hlavička
             conn.send({ type: 'header', name: file.name, size: file.size, mime: file.type });
             await new Promise(r => setTimeout(r, 100));
+
+            // Telo
             conn.send(file);
+            
+            // UI
             progressBar.style.width = ((i + 1) / totalFiles * 100) + '%';
             document.getElementById('send-status').innerText = `Odosielam ${i+1}/${totalFiles}: ${file.name}`;
+            
             await new Promise(r => setTimeout(r, 500));
         }
+        
         document.getElementById('send-status').innerText = "✅ Všetky súbory odoslané!";
     }
 
