@@ -41,6 +41,15 @@
         }
         .template-card.active { border-color: #6366f1; opacity: 1; background: rgba(99, 102, 241, 0.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
         
+        /* A4 Preview Container - Responsive scaling */
+        .preview-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden; /* Skryje pretekanie pri scale */
+        }
+
         .paper-preview {
             background: white; color: #1e293b; padding: 0; 
             width: 210mm; min-height: 297mm; 
@@ -48,46 +57,53 @@
             font-size: 11px; position: relative; font-family: Arial, sans-serif;
             box-shadow: 0 0 40px rgba(0,0,0,0.6);
             transform-origin: top center;
+            transition: transform 0.2s; /* Plynulé škálovanie */
         }
         
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
 
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            .main-layout { flex-direction: column; overflow-y: auto !important; height: auto !important; }
+            .editor-col { width: 100% !important; border-right: none; border-bottom: 1px solid #334155; padding-bottom: 40px; }
+            .preview-col { width: 100% !important; min-height: 600px; padding: 0; }
+        }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body class="h-screen flex flex-col overflow-hidden bg-slate-900">
 
-    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-6 shrink-0 z-20 shadow-lg">
-        <div class="flex items-center gap-4">
+    <div class="h-16 border-b border-slate-700 bg-slate-900 flex items-center justify-between px-4 lg:px-6 shrink-0 z-20 shadow-lg">
+        <div class="flex items-center gap-3">
             <a href="index.html" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-arrow-left"></i></a>
-            <h1 class="font-bold text-xl text-white flex items-center gap-2">
-                <i class="fa-solid fa-file-invoice text-indigo-400"></i> Fakturačný Expres v10.1
+            <h1 class="font-bold text-lg lg:text-xl text-white flex items-center gap-2 truncate">
+                <i class="fa-solid fa-file-invoice text-indigo-400"></i> <span class="hidden sm:inline">Fakturačný Expres</span><span class="sm:hidden">Faktúry</span>
             </h1>
         </div>
         <div class="flex gap-2">
-             <button onclick="exportData()" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-download"></i> Záloha
+             <button onclick="exportData()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Záloha</span>
              </button>
-             <button onclick="document.getElementById('file-import').click()" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-upload"></i> Obnova
+             <button onclick="document.getElementById('file-import').click()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded text-slate-300 border border-slate-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-upload"></i> <span class="hidden sm:inline">Obnova</span>
              </button>
              <input type="file" id="file-import" class="hidden" onchange="importData(this)">
         </div>
     </div>
 
-    <div class="flex-1 flex overflow-hidden">
+    <div class="main-layout flex-1 flex overflow-hidden">
 
-        <div class="w-[45%] min-w-[600px] bg-slate-900 border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 p-6 gap-6 custom-scrollbar">
+        <div class="editor-col w-full lg:w-[45%] bg-slate-900 border-r border-slate-700 flex flex-col overflow-y-auto shrink-0 p-4 lg:p-6 gap-6 custom-scrollbar">
             
             <div class="glass-panel p-5 bg-slate-800/80 border-l-4 border-indigo-500">
                 <div class="flex justify-between items-center mb-4">
                     <span class="text-xs font-bold uppercase text-white tracking-wider">Nastavenia</span>
                 </div>
-                
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Typ Dokladu</label>
@@ -105,8 +121,6 @@
                             <option value="CZK">CZK (Kč)</option>
                             <option value="USD">USD ($)</option>
                             <option value="GBP">GBP (£)</option>
-                            <option value="HUF">HUF (Ft)</option>
-                            <option value="PLN">PLN (zł)</option>
                         </select>
                     </div>
                 </div>
@@ -133,33 +147,33 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-bold text-indigo-300 text-sm uppercase flex items-center gap-2"><i class="fa-solid fa-building"></i> Dodávateľ</h2>
                     <div class="flex items-center gap-3 bg-slate-800 p-1.5 px-3 rounded-lg border border-slate-700">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">DPH:</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">DPH:</span>
                         <div class="relative inline-block w-8 h-4 align-middle select-none">
                             <input type="checkbox" id="vat-toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer right-4 transition-all duration-300" oninput="updatePreview()"/>
                             <label for="vat-toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
                         </div>
-                        <span class="text-[10px] font-bold text-white min-w-[60px]" id="vat-label-text">Neplatca</span>
+                        <span class="text-[10px] font-bold text-white min-w-[50px] text-center" id="vat-label-text">Nie</span>
                     </div>
                 </div>
                 
                 <div class="space-y-3">
                     <input type="text" id="sup-name" class="std-input font-bold" placeholder="Moja Firma" oninput="updatePreview()">
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div><label class="input-label">IČO</label><input type="text" id="sup-ico" class="std-input" oninput="updatePreview()"></div>
                         <div><label class="input-label">DIČ</label><input type="text" id="sup-dic" class="std-input" oninput="updatePreview()"></div>
                         <div class="vat-field hidden"><label class="input-label text-green-400">IČ DPH</label><input type="text" id="sup-icdph" class="std-input border-green-800" placeholder="SK..." oninput="updatePreview()"></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                          <div><label class="input-label">Ulica</label><input type="text" id="sup-street" class="std-input" oninput="updatePreview()"></div>
                          <div><label class="input-label">Mesto / PSČ</label><input type="text" id="sup-city" class="std-input" oninput="updatePreview()"></div>
                     </div>
                     
                     <div class="bg-slate-800/50 p-3 rounded border border-slate-700">
-                        <label class="input-label">IBAN (S medzerami aj bez)</label>
+                        <label class="input-label">IBAN</label>
                         <input type="text" id="sup-iban" class="std-input font-mono mb-2" placeholder="SK00 0000 0000 0000 0000 0000" oninput="updatePreview()">
                         
                         <button onclick="manualGenerateQR()" class="w-full text-xs bg-blue-600 hover:bg-blue-500 text-white py-2 rounded flex items-center justify-center gap-2 transition font-bold shadow">
-                            <i class="fa-solid fa-qrcode"></i> Generovať QR kód (Pay by square)
+                            <i class="fa-solid fa-qrcode"></i> QR kód (Pay by square)
                         </button>
                     </div>
                     
@@ -177,18 +191,18 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-bold text-green-400 text-sm uppercase flex items-center gap-2"><i class="fa-solid fa-user-tie"></i> Odberateľ</h2>
                     <div class="flex gap-2 relative">
-                        <input list="clients-datalist" id="client-search" class="bg-slate-800 text-white text-xs p-1.5 px-3 rounded border border-slate-600 w-48 focus:border-green-500 focus:outline-none" placeholder="Vybrať zo zoznamu..." oninput="checkClientAutofill(this)">
+                        <input list="clients-datalist" id="client-search" class="bg-slate-800 text-white text-xs p-1.5 px-3 rounded border border-slate-600 w-32 sm:w-48 focus:border-green-500 focus:outline-none" placeholder="Vybrať..." oninput="checkClientAutofill(this)">
                         <datalist id="clients-datalist"></datalist>
                     </div>
                 </div>
 
                 <div class="space-y-3">
                     <input type="text" id="cli-name" class="std-input font-bold" placeholder="Klient" oninput="updatePreview()">
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div><label class="input-label">IČO</label><input type="text" id="cli-ico" class="std-input" oninput="updatePreview()"></div>
                         <div><label class="input-label">DIČ / IČ DPH</label><input type="text" id="cli-dic" class="std-input" oninput="updatePreview()"></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                          <div><label class="input-label">Ulica</label><input type="text" id="cli-street" class="std-input" oninput="updatePreview()"></div>
                          <div><label class="input-label">Mesto / PSČ</label><input type="text" id="cli-city" class="std-input" oninput="updatePreview()"></div>
                     </div>
@@ -197,7 +211,7 @@
             </div>
 
             <div class="glass-panel p-5">
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div><label class="input-label">Vystavenie</label><input type="date" id="date-issue" class="std-input" oninput="updatePreview()"></div>
                     <div><label class="input-label" id="lbl-due">Splatnosť</label><input type="date" id="date-due" class="std-input" oninput="updatePreview()"></div>
                     <div><label class="input-label">Var. Symbol</label><input type="text" id="var-sym" class="std-input font-mono" oninput="updatePreview()"></div>
@@ -210,15 +224,18 @@
                     <span class="text-[10px] text-slate-400 font-normal">Ceny bez DPH</span>
                 </h2>
                 
-                <div class="grid grid-cols-12 gap-2 mb-2 px-1 pb-1 border-b border-slate-700">
-                    <div class="col-span-4 text-[9px] text-slate-400 font-bold uppercase tracking-wider">Názov</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider">Mn. / MJ</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Cena/j</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider vat-col hidden">DPH %</div>
-                    <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Spolu</div>
-                </div>
+                <div class="overflow-x-auto pb-2">
+                    <div class="min-w-[500px]"> <div class="grid grid-cols-12 gap-2 mb-2 px-1 pb-1 border-b border-slate-700">
+                            <div class="col-span-4 text-[9px] text-slate-400 font-bold uppercase tracking-wider">Názov</div>
+                            <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider">Mn. / MJ</div>
+                            <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Cena/j</div>
+                            <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-center tracking-wider vat-col hidden">DPH %</div>
+                            <div class="col-span-2 text-[9px] text-slate-400 font-bold uppercase text-right tracking-wider">Spolu</div>
+                        </div>
 
-                <div id="items-container" class="space-y-3"></div>
+                        <div id="items-container" class="space-y-3"></div>
+                    </div>
+                </div>
                 
                 <button onclick="addItemRow()" class="btn-primary mt-5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-sm py-3 flex justify-center items-center gap-2">
                     <i class="fa-solid fa-plus"></i> Pridať riadok
@@ -231,26 +248,28 @@
             </div>
         </div>
 
-        <div class="flex-1 bg-slate-800 relative flex flex-col min-w-[700px]">
-            <div class="h-16 flex items-center justify-between px-8 bg-slate-800 border-b border-slate-700 shrink-0 shadow-md z-10">
+        <div class="preview-col w-full lg:flex-1 bg-slate-800 relative flex flex-col min-h-[500px]">
+            <div class="h-14 lg:h-16 flex items-center justify-between px-4 lg:px-8 bg-slate-800 border-b border-slate-700 shrink-0 shadow-md z-10 sticky top-0">
                 <div class="flex flex-col">
-                    <span class="text-white text-sm font-bold tracking-wide">Náhľad Dokumentu</span>
-                    <span class="text-slate-500 text-[10px] uppercase">Formát A4 • Optimalizované PDF</span>
+                    <span class="text-white text-sm font-bold tracking-wide">Náhľad</span>
+                    <span class="text-slate-500 text-[10px] uppercase hidden sm:inline">Formát A4 • Optimalizované PDF</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
                     <div id="pdf-spinner" class="hidden text-indigo-400 text-xs font-bold animate-pulse flex items-center gap-2">
-                        <i class="fa-solid fa-circle-notch fa-spin"></i> Generujem...
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> <span class="hidden sm:inline">Generujem...</span>
                     </div>
-                    <button onclick="generatePDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-lg shadow-lg font-bold text-sm flex items-center gap-2 transition-transform hover:scale-105">
+                    <button onclick="generatePDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 lg:px-6 py-2 rounded-lg shadow-lg font-bold text-xs lg:text-sm flex items-center gap-2 transition-transform hover:scale-105">
                         <i class="fa-solid fa-file-pdf"></i> STIAHNUŤ PDF
                     </button>
                 </div>
             </div>
 
-            <div class="flex-1 overflow-auto bg-slate-700/50 p-8 flex justify-center items-start custom-scrollbar">
-                <div id="invoice-preview" class="paper-preview">
-                    </div>
+            <div class="flex-1 overflow-auto bg-slate-700/50 flex justify-center items-start custom-scrollbar">
+                <div class="preview-wrapper">
+                    <div id="invoice-preview" class="paper-preview">
+                        </div>
+                </div>
             </div>
         </div>
     </div>
@@ -261,10 +280,8 @@
         isVatPayer: false,
         template: 'pro',
         logo: "",
-        showQR: false // Defaultne skryty
+        showQR: false 
     };
-
-    const t = { sk: { invoice: "FAKTÚRA", proforma: "ZÁLOHOVÁ FAKTÚRA", quote: "CENOVÁ PONUKA", order: "OBJEDNÁVKA" } };
 
     window.onload = function() {
         const today = new Date().toISOString().split('T')[0];
@@ -277,8 +294,33 @@
         loadProfile();
         loadClientsDatalist();
         addItemRow(); 
+        
+        // Responsive Scaling Event
+        window.addEventListener('resize', scalePreview);
+        
+        // Initial Render
         updatePreview();
+        scalePreview();
     };
+
+    // --- RESPONSIVE SCALING (Mobil) ---
+    function scalePreview() {
+        const wrapper = document.querySelector('.preview-wrapper');
+        const preview = document.querySelector('.paper-preview');
+        if (!wrapper || !preview) return;
+        
+        const wrapperWidth = wrapper.clientWidth - 40; // padding
+        const a4Width = 794; // approx A4 width pixels
+        
+        if (wrapperWidth < a4Width) {
+            const scale = wrapperWidth / a4Width;
+            preview.style.transform = `scale(${scale})`;
+            preview.style.marginBottom = `-${(1 - scale) * 1123}px`; // Compensate height
+        } else {
+            preview.style.transform = 'scale(1)';
+            preview.style.marginBottom = '0';
+        }
+    }
 
     function setTemplate(tpl, el) {
         state.template = tpl;
@@ -287,11 +329,8 @@
         updatePreview();
     }
 
-    // --- MANUÁLNE GENEROVANIE QR (LOGIKA) ---
     function manualGenerateQR() {
         const iban = document.getElementById('sup-iban').value;
-        // Skontrolujeme sumu
-        // Musíme ju vypočítať znova, lebo v DOMe je formátovaná
         let total = 0;
         document.querySelectorAll('.item-row').forEach(row => {
             const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
@@ -301,19 +340,17 @@
         });
 
         if(!iban) return alert("Prosím, zadajte najskôr IBAN.");
-        if(total <= 0) return alert("Suma faktúry musí byť vyššia ako 0, aby sa dal vygenerovať platobný QR kód.");
+        if(total <= 0) return alert("Suma musí byť vyššia ako 0.");
 
         state.showQR = true;
         updatePreview();
-        alert("QR kód bol pridaný na faktúru (vpravo dole).");
+        alert("QR kód bol pridaný.");
     }
 
     // --- RENDER ENGINE ---
     function updatePreview() {
         const preview = document.getElementById('invoice-preview');
         const tpl = state.template;
-        
-        // Zber vstupov
         const docType = document.getElementById('doc-type').value;
         const curr = document.getElementById('currency').value;
         const symbol = getCurrencySymbol(curr);
@@ -342,15 +379,14 @@
         };
 
         state.isVatPayer = document.getElementById('vat-toggle').checked;
-        document.getElementById('vat-label-text').innerText = state.isVatPayer ? "Platca DPH" : "Neplatca";
-        document.getElementById('vat-label-text').className = state.isVatPayer ? "text-[11px] font-bold text-green-400 min-w-[60px]" : "text-[11px] font-bold text-white min-w-[60px]";
+        document.getElementById('vat-label-text').innerText = state.isVatPayer ? "Platca" : "Nie";
+        document.getElementById('vat-label-text').className = state.isVatPayer ? "text-[10px] font-bold text-green-400 min-w-[50px] text-center" : "text-[10px] font-bold text-white min-w-[50px] text-center";
         
         document.querySelectorAll('.vat-field').forEach(e => e.classList.toggle('hidden', !state.isVatPayer));
         document.querySelectorAll('.vat-col').forEach(e => e.classList.toggle('hidden', !state.isVatPayer));
 
         const logoHtml = state.logo ? `<img src="${state.logo}" style="max-height: 80px; max-width: 200px; object-fit: contain;">` : '';
         
-        // Items Calculation
         let itemsHtml = '';
         let totalBase = 0, totalTax = 0, grandTotal = 0;
 
@@ -382,13 +418,10 @@
             }
         });
 
-        // QR Validation
         const ibanClean = data.sup.iban.replace(/\s/g, '');
-        // Zobrazíme QR iba ak: 1. Je zapnutý manuálne, 2. Máme IBAN, 3. Suma > 0
         const qrDisplay = (state.showQR && ibanClean && grandTotal > 0) ? 'block' : 'none';
 
         // --- TEMPLATES ---
-        
         if (tpl === 'pro') {
             preview.innerHTML = `
                 <div style="height: 12px; background: #2563eb;"></div>
@@ -448,9 +481,7 @@
                 </div>`;
         }
 
-        // GENERATE QR
         if (state.showQR && ibanClean && grandTotal > 0) {
-            // Bezpečné volanie po vykreslení DOMu
             setTimeout(() => {
                 const qrCanvas = document.getElementById('qr-canvas');
                 if(qrCanvas) {
@@ -467,12 +498,16 @@
         const btn = document.querySelector('button[onclick="generatePDF()"]');
         const spinner = document.getElementById('pdf-spinner');
         
+        // Pred generovaním vrátime scale na 1
+        element.style.transform = 'scale(1)';
+        element.style.marginBottom = '0';
+        
         btn.disabled = true;
         spinner.classList.remove('hidden');
 
         try {
             const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
-            const imgData = canvas.toDataURL('image/jpeg', 0.75); // Kompresia
+            const imgData = canvas.toDataURL('image/jpeg', 0.75);
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
             const w = pdf.internal.pageSize.getWidth();
@@ -485,12 +520,12 @@
         } finally {
             btn.disabled = false;
             spinner.classList.add('hidden');
+            scalePreview(); // Obnovíme scale pre mobil
         }
     }
 
     // --- UTILS ---
     function val(id) { return document.getElementById(id).value; }
-    function setText(id, txt) { const el = document.getElementById(id); if(el) el.innerText = txt; }
     function getCurrencySymbol(code) { const s = { 'EUR': '€', 'USD': '$', 'CZK': 'Kč', 'GBP': '£', 'HUF': 'Ft', 'PLN': 'zł' }; return s[code] || code; }
     function formatMoney(amount, symbol) { return amount.toFixed(2) + " " + symbol; }
 
@@ -530,7 +565,7 @@
         }
     }
 
-    // --- DATA ---
+    // --- DATA EXPORT/IMPORT ---
     function exportData() {
         const backup = {
             profile: localStorage.getItem('inv_v10_prof'),
