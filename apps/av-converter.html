@@ -2,201 +2,175 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-<script src="coi-serviceworker.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A/V CONVERTER | Office Tools</title>
+    <title>A/V Converter Pro | Unoneto</title>
     
     <script src="coi-serviceworker.js"></script>
 
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root {
-            --primary: #ea580c; /* Oranžová pre konvertor */
-            --primary-hover: #c2410c;
-            --secondary: #0f172a;
-            --bg-app: #f8fafc;
-            --text-main: #1e293b;
-            --border-radius: 12px;
-        }
-
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); overflow-x: hidden; }
-        * { box-sizing: border-box; }
-
-        /* --- OCHRANA --- */
-        #lockOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f172a; z-index: 9999999; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: white; transition: opacity 0.5s ease;
-        }
-        .lock-box {
-            background: #1e293b; padding: 40px; border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
-            max-width: 450px; width: 90%; border: 1px solid #334155;
-        }
-        .lock-input {
-            padding: 15px; width: 100%; margin: 20px 0; border-radius: 10px;
-            border: 1px solid #475569; background: #0f172a; color: white;
-            font-size: 1.1rem; text-align: center; letter-spacing: 2px;
-            font-family: monospace; outline: none;
-        }
-        .lock-input:focus { border-color: var(--primary); }
-        .lock-btn {
-            padding: 15px 30px; background: var(--primary); color: white;
-            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
-            font-size: 1rem; width: 100%; transition: 0.2s;
-        }
-        .lock-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
-
-        /* --- APP UI --- */
-        header {
-            background: white; padding: 15px 5%; border-bottom: 1px solid #e2e8f0;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
-        .brand span { color: var(--primary); }
-        .back-btn { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
-        .back-btn:hover { color: var(--primary); }
-
-        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-
-        .drop-area {
-            border: 3px dashed #cbd5e1; border-radius: 20px; background: white;
-            padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-        }
-        .drop-area:hover, .drop-area.dragover { border-color: var(--primary); background: #fff7ed; transform: scale(1.01); }
-        .drop-icon { font-size: 3.5rem; color: #cbd5e1; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         
-        /* SETTINGS & LIST */
-        .work-area {
-            background: white; border-radius: 16px; padding: 30px; margin-top: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;
-            display: none; animation: slideUp 0.4s ease;
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .file-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
-        .file-item {
-            display: flex; align-items: center; gap: 15px; padding: 12px; 
-            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-        }
-        .f-icon { font-size: 1.5rem; }
-        .f-name { font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .f-size { font-size: 0.8rem; color: #64748b; }
-        .f-status { font-size: 0.8rem; font-weight: 700; color: #cbd5e1; }
-        .f-status.done { color: #10b981; }
-        .f-status.work { color: var(--primary); }
-
-        .format-select-group {
-            margin-bottom: 25px; padding: 20px; background: #fff7ed; 
-            border: 1px solid #fed7aa; border-radius: 12px;
-        }
-        .main-select {
-            width: 100%; padding: 12px; border: 2px solid #fdba74; border-radius: 8px;
-            font-size: 1rem; background: white; cursor: pointer; font-weight: 600;
-        }
-        .main-select:focus { outline: none; border-color: var(--primary); }
-
-        .action-btn {
-            background: var(--primary); color: white; border: none; padding: 15px 30px;
-            font-size: 1.1rem; font-weight: 700; border-radius: 50px; cursor: pointer;
-            width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3); }
-        .action-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        /* CONSOLE LOG */
-        #logArea {
-            margin-top: 20px; background: #1e293b; color: #a5b4fc; 
-            padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.8rem;
-            max-height: 150px; overflow-y: auto; display: none;
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
+        .drop-zone {
+            border: 2px dashed #475569;
+            background: rgba(15, 23, 42, 0.6);
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #f97316; /* Orange-500 */
+            background: rgba(249, 115, 22, 0.1);
+            transform: scale(1.01);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            transition: all 0.3s;
+        }
+        .btn-gradient:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(234, 88, 12, 0.5);
+        }
+        .btn-gradient:disabled {
+            background: #475569; cursor: not-allowed; transform: none; filter: grayscale(1);
+        }
+
+        .custom-select {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            outline: none;
+            width: 100%;
+            cursor: pointer;
+        }
+        .custom-select:focus { border-color: #f97316; }
+
+        /* Progress Bar Animation */
+        .progress-bar { transition: width 0.3s ease; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-   
-
-    <header>
-        <div class="brand">
-            <div style="width:35px; height:35px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🎬</div>
-            <div>A/V <span>CONVERTER</span></div>
+    <header class="h-20 border-b border-slate-700 flex items-center justify-between px-6 lg:px-10 shrink-0 bg-slate-900/90 backdrop-blur z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-xl shadow-lg shadow-orange-500/20">
+                <i class="fa-solid fa-film"></i>
+            </div>
+            <div>
+                <h1 class="font-outfit font-bold text-xl tracking-tight text-white">A/V Converter <span class="text-orange-500">Pro</span></h1>
+                <p class="text-xs text-slate-400">Kompresia & Formáty</p>
+            </div>
         </div>
-        <a href="index.html" class="back-btn">⬅ Späť na Dashboard</a>
+        <a href="index.html" class="text-slate-400 hover:text-white transition font-medium flex items-center gap-2 text-sm bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-500">
+            <i class="fa-solid fa-arrow-left"></i> Späť
+        </a>
     </header>
 
-    <div class="container">
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; color: var(--secondary);">Konvertor Audia a Videa</h1>
-            <p style="color: #64748b; font-size: 1rem;">
-                Univerzálny nástroj. Preveďte MOV na MP4, extrahujte hudbu z videa (MP4 na MP3)<br>
-                alebo zmeňte formát nahrávky (WAV na MP3).
-            </p>
-        </div>
+    <main class="flex-1 w-full max-w-5xl mx-auto p-6 flex flex-col gap-8">
 
-        <div class="drop-area" id="dropArea">
-            <div class="drop-icon">📂</div>
-            <div style="font-weight: 600; font-size: 1.1rem; color: #334155;">Nahrajte súbory</div>
-            <div style="color: #94a3b8; font-size: 0.9rem;">(Audio alebo Video súbory)</div>
-            <input type="file" id="fileInput" multiple accept="video/*, audio/*" style="display:none">
-        </div>
-
-        <div class="work-area" id="workArea">
+        <div class="drop-zone rounded-2xl p-10 text-center cursor-pointer relative overflow-hidden group" id="dropArea">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-orange-500/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
             
-            <div class="format-select-group">
-                <label style="display:block; font-weight:700; margin-bottom:10px; color:#c2410c;">Konvertovať všetko na:</label>
-                <select id="selFormat" class="main-select">
-                    <optgroup label="Video Formáty">
-                        <option value="mp4">MP4 (Najlepšie pre web/PC)</option>
-                        <option value="avi">AVI (Starší štandard)</option>
-                        <option value="mkv">MKV (Vysoká kvalita)</option>
-                        <option value="webm">WEBM (Google Video)</option>
-                        <option value="mov">MOV (Apple)</option>
-                    </optgroup>
-                    <optgroup label="Audio Formáty (Extrakcia zvuku)">
-                        <option value="mp3">MP3 (Najpoužívanejšie)</option>
-                        <option value="wav">WAV (Bez straty kvality)</option>
-                        <option value="flac">FLAC (Lossless)</option>
-                        <option value="aac">AAC (Apple Audio)</option>
-                        <option value="ogg">OGG (Open format)</option>
-                    </optgroup>
-                </select>
+            <div class="relative z-10 flex flex-col items-center gap-4">
+                <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-3xl text-slate-400 mb-2 group-hover:scale-110 group-hover:text-orange-400 transition duration-300">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-white">Klikni alebo pretiahni súbory</h2>
+                <p class="text-slate-400 max-w-md mx-auto">
+                    Podporujeme videá (MOV, MKV, AVI) aj audio (WAV, FLAC).<br>
+                    <span class="text-orange-400 font-medium">Ideálne na zmenšovanie veľkých videí.</span>
+                </p>
+            </div>
+            <input type="file" id="fileInput" multiple accept="video/*, audio/*" class="hidden">
+        </div>
+
+        <div id="workArea" class="hidden space-y-6">
+            
+            <div class="glass-panel p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Výstupný formát</label>
+                    <select id="selFormat" class="custom-select">
+                        <optgroup label="Video">
+                            <option value="mp4" selected>MP4 (Univerzálne)</option>
+                            <option value="mov">MOV (Apple)</option>
+                            <option value="mkv">MKV (Vysoká kvalita)</option>
+                            <option value="webm">WEBM (Web)</option>
+                        </optgroup>
+                        <optgroup label="Audio (Extrakcia)">
+                            <option value="mp3">MP3 (Audio)</option>
+                            <option value="wav">WAV (Lossless)</option>
+                            <option value="flac">FLAC (Hi-Res)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Kompresia / Veľkosť</label>
+                    <select id="selQuality" class="custom-select">
+                        <option value="copy">Pôvodná kvalita (Rýchle)</option>
+                        <option value="medium" selected>Stredná kompresia (Optimálne)</option>
+                        <option value="high">Silná kompresia (Malá veľkosť)</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="file-list" id="fileList"></div>
+            <div class="glass-panel p-6">
+                <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-slate-400"></i> Zoznam úloh
+                </h3>
+                <div id="fileList" class="flex flex-col gap-3"></div>
+            </div>
 
-            <button class="action-btn" id="btnConvert" onclick="startConversion()">
-                <span>⚡ Spustiť Konverziu</span>
+            <button id="btnConvert" class="btn-gradient w-full py-4 rounded-xl text-white font-bold text-lg shadow-xl flex items-center justify-center gap-3" onclick="startConversion()">
+                <i class="fa-solid fa-bolt"></i> Spustiť Konverziu
             </button>
 
-            <div id="logArea"></div>
+            <div class="bg-black/50 rounded-xl p-4 font-mono text-xs text-slate-400 max-h-32 overflow-y-auto border border-slate-800" id="logArea">
+                <div class="text-slate-500 italic">> Pripravený na prácu...</div>
+            </div>
+
         </div>
 
-    </div>
+    </main>
 
 <script>
-
-
-    // --- 2. FFmpeg SETUP ---
     const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true, corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js' });
+    let ffmpeg = null;
     let isFfmpegReady = false;
-
-    // --- 3. UI LOGIKA ---
     let filesQueue = [];
+    let currentFileId = null; // ID aktuálne spracovávaného súboru pre update progress baru
+
+    // UI Elements
     const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('fileInput');
     const workArea = document.getElementById('workArea');
     const fileList = document.getElementById('fileList');
     const logArea = document.getElementById('logArea');
+    const btnConvert = document.getElementById('btnConvert');
 
+    // Drag & Drop
     dropArea.addEventListener('click', () => fileInput.click());
     dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
     dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
@@ -206,148 +180,216 @@
     });
     fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
+    // --- INITIALIZATION ---
+    async function initFFmpeg() {
+        if (isFfmpegReady) return;
+        
+        log("Načítavam konvertor (FFmpeg)... Prosím čakajte.");
+        
+        ffmpeg = createFFmpeg({ 
+            log: false, // Vypneme default logy do konzoly, aby sme si robili vlastne
+            corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+            progress: ({ ratio }) => {
+                // Callback pre progress bar
+                if (currentFileId && ratio >= 0 && ratio <= 1) {
+                    updateProgress(currentFileId, ratio * 100);
+                }
+            }
+        });
+
+        await ffmpeg.load();
+        isFfmpegReady = true;
+        log("Jadro načítané. Pripravený.");
+    }
+
     function handleFiles(files) {
         if(files.length === 0) return;
         
-        // Load FFmpeg on first upload
-        if(!isFfmpegReady) { 
-            log("Načítavam FFmpeg jadro...");
-            ffmpeg.load().then(() => { 
-                isFfmpegReady = true; 
-                log("FFmpeg pripravený!"); 
-            });
-        }
+        // Init FFmpeg on first user interaction
+        initFFmpeg().catch(e => {
+            log("CHYBA NAČÍTANIA: " + e.message);
+            alert("Nepodarilo sa načítať konvertor. Skúste obnoviť stránku.");
+        });
 
         Array.from(files).forEach(f => {
-            filesQueue.push({
-                file: f,
-                id: Math.random().toString(36).substr(2, 9),
-                status: 'pending'
+            filesQueue.push({ 
+                file: f, 
+                id: Math.random().toString(36).substr(2, 9), 
+                status: 'pending',
+                progress: 0
             });
         });
         
         renderList();
-        workArea.style.display = 'block';
+        workArea.classList.remove('hidden');
     }
 
     function renderList() {
         fileList.innerHTML = '';
         filesQueue.forEach((item) => {
-            let icon = item.file.type.startsWith('video') ? '🎬' : '🎵';
+            let icon = item.file.type.includes('video') ? 'fa-video' : 'fa-music';
+            let statusColor = 'bg-slate-700';
             let statusText = 'Čaká';
-            let statusClass = 'f-status';
-
-            if(item.status === 'processing') { statusText = 'Spracovávam...'; statusClass += ' work'; }
-            if(item.status === 'done') { statusText = 'Hotovo ✅'; statusClass += ' done'; }
+            let progressWidth = item.progress + '%';
+            
+            if(item.status === 'processing') { 
+                statusText = `Spracovávam ${Math.round(item.progress)}%`; 
+                statusColor = 'bg-orange-500'; // Active bar
+            }
+            if(item.status === 'done') { 
+                statusText = 'Hotovo'; 
+                statusColor = 'bg-green-500'; 
+                progressWidth = '100%';
+            }
+            if(item.status === 'error') {
+                statusText = 'Chyba';
+                statusColor = 'bg-red-500';
+            }
 
             fileList.innerHTML += `
-                <div class="file-item">
-                    <div class="f-icon">${icon}</div>
-                    <div class="f-name">${item.file.name}</div>
-                    <div class="f-size">${(item.file.size/1024/1024).toFixed(2)} MB</div>
-                    <div class="${statusClass}" id="stat-${item.id}">${statusText}</div>
-                    ${item.status === 'pending' ? `<button onclick="removeFile('${item.id}')" style="border:none;background:none;cursor:pointer;color:red;">✖</button>` : ''}
+                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 relative overflow-hidden group">
+                    <div class="absolute bottom-0 left-0 h-1 bg-slate-700 w-full">
+                        <div class="h-full ${statusColor} progress-bar" style="width: ${progressWidth}"></div>
+                    </div>
+
+                    <div class="flex items-center gap-4 relative z-10">
+                        <div class="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center text-slate-300">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold text-white truncate">${item.file.name}</div>
+                            <div class="text-xs text-slate-400 flex justify-between mt-1">
+                                <span>${(item.file.size/1024/1024).toFixed(1)} MB</span>
+                                <span class="${item.status === 'processing' ? 'text-orange-400 animate-pulse' : 'text-slate-500'} font-bold" id="txt-${item.id}">
+                                    ${statusText}
+                                </span>
+                            </div>
+                        </div>
+                        ${item.status === 'pending' ? `
+                        <button onclick="removeFile('${item.id}')" class="text-slate-500 hover:text-red-400 transition px-2">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>` : ''}
+                        ${item.status === 'done' ? `
+                        <div class="text-green-400 text-lg"><i class="fa-solid fa-circle-check"></i></div>
+                        ` : ''}
+                    </div>
                 </div>
             `;
         });
     }
 
+    function updateProgress(id, percent) {
+        // Updatujeme len dáta v poli a re-renderujeme len ak je zmena výrazná (aby nesekalo UI)
+        const item = filesQueue.find(x => x.id === id);
+        if(item) {
+            item.progress = percent;
+            // Lokálny update DOMu pre plynulosť bez celého re-renderu
+            const txt = document.getElementById(`txt-${id}`);
+            if(txt) txt.innerText = `Spracovávam ${Math.round(percent)}%`;
+            
+            // Nájdeme bar v DOMe (trosku hacky ale rychle)
+            const bar = txt.parentElement.parentElement.parentElement.querySelector('.progress-bar');
+            if(bar) bar.style.width = `${percent}%`;
+        }
+    }
+
     window.removeFile = (id) => {
         filesQueue = filesQueue.filter(x => x.id !== id);
         renderList();
-        if(filesQueue.length === 0) workArea.style.display = 'none';
+        if(filesQueue.length === 0) workArea.classList.add('hidden');
     }
 
     function log(msg) {
-        logArea.style.display = 'block';
-        logArea.innerHTML += `> ${msg}<br>`;
+        logArea.innerHTML += `<div><span class="text-slate-600">[LOG]</span> ${msg}</div>`;
         logArea.scrollTop = logArea.scrollHeight;
     }
 
-    // --- 4. CONVERSION LOGIC ---
+    // --- CONVERSION LOGIC ---
     async function startConversion() {
-        if(!isFfmpegReady) { alert("FFmpeg sa ešte načítava, čakajte..."); return; }
+        if(!isFfmpegReady) { 
+            alert("Jadro sa ešte načítava. Skontrolujte internet alebo chvíľu počkajte."); 
+            return; 
+        }
         
-        const targetFormat = document.getElementById('selFormat').value;
-        const btn = document.getElementById('btnConvert');
+        const format = document.getElementById('selFormat').value;
+        const quality = document.getElementById('selQuality').value;
         
-        btn.disabled = true;
-        btn.innerHTML = "⏳ Pracujem...";
+        btnConvert.disabled = true;
+        btnConvert.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Pracujem...`;
 
         for (let item of filesQueue) {
-            if(item.status === 'done') continue; // Preskočiť hotové
+            if(item.status === 'done') continue;
 
             item.status = 'processing';
+            item.progress = 0;
+            currentFileId = item.id; // Nastavíme globálnu premennú pre callback
             renderList();
 
             try {
-                const fName = item.file.name;
-                // Vyčistiť meno od medzier pre FFmpeg
-                const safeName = "input_" + item.id + "_" + fName.replace(/\s/g, '_');
-                const outputName = `output_${item.id}.${targetFormat}`;
-
-                log(`Nahrávam ${fName} do pamäte...`);
-                ffmpeg.FS('writeFile', safeName, await fetchFile(item.file));
-
-                log(`Konvertujem na ${targetFormat.toUpperCase()}...`);
+                const fName = item.file.name.replace(/\s/g, '_'); 
+                const outputName = `output_${item.id}.${format}`;
                 
-                // Zostavenie príkazu
-                // Základ: -i input output
-                let args = ['-i', safeName];
+                log(`Nahrávam súbor do pamäte: ${fName}`);
+                ffmpeg.FS('writeFile', fName, await fetchFile(item.file));
 
-                // Optimalizácia pre video (rýchlosť)
-                const isVideoOut = ['mp4','avi','mkv','webm','mov'].includes(targetFormat);
-                const isAudioOut = ['mp3','wav','flac','aac','ogg'].includes(targetFormat);
+                log(`Spúšťam konverziu na ${format.toUpperCase()}...`);
+                
+                let args = ['-i', fName];
 
-                if (isVideoOut) {
-                    // Použiť ultrafast preset pre x264
-                    args.push('-preset', 'ultrafast');
-                    // Ak je vstup video a výstup video, kodeky:
-                    if (targetFormat === 'mp4') { args.push('-c:v', 'libx264', '-c:a', 'aac'); }
-                    if (targetFormat === 'webm') { args.push('-c:v', 'libvpx-vp9', '-c:a', 'libopus'); }
-                }
-
-                if (isAudioOut) {
-                    // Ak je vstup video a chceme audio, FFmpeg to spraví automaticky, ale môžeme dať -vn (no video)
-                    args.push('-vn'); 
-                    // Kodeky
-                    if (targetFormat === 'mp3') { args.push('-c:a', 'libmp3lame'); }
+                // AUDIO ONLY
+                if (['mp3', 'wav', 'flac'].includes(format)) {
+                    args.push('-vn'); // No video
+                    if(format === 'mp3') args.push('-ab', '192k');
+                } 
+                // VIDEO MODE
+                else {
+                    args.push('-c:v', 'libx264'); // Kodek
+                    args.push('-preset', 'ultrafast'); // Rýchlosť
+                    
+                    if (quality === 'medium') {
+                        args.push('-crf', '28'); 
+                    } else if (quality === 'high') {
+                        // Agresívna kompresia
+                        args.push('-crf', '32');
+                        args.push('-vf', 'scale=-2:720'); // 720p
+                        args.push('-r', '24'); // 24fps
+                    }
                 }
 
                 args.push(outputName);
 
                 await ffmpeg.run(...args);
 
-                log(`Hotovo. Sťahujem...`);
+                log(`Hotovo! Sťahujem...`);
                 const data = ffmpeg.FS('readFile', outputName);
 
-                // Určenie MIME
-                let mime = 'application/octet-stream';
-                if(targetFormat === 'mp4') mime = 'video/mp4';
-                if(targetFormat === 'mp3') mime = 'audio/mpeg';
-                if(targetFormat === 'wav') mime = 'audio/wav';
+                download(new Blob([data.buffer]), outputName.replace(`output_${item.id}`, 'converted'), `video/${format}`);
 
-                download(new Blob([data.buffer], { type: mime }), fName.split('.')[0] + '.' + targetFormat, mime);
-
-                // Cleanup
-                ffmpeg.FS('unlink', safeName);
+                // Clean memory
+                ffmpeg.FS('unlink', fName);
                 ffmpeg.FS('unlink', outputName);
 
                 item.status = 'done';
+                item.progress = 100;
                 renderList();
 
             } catch(e) {
                 console.error(e);
-                log(`CHYBA: ${e.message}`);
+                log(`CRITICAL ERROR: ${e.message}`);
+                
+                if(e.message && e.message.includes('memory')) {
+                    alert("⚠️ Chyba pamäte: Prehliadač nedovolil spracovať taký veľký súbor. Skúste zavrieť ostatné taby.");
+                }
+                
                 item.status = 'error';
                 renderList();
             }
         }
 
-        btn.disabled = false;
-        btn.innerHTML = "⚡ Spustiť Konverziu";
+        currentFileId = null;
+        btnConvert.disabled = false;
+        btnConvert.innerHTML = `<i class="fa-solid fa-bolt"></i> Spustiť Konverziu`;
     }
-
 </script>
 </body>
 </html>
