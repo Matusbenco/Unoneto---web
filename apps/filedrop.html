@@ -123,7 +123,7 @@
         <div style="text-align: center;">
             <div class="drop-icon">⬇️</div>
             <h2 id="recv-title">Pripájam sa...</h2>
-            <p id="recv-desc" style="color: var(--text-muted)">Čakám na spojenie s odosielateľom...</p>
+            <p id="recv-desc" style="color: var(--text-muted)">Hľadám odosielateľa v sieti...</p>
             
             <button id="btn-start-download" class="btn btn-download" onclick="requestDownload()">
                 📥 STIAHNUŤ SÚBORY
@@ -169,7 +169,7 @@
 
             <div class="info-note">
                 ⚠️ <b>NEZATVÁRAJ TOTO OKNO!</b><br>
-                Súbory sa začnú odosielať priamo z tvojho zariadenia až vtedy, keď príjemca klikne na "Stiahnuť".
+                Odosielanie začne až vtedy, keď príjemca klikne na tlačidlo "Stiahnuť".
             </div>
 
             <div id="send-progress" class="progress-box">
@@ -189,6 +189,19 @@
     let peer = null;
     let conn = null;
     let filesBuffer = []; 
+
+    // --- KONFIGURÁCIA STUN (PRE MOBILNÉ DÁTA) ---
+    // Toto je kľúčové pre fungovanie cez internet
+    const peerConfig = {
+        config: {
+            'iceServers': [
+                { url: 'stun:stun.l.google.com:19302' },
+                { url: 'stun:stun1.l.google.com:19302' },
+                { url: 'stun:stun2.l.google.com:19302' }
+            ]
+        },
+        debug: 1 // 0=none, 1=errors, 2=warnings, 3=all
+    };
 
     const views = {
         receiver: document.getElementById('view-receiver'),
@@ -210,6 +223,8 @@
         } else {
             // ODOSIELATEĽ
             switchView('upload');
+            // Inicializujeme Peer až pri generovaní linku alebo hneď,
+            // ale pre istotu hneď, aby sme chytili errory
             initPeer(); 
             setupDragDrop();
         }
@@ -222,8 +237,8 @@
 
     // --- PEERJS LOGIKA ---
     function initPeer(customId = null, isReceiver = false) {
-        // Inicializácia P2P siete
-        peer = new Peer(customId);
+        // Inicializácia P2P siete s STUN servermi
+        peer = new Peer(customId, peerConfig);
 
         peer.on('open', (id) => {
             console.log('Moje ID:', id);
@@ -231,7 +246,9 @@
                 connectToSender();
             } else {
                 // Odosielateľ: Vygenerujeme link
-                const link = `${window.location.href.split('?')[0]}?id=${id}`;
+                // Odstránime prípadné predchádzajúce parametre z URL
+                const baseUrl = window.location.href.split('?')[0];
+                const link = `${baseUrl}?id=${id}`;
                 document.getElementById('share-link').innerText = link;
             }
         });
@@ -245,14 +262,31 @@
         peer.on('error', err => {
             const errBox = document.getElementById('global-error');
             errBox.style.display = 'block';
-            errBox.innerText = "Chyba spojenia: " + err.type;
+            
+            let msg = "Neznáma chyba";
+            if (err.type === 'peer-unavailable') msg = "Odosielateľ sa nenašiel. Možno už zatvoril stránku.";
+            else if (err.type === 'network') msg = "Chyba siete. Skontroluj internet/firewall.";
+            else msg = err.type;
+
+            errBox.innerText = "❌ " + msg;
             console.error(err);
+        });
+        
+        peer.on('disconnected', () => {
+             // Pokus o reconnect, ak len vypadla sieť
+             // peer.reconnect();
+             console.log('Peer disconnected.');
         });
     }
 
     function connectToSender() {
         if (!peer || !targetPeerId) return;
-        conn = peer.connect(targetPeerId);
+        
+        // Skúsime sa pripojiť s reliable: true
+        conn = peer.connect(targetPeerId, {
+            reliable: true
+        });
+        
         setupReceiverEvents();
     }
 
@@ -284,16 +318,22 @@
         conn.on('data', (data) => handleIncomingData(data));
         
         conn.on('close', () => {
-            document.getElementById('recv-title').innerText = "Spojenie prerušené";
-            document.getElementById('recv-desc').style.color = "red";
+            // Ak sa preruší spojenie
+            if(document.getElementById('recv-fill').style.width !== '100%') {
+                 document.getElementById('recv-title').innerText = "Spojenie prerušené";
+                 document.getElementById('recv-desc').style.color = "#fca5a5";
+                 document.getElementById('recv-desc').innerText = "Odosielateľ pravdepodobne zatvoril okno alebo vypadla sieť.";
+            }
         });
     }
 
     function requestDownload() {
-        if (conn) {
+        if (conn && conn.open) {
             conn.send({ type: 'START_DOWNLOAD' });
             document.getElementById('btn-start-download').style.display = 'none';
             document.getElementById('recv-desc').innerText = "Sťahovanie začalo...";
+        } else {
+            alert("Spojenie ešte nie je aktívne. Čakaj chvíľu.");
         }
     }
 
