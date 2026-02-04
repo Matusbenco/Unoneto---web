@@ -30,14 +30,12 @@
         /* PREVIEWS */
         .preview-box { background: white; border-radius: 8px; overflow: hidden; color: #333; font-family: Arial, sans-serif; }
         
-        /* Google */
         .g-wrap { padding: 15px; }
         .g-link { font-size: 12px; color: #202124; display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
         .g-title { font-size: 18px; color: #1a0dab; text-decoration: none; display: block; line-height: 1.3; margin-bottom: 3px; }
         .g-title:hover { text-decoration: underline; }
         .g-desc { font-size: 13px; color: #4d5156; line-height: 1.5; }
 
-        /* Facebook */
         .fb-wrap { background: #f0f2f5; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; max-width: 100%; }
         .fb-img-area { width: 100%; padding-bottom: 52%; position: relative; background: #ddd; }
         .fb-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -64,6 +62,9 @@
         .dot-green { background: #10b981; box-shadow: 0 0 5px #10b981; }
         .dot-red { background: #ef4444; box-shadow: 0 0 5px #ef4444; }
         .dot-orange { background: #f59e0b; box-shadow: 0 0 5px #f59e0b; }
+
+        .manual-box { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
@@ -98,9 +99,31 @@
             </div>
             
             <div id="loading" class="hidden mt-4 text-emerald-400 text-sm font-bold animate-pulse">
-                <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Skúšam pripojenie k serveru...
+                <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Pripájam sa k webu...
             </div>
-            <div id="errorMsg" class="hidden mt-4 p-3 bg-red-500/20 text-red-200 text-xs rounded border border-red-500/30 text-left"></div>
+
+            <div id="manualInputArea" class="hidden manual-box mt-6 p-4 bg-slate-800/50 rounded-xl border border-slate-700 text-left">
+                <div class="flex items-start gap-3">
+                    <div class="text-orange-400 text-2xl"><i class="fa-solid fa-shield-cat"></i></div>
+                    <div class="flex-1">
+                        <h3 class="text-orange-400 font-bold mb-1">Web je chránený proti botom</h3>
+                        <p class="text-slate-400 text-xs mb-3">Automatické stiahnutie zlyhalo (Firewall/Cloudflare). <br>Vložte zdrojový kód manuálne pre 100% výsledok:</p>
+                        
+                        <div class="bg-black/30 p-2 rounded text-[10px] text-slate-300 font-mono mb-3 border border-slate-600">
+                            1. Otvorte váš web v novej karte.<br>
+                            2. Stlačte <b>Ctrl + U</b> (Zobraziť zdrojový kód).<br>
+                            3. Stlačte <b>Ctrl + A</b> (Označiť všetko) a <b>Ctrl + C</b> (Kopírovať).<br>
+                            4. Vložte kód nižšie (Ctrl + V).
+                        </div>
+
+                        <textarea id="htmlInput" class="w-full h-32 bg-slate-900 border border-slate-600 rounded p-2 text-xs text-slate-300 font-mono focus:border-emerald-500 outline-none" placeholder="Sem vložte skopírovaný HTML kód..."></textarea>
+                        
+                        <button onclick="runManualAudit()" class="mt-3 bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-code"></i> Analyzovať Vložený Kód
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="resultsArea" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 pb-10">
@@ -130,8 +153,8 @@
                                 <div class="text-[10px] text-slate-500 uppercase">Obrázkov</div>
                             </div>
                             <div class="bg-slate-800/50 p-2 rounded text-center">
-                                <div class="text-lg font-bold text-pink-400" id="statLoadTime">-</div>
-                                <div class="text-[10px] text-slate-500 uppercase">Odozva</div>
+                                <div class="text-lg font-bold text-pink-400" id="statHtags">0</div>
+                                <div class="text-[10px] text-slate-500 uppercase">H-Tagov</div>
                             </div>
                         </div>
                     </div>
@@ -201,30 +224,21 @@
     async function fetchHtml(url) {
         const encodedUrl = encodeURIComponent(url);
         
-        // Zoznam proxy serverov (Skúšame v poradí)
         const proxies = [
             { url: `https://api.allorigins.win/get?url=${encodedUrl}`, type: 'json' },
             { url: `https://corsproxy.io/?${encodedUrl}`, type: 'text' },
-            { url: `https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`, type: 'text' },
-            { url: `https://thingproxy.freeboard.io/fetch/${url}`, type: 'text' }
+            { url: `https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`, type: 'text' }
         ];
-
-        let lastError;
 
         for (const proxy of proxies) {
             try {
-                const start = performance.now();
-                // Timeout 5s na jeden proxy
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
 
-                const res = await fetch(proxy.url, { 
-                    signal: controller.signal,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' } // Niektoré proxy to vyžadujú
-                });
+                const res = await fetch(proxy.url, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                if (!res.ok) throw new Error("HTTP Error");
                 
                 let text;
                 if (proxy.type === 'json') {
@@ -234,25 +248,21 @@
                     text = await res.text();
                 }
 
-                if (!text || text.length < 50) throw new Error("Prázdna odpoveď");
-                
-                const time = Math.round(performance.now() - start);
-                console.log(`Úspech cez proxy: ${proxy.url}`);
-                return { html: text, time };
+                if (!text || text.length < 50) throw new Error("Empty");
+                return text;
 
             } catch (e) {
-                console.warn(`Proxy failed: ${proxy.url}`, e);
-                lastError = e;
+                console.warn(`Proxy failed: ${proxy.url}`);
             }
         }
-        throw lastError; // Ak zlyhajú všetky
+        throw new Error("All proxies failed");
     }
 
     async function runAudit() {
         const input = document.getElementById('urlInput');
         const btn = document.getElementById('btnAnalyze');
         const loading = document.getElementById('loading');
-        const err = document.getElementById('errorMsg');
+        const manualArea = document.getElementById('manualInputArea');
         const results = document.getElementById('resultsArea');
         
         let url = input.value.trim();
@@ -261,54 +271,76 @@
         url = url.replace(/\s/g, ''); 
         if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
-        // Reset UI
-        err.classList.add('hidden');
+        // Reset
+        manualArea.classList.add('hidden');
         results.classList.add('hidden');
         loading.classList.remove('hidden');
         btn.disabled = true;
         input.disabled = true;
 
         try {
-            const data = await fetchHtml(url);
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.html, "text/html");
-
-            // Meta Data Extraction
-            const meta = {
-                title: doc.querySelector('title')?.innerText.trim() || "",
-                desc: doc.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() || "",
-                h1: Array.from(doc.querySelectorAll('h1')).map(h => h.innerText.trim()).filter(t => t.length > 0),
-                h2s: doc.querySelectorAll('h2').length,
-                h3s: doc.querySelectorAll('h3').length,
-                ogTitle: doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || "",
-                ogDesc: doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || "",
-                ogImage: doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || "",
-                favicon: `https://www.google.com/s2/favicons?domain=${url}&sz=64`,
-                domain: new URL(url).hostname,
-                images: Array.from(doc.querySelectorAll('img')),
-                links: Array.from(doc.querySelectorAll('a')),
-                bodyText: doc.body.innerText,
-                loadTime: data.time
-            };
-
-            // Image Path Fix
-            if (meta.ogImage && !meta.ogImage.startsWith('http')) {
-                meta.ogImage = new URL(url).origin + (meta.ogImage.startsWith('/') ? '' : '/') + meta.ogImage;
-            }
-
-            renderResults(meta, url);
-            loading.classList.add('hidden');
-            results.classList.remove('hidden');
-            setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-
+            const htmlText = await fetchHtml(url);
+            processHtml(htmlText, url);
         } catch (e) {
             loading.classList.add('hidden');
-            err.innerHTML = `<strong>Nepodarilo sa načítať web:</strong><br>Všetky pokusy o pripojenie zlyhali (403/Timeout).<br>Tento web má silnú ochranu proti botom.`;
-            err.classList.remove('hidden');
+            manualArea.classList.remove('hidden'); // SHOW MANUAL INPUT
         } finally {
             btn.disabled = false;
             input.disabled = false;
         }
+    }
+
+    function runManualAudit() {
+        const html = document.getElementById('htmlInput').value;
+        const urlInput = document.getElementById('urlInput').value || "manual-input.sk";
+        
+        if(html.length < 20) {
+            alert("Vložte prosím validný HTML kód.");
+            return;
+        }
+
+        let url = urlInput.replace(/\s/g, '');
+        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+        document.getElementById('manualInputArea').classList.add('hidden');
+        document.getElementById('loading').classList.remove('hidden');
+
+        setTimeout(() => {
+            processHtml(html, url);
+        }, 500);
+    }
+
+    function processHtml(htmlText, url) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        // Extraction
+        const meta = {
+            title: doc.querySelector('title')?.innerText.trim() || "",
+            desc: doc.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() || "",
+            h1: Array.from(doc.querySelectorAll('h1')).map(h => h.innerText.trim()).filter(t => t.length > 0),
+            h2s: doc.querySelectorAll('h2').length,
+            h3s: doc.querySelectorAll('h3').length,
+            ogTitle: doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || "",
+            ogDesc: doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || "",
+            ogImage: doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || "",
+            favicon: `https://www.google.com/s2/favicons?domain=${url}&sz=64`,
+            domain: new URL(url).hostname,
+            images: Array.from(doc.querySelectorAll('img')),
+            links: Array.from(doc.querySelectorAll('a')),
+            bodyText: doc.body.innerText
+        };
+
+        // Image Path Fix
+        if (meta.ogImage && !meta.ogImage.startsWith('http')) {
+            meta.ogImage = new URL(url).origin + (meta.ogImage.startsWith('/') ? '' : '/') + meta.ogImage;
+        }
+
+        renderResults(meta, url);
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('resultsArea').classList.remove('hidden');
+        
+        setTimeout(() => document.getElementById('resultsArea').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     }
 
     function renderResults(meta, url) {
@@ -317,10 +349,6 @@
         document.getElementById('statWords').innerText = words;
         document.getElementById('statLinks').innerText = meta.links.length;
         document.getElementById('statImgCount').innerText = meta.images.length;
-        
-        const timeEl = document.getElementById('statLoadTime');
-        timeEl.innerText = meta.loadTime + 'ms';
-        timeEl.className = meta.loadTime < 800 ? 'text-lg font-bold text-emerald-400' : 'text-lg font-bold text-orange-400';
 
         // Previews
         document.getElementById('gTitle').innerText = truncate(meta.title, 60) || "Bez titulku";
@@ -346,7 +374,7 @@
 
         analyzeKeywords(meta.bodyText);
         
-        // Socials check
+        // Socials
         const socialContainer = document.getElementById('socialList');
         socialContainer.innerHTML = '';
         const networks = [
@@ -385,11 +413,7 @@
         const check = (label, isPass, passMsg, failMsg, weight = 1, isWarning = false) => {
             totalWeight += weight;
             totalChecks++;
-            
-            if (isPass) {
-                score += weight;
-                passedChecks++;
-            }
+            if (isPass) { score += weight; passedChecks++; }
 
             let color = isPass ? 'dot-green' : (isWarning ? 'dot-orange' : 'dot-red');
             let textCol = isPass ? 'text-slate-300' : (isWarning ? 'text-orange-300' : 'text-red-300');
@@ -405,38 +429,32 @@
             `;
         };
 
-        // 1. TITULOK (Strict)
-        if (meta.title.length === 0) check("Titulok", false, "", "Chýba úplne", 5);
-        else if (meta.title.length < 15) check("Titulok", false, "", "Príliš krátky (<15)", 3, true);
-        else if (meta.title.length > 70) check("Titulok", false, "", "Príliš dlhý (>70)", 2, true);
-        else check("Titulok", true, "Optimálna dĺžka ✅", "", 3);
+        // KONTROLY (PRÍSNE)
+        if (meta.title.length === 0) check("Titulok", false, "", "Chýba", 5);
+        else if (meta.title.length < 15) check("Titulok", false, "", "Krátky (<15)", 3, true);
+        else check("Titulok", true, "Optimálne ✅", "", 3);
 
-        // 2. POPIS (Strict)
-        if (meta.desc.length === 0) check("Meta Popis", false, "", "Chýba (Kritické)", 5);
-        else if (meta.desc.length < 70) check("Meta Popis", false, "", "Krátky (nevyužité)", 3, true);
-        else check("Meta Popis", true, "Dobrý rozsah ✅", "", 3);
+        if (meta.desc.length === 0) check("Meta Popis", false, "", "Chýba", 5);
+        else if (meta.desc.length < 70) check("Meta Popis", false, "", "Krátky", 3, true);
+        else check("Meta Popis", true, "OK ✅", "", 3);
 
-        // 3. NADPIS H1
-        if (meta.h1.length === 0) check("Nadpis H1", false, "", "Chýba H1 nadpis", 5);
-        else if (meta.h1.length > 1) check("Nadpis H1", false, "", "Viacero H1 (zmätočné)", 3, true);
-        else check("Nadpis H1", true, "Správne použitie ✅", "", 3);
+        if (meta.h1.length === 0) check("Nadpis H1", false, "", "Chýba", 5);
+        else if (meta.h1.length > 1) check("Nadpis H1", false, "", "Duplicita", 3, true);
+        else check("Nadpis H1", true, "OK ✅", "", 3);
 
-        // 4. OBSAH
-        if (wordCount < 300) check("Obsah textu", false, "", "Kriticky málo obsahu", 4);
-        else if (wordCount < 600) check("Obsah textu", false, "", "Priemer (odporúčam viac)", 2, true);
-        else check("Obsah textu", true, "Bohatý obsah ✅", "", 3);
+        if (wordCount < 300) check("Obsah", false, "", "Málo textu", 4);
+        else if (wordCount < 600) check("Obsah", false, "", "Priemer", 2, true);
+        else check("Obsah", true, "Výborný ✅", "", 3);
 
-        // 5. OBRÁZKY (ALT Check)
-        if (meta.images.length === 0) check("Obrázky", false, "", "Web je bez obrázkov", 1, true);
+        if (meta.images.length === 0) check("Obrázky", false, "", "Žiadne", 1, true);
         else {
             const missingAlt = meta.images.filter(i => !i.alt || i.alt.length < 2).length;
-            if (missingAlt > 0) check("ALT Popisy", false, "", `${missingAlt} obr. bez popisu`, 3, true);
-            else check("ALT Popisy", true, "Všetky majú popis ✅", "", 2);
+            if (missingAlt > 0) check("ALT", false, "", `${missingAlt}x chýba popis`, 3, true);
+            else check("ALT", true, "Všetky OK ✅", "", 2);
         }
 
-        // 6. SOCIAL & LINKY
-        check("Social Náhľad", meta.ogImage.length > 5, "Nastavený ✅", "Chýba og:image", 2);
-        check("Interné linky", meta.links.length > 3, "OK ✅", "Málo prelinkovaní", 1);
+        check("Social", meta.ogImage.length > 5, "Nastavené ✅", "Chýba náhľad", 2);
+        check("Linky", meta.links.length > 3, "OK ✅", "Málo", 1);
 
         const finalScore = Math.max(0, Math.round((score / totalWeight) * 100));
         
@@ -450,10 +468,10 @@
         document.getElementById('auditPassCount').innerText = `${passedChecks}/${totalChecks} OK`;
 
         let msg = "";
-        if (finalScore > 90) msg = "Profesionálna práca! Web spĺňa prísne SEO štandardy.";
-        else if (finalScore > 70) msg = "Dobrý stav, ale s priestorom na zlepšenie. Pozrite oranžové varovania.";
-        else if (finalScore > 40) msg = "Priemerný web. Obsah alebo technické meta dáta potrebujú doplniť.";
-        else msg = "Kritický stav. Web ignoruje základné pravidlá pre vyhľadávače.";
+        if (finalScore > 90) msg = "Perfektné! Web spĺňa prísne SEO kritériá.";
+        else if (finalScore > 70) msg = "Dobrý stav, ale s priestorom na zlepšenie.";
+        else if (finalScore > 40) msg = "Priemerný web. Nutné doplniť meta dáta.";
+        else msg = "Slabý výsledok. Web potrebuje zásadnú optimalizáciu.";
         verdictEl.innerText = msg;
     }
 
