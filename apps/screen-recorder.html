@@ -3,254 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nahrávač obrazovky | OfficeSuite</title>
-    <script src="coi-serviceworker.js"></script>
+    <title>Screen Recorder Studio | Unoneto</title>
     
+    <script src="coi-serviceworker.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f4f4f9; text-align: center; color: #333; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         
-        .recorder-box {
-            background: white; padding: 30px; border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px;
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
-        video {
-            width: 100%; max-height: 500px; background: #000; border-radius: 8px;
-            margin: 20px 0; display: none;
+        .btn-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s;
         }
-
-        .controls {
-            display: flex; justify-content: center; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 20px;
-        }
-
-        select, button {
-            padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+        .btn-gradient:hover {
+            filter: brightness(1.1); transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(220, 38, 38, 0.5);
         }
         
-        select { border: 2px solid #e2e8f0; background: #fff; color: #4a5568; }
-        
-        button { border: none; color: white; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
-        #btn-start { background-color: #3182ce; }
-        #btn-stop { background-color: #e53e3e; display: none; }
-
-        .status { margin-top: 20px; font-weight: 500; color: #718096; min-height: 24px; }
-        .error-log { color: #e53e3e; font-size: 0.9em; margin-top: 10px; display: none; }
-
-        .rec-dot {
-            color: #e53e3e; font-weight: bold; animation: pulse 1.5s infinite; 
-            display: none; margin-bottom: 10px; font-size: 1.2em;
+        .toggle-btn {
+            background: #1e293b; border: 1px solid #334155; color: #94a3b8;
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
         }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .toggle-btn.active {
+            background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #10b981;
+        }
+
+        video { width: 100%; border-radius: 12px; background: #000; max-height: 60vh; }
+        
+        .rec-indicator {
+            width: 12px; height: 12px; background: #ef4444; border-radius: 50%;
+            display: inline-block; margin-right: 8px; animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <h1>Nahrávač obrazovky</h1>
-    
-    <div class="recorder-box">
-        <div class="rec-dot" id="recDot">🔴 NAHRÁVANIE BEŽÍ...</div>
-        
-        <video id="preview" autoplay muted playsinline></video>
+    <header class="h-20 border-b border-slate-700 flex items-center justify-between px-6 lg:px-10 shrink-0 bg-slate-900/90 backdrop-blur z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white text-xl shadow-lg shadow-red-500/20">
+                <i class="fa-solid fa-video"></i>
+            </div>
+            <div>
+                <h1 class="font-outfit font-bold text-xl tracking-tight text-white">Screen Recorder <span class="text-red-500">Studio</span></h1>
+                <p class="text-xs text-slate-400">Video & Audio Mixer</p>
+            </div>
+        </div>
+        <a href="index.html" class="text-slate-400 hover:text-white transition font-medium flex items-center gap-2 text-sm bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-500">
+            <i class="fa-solid fa-arrow-left"></i> Späť
+        </a>
+    </header>
 
-        <div class="controls">
-            <select id="formatSelect">
-                <option value="original">WebM (Originál - Bezpečné)</option>
-                <option value="mp4" selected>MP4 (Konverzia)</option>
-                <option value="avi">AVI</option>
-                <option value="gif">GIF (Bez zvuku)</option>
-            </select>
+    <main class="flex-1 w-full max-w-6xl mx-auto p-6 flex flex-col gap-6">
 
-            <button id="btn-start">▶ Spustiť nahrávanie</button>
-            <button id="btn-stop">⏹ Ukončiť</button>
+        <div class="glass-panel p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button class="toggle-btn" id="btnMic" onclick="toggleAudio('mic')">
+                        <i class="fa-solid fa-microphone"></i> Mikrofón
+                    </button>
+                    <button class="toggle-btn" id="btnSys" onclick="toggleAudio('sys')">
+                        <i class="fa-solid fa-volume-high"></i> Zvuk PC
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <label class="text-slate-400 text-sm font-bold">Formát:</label>
+                    <select id="formatSelect" class="bg-slate-900 border border-slate-700 text-white text-sm rounded-lg p-2.5 outline-none focus:border-red-500">
+                        <option value="webm">WebM (Originál - Rýchle)</option>
+                        <option value="mp4" selected>MP4 (Kompatibilné)</option>
+                        <option value="gif">GIF (Bez zvuku)</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="btnStart" class="btn-gradient text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-red-600/20" onclick="startRecording()">
+                        <i class="fa-solid fa-circle"></i> Nahrávať
+                    </button>
+                    <button id="btnStop" class="bg-slate-700 hover:bg-slate-600 text-white px-8 py-3 rounded-xl font-bold hidden items-center gap-2 border border-slate-600" onclick="stopRecording()">
+                        <i class="fa-solid fa-stop"></i> Ukončiť
+                    </button>
+                </div>
+            </div>
+
+            <div id="audioHint" class="hidden mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-200 text-sm text-center">
+                <i class="fa-solid fa-circle-exclamation mr-2"></i>
+                <b>Dôležité:</b> V okne, ktoré vyskočí, musíte zaškrtnúť <b>"Zdieľať zvuk systému"</b> (Share system audio), inak bude video bez zvuku PC.
+            </div>
         </div>
 
-        <div class="status" id="statusLog">Pripravené.</div>
-        <div class="error-log" id="errorLog"></div>
-    </div>
+        <div class="glass-panel p-2 relative min-h-[400px] flex items-center justify-center bg-black/40">
+            
+            <div id="placeholder" class="text-center text-slate-500">
+                <i class="fa-solid fa-desktop text-6xl mb-4 opacity-50"></i>
+                <p>Náhľad obrazovky sa objaví tu</p>
+            </div>
+
+            <video id="previewVideo" autoplay muted playsinline class="hidden"></video>
+
+            <div id="recStatus" class="absolute top-6 left-6 bg-red-500/90 backdrop-blur text-white px-4 py-2 rounded-full text-xs font-bold items-center gap-2 hidden shadow-lg animate-pulse">
+                <div class="w-2 h-2 bg-white rounded-full"></div>
+                NAHRÁVAM... <span id="timer">00:00</span>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <div id="statusLog" class="text-slate-400 text-sm font-mono h-6">Pripravené na nahrávanie.</div>
+            <div id="errorLog" class="text-red-400 text-sm font-mono mt-2 hidden"></div>
+        </div>
+
+    </main>
 
 <script>
     const { createFFmpeg, fetchFile } = FFmpeg;
     let ffmpeg = null;
-
-    const preview = document.getElementById('preview');
-    const btnStart = document.getElementById('btn-start');
-    const btnStop = document.getElementById('btn-stop');
-    const formatSelect = document.getElementById('formatSelect');
-    const statusLog = document.getElementById('statusLog');
-    const errorLog = document.getElementById('errorLog');
-
     let mediaRecorder;
     let recordedChunks = [];
-    let supportedMimeType = "";
+    let stream = null;
+    let micStream = null;
+    let audioContext = null;
+    let mixedDest = null;
+    let timerInterval;
+    let startTime;
 
-    // 1. Zistenie najlepšieho formátu pre tento prehliadač
-    function getSupportedMimeType() {
-        const types = [
-            "video/webm;codecs=vp9", 
-            "video/webm;codecs=vp8", 
-            "video/webm", 
-            "video/mp4"
-        ];
-        for (const type of types) {
-            if (MediaRecorder.isTypeSupported(type)) {
-                return type;
-            }
-        }
-        return "";
-    }
+    // Settings State
+    let state = {
+        mic: false,
+        sys: false
+    };
 
-    // 2. Načítanie FFmpeg (iba ak treba)
-    async function loadFFmpeg() {
-        if (ffmpeg) return true;
-        statusLog.innerText = "⏳ Načítavam konvertor...";
-        try {
-            ffmpeg = createFFmpeg({ corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js', log: true });
-            await ffmpeg.load();
-            statusLog.innerText = "✅ Konvertor pripravený.";
-            return true;
-        } catch (e) {
-            console.error(e);
-            errorLog.style.display = 'block';
-            errorLog.innerText = "Chyba konvertora: " + e.message;
-            return false;
-        }
-    }
+    // UI Elements
+    const btnMic = document.getElementById('btnMic');
+    const btnSys = document.getElementById('btnSys');
+    const audioHint = document.getElementById('audioHint');
+    const previewVideo = document.getElementById('previewVideo');
+    const placeholder = document.getElementById('placeholder');
+    const recStatus = document.getElementById('recStatus');
+    const timerDisplay = document.getElementById('timer');
+    const statusLog = document.getElementById('statusLog');
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
 
-    btnStart.addEventListener('click', async () => {
-        recordedChunks = [];
-        errorLog.style.display = 'none';
+    // --- 1. UI LOGIKA ---
+    
+    function toggleAudio(type) {
+        state[type] = !state[type];
         
-        supportedMimeType = getSupportedMimeType();
-        if (!supportedMimeType) {
-            alert("Tvoj prehliadač nepodporuje nahrávanie.");
-            return;
+        // Update UI classes
+        if (type === 'mic') btnMic.classList.toggle('active');
+        if (type === 'sys') {
+            btnSys.classList.toggle('active');
+            // Show hint only if system audio is requested
+            if(state.sys) audioHint.classList.remove('hidden');
+            else audioHint.classList.add('hidden');
         }
+    }
 
+    function updateTimer() {
+        const diff = Math.floor((Date.now() - startTime) / 1000);
+        const m = Math.floor(diff / 60).toString().padStart(2, '0');
+        const s = (diff % 60).toString().padStart(2, '0');
+        timerDisplay.innerText = `${m}:${s}`;
+    }
+
+    // --- 2. RECORDING LOGIC (THE HARD PART) ---
+
+    async function startRecording() {
+        recordedChunks = [];
+        document.getElementById('errorLog').style.display = 'none';
+        
         try {
-            const stream = await navigator.mediaDevices.getDisplayMedia({
+            statusLog.innerText = "Pripravujem zdroje...";
+
+            // A. GET SCREEN + SYSTEM AUDIO
+            // Ak chceme system audio, musime dufat ze uzivatel zaskrtne checkbox v prehliadaci
+            const displayConstraints = {
                 video: { cursor: "always" },
-                audio: true // Pokus o zvuk
-            });
+                audio: state.sys // Toto povie prehliadacu, nech ponukne audio
+            };
 
-            preview.srcObject = stream;
-            preview.style.display = 'block';
-            btnStart.style.display = 'none';
-            btnStop.style.display = 'flex';
-            document.getElementById('recDot').style.display = 'block';
-            formatSelect.disabled = true;
-            statusLog.innerText = "Nahrávam...";
+            stream = await navigator.mediaDevices.getDisplayMedia(displayConstraints);
 
-            // Inicializácia nahrávača
-            mediaRecorder = new MediaRecorder(stream, { mimeType: supportedMimeType });
+            // Kontrola: Dal nám používateľ naozaj zvuk systému?
+            const hasSysAudio = stream.getAudioTracks().length > 0;
+            if (state.sys && !hasSysAudio) {
+                alert("⚠️ Upozornenie: Nezaškrtli ste 'Zdieľať zvuk systému' v okne prehliadača. Nahrávka bude bez zvuku PC.");
+            }
+
+            // B. GET MICROPHONE (If requested)
+            if (state.mic) {
+                try {
+                    micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+                } catch (e) {
+                    console.error("Mic error:", e);
+                    alert("Nepodarilo sa získať prístup k mikrofónu.");
+                    state.mic = false; // Disable mic if failed
+                }
+            }
+
+            // C. MIX AUDIO (If multiple sources)
+            let finalStream = new MediaStream();
+            
+            // Add Video Track
+            stream.getVideoTracks().forEach(track => finalStream.addTrack(track));
+
+            // Mix Audio Tracks
+            if (state.mic || hasSysAudio) {
+                audioContext = new AudioContext();
+                mixedDest = audioContext.createMediaStreamDestination();
+
+                if (hasSysAudio) {
+                    const sysSource = audioContext.createMediaStreamSource(stream);
+                    const sysGain = audioContext.createGain();
+                    sysGain.gain.value = 1.0; // Volume PC
+                    sysSource.connect(sysGain).connect(mixedDest);
+                }
+
+                if (state.mic && micStream) {
+                    const micSource = audioContext.createMediaStreamSource(micStream);
+                    const micGain = audioContext.createGain();
+                    micGain.gain.value = 1.5; // Boost mic volume slightly
+                    micSource.connect(micGain).connect(mixedDest);
+                }
+
+                // Add the mixed audio track to final stream
+                mixedDest.stream.getAudioTracks().forEach(track => finalStream.addTrack(track));
+            }
+
+            // D. START RECORDER
+            setupUIForRecording(finalStream);
+            
+            // Určenie MIME typu
+            let mimeType = "video/webm;codecs=vp9";
+            if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = "video/webm";
+
+            mediaRecorder = new MediaRecorder(finalStream, { mimeType });
 
             mediaRecorder.ondataavailable = (e) => {
-                if (e.data && e.data.size > 0) {
-                    recordedChunks.push(e.data);
-                }
+                if (e.data.size > 0) recordedChunks.push(e.data);
             };
 
             mediaRecorder.onstop = processRecording;
+            mediaRecorder.start(1000); // 1s chunks
 
-            // DÔLEŽITÉ: Ukladaj dáta každú sekundu (rieši 0kB problém)
-            mediaRecorder.start(1000); 
+            // Stop logic when user clicks "Stop Sharing" native browser button
+            stream.getVideoTracks()[0].onended = stopRecording;
 
         } catch (err) {
             console.error(err);
-            statusLog.innerText = "❌ Chyba pri štarte.";
+            statusLog.innerText = "❌ Chyba spustenia.";
+            alert("Chyba: " + err.message);
         }
-    });
+    }
 
-    btnStop.addEventListener('click', () => {
+    function setupUIForRecording(stream) {
+        previewVideo.srcObject = stream;
+        previewVideo.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        
+        btnStart.classList.add('hidden');
+        btnStop.classList.remove('hidden');
+        btnStop.classList.add('flex');
+        
+        recStatus.classList.remove('hidden');
+        recStatus.classList.add('flex');
+        
+        // Timer
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // Disable controls
+        document.getElementById('formatSelect').disabled = true;
+    }
+
+    function stopRecording() {
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
-            preview.srcObject.getTracks().forEach(track => track.stop());
         }
-    });
+        
+        // Stop all tracks
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        if (micStream) micStream.getTracks().forEach(track => track.stop());
+        if (audioContext) audioContext.close();
+
+        clearInterval(timerInterval);
+    }
+
+    // --- 3. PROCESSING & CONVERSION ---
 
     async function processRecording() {
-        document.getElementById('recDot').style.display = 'none';
-        btnStop.style.display = 'none';
-        statusLog.innerText = "Spracovávam...";
+        // UI Reset
+        recStatus.classList.add('hidden');
+        btnStop.classList.add('hidden');
+        statusLog.innerText = "Spracovávam video...";
+        
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const format = document.getElementById('formatSelect').value;
 
-        // Vytvorenie základného BLOBu
-        const originalBlob = new Blob(recordedChunks, { type: supportedMimeType });
-
-        if (originalBlob.size === 0) {
-            statusLog.innerText = "❌ Chyba: Nahralo sa 0 bajtov.";
-            resetUI();
+        if (format === 'webm') {
+            downloadBlob(blob, 'nahravka.webm');
+            finishProcess();
             return;
         }
 
-        const format = formatSelect.value;
-
-        // Ak chce originál, sťahujeme hneď
-        if (format === 'original') {
-            downloadBlob(originalBlob, 'nahravka.webm');
-            resetUI();
-            return;
-        }
-
-        // Pokus o konverziu
+        // FFmpeg Conversion (MP4/GIF)
         try {
-            const isLoaded = await loadFFmpeg();
-            if (!isLoaded) throw new Error("FFmpeg sa nenačítal");
-
-            statusLog.innerText = `🔄 Konvertujem na ${format.toUpperCase()}...`;
-            
-            ffmpeg.FS('writeFile', 'input.video', await fetchFile(originalBlob));
-
-            // Bezpečnejšie nastavenie pre MP4
-            let args = ['-i', 'input.video', `output.${format}`];
-            if (format === 'mp4') {
-                // Preset ultrafast = menej chýb, rýchlejšie
-                args = ['-i', 'input.video', '-c:v', 'libx264', '-preset', 'ultrafast', `output.mp4`];
+            statusLog.innerText = "⏳ Načítavam konvertor (FFmpeg)...";
+            if (!ffmpeg) {
+                ffmpeg = createFFmpeg({ corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js', log: true });
+                await ffmpeg.load();
             }
-            if (format === 'gif') {
-                args = ['-i', 'input.video', '-vf', 'fps=10,scale=480:-1', `output.gif`];
+
+            statusLog.innerText = `🔄 Konvertujem na ${format.toUpperCase()}... Prosím čakajte.`;
+            
+            ffmpeg.FS('writeFile', 'input.webm', await fetchFile(blob));
+
+            let args = [];
+            if (format === 'mp4') {
+                // Preset ultrafast pre rýchlosť
+                args = ['-i', 'input.webm', '-c:v', 'libx264', '-preset', 'ultrafast', '-c:a', 'aac', 'output.mp4'];
+            } else if (format === 'gif') {
+                args = ['-i', 'input.webm', '-vf', 'fps=10,scale=720:-1', 'output.gif'];
             }
 
             await ffmpeg.run(...args);
 
             const data = ffmpeg.FS('readFile', `output.${format}`);
+            const outputBlob = new Blob([data.buffer], { type: format === 'mp4' ? 'video/mp4' : 'image/gif' });
             
-            // Kontrola či výsledok nie je prázdny (riešenie 0kB pri konverzii)
-            if (data.length === 0) throw new Error("Konverzia vytvorila prázdny súbor.");
+            downloadBlob(outputBlob, `nahravka.${format}`);
+            
+            // Clean memory
+            try { ffmpeg.FS('unlink', 'input.webm'); ffmpeg.FS('unlink', `output.${format}`); } catch(e){}
 
-            const outputBlob = new Blob([data.buffer], { type: `video/${format}` });
-            downloadBlob(outputBlob, `video.${format}`);
-            statusLog.innerText = "✅ Hotovo!";
-
-            // Cleanup
-            try { ffmpeg.FS('unlink', 'input.video'); ffmpeg.FS('unlink', `output.${format}`); } catch(e){}
-
-        } catch (err) {
-            console.error(err);
-            errorLog.innerText = "Konverzia zlyhala (" + err.message + "). Sťahujem aspoň originál.";
-            errorLog.style.display = 'block';
-            // ZÁCHRANA: Stiahni originál ak konverzia zlyhá
-            downloadBlob(originalBlob, 'zachrana-video.webm');
+        } catch (e) {
+            console.error(e);
+            document.getElementById('errorLog').innerText = "Chyba konverzie: " + e.message + "\nSťahujem originál.";
+            document.getElementById('errorLog').style.display = 'block';
+            downloadBlob(blob, 'zachrana.webm');
         }
 
-        resetUI();
+        finishProcess();
     }
 
-    function downloadBlob(blob, name) {
+    function downloadBlob(blob, filename) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = name;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         setTimeout(() => window.URL.revokeObjectURL(url), 100);
     }
 
-    function resetUI() {
-        btnStart.style.display = 'flex';
-        preview.style.display = 'none';
-        formatSelect.disabled = false;
+    function finishProcess() {
+        statusLog.innerText = "✅ Hotovo! Súbor stiahnutý.";
+        btnStart.classList.remove('hidden');
+        previewVideo.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        document.getElementById('formatSelect').disabled = false;
+        
+        // Clear status after 3s
+        setTimeout(() => statusLog.innerText = "Pripravené na nahrávanie.", 3000);
     }
+
 </script>
 
 </body>
