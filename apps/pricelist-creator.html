@@ -14,37 +14,22 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-panel { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .btn-action { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
+        .glass-panel { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; }
+        .btn-action { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer; white-space: nowrap; }
         .btn-primary { background: #6366f1; color: white; }
-        .btn-primary:hover { background: #4f46e5; }
-        .btn-secondary { background: #1e293b; color: #cbd5e1; border-color: #334155; }
-        .btn-secondary:hover { background: #334155; color: white; }
+        .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
         .input-dark { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-size: 0.85rem; width: 100%; transition: border-color 0.2s; }
         .input-dark:focus { border-color: #6366f1; outline: none; }
         .textarea-dark { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; font-size: 0.85rem; width: 100%; min-height: 80px; resize: vertical; }
         
         .print-area { background: white; color: #1e293b; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 10mm; box-shadow: 0 0 40px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; position: relative; display: flex; flex-direction: column; transform-origin: top center; }
         
-        /* MOBILE TOGGLE BUTTON */
-        .mobile-toggle {
-            position: fixed; bottom: 20px; right: 20px; z-index: 100;
-            background: #6366f1; color: white; padding: 15px 20px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5); font-weight: bold;
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .mobile-toggle:active { transform: scale(0.95); }
-        
-        /* PC Styles */
-        @media (min-width: 1024px) {
-            .mobile-toggle { display: none; }
-            .mobile-hidden { display: flex !important; }
-        }
+        /* MOBILE TOGGLE */
+        .mobile-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 100; background: #6366f1; color: white; padding: 15px 20px; border-radius: 50px; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5); font-weight: bold; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        @media (min-width: 1024px) { .mobile-toggle { display: none; } }
+        @media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; height: auto; transform: none !important; } ::-webkit-scrollbar { display: none; } .mobile-toggle { display: none; } }
 
-        @media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; box-shadow: none; height: auto; transform: none !important; } ::-webkit-scrollbar { display: none; } .mobile-toggle { display: none; } }
-
-        /* TPL Styles (Skrátené, rovnaké ako v minulej verzii) */
+        /* TPL STYLES */
         .tpl-corporate header { border-bottom: 2px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
         .tpl-corporate h1 { color: #1e3a8a; font-size: 20pt; font-weight: 800; text-transform: uppercase; margin: 0; line-height: 1; }
         .tpl-corporate table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 20px; }
@@ -71,7 +56,7 @@
         .tpl-bold h1 { font-weight: 900; text-transform: uppercase; font-size: 24pt; margin: 0; }
         .tpl-bold .row { border-bottom: 4px solid #000; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; page-break-inside: avoid; }
         .tpl-bold .big-price { font-size: 16pt; font-weight: 900; color: #000; background: #facc15; padding: 5px 10px; transform: skew(-10deg); display: inline-block; }
-        .tpl-bold .vo-price { font-size: 9pt; color: #64748b; font-weight: bold; margin-bottom: 2px; }
+        .tpl-bold .vo-price { font-size: 8pt; color: #64748b; font-weight: 600; margin-bottom: 2px; }
         .tpl-bold .footer-note { background: #000; color: #facc15; padding: 15px; margin: auto -10mm -10mm -10mm; font-size: 10pt; font-weight: bold; text-align: center; text-transform: uppercase; white-space: pre-wrap; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -88,7 +73,7 @@
             <h1 class="font-bold text-white sm:hidden">Cenníky</h1>
         </div>
         <div class="flex gap-2">
-            <button onclick="exportToXLSX()" class="btn-action btn-secondary" title="Exportovať do Excelu">
+            <button onclick="exportToXLSX()" class="btn-action btn-secondary" title="Export">
                 <i class="fa-solid fa-file-excel text-green-500"></i> <span class="hidden sm:inline">Export</span>
             </button>
             <button onclick="window.print()" class="btn-action btn-primary" title="Tlačiť PDF">
@@ -97,24 +82,28 @@
         </div>
     </div>
 
-    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+    <div id="main-container" class="flex-1 flex flex-col lg:flex-row overflow-hidden relative group">
         
-        <div id="panel-editor" class="w-full lg:w-[480px] bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-700 flex flex-col overflow-hidden h-full">
+        <div id="panel-editor" class="flex flex-col bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-700 h-full w-full lg:w-[450px] lg:flex-none z-20 group-[.show-preview]:hidden lg:group-[.show-preview]:flex">
             
             <div class="p-4 border-b border-slate-800 shrink-0">
                 <h3 class="text-xs font-bold text-slate-400 uppercase mb-3">1. Produkty</h3>
                 <div class="grid grid-cols-2 gap-2 mb-3">
-                    <button onclick="addEmptyRow()" class="btn-action btn-secondary bg-slate-800 border-slate-700">
+                    <button onclick="addEmptyRow()" class="btn-action btn-secondary bg-slate-800 border-slate-700 hover:bg-slate-700 hover:text-white">
                         <i class="fa-solid fa-plus"></i> Nový
                     </button>
-                    <label class="btn-action btn-secondary bg-slate-800 border-slate-700 cursor-pointer">
+                    <label class="btn-action btn-secondary bg-slate-800 border-slate-700 cursor-pointer hover:bg-slate-700 hover:text-white">
                         <i class="fa-solid fa-file-import"></i> Import
                         <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" class="hidden" onchange="handleFile(this)">
                     </label>
                 </div>
+                <div class="flex justify-between text-[10px] text-slate-500 px-1">
+                    <button onclick="loadDemoData()" class="hover:text-white underline">Nahrať ukážku</button>
+                    <button onclick="clearAll()" class="hover:text-red-400 underline">Vymazať všetko</button>
+                </div>
             </div>
 
-            <div class="p-4 border-b border-slate-800 shrink-0">
+            <div class="p-4 border-b border-slate-800 shrink-0 overflow-y-auto max-h-[40vh]">
                 <h3 class="text-xs font-bold text-slate-400 uppercase cursor-pointer flex justify-between items-center" onclick="toggleSettings()">
                     2. Nastavenia <i class="fa-solid fa-chevron-down text-slate-600"></i>
                 </h3>
@@ -182,7 +171,7 @@
             </div>
         </div>
 
-        <div id="panel-preview" class="hidden lg:flex flex-1 bg-slate-800 overflow-auto justify-center p-4 lg:p-10 custom-scrollbar h-full">
+        <div id="panel-preview" class="hidden flex-col bg-slate-800 overflow-auto justify-center p-4 lg:p-10 custom-scrollbar h-full flex-1 relative z-10 group-[.show-preview]:flex lg:flex">
             <div id="printArea" class="print-area tpl-corporate transform scale-[0.55] origin-top lg:scale-100 lg:origin-top-center">
                 </div>
         </div>
@@ -208,21 +197,15 @@
     }
 
     function toggleMobileView() {
-        const editor = document.getElementById('panel-editor');
-        const preview = document.getElementById('panel-preview');
+        const container = document.getElementById('main-container');
         const btnText = document.getElementById('btn-text');
-
+        
+        // Prepíname triedu na hlavnom kontajneri
         if (!isPreviewMode) {
-            // Show Preview
-            editor.classList.add('hidden');
-            preview.classList.remove('hidden');
-            preview.classList.add('flex');
+            container.classList.add('show-preview');
             btnText.innerHTML = '✏️ Upraviť';
         } else {
-            // Show Editor
-            editor.classList.remove('hidden');
-            preview.classList.add('hidden');
-            preview.classList.remove('flex');
+            container.classList.remove('show-preview');
             btnText.innerHTML = '👁️ Náhľad';
         }
         isPreviewMode = !isPreviewMode;
@@ -238,11 +221,11 @@
             vatRate: document.getElementById('vat-rate').value,
             currency: document.getElementById('currency').value
         };
-        localStorage.setItem('pricelist_data_v7', JSON.stringify(dataToSave));
+        localStorage.setItem('pricelist_data_v9', JSON.stringify(dataToSave));
     }
 
     function loadData() {
-        const saved = localStorage.getItem('pricelist_data_v7');
+        const saved = localStorage.getItem('pricelist_data_v9');
         if (saved) {
             const data = JSON.parse(saved);
             products = data.products || [];
@@ -285,57 +268,34 @@
         if(confirm("Vymazať všetko?")) { products = []; renderEditor(); saveAndRender(); }
     }
 
-    // --- UPDATE LOGIC (ZMENENÉ: Fixná MOC pri zmene VO) ---
+    // --- UPDATE LOGIC (Bidirectional) ---
     function updateProd(idx, key, val) {
         if (['vo_price', 'margin', 'bulk_disc', 'moc_price'].includes(key)) val = parseFloat(val) || 0;
         
         const p = products[idx];
         p[key] = val;
 
-        // Obojsmerný prepočet
         if (key === 'vo_price') {
-            // Zmenil som VO (dodávateľ) -> MOC (predaj) ostáva fixná -> Prepočítaj Maržu
-            if (p.vo_price > 0 && p.moc_price > 0) {
-                p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
-            } else if (p.moc_price === 0) {
-                // Ak MOC ešte nebola nastavená, nastav ju podľa default marže
-                p.moc_price = p.vo_price * (1 + p.margin / 100);
-            }
+            if (p.moc_price > 0 && p.vo_price > 0) p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
+            else if (p.moc_price === 0) p.moc_price = p.vo_price * (1 + p.margin / 100);
         } 
         else if (key === 'moc_price') {
-            // Zmenil som MOC (chcem predať za X) -> Prepočíta Maržu (ak mám VO)
-            if (p.vo_price > 0) {
-                p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
-            }
+            if (p.vo_price > 0) p.margin = ((p.moc_price / p.vo_price) - 1) * 100;
         }
         else if (key === 'margin') {
-            // Zmenil som Maržu -> Ale MOC chcem fixnú -> Musím zmeniť VO (nákup)
-            // VO = MOC / (1 + Margin/100)
-            if (p.moc_price > 0) {
-                p.vo_price = p.moc_price / (1 + p.margin / 100);
-            } else {
-                // Ak nemám MOC, tak ju vypočítam z VO
-                p.moc_price = p.vo_price * (1 + p.margin / 100);
-            }
+            p.vo_price = p.moc_price > 0 ? p.moc_price / (1 + p.margin / 100) : p.vo_price;
+            if(p.moc_price === 0) p.moc_price = p.vo_price * (1 + p.margin / 100);
         }
 
-        // Aktualizácia UI inputov (aby sedeli s dátami)
         const inputs = {
             vo: document.getElementById(`vo-${idx}`),
             moc: document.getElementById(`moc-${idx}`),
             mar: document.getElementById(`mar-${idx}`)
         };
         
-        // Update len ak užívateľ práve nepíše do daného poľa
         if (inputs.vo && document.activeElement !== inputs.vo) inputs.vo.value = p.vo_price.toFixed(2);
         if (inputs.moc && document.activeElement !== inputs.moc) inputs.moc.value = p.moc_price.toFixed(2);
         if (inputs.mar && document.activeElement !== inputs.mar) inputs.mar.value = p.margin.toFixed(2);
-
-        // Highlight changed field logic
-        if(key === 'vo_price' || key === 'margin') {
-             if(inputs.vo) inputs.vo.style.color = '#60a5fa'; // Blue when changing
-             setTimeout(() => { if(inputs.vo) inputs.vo.style.color = 'white'; }, 500);
-        }
 
         saveAndRender();
     }
@@ -345,7 +305,6 @@
     function calcPrices(p) {
         const vat = parseFloat(document.getElementById('vat-rate').value) || 0;
         const vo = p.vo_price;
-        // Používame uloženú moc_price, ktorá je bez DPH
         const mocNoVat = p.moc_price;
         const mocWithVat = mocNoVat * (1 + vat / 100);
         return { vo: vo.toFixed(2), mocNoVat: mocNoVat.toFixed(2), mocWithVat: mocWithVat.toFixed(2) };
@@ -370,15 +329,15 @@
                 <div class="grid grid-cols-4 gap-2 bg-slate-900/50 p-2 rounded border border-slate-700">
                     <div class="col-span-1">
                         <label class="text-[9px] text-slate-500 block">VO (bez DPH)</label>
-                        <input type="number" id="vo-${index}" class="bg-transparent text-white w-full border-b border-slate-600 outline-none focus:border-blue-500" value="${p.vo_price.toFixed(2)}" onchange="updateProd(${index}, 'vo_price', this.value)">
+                        <input type="number" id="vo-${index}" class="bg-transparent text-white w-full border-b border-slate-600 outline-none" value="${p.vo_price.toFixed(2)}" onchange="updateProd(${index}, 'vo_price', this.value)">
                     </div>
                     <div class="col-span-1">
                         <label class="text-[9px] text-slate-500 block">Marža %</label>
-                        <input type="number" id="mar-${index}" class="bg-transparent text-green-400 w-full border-b border-slate-600 outline-none focus:border-green-500" value="${p.margin.toFixed(2)}" onchange="updateProd(${index}, 'margin', this.value)">
+                        <input type="number" id="mar-${index}" class="bg-transparent text-green-400 w-full border-b border-slate-600 outline-none" value="${p.margin.toFixed(2)}" onchange="updateProd(${index}, 'margin', this.value)">
                     </div>
                     <div class="col-span-1">
                         <label class="text-[9px] text-slate-500 block text-yellow-400 font-bold">MOC (bez DPH)</label>
-                        <input type="number" id="moc-${index}" class="bg-transparent text-yellow-400 font-bold w-full border-b border-slate-600 outline-none focus:border-yellow-500" value="${p.moc_price.toFixed(2)}" onchange="updateProd(${index}, 'moc_price', this.value)">
+                        <input type="number" id="moc-${index}" class="bg-transparent text-yellow-400 font-bold w-full border-b border-slate-600 outline-none" value="${p.moc_price.toFixed(2)}" onchange="updateProd(${index}, 'moc_price', this.value)">
                     </div>
                     <div class="col-span-1">
                         <label class="text-[9px] text-slate-500 block">Sklad</label>
@@ -388,18 +347,14 @@
                 <div class="flex items-center gap-3 pt-1">
                     <label class="flex items-center gap-1 text-slate-400 cursor-pointer"><input type="checkbox" ${p.gift ? 'checked' : ''} onchange="updateProd(${index}, 'gift', this.checked)"> 🎁</label>
                     <input type="text" class="input-dark py-1 px-2 ${p.gift ? '' : 'hidden'}" placeholder="Darček?" value="${p.gift_desc}" onchange="updateProd(${index}, 'gift_desc', this.value)">
-                    
-                    <div class="flex-1 text-right flex items-center justify-end gap-1">
-                        <span class="text-[9px] text-slate-500">Množst. zľava:</span>
-                        <input type="number" class="bg-slate-900 text-white w-10 border border-slate-600 rounded text-center ml-1 text-[10px]" value="${p.bulk_disc}" onchange="updateProd(${index}, 'bulk_disc', this.value)"> %
-                    </div>
+                    <div class="flex-1 text-right flex items-center justify-end gap-1"><span class="text-[9px] text-slate-500">Množst. zľava:</span><input type="number" class="bg-slate-900 text-white w-10 border border-slate-600 rounded text-center ml-1 text-[10px]" value="${p.bulk_disc}" onchange="updateProd(${index}, 'bulk_disc', this.value)"> %</div>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    // --- RENDER PREVIEW (HTML) ---
+    // --- RENDER PREVIEW ---
     function render() {
         const area = document.getElementById('printArea');
         const title = document.getElementById('list-title').value;
@@ -436,7 +391,7 @@
         area.innerHTML = html;
     }
 
-    // --- IMPORT/EXPORT ---
+    // --- IMPORT (Robust) ---
     function handleFile(input) {
         const file = input.files[0]; if(!file) return;
         if(file.name.endsWith('.csv')) {
@@ -453,19 +408,25 @@
 
     function processImport(data) {
         products = data.map(row => {
-            const vo = parseFloat(row['VO (bez DPH)']||row['VO']||row['Price']||0);
-            const margin = parseFloat(row['Marža %']||row['Marža']||row['Margin']||20);
-            const moc = vo * (1 + margin / 100);
+            // Skúsime nájsť rôzne varianty názvov stĺpcov
+            const vo = parseFloat(row['VO'] || row['VO (bez DPH)'] || row['Nákup'] || row['Price'] || 0);
+            const margin = parseFloat(row['Marža'] || row['Marža %'] || row['Margin'] || 20);
+            const moc = parseFloat(row['MOC'] || row['MOC (bez DPH)'] || 0);
             
+            let finalMoc = moc;
+            // Ak nemáme MOC v importe, vypočítame ju
+            if (finalMoc === 0 && vo > 0) finalMoc = vo * (1 + margin / 100);
+
             return {
                 code: row['Kód']||row['Code']||'', brand: row['Značka']||row['Brand']||'',
                 name: row['Názov']||row['Name']||'Produkt', desc: row['Popis']||row['Description']||'',
                 vo_price: vo,
                 margin: margin,
-                moc_price: moc,
+                moc_price: finalMoc,
                 stock: row['Dostupnosť']||row['Stock']||'Skladom',
-                gift: !!(row['Darček']||row['Gift']||row['darcek']==='Áno'),
-                gift_desc: row['Popis Darčeka']||'', bulk_disc: parseFloat(row['Zľava']||0)
+                gift: !!(row['Darček']||row['Gift']),
+                gift_desc: row['Popis Darčeka']||'', 
+                bulk_disc: parseFloat(row['Zľava'] || 0)
             };
         });
         renderEditor(); saveAndRender();
