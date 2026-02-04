@@ -11,10 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Základné nastavenia pre prípad, že Tailwind zlyhá */
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; }
         
-        /* Glass Panel - Musí byť definovaný natvrdo pre istotu */
         .glass-panel {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
@@ -22,17 +20,15 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
         }
 
         .btn-gradient {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            transition: all 0.2s;
-            cursor: pointer;
+            transition: all 0.2s; cursor: pointer;
         }
         .btn-gradient:active { transform: scale(0.98); }
 
-        /* Responzívne náhľady */
+        /* PREVIEWS */
         .preview-box { background: white; border-radius: 8px; overflow: hidden; color: #333; font-family: Arial, sans-serif; }
         
         /* Google */
@@ -48,8 +44,9 @@
         .fb-text-area { padding: 10px; background: #f0f2f5; border-top: 1px solid #ddd; }
         .fb-domain { font-size: 12px; text-transform: uppercase; color: #65676b; margin-bottom: 5px; }
         .fb-title { font-size: 16px; font-weight: bold; color: #050505; line-height: 1.2; margin-bottom: 3px; }
+        .fb-desc { font-size: 13px; color: #65676b; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* Skóre a štatistiky */
+        /* SCORE */
         .score-circle {
             width: 80px; height: 80px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -63,7 +60,18 @@
         }
         .score-val { position: relative; z-index: 2; }
 
-        /* Scrollbar */
+        /* SOCIAL TAGS */
+        .social-tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; margin: 2px; }
+        .soc-fb { background: #1877F2; color: white; }
+        .soc-ig { background: #E1306C; color: white; }
+        .soc-li { background: #0077b5; color: white; }
+        .soc-tt { background: #000000; color: white; border: 1px solid #333; }
+        .soc-yt { background: #FF0000; color: white; }
+
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
+        .dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+        .dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
@@ -137,13 +145,20 @@
 
                 <div class="glass-panel p-5">
                     <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Technický Audit</h3>
-                    <div class="space-y-3" id="auditList">
-                        </div>
+                    <div class="space-y-3" id="auditList"></div>
                 </div>
 
-                <div class="glass-panel p-5">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Top Kľúčové slová</h3>
-                    <div class="flex flex-wrap gap-2" id="keywordList"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="glass-panel p-5">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Kľúčové slová</h3>
+                        <div class="flex flex-wrap gap-2" id="keywordList"></div>
+                    </div>
+                    <div class="glass-panel p-5">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Sociálne siete</h3>
+                        <div id="socialList" class="flex flex-wrap gap-2">
+                            <span class="text-slate-500 text-xs italic">Žiadne prepojenia.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -197,13 +212,12 @@
 
         if (!url) return;
 
-        // Formátovanie URL
         url = url.replace(/\s/g, ''); 
         if (!/^https?:\/\//i.test(url)) {
             url = 'https://' + url;
         }
 
-        // UI Reset
+        // Reset
         err.classList.add('hidden');
         results.classList.add('hidden');
         loading.classList.remove('hidden');
@@ -211,63 +225,61 @@
         input.disabled = true;
 
         try {
-            // Použitie CORSPROXY.IO (Spoľahlivejšie ako allorigins)
-            // Táto služba vráti priamo HTML obsah stránky
+            // PROXY Fetch
             const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-            
             const response = await fetch(proxyUrl);
             if (!response.ok) throw new Error(`Server vrátil chybu: ${response.status}`);
             
             const htmlText = await response.text();
-            
-            if (!htmlText || htmlText.length < 50) {
-                throw new Error("Stránka vrátila prázdny obsah. Pravdepodobne blokuje prístup robotom.");
-            }
+            if (!htmlText || htmlText.length < 50) throw new Error("Stránka vrátila prázdny obsah.");
 
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlText, "text/html");
 
-            // Spracovanie dát
-            const meta = extractMeta(doc, url);
-            
-            // Vykreslenie
+            // Meta Data Extraction
+            const meta = {
+                title: doc.querySelector('title')?.innerText || "",
+                desc: doc.querySelector('meta[name="description"]')?.getAttribute('content') || "",
+                h1: doc.querySelector('h1')?.innerText || "",
+                h2s: doc.querySelectorAll('h2').length,
+                h3s: doc.querySelectorAll('h3').length,
+                ogTitle: doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || "",
+                ogDesc: doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || "",
+                ogImage: doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || "",
+                favicon: `https://www.google.com/s2/favicons?domain=${url}&sz=64`,
+                domain: new URL(url).hostname,
+                images: Array.from(doc.querySelectorAll('img')),
+                links: Array.from(doc.querySelectorAll('a')),
+                bodyText: doc.body.innerText
+            };
+
+            // Image Fix
+            if (!meta.ogImage) {
+                const firstImg = doc.querySelector('img[src^="http"], img[src^="/"]');
+                if (firstImg) meta.ogImage = firstImg.getAttribute('src');
+            }
+            if (meta.ogImage && !meta.ogImage.startsWith('http')) {
+                const origin = new URL(url).origin;
+                meta.ogImage = origin + (meta.ogImage.startsWith('/') ? '' : '/') + meta.ogImage;
+            }
+
+            // Render
             renderData(meta, url);
-            
+            detectSocials(doc); // PRIDANÉ SPÄŤ
+
             loading.classList.add('hidden');
             results.classList.remove('hidden');
-            
-            // Scroll na výsledky (pre mobil)
-            setTimeout(() => {
-                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            setTimeout(() => results.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 
         } catch (e) {
             console.error(e);
             loading.classList.add('hidden');
-            err.innerHTML = `<strong>Nepodarilo sa načítať web:</strong><br>${e.message}<br><br>Tip: Niektoré weby (napr. Facebook, Instagram) blokujú automatickú analýzu. Skúste bežný firemný web.`;
+            err.innerHTML = `<strong>Chyba:</strong> ${e.message}<br>Tip: Niektoré weby blokujú botov.`;
             err.classList.remove('hidden');
         } finally {
             btn.disabled = false;
             input.disabled = false;
         }
-    }
-
-    function extractMeta(doc, url) {
-        return {
-            title: doc.querySelector('title')?.innerText || "",
-            desc: doc.querySelector('meta[name="description"]')?.getAttribute('content') || "",
-            h1: doc.querySelector('h1')?.innerText || "",
-            h2s: doc.querySelectorAll('h2').length,
-            h3s: doc.querySelectorAll('h3').length,
-            ogTitle: doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || "",
-            ogDesc: doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || "",
-            ogImage: doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || "",
-            favicon: `https://www.google.com/s2/favicons?domain=${url}&sz=64`,
-            domain: new URL(url).hostname,
-            images: Array.from(doc.querySelectorAll('img')),
-            links: Array.from(doc.querySelectorAll('a')),
-            bodyText: doc.body.innerText
-        };
     }
 
     function renderData(meta, url) {
@@ -278,31 +290,21 @@
         document.getElementById('statImages').innerText = meta.images.length;
         document.getElementById('statHtags').innerText = meta.h2s + meta.h3s;
 
-        // Google Preview
+        // Previews
         document.getElementById('gTitle').innerText = truncate(meta.title, 60) || "Bez titulku";
         document.getElementById('gDesc').innerText = truncate(meta.desc, 155) || "Bez popisu...";
         document.getElementById('gDomain').innerText = meta.domain;
         document.getElementById('gFavicon').src = meta.favicon;
         document.getElementById('gFavicon').classList.remove('hidden');
 
-        // Facebook Preview
         document.getElementById('fbTitle').innerText = truncate(meta.ogTitle || meta.title, 80);
         document.getElementById('fbDesc').innerText = truncate(meta.ogDesc || meta.desc, 100);
         document.getElementById('fbDomain').innerText = meta.domain.toUpperCase();
         
         const fbImg = document.getElementById('fbImg');
         const fbNoImg = document.getElementById('fbNoImg');
-        
-        // Fix relatívnej cesty obrázka
-        let imgUrl = meta.ogImage;
-        if (imgUrl && !imgUrl.startsWith('http')) {
-            // Ak je cesta relatívna, doplníme doménu
-            const origin = new URL(url).origin;
-            imgUrl = origin + (imgUrl.startsWith('/') ? '' : '/') + imgUrl;
-        }
-
-        if (imgUrl) {
-            fbImg.src = imgUrl;
+        if (meta.ogImage) {
+            fbImg.src = meta.ogImage;
             fbImg.classList.remove('hidden');
             fbNoImg.classList.add('hidden');
         } else {
@@ -310,10 +312,7 @@
             fbNoImg.classList.remove('hidden');
         }
 
-        // Keywords
         analyzeKeywords(meta.bodyText);
-
-        // Score & Audit
         calculateAudit(meta, words);
     }
 
@@ -326,20 +325,18 @@
         list.innerHTML = '';
         let score = 0;
         let total = 0;
-        let issues = [];
 
         const check = (label, condition, successMsg, failMsg, weight = 1) => {
             total += weight;
             if(condition) score += weight;
-            else issues.push(failMsg);
-
-            const color = condition ? 'bg-emerald-500' : 'bg-red-500';
+            
+            const color = condition ? 'dot-green' : 'dot-red';
             const textClass = condition ? 'text-slate-300' : 'text-red-300';
             
             list.innerHTML += `
                 <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
                     <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full ${color}"></div>
+                        <span class="status-dot ${color}"></span>
                         <span class="text-white font-medium text-xs">${label}</span>
                     </div>
                     <span class="text-[10px] ${textClass} text-right">${condition ? successMsg : failMsg}</span>
@@ -347,53 +344,87 @@
             `;
         };
 
-        // KONTROLY
-        check("Titulok", meta.title.length > 10 && meta.title.length < 70, "OK ✅", "Dĺžka nevyhovuje", 3);
-        check("Meta Popis", meta.desc.length > 50 && meta.desc.length < 160, "OK ✅", "Chýba alebo zlá dĺžka", 3);
-        check("Nadpis H1", meta.h1.length > 0, "OK ✅", "Chýba H1", 3);
+        check("Titulok", meta.title.length > 10 && meta.title.length < 70, "OK ✅", "Zlá dĺžka", 3);
+        check("Meta Popis", meta.desc.length > 50 && meta.desc.length < 160, "OK ✅", "Chýba/Zlý", 3);
+        check("Nadpis H1", meta.h1.length > 0, "OK ✅", "Chýba", 3);
         check("Obsah", wordCount > 300, "OK ✅", "Málo textu", 2);
-        check("Obrázky", meta.images.length > 0, "OK ✅", "Žiadne obrázky", 1);
-        check("Social", meta.ogImage.length > 0, "OK ✅", "Chýba náhľad", 1);
-        check("HTTPS", true, "Aktívne ✅", "Neaktívne", 1); // Predpokladáme HTTPS keďže fetchujeme
+        check("Obrázky", meta.images.length > 0, "OK ✅", "Žiadne", 1);
+        check("Social", meta.ogImage.length > 0, "OK ✅", "Chýba img", 1);
+        check("HTTPS", true, "Aktívne ✅", "Neaktívne", 1);
 
-        // Výpočet skóre
         const finalScore = Math.round((score / total) * 100);
-        scoreVal.innerText = finalScore;
         
+        // Animácia čísla
+        let start = 0;
+        const duration = 1000;
+        const step = (ts) => {
+            if (!start) start = ts;
+            const progress = Math.min((ts - start) / duration, 1);
+            scoreVal.innerText = Math.floor(progress * finalScore);
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+
         let color = '#ef4444';
         if(finalScore > 50) color = '#f59e0b';
         if(finalScore > 80) color = '#10b981';
-        
         scoreCircle.style.setProperty('--score-color', color);
         scoreCircle.style.setProperty('--score-percent', `${finalScore}%`);
 
-        // Verdikt
-        if(finalScore > 80) verdictEl.innerText = "Výborný stav! Web je technicky dobre pripravený.";
-        else if(finalScore > 50) verdictEl.innerText = "Priemerný stav. Odporúčam doplniť meta popisy a skontrolovať nadpisy.";
-        else verdictEl.innerText = "Slabý stav. Web potrebuje základnú SEO optimalizáciu (Titulky, Popisy, H1).";
+        if(finalScore > 80) verdictEl.innerText = "Výborný stav! Web je technicky pripravený.";
+        else if(finalScore > 50) verdictEl.innerText = "Priemerný stav. Skontrolujte meta tagy.";
+        else verdictEl.innerText = "Slabý stav. Chýbajú základné SEO prvky.";
     }
 
     function analyzeKeywords(text) {
         if (!text) return;
-        const words = text.toLowerCase().replace(/[^\w\s]/gi, '').split(/\s+/);
-        const stopWords = ['a', 'v', 's', 'z', 'o', 'u', 'k', 'na', 'pre', 'pri', 'do', 'je', 'sa', 'si', 'to', 'že', 'ako', 'čo', 'len', 'ale'];
+        const words = text.toLowerCase().replace(/[^\w\s\u00C0-\u017F]/g, '').split(/\s+/);
+        const stopWords = ['a', 'v', 's', 'z', 'o', 'u', 'k', 'na', 'pre', 'pri', 'do', 'je', 'sa', 'si', 'to', 'že', 'ako', 'čo', 'len', 'ale', 'kde', 'kto', 'bol', 'bude', 'sme', 'sú'];
         
         const counts = {};
         words.forEach(w => {
-            if(w.length > 3 && !stopWords.includes(w) && isNaN(w)) {
-                counts[w] = (counts[w] || 0) + 1;
-            }
+            if(w.length > 3 && !stopWords.includes(w) && isNaN(w)) counts[w] = (counts[w] || 0) + 1;
         });
 
         const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 8);
         const container = document.getElementById('keywordList');
         container.innerHTML = '';
         
-        if(sorted.length === 0) container.innerHTML = '<span class="text-slate-500 text-xs">Žiadne kľúčové slová</span>';
+        if(sorted.length === 0) container.innerHTML = '<span class="text-slate-500 text-xs">Žiadne dáta</span>';
 
         sorted.forEach(([word, count]) => {
             container.innerHTML += `<span class="bg-white/10 px-2 py-1 rounded-full text-[10px] text-slate-300 border border-white/5">${word} <span class="opacity-50 ml-1">${count}x</span></span>`;
         });
+    }
+
+    function detectSocials(doc) {
+        const socialMap = {
+            'facebook.com': { name: 'Facebook', cls: 'soc-fb', icon: 'fa-facebook' },
+            'instagram.com': { name: 'Instagram', cls: 'soc-ig', icon: 'fa-instagram' },
+            'linkedin.com': { name: 'LinkedIn', cls: 'soc-li', icon: 'fa-linkedin' },
+            'tiktok.com': { name: 'TikTok', cls: 'soc-tt', icon: 'fa-tiktok' },
+            'youtube.com': { name: 'YouTube', cls: 'soc-yt', icon: 'fa-youtube' }
+        };
+
+        const links = Array.from(doc.querySelectorAll('a'));
+        const found = new Set();
+        const container = document.getElementById('socialList');
+        container.innerHTML = '';
+
+        links.forEach(link => {
+            const href = link.href.toLowerCase();
+            for (const [domain, info] of Object.entries(socialMap)) {
+                if (href.includes(domain)) found.add(info);
+            }
+        });
+
+        if (found.size === 0) {
+            container.innerHTML = '<span class="text-slate-500 text-xs italic">Žiadne prepojenia.</span>';
+        } else {
+            found.forEach(soc => {
+                container.innerHTML += `<span class="social-tag ${soc.cls}"><i class="fa-brands ${soc.icon}"></i> ${soc.name}</span>`;
+            });
+        }
     }
 
     function truncate(str, n) { return (str.length > n) ? str.substr(0, n-1) + '...' : str; }
