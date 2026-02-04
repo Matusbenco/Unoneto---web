@@ -2,8 +2,9 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEO & Web Inšpektor | Unoneto</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,43 +29,57 @@
             box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.3);
         }
 
-        /* PREVIEWS */
-        .google-preview { font-family: Arial, sans-serif; background: white; color: #3c4043; padding: 20px; border-radius: 12px; }
-        .g-link { color: #202124; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .g-title { color: #1a0dab; font-size: 20px; text-decoration: none; display: block; margin-bottom: 2px;}
-        .g-title:hover { text-decoration: underline; }
-        .g-desc { color: #4d5156; font-size: 14px; line-height: 1.58; }
+        /* --- PREVIEWS (Responsive Fixes) --- */
+        .google-preview { 
+            font-family: Arial, sans-serif; background: white; color: #3c4043; 
+            padding: 15px; border-radius: 12px; width: 100%; box-sizing: border-box;
+            overflow: hidden; 
+        }
+        .g-link { color: #202124; font-size: 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .g-title { color: #1a0dab; font-size: 18px; text-decoration: none; display: block; margin-bottom: 2px; line-height: 1.3; overflow-wrap: break-word; }
+        .g-desc { color: #4d5156; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
 
-        .fb-preview { font-family: Helvetica, Arial, sans-serif; background: #f0f2f5; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; max-width: 500px; margin: 0 auto; }
-        .fb-img-container { width: 100%; height: 260px; background: #ddd; position: relative; overflow: hidden; }
-        .fb-img { width: 100%; height: 100%; object-fit: cover; }
+        .fb-preview { 
+            font-family: Helvetica, Arial, sans-serif; background: #f0f2f5; 
+            border-radius: 8px; overflow: hidden; border: 1px solid #ddd; 
+            width: 100%; max-width: 500px; margin: 0 auto; 
+        }
+        .fb-img-container { 
+            width: 100%; height: 0; padding-bottom: 52.25%; /* 1.91:1 Aspect Ratio */
+            background: #ddd; position: relative; overflow: hidden; 
+        }
+        .fb-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .fb-content { padding: 10px 12px; background: #f0f2f5; border-top: 1px solid #ddd; }
         .fb-domain { text-transform: uppercase; color: #65676b; font-size: 12px; margin-bottom: 5px; }
-        .fb-title { color: #050505; font-weight: 600; font-size: 16px; line-height: 1.2; margin-bottom: 3px; }
+        .fb-title { color: #050505; font-weight: 600; font-size: 16px; line-height: 1.2; margin-bottom: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .fb-desc { color: #65676b; font-size: 13px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
         /* SCORE CIRCLE */
         .score-circle {
-            width: 90px; height: 90px; border-radius: 50%;
+            width: 80px; height: 80px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; font-weight: 800; color: white;
+            font-size: 1.8rem; font-weight: 800; color: white;
             background: conic-gradient(var(--score-color) var(--score-percent), #334155 0);
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            position: relative;
+            position: relative; flex-shrink: 0;
         }
         .score-circle::before {
-            content: ''; position: absolute; width: 75px; height: 75px;
+            content: ''; position: absolute; width: 65px; height: 65px;
             background: #1e293b; border-radius: 50%;
         }
         .score-val { position: relative; z-index: 2; }
 
         /* TAGS & STATS */
         .stat-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; text-align: center; }
-        .stat-val { font-size: 1.2rem; font-weight: bold; color: white; display: block; }
-        .stat-lbl { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
+        .stat-val { font-size: 1.1rem; font-weight: bold; color: white; display: block; }
+        .stat-lbl { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
 
-        .keyword-tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); }
-        .social-tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; margin-right: 5px; margin-bottom: 5px;}
+        .keyword-tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); display: inline-block; margin: 2px; }
+        
+        .social-tag { 
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; 
+            border-radius: 6px; font-size: 0.8rem; font-weight: bold; margin: 2px;
+        }
         .soc-fb { background: #1877F2; color: white; }
         .soc-ig { background: #E1306C; color: white; }
         .soc-li { background: #0077b5; color: white; }
@@ -76,43 +91,40 @@
         .dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
         .dot-orange { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
 
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-sm">
 
-    <header class="h-20 border-b border-slate-700 flex items-center justify-between px-6 lg:px-10 shrink-0 bg-slate-900/90 backdrop-blur z-50">
+    <header class="h-16 border-b border-slate-700 flex items-center justify-between px-4 lg:px-10 shrink-0 bg-slate-900/90 backdrop-blur z-50">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-500/20">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-500/20">
                 <i class="fa-solid fa-magnifying-glass-chart"></i>
             </div>
             <div>
-                <h1 class="font-outfit font-bold text-xl tracking-tight text-white">SEO <span class="text-emerald-500">Inšpektor</span></h1>
-                <p class="text-xs text-slate-400">Analýza webov a e-shopov</p>
+                <h1 class="font-outfit font-bold text-lg tracking-tight text-white leading-tight">SEO <span class="text-emerald-500">Inšpektor</span></h1>
             </div>
         </div>
-        <a href="index.html" class="text-slate-400 hover:text-white transition font-medium flex items-center gap-2 text-sm bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-500">
+        <a href="index.html" class="text-slate-400 hover:text-white transition font-medium flex items-center gap-2 text-xs bg-slate-800 px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500">
             <i class="fa-solid fa-arrow-left"></i> Späť
         </a>
     </header>
 
-    <main class="flex-1 w-full max-w-7xl mx-auto p-6 flex flex-col gap-8">
+    <main class="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-6 flex flex-col gap-6">
 
-        <div class="glass-panel p-8 text-center relative overflow-hidden group">
+        <div class="glass-panel p-6 lg:p-8 text-center relative overflow-hidden group">
             <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-50"></div>
             <div class="relative z-10 max-w-2xl mx-auto">
-                <h2 class="text-2xl font-bold text-white mb-2">Skontroluj webstránku</h2>
-                <p class="text-slate-400 mb-6 text-sm">Zadaj ľubovoľnú adresu (napr. bosakandrej.sk) a získaj okamžitý audit.</p>
-                <div class="flex gap-2">
-                    <input type="text" id="urlInput" placeholder="zadaj-domenu.sk" class="flex-1 bg-slate-900 border border-slate-700 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-emerald-500 transition shadow-inner font-mono">
-                    <button onclick="analyzeUrl()" class="btn-gradient text-white font-bold px-8 rounded-xl flex items-center gap-2">
-                        <i class="fa-solid fa-rocket"></i> Spustiť
+                <h2 class="text-xl lg:text-2xl font-bold text-white mb-2">Skontroluj webstránku</h2>
+                <p class="text-slate-400 mb-6 text-xs lg:text-sm">Zadaj adresu (napr. tvojeshop.sk) a získaj okamžitý audit.</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="urlInput" placeholder="zadaj-domenu.sk" class="flex-1 bg-slate-900 border border-slate-700 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-emerald-500 transition shadow-inner font-mono text-base"> <button onclick="analyzeUrl()" class="btn-gradient text-white font-bold px-8 py-4 sm:py-0 rounded-xl flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rocket"></i> <span id="btnText">Analyzovať</span>
                     </button>
                 </div>
-                <p id="errorMsg" class="text-red-400 text-xs mt-3 hidden"></p>
+                <p id="errorMsg" class="text-red-400 text-xs mt-3 hidden bg-red-900/20 p-2 rounded border border-red-900/50"></p>
             </div>
         </div>
 
@@ -120,13 +132,13 @@
             
             <div class="lg:col-span-7 space-y-6">
                 
-                <div class="glass-panel p-6 border-l-4 border-emerald-500">
+                <div class="glass-panel p-5 border-l-4 border-emerald-500">
                     <div class="flex flex-col sm:flex-row items-center gap-6">
-                        <div class="flex flex-col items-center">
+                        <div class="flex flex-col items-center shrink-0">
                             <div class="score-circle" id="scoreCircle" style="--score-color: #10b981; --score-percent: 0%;">
                                 <span class="score-val" id="scoreVal">0</span>
                             </div>
-                            <span class="text-xs font-bold text-slate-400 uppercase mt-2">Celkové Skóre</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mt-2">SEO Skóre</span>
                         </div>
                         
                         <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
@@ -150,18 +162,18 @@
                     </div>
                 </div>
 
-                <div class="glass-panel p-6">
+                <div class="glass-panel p-5">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Technický Audit</h3>
                     <div class="space-y-3" id="auditList"></div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6">
+                    <div class="glass-panel p-5">
                         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Kľúčové slová</h3>
-                        <div class="flex flex-wrap gap-2" id="keywordList"></div>
+                        <div class="flex flex-wrap gap-1" id="keywordList"></div>
                     </div>
-                    <div class="glass-panel p-6">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Detekované Sociálne siete</h3>
+                    <div class="glass-panel p-5">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Sociálne siete</h3>
                         <div id="socialList" class="flex flex-wrap gap-2">
                             <span class="text-slate-500 text-xs italic">Žiadne prepojenia sa nenašli.</span>
                         </div>
@@ -181,14 +193,14 @@
                 </div>
 
                 <div class="space-y-4">
-                    <div class="glass-panel p-5">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3"><i class="fa-brands fa-google text-blue-500"></i> Ako to vidí Google</h3>
+                    <div class="glass-panel p-4">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3"><i class="fa-brands fa-google text-blue-500"></i> Google Náhľad</h3>
                         <div class="google-preview">
                             <div class="g-link">
-                                <img id="gFavicon" src="" class="w-4 h-4 rounded-full hidden">
-                                <div class="flex flex-col">
-                                    <span id="gDomain" class="font-bold text-xs">domena.sk</span>
-                                    <span id="gUrl" class="text-gray-500 text-[10px]">https://domena.sk</span>
+                                <img id="gFavicon" src="" class="w-4 h-4 rounded-full hidden shrink-0">
+                                <div class="flex flex-col overflow-hidden">
+                                    <span id="gDomain" class="font-bold text-xs truncate">domena.sk</span>
+                                    <span id="gUrl" class="text-gray-500 text-[10px] truncate">https://domena.sk</span>
                                 </div>
                             </div>
                             <a href="#" class="g-title" id="gTitle">Titulok stránky</a>
@@ -196,12 +208,12 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel p-5">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3"><i class="fa-brands fa-facebook text-blue-600"></i> Ako to vidí Facebook</h3>
+                    <div class="glass-panel p-4">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3"><i class="fa-brands fa-facebook text-blue-600"></i> Facebook Náhľad</h3>
                         <div class="fb-preview">
                             <div class="fb-img-container">
                                 <img id="fbImg" src="" class="fb-img hidden" referrerpolicy="no-referrer">
-                                <div id="fbNoImg" class="flex items-center justify-center h-full text-gray-400 text-sm bg-gray-300">
+                                <div id="fbNoImg" class="flex items-center justify-center h-full text-gray-400 text-sm bg-gray-300 absolute inset-0">
                                     <i class="fa-regular fa-image text-2xl mr-2"></i> Bez náhľadu
                                 </div>
                             </div>
@@ -216,14 +228,14 @@
 
             </div>
 
-            <div class="lg:col-span-12 glass-panel p-8 mt-4 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-slate-700/50">
+            <div class="lg:col-span-12 glass-panel p-6 mt-4 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-slate-700/50 text-center md:text-left">
                 <div class="max-w-2xl">
                     <h3 class="font-bold text-white mb-1">Potrebujete vylepšiť svoj web?</h3>
-                    <p class="text-slate-400 text-sm">
-                        Zelené čísla sú super, ale reálny predaj robí kvalitný obsah a stratégia.
+                    <p class="text-slate-400 text-xs sm:text-sm">
+                        Ak máte červené čísla, prichádzate o zákazníkov. Pomôžeme vám s SEO.
                     </p>
                 </div>
-                <a href="mailto:info@unoneto.sk" class="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold hover:bg-emerald-50 transition shadow-lg flex items-center gap-2 whitespace-nowrap">
+                <a href="mailto:info@unoneto.sk" class="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold hover:bg-emerald-50 transition shadow-lg flex items-center gap-2 whitespace-nowrap text-sm">
                     <i class="fa-regular fa-envelope"></i> Ozvite sa nám
                 </a>
             </div>
@@ -235,14 +247,14 @@
 <script>
     async function analyzeUrl() {
         const input = document.getElementById('urlInput');
+        const btnText = document.getElementById('btnText');
         let url = input.value.trim();
         const err = document.getElementById('errorMsg');
         const results = document.getElementById('resultsArea');
 
         if (!url) return;
 
-        // --- 1. INTELIGENTNÁ OPRAVA URL ---
-        // Odstráni medzery, opraví "www", doplní protokol
+        // Oprava URL
         url = url.replace(/\s/g, ''); 
         if (!/^https?:\/\//i.test(url)) {
             url = 'https://' + url;
@@ -252,19 +264,21 @@
         err.classList.add('hidden');
         results.classList.add('hidden');
         input.disabled = true;
+        btnText.innerText = "Načítavam...";
         document.body.style.cursor = 'wait';
 
         try {
+            // Použitie CORS proxy
             const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
             const response = await fetch(proxyUrl);
             const data = await response.json();
 
-            if (!data.contents) throw new Error("Stránku sa nepodarilo načítať (blokuje botov alebo neexistuje).");
+            if (!data.contents) throw new Error("Stránku sa nepodarilo načítať. Skontrolujte URL alebo či web neblokuje botov.");
 
             const parser = new DOMParser();
             const doc = parser.parseFromString(data.contents, "text/html");
 
-            // --- 2. ZBER DÁT ---
+            // --- ZBER DÁT ---
             const meta = {
                 title: doc.querySelector('title')?.innerText || "",
                 desc: doc.querySelector('meta[name="description"]')?.getAttribute('content') || "",
@@ -293,7 +307,7 @@
                 meta.ogImage = origin + path;
             }
 
-            // --- 3. VYKRESLENIE ---
+            // --- VYKRESLENIE ---
             updatePreviews(meta, url);
             updateStats(meta);
             analyzeKeywords(meta.bodyText);
@@ -301,6 +315,8 @@
             calculateScoreAndAudit(meta);
 
             results.classList.remove('hidden');
+            // Scroll to results on mobile
+            results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (e) {
             err.innerText = "Chyba: " + e.message;
@@ -308,6 +324,7 @@
             console.error(e);
         } finally {
             input.disabled = false;
+            btnText.innerText = "Analyzovať";
             document.body.style.cursor = 'default';
         }
     }
@@ -368,61 +385,39 @@
                 <div class="flex items-center justify-between border-b border-slate-700/50 pb-2 last:border-0">
                     <div class="flex items-center">
                         <span class="status-dot ${color}"></span>
-                        <span class="font-bold text-sm text-white">${label}</span>
+                        <span class="font-bold text-xs sm:text-sm text-white">${label}</span>
                     </div>
-                    <span class="text-xs ${textCol} text-right max-w-[150px]">${msg}</span>
+                    <span class="text-[10px] sm:text-xs ${textCol} text-right max-w-[120px]">${msg}</span>
                 </div>
             `;
         };
 
-        // 1. Titulok
+        // KONTROLY
         const tLen = meta.title.length;
-        if (tLen === 0) addCheck("Titulok (Title)", false, "Chýba!", 3, "Web nemá žiadny titulok pre vyhľadávače.");
-        else if (tLen < 15) addCheck("Titulok (Title)", false, "Príliš krátky", 2, "Titulok je príliš krátky.");
-        else if (tLen > 70) addCheck("Titulok (Title)", false, "Príliš dlhý", 2, "Titulok je príliš dlhý (Google ho odsekne).");
-        else addCheck("Titulok (Title)", true, "Optimálna dĺžka ✅", 2);
+        if (tLen === 0) addCheck("Titulok", false, "Chýba!", 3, "Web nemá žiadny titulok.");
+        else if (tLen < 15) addCheck("Titulok", false, "Krátky", 2, "Titulok je príliš krátky.");
+        else if (tLen > 70) addCheck("Titulok", false, "Dlhý", 2, "Titulok je príliš dlhý.");
+        else addCheck("Titulok", true, "OK ✅", 2);
 
-        // 2. Popis
         const dLen = meta.desc.length;
-        if (dLen === 0) addCheck("Meta Popis", false, "Chýba!", 3, "Chýba meta popis, ktorý láka na kliknutie.");
-        else if (dLen < 70) addCheck("Meta Popis", false, "Príliš stručný", 2, "Popis je príliš krátky.");
-        else if (dLen > 165) addCheck("Meta Popis", false, "Príliš dlhý", 2, "Popis je dlhý.");
-        else addCheck("Meta Popis", true, "Perfektné ✅", 2);
+        if (dLen === 0) addCheck("Meta Popis", false, "Chýba!", 3, "Chýba meta popis.");
+        else if (dLen < 70) addCheck("Meta Popis", false, "Krátky", 2, "Popis je príliš krátky.");
+        else addCheck("Meta Popis", true, "OK ✅", 2);
 
-        // 3. Nadpisy
-        if (meta.h1.length > 0) addCheck("Nadpis H1", true, "Nájdený ✅", 3);
-        else addCheck("Nadpis H1", false, "Chýba hlavný nadpis", 3, "Chýba hlavný nadpis H1.");
+        if (meta.h1.length > 0) addCheck("Nadpis H1", true, "OK ✅", 3);
+        else addCheck("Nadpis H1", false, "Chýba", 3, "Chýba hlavný nadpis H1.");
 
-        if (meta.h2s > 0) addCheck("Štruktúra (H2)", true, `${meta.h2s} podnadpisov`, 1);
-        else addCheck("Štruktúra (H2)", false, "Web je bez štruktúry", 1, "Text nie je členený podnadpismi H2.");
+        if (meta.h2s > 0) addCheck("Štruktúra H2", true, `${meta.h2s} ks`, 1);
+        else addCheck("Štruktúra H2", false, "Chýba", 1);
 
-        // 4. Synergia
-        if (meta.title && meta.h1) {
-            const tWords = meta.title.toLowerCase().split(/\s+/);
-            const h1Words = meta.h1.toLowerCase().split(/\s+/);
-            const match = tWords.some(w => w.length > 3 && h1Words.includes(w));
-            if (match) addCheck("Kľúčové slovo", true, "Je v Title aj H1 ✅", 2);
-            else addCheck("Kľúčové slovo", false, "Nezhoda Title a H1", 2, "Hlavné kľúčové slovo nie je v nadpise aj titulku.");
-        }
-
-        // 5. Obsah
         const wCount = meta.bodyText.split(/\s+/).length;
-        if (wCount < 300) addCheck("Dĺžka textu", false, "Málo textu (<300 slov)", 2, "Stránka má veľmi málo textového obsahu.");
-        else addCheck("Dĺžka textu", true, "Dostatočný obsah ✅", 1);
+        if (wCount < 300) addCheck("Obsah", false, "Málo textu", 2, "Málo textového obsahu.");
+        else addCheck("Obsah", true, "OK ✅", 1);
 
-        // 6. Obrázky
-        if (meta.images.length > 0) {
-            const missingAlt = meta.images.filter(img => !img.alt).length;
-            if (missingAlt === 0) addCheck("Obrázky ALT", true, "Všetky majú popis ✅", 1);
-            else if (missingAlt < meta.images.length / 2) addCheck("Obrázky ALT", true, `Chýba pri ${missingAlt} obr.`, 1);
-            else addCheck("Obrázky ALT", false, "Väčšina bez popisu", 1, "Obrázkom chýbajú textové popisy (ALT).");
-        }
+        if (meta.ogImage) addCheck("Social img", true, "OK ✅", 1);
+        else addCheck("Social img", false, "Chýba", 1, "Chýba obrázok pre sociálne siete.");
 
-        // 7. Social
-        if (meta.ogImage) addCheck("Sociálne siete", true, "Náhľad pripravený ✅", 1);
-        else addCheck("Sociálne siete", false, "Chýba obrázok", 1, "Pri zdieľaní na FB/IG sa nezobrazí pekný obrázok.");
-
-        // SKÓRE & VERDIKT
+        // SKÓRE
         const finalScore = Math.round((score / checks) * 100);
         const scoreEl = document.getElementById('scoreVal');
         const circle = document.getElementById('scoreCircle');
@@ -436,17 +431,16 @@
         circle.style.setProperty('--score-color', scoreColor);
         circle.style.setProperty('--score-percent', `${finalScore}%`);
 
-        // GENERÁCIA NÁZORU
+        // VERDIKT
         let verdict = "";
-        if (finalScore > 90) verdict = "Excelentný výsledok! Tento web je technicky výborne pripravený. Udržujte kvalitu obsahu.";
-        else if (finalScore > 70) verdict = "Veľmi dobrý základ. Web je funkčný a čitateľný, no má drobné nedostatky v meta dátach alebo štruktúre.";
-        else if (finalScore > 40) verdict = "Priemerný web. Návštevníci môžu byť zmätení, ak nevidia jasný popis vo vyhľadávači. Odporúčam doplniť meta tagy a nadpisy.";
-        else verdict = "Web potrebuje urgentnú pomoc. Chýbajú základné prvky (Titulok, H1, Popis), čo výrazne poškodzuje viditeľnosť na Google.";
+        if (finalScore > 90) verdict = "Excelentný výsledok! Web je technicky výborne pripravený.";
+        else if (finalScore > 70) verdict = "Dobrý základ, no má drobné nedostatky v meta dátach.";
+        else if (finalScore > 40) verdict = "Priemerný web. Návštevníci môžu byť zmätení.";
+        else verdict = "Web potrebuje urgentnú pomoc. Chýbajú základné prvky.";
 
         if (issues.length > 0) {
-            verdict += "<br><br><span class='text-orange-300 font-bold'>Kritické chyby:</span> " + issues.slice(0, 2).join(", ") + ".";
+            verdict += "<br><br><span class='text-orange-300 font-bold'>Chyby:</span> " + issues.slice(0, 2).join(", ") + ".";
         }
-
         verdictEl.innerHTML = verdict;
     }
 
@@ -468,17 +462,17 @@
         container.innerHTML = '';
         
         sorted.forEach(([word, count]) => {
-            container.innerHTML += `<span class="keyword-tag">${word} <span class="keyword-count">${count}x</span></span>`;
+            container.innerHTML += `<span class="keyword-tag">${word} ${count}x</span>`;
         });
     }
 
     function detectSocials(doc) {
         const socialMap = {
-            'facebook.com': { name: 'Facebook', cls: 'soc-fb', icon: 'fa-facebook' },
-            'instagram.com': { name: 'Instagram', cls: 'soc-ig', icon: 'fa-instagram' },
-            'linkedin.com': { name: 'LinkedIn', cls: 'soc-li', icon: 'fa-linkedin' },
-            'tiktok.com': { name: 'TikTok', cls: 'soc-tt', icon: 'fa-tiktok' },
-            'youtube.com': { name: 'YouTube', cls: 'soc-yt', icon: 'fa-youtube' }
+            'facebook.com': { name: 'FB', cls: 'soc-fb', icon: 'fa-facebook' },
+            'instagram.com': { name: 'IG', cls: 'soc-ig', icon: 'fa-instagram' },
+            'linkedin.com': { name: 'LI', cls: 'soc-li', icon: 'fa-linkedin' },
+            'tiktok.com': { name: 'TT', cls: 'soc-tt', icon: 'fa-tiktok' },
+            'youtube.com': { name: 'YT', cls: 'soc-yt', icon: 'fa-youtube' }
         };
 
         const links = Array.from(doc.querySelectorAll('a'));
