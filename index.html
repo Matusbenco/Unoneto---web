@@ -194,11 +194,11 @@
             border-color: rgba(34, 211, 238, 0.3);
         }
 
-        /* Horná polovica - PROBLÉM (Červená) */
+        /* Horná polovica - PROBLÉM (Elegantná tlmená sivá/bridlicová) */
         .ps-problem {
-            background: linear-gradient(to bottom, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.02));
+            background: rgba(30, 41, 59, 0.5); /* Tlmené pozadie bez červenej */
             padding: 2rem;
-            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Iba veľmi jemný predel */
             position: relative;
         }
         
@@ -206,16 +206,16 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--error-red);
-            font-weight: 900;
-            font-size: 1.3rem;
+            color: var(--slate-400); /* Elegantná sivomodrá namiesto agresívnej červenej */
+            font-weight: 800;
+            font-size: 1.1rem;
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         
         .ps-problem p {
-            color: #cbd5e1;
+            color: var(--slate-300);
             font-size: 1.05rem;
             line-height: 1.5;
             margin: 0;
