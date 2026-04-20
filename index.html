@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="sk" class="scroll-smooth">
 <head>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Unoneto s.r.o. - Váš technologický partner pre AI agentov, digitalizáciu procesov a systémové integrácie. Neplaťte za prístup k nástrojom, plaťte za výsledky s AGaaS.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Unoneto | AI Agenti & Strategická Digitalizácia</title>
+    <meta name="description" content="Unoneto s.r.o. - Váš technologický partner pre AI agentov, digitalizáciu procesov a systémové integrácie. Neplaťte za prístup k nástrojom, plaťte za výsledky s AGaaS.">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"/>
     
     <script>
       tailwind.config = {
@@ -36,17 +28,31 @@
       }
     </script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    
     <style>
-        body { background-color: #08021a; color: white; overflow-x: hidden; }
+        body, html { 
+            background-color: #08021a; 
+            color: white; 
+            overflow-x: hidden; 
+            width: 100%;
+            position: relative;
+        }
 
-        /* Všeobecné animácie */
         @keyframes fadeUp {
             0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-        /* Glassmorphism */
         .glass-panel {
             background: rgba(14, 6, 36, 0.6);
             backdrop-filter: blur(16px);
@@ -62,7 +68,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Navigácia a Dropdown */
+        /* Navigácia Desktop */
         .nav-links li { position: relative; }
         .dropdown-menu {
             display: none;
@@ -92,9 +98,7 @@
             padding-left: 1.75rem;
         }
 
-        /* -------------------------------------------
-           VIZUALIZÁCIA 1: GEOMETRICKÝ ORBITÁLNY SYSTÉM
-           ------------------------------------------- */
+        /* Animácie Orbit Core */
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
         @keyframes pulse-core { 
@@ -106,9 +110,7 @@
         .orbit-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(147, 51, 234, 0.2); display: flex; justify-content: center; align-items: center; }
         .planet { position: absolute; border-radius: 50%; background: #d946ef; box-shadow: 0 0 15px #d946ef, 0 0 30px #9333ea; }
 
-        /* -------------------------------------------
-           VIZUALIZÁCIA 3: GLOWING BORDERS (Služby)
-           ------------------------------------------- */
+        /* Cyber Cards (Služby) */
         .cyber-card { position: relative; background: #0d0620; border-radius: 20px; overflow: hidden; transition: transform 0.3s ease; }
         .cyber-card::before {
             content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -123,17 +125,24 @@
 
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
     <div class="fixed inset-0 z-[-2] bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
     <div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(147,51,234,0.15),rgba(255,255,255,0))]"></div>
 
-    <header class="fixed top-0 w-full z-50 glass-panel border-t-0 border-l-0 border-r-0 border-b border-white/5">
-        <nav class="max-w-[80rem] mx-auto px-6 py-4 flex justify-between items-center">
+    <header class="fixed top-4 md:top-6 left-0 right-0 z-50 mx-auto w-[95%] max-w-[75rem]">
+        <nav class="glass-panel rounded-2xl px-5 py-3 md:px-8 md:py-4 flex justify-between items-center shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
             
-            <a href="/" class="font-display font-bold text-2xl tracking-wide flex items-center gap-3">
+            <a href="/" class="font-display font-bold text-xl md:text-2xl tracking-wide flex items-center gap-3 relative z-50">
                 <img src="favicon.png" alt="Unoneto Logo" class="h-8 w-auto object-contain">
                 <span>Unoneto</span>
             </a>
             
+            <button id="mobile-menu-btn" class="lg:hidden text-white focus:outline-none relative z-[70] p-2 -mr-2">
+                <svg id="menu-icon" class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+
             <ul class="nav-links hidden lg:flex gap-8 items-center text-sm font-medium text-white/70" id="nav-menu">
                 <li class="has-dropdown py-2">
                     <a href="#sluzby" id="nasa-ponuka-toggle" class="hover:text-white transition-colors flex items-center gap-1">
@@ -152,10 +161,8 @@
                 <li><a href="#partneri" class="hover:text-white transition-colors">Naši partneri</a></li>
                 <li><a href="blog" class="hover:text-white transition-colors">Novinky</a></li>
                 
-            
-                
                 <li>
-                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink hover:scale-105 border-none text-white text-sm font-bold transition-transform shadow-[0_0_20px_rgba(217,70,239,0.3)]">
+                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink hover:scale-105 border-none text-white text-sm font-bold transition-transform shadow-[0_0_15px_rgba(217,70,239,0.3)]">
                         Bezplatná analýza
                     </a>
                 </li>
@@ -163,23 +170,43 @@
         </nav>
     </header>
 
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-[#08021a]/98 backdrop-blur-3xl z-[60] hidden flex-col justify-center items-center opacity-0 transition-opacity duration-300">
+        <ul class="flex flex-col gap-6 items-center text-xl font-display font-bold text-white w-full px-6">
+            <li><a href="#agaas" class="mobile-link hover:text-neon-pink transition-colors">AI Agenti</a></li>
+            <li><a href="#sluzby" class="mobile-link hover:text-neon-pink transition-colors">Naše Služby</a></li>
+            <li><a href="weby" class="mobile-link text-white/70 hover:text-white text-lg transition-colors">→ Tvorba webov</a></li>
+            <li><a href="automatizacia" class="mobile-link text-white/70 hover:text-white text-lg transition-colors">→ AI Automatizácia</a></li>
+            <li><a href="graficke-sluzby" class="mobile-link text-white/70 hover:text-white text-lg transition-colors">→ Grafika na mieru</a></li>
+            <li><a href="blog" class="mobile-link hover:text-neon-pink transition-colors mt-4">Novinky</a></li>
+            
+            <li class="mt-8 w-full">
+                <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="mobile-link block w-full py-4 text-center rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink text-white font-bold shadow-[0_0_20px_rgba(217,70,239,0.3)]">
+                    Rezervovať audit
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <main>
-        <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
-            <div class="max-w-[80rem] w-full mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <section class="relative min-h-screen flex items-center pt-32 lg:pt-28 overflow-hidden">
+            <div class="max-w-[80rem] w-full mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10 text-center lg:text-left">
                 
-                <div class="animate-fade-up">
+                <div class="animate-fade-up flex flex-col items-center lg:items-start">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neon-pink/30 bg-neon-pink/10 text-neon-pink text-xs font-bold uppercase tracking-widest mb-6">
                         <span class="relative flex size-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-pink opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-neon-pink"></span></span>
                         Systém Online
                     </div>
-                    <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1]">
-                        Vaša firma vie rásť <br>
-                        <span class="gradient-text">exponenciálne.</span>
-                    </h1>
-                    <p class="text-lg text-white/60 mb-10 max-w-xl leading-relaxed">
+                    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] max-w-2xl mx-auto lg:mx-0">
+    Zažite <br>
+    <span class="gradient-text">skutčnú digitalizáciu</span>
+</h1>
+<p class="text-base sm:text-lg text-white/60 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+    To čo ponúkame je hlavne funkčnosť a výsledky. Vaša firma bude s nami fungovať efektívnejšie, rýchlejšie a s menšími nákladmi. Nejde nám o to, aby ste mali "AI nástroje", ale aby ste mali <strong>AI agentov</strong>, ktorí pre vás pracujú nonstop a bez potreby učiť sa nové rozhrania.
+</p>
+                    <p class="text-base sm:text-lg text-white/60 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                         Sme technologický partner, ktorý spája AI, systémové integrácie a autonómnych agentov do jedného funkčného a bezpečného ekosystému.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-start">
                         <a href="#sluzby" class="px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 font-bold text-center transition-colors">
                             Čo všetko robíme?
                         </a>
@@ -189,8 +216,8 @@
                     </div>
                 </div>
 
-                <div class="h-[400px] lg:h-[600px] w-full animate-fade-up" style="animation-delay: 0.2s;">
-                    <div class="orbit-container">
+                <div class="h-[300px] sm:h-[400px] lg:h-[600px] w-full flex justify-center items-center animate-fade-up" style="animation-delay: 0.2s;">
+                    <div class="orbit-container scale-[0.55] sm:scale-75 lg:scale-100 origin-center">
                         <div class="absolute size-20 rounded-full bg-neon-purple/20 flex items-center justify-center animate-pulse-core z-20 border border-neon-purple/50 backdrop-blur-sm">
                             <div class="size-12 rounded-full bg-gradient-to-tr from-neon-purple to-neon-pink shadow-[0_0_30px_#d946ef]"></div>
                         </div>
@@ -218,47 +245,47 @@
             </div>
         </section>
 
-        <section id="agaas" class="py-32 relative border-t border-white/5">
+        <section id="agaas" class="py-20 lg:py-32 relative border-t border-white/5">
             <canvas id="neuralCanvas" class="absolute inset-0 w-full h-full opacity-30"></canvas>
             
             <div class="max-w-[80rem] mx-auto px-6 relative z-10">
-                <div class="glass-panel rounded-3xl p-10 lg:p-16 border-neon-purple/20">
-                    <div class="grid lg:grid-cols-2 gap-16 items-center">
-                        <div>
-                            <h2 class="font-display text-4xl font-bold mb-6">AI Agenti: Tím, ktorý nespí.</h2>
-                            <p class="text-white/60 text-lg mb-8 leading-relaxed">
+                <div class="glass-panel rounded-3xl p-8 sm:p-10 lg:p-16 border-neon-purple/20">
+                    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center text-center lg:text-left">
+                        <div class="flex flex-col items-center lg:items-start">
+                            <h2 class="font-display text-3xl sm:text-4xl font-bold mb-6">AI Agenti: Tím, ktorý nespí.</h2>
+                            <p class="text-white/60 text-base sm:text-lg mb-8 leading-relaxed">
                                 Nulová zmena vášho softvéru. Agentov napájame priamo do vašich aktuálnych systémov (API, ERP, e-maily). Fungujú ako virtuálni zamestnanci, ktorí autonómne riešia operatívu.
                             </p>
                             
-                            <div class="my-8 p-6 rounded-2xl bg-gradient-to-r from-neon-purple/20 to-neon-pink/10 border-l-4 border-neon-pink shadow-lg shadow-neon-pink/10">
-                                <p class="text-xl font-display font-medium text-white leading-snug">
+                            <div class="my-8 p-6 w-full rounded-2xl bg-gradient-to-r from-neon-purple/20 to-neon-pink/10 border-l-4 border-neon-pink shadow-lg shadow-neon-pink/10 text-left">
+                                <p class="text-lg sm:text-xl font-display font-medium text-white leading-snug">
                                     <span class="text-white/50">SaaS si účtuje poplatky za prístup k nástrojom.</span><br>
                                     <span class="text-neon-pink font-bold">AGaaS</span> (Agent as a Service) si účtuje poplatky <span class="text-neon-pink font-bold">za realizáciu výsledkov.</span>
                                 </p>
                             </div>
 
-                            <ul class="space-y-4">
+                            <ul class="space-y-4 text-left w-full sm:w-auto">
                                 <li class="flex items-center gap-3 text-white/80"><div class="size-2 rounded-full bg-neon-pink shadow-[0_0_10px_#d946ef]"></div> Spracovanie objednávok 24/7</li>
                                 <li class="flex items-center gap-3 text-white/80"><div class="size-2 rounded-full bg-neon-purple shadow-[0_0_10px_#9333ea]"></div> Inteligentná zákaznícka podpora</li>
                                 <li class="flex items-center gap-3 text-white/80"><div class="size-2 rounded-full bg-white shadow-[0_0_10px_#fff]"></div> Analýza rizík v reálnom čase</li>
                             </ul>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:border-neon-pink/50 transition-colors">
+                        <div class="grid grid-cols-2 gap-4 w-full">
+                            <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:border-neon-pink/50 transition-colors flex flex-col justify-center items-center">
                                 <div class="text-neon-pink text-3xl font-display font-bold mb-1">0.2s</div>
                                 <div class="text-white/50 text-sm">Odozva agenta</div>
                             </div>
-                            <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:border-neon-purple/50 transition-colors">
+                            <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:border-neon-purple/50 transition-colors flex flex-col justify-center items-center">
                                 <div class="text-neon-purple text-3xl font-display font-bold mb-1">99.9%</div>
                                 <div class="text-white/50 text-sm">Presnosť úloh</div>
                             </div>
-                            <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="col-span-2 bg-gradient-to-r from-neon-purple/10 to-neon-pink/10 border border-neon-pink/20 rounded-2xl p-6 backdrop-blur-md flex items-center justify-between group cursor-pointer hover:from-neon-purple/20 hover:to-neon-pink/20 transition-colors block">
+                            <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="col-span-2 bg-gradient-to-r from-neon-purple/10 to-neon-pink/10 border border-neon-pink/20 rounded-2xl p-6 backdrop-blur-md flex items-center justify-between group cursor-pointer hover:from-neon-purple/20 hover:to-neon-pink/20 transition-colors text-left">
                                 <div>
                                     <div class="text-white font-bold mb-1">Nasadenie do 14 dní</div>
                                     <div class="text-white/50 text-sm">Bez výpadku vašich systémov</div>
                                 </div>
-                                <div class="size-10 rounded-full border border-neon-pink/50 flex items-center justify-center text-neon-pink group-hover:bg-neon-pink group-hover:text-white transition-all">
+                                <div class="size-10 shrink-0 rounded-full border border-neon-pink/50 flex items-center justify-center text-neon-pink group-hover:bg-neon-pink group-hover:text-white transition-all">
                                     &rarr;
                                 </div>
                             </a>
@@ -268,17 +295,16 @@
             </div>
         </section>
 
-        <section id="sluzby" class="py-32 relative">
+        <section id="sluzby" class="py-20 lg:py-32 relative">
             <div class="max-w-[80rem] mx-auto px-6">
-                <div class="text-center mb-20">
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Komplexné digitálne zázemie</h2>
-                    <p class="text-white/60 max-w-2xl mx-auto text-lg">Zastrešujeme všetko od prvotnej analýzy až po nasadenie umelej inteligencie a zisk nových klientov.</p>
+                <div class="text-center mb-16 lg:mb-20">
+                    <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Komplexné digitálne zázemie</h2>
+                    <p class="text-white/60 max-w-2xl mx-auto text-base sm:text-lg">Zastrešujeme všetko od prvotnej analýzy až po nasadenie umelej inteligencie a zisk nových klientov.</p>
                 </div>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     <div class="cyber-card group">
-                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                        <div class="cyber-card-content p-8 flex flex-col h-full text-center sm:text-left items-center sm:items-start">
                             <div class="size-14 rounded-xl bg-neon-purple/10 border border-neon-purple/30 flex items-center justify-center mb-6 text-neon-purple group-hover:scale-110 transition-transform">
                                 <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
@@ -288,48 +314,48 @@
                     </div>
 
                     <div class="cyber-card group">
-                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                        <div class="cyber-card-content p-8 flex flex-col h-full text-center sm:text-left items-center sm:items-start">
                             <div class="size-14 rounded-xl bg-neon-pink/10 border border-neon-pink/30 flex items-center justify-center mb-6 text-neon-pink group-hover:scale-110 transition-transform">
                                 <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
                             </div>
-                            <h3 class="text-xl font-bold mb-4 font-display">2. Nezávislé poradenstvo & Systémy</h3>
-                            <p class="text-white/50 text-sm flex-grow">Uľahčíme vám výber CRM a ERP. Zanalyzujeme vaše potreby, nasadíme vhodné riešenie a nástroje navzájom prepojíme a zautomatizujeme.</p>
+                            <h3 class="text-xl font-bold mb-4 font-display">2. Nezávislé poradenstvo</h3>
+                            <p class="text-white/50 text-sm flex-grow">Uľahčíme vám výber CRM a ERP. Zanalyzujeme potreby, nasadíme vhodné riešenie a nástroje navzájom prepojíme.</p>
                         </div>
                     </div>
 
                     <div class="cyber-card group">
-                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                        <div class="cyber-card-content p-8 flex flex-col h-full text-center sm:text-left items-center sm:items-start">
                             <div class="size-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform">
                                 <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
                             </div>
                             <h3 class="text-xl font-bold mb-4 font-display">3. Moderné Webstránky</h3>
-                            <p class="text-white/50 text-sm flex-grow">Vytvárame vizitky, ktoré predávajú. Od základných a čistých dizajnov až po extrémne pokročilé a plne automatizované webové portály na mieru.</p>
+                            <p class="text-white/50 text-sm flex-grow">Vytvárame vizitky, ktoré predávajú. Od základných dizajnov až po plne automatizované webové portály na mieru.</p>
                         </div>
                     </div>
 
                     <div class="cyber-card group">
-                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                        <div class="cyber-card-content p-8 flex flex-col h-full text-center sm:text-left items-center sm:items-start">
                             <div class="size-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform">
                                 <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             </div>
                             <h3 class="text-xl font-bold mb-4 font-display">4. E-commerce na kľúč</h3>
-                            <p class="text-white/50 text-sm flex-grow">Zriadime plne automatizovaný e-shop. Zabezpečíme prepojenie na sklady, AI generovanie produktových fotiek a automatické vybavovanie objednávok.</p>
+                            <p class="text-white/50 text-sm flex-grow">Zriadime automatizovaný e-shop. Prepojenie na sklady, AI generovanie fotiek a automatické vybavovanie objednávok.</p>
                         </div>
                     </div>
 
                     <div class="cyber-card group">
-                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                        <div class="cyber-card-content p-8 flex flex-col h-full text-center sm:text-left items-center sm:items-start">
                             <div class="size-14 rounded-xl bg-neon-pink/10 border border-neon-pink/30 flex items-center justify-center mb-6 text-neon-pink group-hover:scale-110 transition-transform">
                                 <svg class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             </div>
                             <h3 class="text-xl font-bold mb-4 font-display">5. Prísun nových Leadov</h3>
-                            <p class="text-white/50 text-sm flex-grow">Zabudnite na cold-calling. Nastavíme digitálny marketing tak, aby ste dostávali "teplé" leady – klientov, ktorí už majú reálny záujem o vašu službu.</p>
+                            <p class="text-white/50 text-sm flex-grow">Zabudnite na cold-calling. Nastavíme digitálny marketing tak, aby ste dostávali klientov s reálnym záujmom.</p>
                         </div>
                     </div>
 
                     <div class="cyber-card group">
                         <div class="cyber-card-content p-8 flex flex-col h-full items-center justify-center text-center bg-gradient-to-br from-neon-purple/5 to-neon-pink/5">
-                            <h3 class="text-2xl font-bold mb-4 font-display gradient-text">Možností je veľa<br>a my o nich vieme :)</h3>
+                            <h3 class="text-xl sm:text-2xl font-bold mb-4 font-display gradient-text">Možností je veľa<br>a my o nich vieme :)</h3>
                             <p class="text-white/50 text-sm mb-6">Máte špecifický technologický problém alebo víziu, ktorú iní nevedia zrealizovať?</p>
                             <a href="#kontakt" class="px-6 py-2.5 rounded-full border border-neon-purple/50 text-neon-purple hover:bg-neon-purple hover:text-white transition-colors text-sm font-bold">
                                 Poďme sa porozprávať
@@ -341,35 +367,35 @@
             </div>
         </section>
 
-        <section id="kontakt" class="py-32 relative border-t border-white/5 bg-black/20">
-            <div class="max-w-[80rem] mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Inicializácia spolupráce</h2>
-                    <p class="text-white/60 mb-10 text-lg">Zanechajte nám základné informácie - <strong class="text-white">do 24 hodín sa vám ozveme. </strong> </p>
+        <section id="kontakt" class="py-20 lg:py-32 relative border-t border-white/5 bg-black/20">
+            <div class="max-w-[80rem] mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center text-center lg:text-left">
+                <div class="flex flex-col items-center lg:items-start">
+                    <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Inicializácia spolupráce</h2>
+                    <p class="text-white/60 mb-10 text-base sm:text-lg max-w-xl">Zanechajte nám základné parametre a my vám v tíme <strong class="text-white">Unoneto s.r.o.</strong> do 24 hodín navrhneme architektúru riešenia na mieru.</p>
                     
-                    <div class="space-y-6">
+                    <div class="space-y-6 w-full flex flex-col items-center lg:items-start">
                         <div class="flex items-center gap-4">
-                            <div class="size-10 rounded-full border border-neon-purple/30 bg-neon-purple/10 flex items-center justify-center text-neon-purple">
+                            <div class="size-10 shrink-0 rounded-full border border-neon-purple/30 bg-neon-purple/10 flex items-center justify-center text-neon-purple">
                                 <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             </div>
                             <a href="mailto:info@unoneto.eu" class="text-white/80 hover:text-white font-medium transition-colors">info@unoneto.eu</a>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="size-10 rounded-full border border-neon-pink/30 bg-neon-pink/10 flex items-center justify-center text-neon-pink">
+                            <div class="size-10 shrink-0 rounded-full border border-neon-pink/30 bg-neon-pink/10 flex items-center justify-center text-neon-pink">
                                 <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             </div>
                             <a href="tel:+421905351100" class="text-white/80 hover:text-white font-medium transition-colors">+421 905 351 100</a>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="size-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-white">
+                            <div class="size-10 shrink-0 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-white">
                                 <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             </div>
-                            <span class="text-white/80">Bidovce, Slovenská republika</span>
+                            <span class="text-white/80 text-left">Bidovce, Slovenská republika</span>
                         </div>
                     </div>
                 </div>
 
-                <form action="https://formspree.io/f/xyzjaepv" method="POST" class="glass-panel p-8 rounded-3xl">
+                <form action="https://formspree.io/f/xyzjaepv" method="POST" class="glass-panel p-6 sm:p-8 rounded-3xl text-left w-full">
                     <div class="space-y-5">
                         <div>
                             <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Subjekt</label>
@@ -395,7 +421,7 @@
     </main>
 
     <footer class="border-t border-white/10 py-8 bg-black/40">
-        <div class="max-w-[80rem] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-[80rem] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4 text-center md:text-left">
             <div class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
                 <img src="favicon.png" alt="Unoneto Logo" class="h-6 w-auto object-contain grayscale">
                 <span class="font-display font-bold text-white">Unoneto s.r.o.</span>
@@ -403,7 +429,7 @@
             <div class="text-white/40 text-sm">
                 &copy; 2026 Všetky práva vyhradené.
             </div>
-            <div class="flex gap-6 text-sm text-white/40">
+            <div class="flex gap-6 text-sm text-white/40 flex-col sm:flex-row">
                 <a href="mailto:info@unoneto.eu" class="hover:text-neon-pink transition-colors">info@unoneto.eu</a>
                 <a href="tel:+421905351100" class="hover:text-neon-pink transition-colors">+421 905 351 100</a>
             </div>
@@ -411,11 +437,59 @@
     </footer>
 
     <script>
+        // Logika pre Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const menuIcon = document.getElementById('menu-icon');
+        let isMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                mobileMenuOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; 
+                
+                menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+                
+                setTimeout(() => {
+                    mobileMenuOverlay.classList.remove('opacity-0');
+                    mobileMenuOverlay.classList.add('opacity-100');
+                }, 10);
+            } else {
+                mobileMenuOverlay.classList.remove('opacity-100');
+                mobileMenuOverlay.classList.add('opacity-0');
+                document.body.style.overflow = ''; 
+                
+                menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+                
+                setTimeout(() => {
+                    mobileMenuOverlay.classList.add('hidden');
+                }, 300); 
+            }
+        });
+
+        // Zavretie menu po kliku
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if(isMenuOpen) mobileMenuBtn.click();
+            });
+        });
+        // Zavretie menu po kliknutí kamkoľvek na stmavené pozadie
+mobileMenuOverlay.addEventListener('click', (e) => {
+    // Ak používateľ klikne presne na overlay (pozadie) a menu je otvorené, zatvoríme ho
+    if (e.target === mobileMenuOverlay && isMenuOpen) {
+        mobileMenuBtn.click(); 
+    }
+});
+
+        // Neural Canvas Network
         const canvas = document.getElementById('neuralCanvas');
         const ctx = canvas.getContext('2d');
         let particlesArray;
 
         function resizeCanvas() {
+            if(!canvas) return;
             canvas.width = canvas.parentElement.offsetWidth;
             canvas.height = canvas.parentElement.offsetHeight;
         }
