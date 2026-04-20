@@ -1,649 +1,608 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk" class="scroll-smooth">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<meta charset="UTF-8">
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
+    
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grafické služby - Profesionálny dizajn | Unoneto</title>
     <meta name="description" content="Komplexné grafické a dizajnové služby. Logo design, social media grafika, tlač, webové prvky a viac. Profesionálna kvalita dodaná do týždňa.">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.png" type="image/png">
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"/>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"DM Sans"', 'sans-serif'],
+              display: ['"Space Grotesk"', 'sans-serif'],
+            },
+            colors: {
+                neon: {
+                    purple: '#9333ea',
+                    pink: '#d946ef',
+                    dark: '#08021a'
+                }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+        body { background-color: #08021a; color: white; overflow-x: hidden; }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+        .glass-panel {
+            background: rgba(14, 6, 36, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 70, 239, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff, #c084fc, #d946ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigácia a Dropdown */
+        .nav-links li { position: relative; }
+        .dropdown-menu {
+            display: none; position: absolute; top: 100%; left: -1rem; min-width: 240px;
+            background: rgba(14, 6, 36, 0.95); backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 51, 234, 0.3); border-radius: 12px;
+            padding: 0.75rem 0; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 100;
+        }
+        .has-dropdown:hover .dropdown-menu { display: block; animation: fadeUp 0.2s ease-out forwards; }
+        .dropdown-menu a { display: block; padding: 0.6rem 1.5rem; color: rgba(255,255,255,0.7); font-size: 0.875rem; transition: all 0.2s; }
+        .dropdown-menu a:hover { color: #d946ef; background: rgba(217, 70, 239, 0.1); padding-left: 1.75rem; }
+
+        /* Cyber Cards (Služby) */
+        .cyber-card { position: relative; background: #0d0620; border-radius: 20px; overflow: hidden; transition: transform 0.3s ease; }
+        .cyber-card::before {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, rgba(217, 70, 239, 0.3), transparent 30%);
+            animation: spin 4s linear infinite; z-index: 0; opacity: 0; transition: opacity 0.3s;
+        }
+        .cyber-card:hover::before { opacity: 1; }
+        .cyber-card:hover { transform: translateY(-5px); }
+        .cyber-card-content { position: relative; z-index: 1; background: #0d0620; margin: 2px; border-radius: 18px; height: calc(100% - 4px); }
+
+        /* FAQ Akordeón */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: fadeUp 0.3s ease-in-out; }
+
+        /* Custom scrollbar pre Select */
+        select option { background-color: #08021a; color: white; }
+    </style>
 </head>
+<body class="antialiased selection:bg-neon-pink selection:text-white">
 
-<body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<div id="promo-banner" class="promo-banner">
-    <p>
-        <strong>AKCIA:</strong> Prezentačná webstránka so SEO nastavením len za <strong>290€</strong>! Predĺžená akcia do konca septembra 2025!
-    </p>
-    <a href="/weby" class="btn btn-secondary btn-small">Zistiť viac</a>
-</div>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<div class="particle-container">
-    <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
-    <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
-    <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
-    <div class="ping-particle" style="top: 10%; left: 70%; animation-duration: 6s; animation-delay: 2s;"></div>
-    <div class="ping-particle" style="top: 90%; left: 25%; animation-duration: 4.5s; animation-delay: 3s;"></div>
-</div>
+    <div class="fixed inset-0 z-[-2] bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+    <div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(147,51,234,0.15),rgba(255,255,255,0))]"></div>
 
-<div class="background-shapes">
-    <div class="shape shape1"></div>
-    <div class="shape shape2"></div>
-    <div class="shape shape3"></div>
-</div>
+    <div class="w-full bg-gradient-to-r from-neon-purple/20 to-neon-pink/20 border-b border-neon-pink/30 text-center py-3 px-4 fixed top-0 z-[60] backdrop-blur-md text-sm text-white/90">
+        <span class="font-bold text-white">AKCIA:</span> Prezentačná webstránka so SEO nastavením len za <strong>290€</strong>! Predĺžená akcia do konca septembra 2026. 
+        <a href="weby.html" class="ml-2 font-bold text-neon-pink hover:text-white underline transition-colors">Zistiť viac &rarr;</a>
+    </div>
 
-<header class="main-header">
-    <nav class="container">
-        <a href="/" class="logo">
-            <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
-            <span>Unoneto</span>
-        </a>
-        <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
-            <span class="hamburger-bar"></span>
-            <span class="hamburger-bar"></span>
-            <span class="hamburger-bar"></span>
-        </button>
-        
-        <ul class="nav-links" id="nav-menu">
-            <li class="has-dropdown">
-                <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
-                <ul class="dropdown-menu">
-                         <li><a href="weby">Prezentačné weby</a></li>
+    <header class="fixed top-[45px] w-full z-50 glass-panel border-t-0 border-l-0 border-r-0 border-b border-white/5">
+        <nav class="max-w-[80rem] mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="font-display font-bold text-2xl tracking-wide flex items-center gap-3">
+                <img src="favicon.png" alt="Unoneto Logo" class="h-8 w-auto object-contain">
+                <span>Unoneto</span>
+            </a>
+            
+            <ul class="nav-links hidden lg:flex gap-8 items-center text-sm font-medium text-white/70" id="nav-menu">
+                <li class="has-dropdown py-2">
+                    <a href="#" class="hover:text-white transition-colors flex items-center gap-1 text-white">
+                        Naša ponuka
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Prezentačné weby</a></li>
                         <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafika na mieru</a></li>
+                        <li><a href="graficke-sluzby" class="text-neon-pink font-bold">Grafika na mieru</a></li>
                         <li><a href="automatizacia">AI Automatizácia procesov</a></li>
                         <li><a href="raynetcrm">RAYNET CRM</a></li>
                         <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
                         <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
-                 </ul>
-            </li>
-            <li><a href="blog">Blog</a></li>
-            <li class="language-switcher">
-                <a href="/graficke-sluzby" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
-                <span class="lang-separator">|</span>
-                <a href="graphic-design" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
-            </li>
-            <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Rezervovať konzultáciu</a></li>
-        </ul>
-    </nav>
-</header>
+                        <li><a href="hugo">IS HUGO pre samosprávy</a></li>
+                        <li><a href="ozobot">Programovateľné roboty</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog" class="hover:text-white transition-colors">Blog</a></li>
+                
+                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink hover:scale-105 border-none text-white text-sm font-bold transition-transform shadow-[0_0_20px_rgba(217,70,239,0.3)]">
+                        Rezervovať konzultáciu
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-<main class="main-content">
-    <section class="subpage-hero container reveal">
-        <h1 class="hero-title">Profesionálne<br><span class="gradient-text">grafické služby</span></h1>
-        <p class="hero-description">Od loga po kompletnú vizuálnu identitu. Profesionálna kvalita, dodanie do týždňa.</p>
-        
-        <div class="hero-cta-buttons">
-            <a href="#contact-form" class="btn btn-primary btn-large">Vyžiadať cenovú ponuku</a>
-            <a href="https://wa.me/421905351100" target="_blank" class="btn btn-secondary btn-large">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 0.5rem;">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-                WhatsApp
-            </a>
-            <a href="tel:+421905351100" class="btn btn-secondary btn-large">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 0.5rem;">
-                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-                </svg>
-                Zavolať
-            </a>
-        </div>
-    </section>
+    <main>
+        <section class="relative pt-40 pb-20 overflow-hidden min-h-[80vh] flex items-center mt-10">
+            <div class="max-w-[80rem] w-full mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="animate-fade-up">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neon-purple/30 bg-neon-purple/10 text-neon-purple text-xs font-bold uppercase tracking-widest mb-6">
+                        <span class="relative flex size-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-purple opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-neon-purple"></span></span>
+                        Pixel-Perfect Identita
+                    </div>
+                    <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1]">
+                        Vizuál, ktorý <br>
+                        <span class="gradient-text">predáva.</span>
+                    </h1>
+                    <p class="text-lg text-white/60 mb-10 max-w-xl leading-relaxed">
+                        Od loga po kompletnú vizuálnu identitu. Poskytujeme profesionálne grafické služby, ktoré vašu značku odlíšia od konkurencie. Špičková kvalita, dodanie do týždňa.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#contact-form" class="px-8 py-4 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink font-bold text-center hover:scale-105 transition-transform shadow-[0_0_30px_rgba(217,70,239,0.4)] text-white">
+                            Vyžiadať cenovú ponuku
+                        </a>
+                        <a href="https://wa.me/421905351100" target="_blank" class="px-8 py-4 rounded-full border border-[#25D366]/50 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] font-bold text-center transition-colors flex items-center justify-center gap-2">
+                            <i class="fab fa-whatsapp text-xl"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
 
-    <section class="container subpage-content reveal">
-        <h2 class="section-title">Naše grafické služby</h2>
-        <p class="section-subtitle">Vyberte si kategóriu alebo prehliadajte všetky služby</p>
-        
-        <div class="services-filter">
-            <button class="filter-btn active" data-filter="all">Všetky služby</button>
-            <button class="filter-btn" data-filter="brand">Brand & Logo</button>
-            <button class="filter-btn" data-filter="digital">Digital & Social Media</button>
-            <button class="filter-btn" data-filter="print">Print & Tlač</button>
-            <button class="filter-btn" data-filter="events">Eventy & Pozvánky</button>
-                        <button class="filter-btn" data-filter="creative">Kreatíva & Marketing</button>
-        </div>
-
-        <div class="services-grid" id="services-grid">
-            
-            <div class="card service-item" data-category="brand">
-                <h3>Dizajn loga (2D)</h3>
-                <p>Vytvoríme jedinečné logo, ktoré dokonale vystihne vašu značku a bude fungovať vo všetkých formátoch.</p>
-                <ul class="service-features">
-                    <li>3 koncepcie dizajnu</li>
-                    <li>Neobmedzené revízie</li>
-                    <li>Všetky formáty súborov</li>
-                    <li>Dodanie: 5-7 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="brand">
-                <h3>Dizajn loga (3D)</h3>
-                <p>Moderné 3D logo s hĺbkou a objemom pre prémiový vzhľad vašej značky.</p>
-                <ul class="service-features">
-                    <li>3D modelovanie</li>
-                    <li>Rôzne uhly pohľadu</li>
-                    <li>Render vo vysokom rozlíšení</li>
-                    <li>Dodanie: 7-10 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="brand">
-                <h3>Dizajn vizitiek</h3>
-                <p>Profesionálne vizitky, ktoré zanechajú trvalý dojem a perfektne reprezentujú vašu firmu.</p>
-                <ul class="service-features">
-                    <li>Obojstranný dizajn</li>
-                    <li>Tlačová predloha</li>
-                    <li>2-3 varianty</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-<div class="card service-item" data-category="print">
-    <h3>Vektorizácia obrázkov</h3>
-    <p>Konverzia rastrových obrázkov na vektorové pre neobmedzenú škálovateľnosť.</p>
-    <ul class="service-features">
-        <li>Ručná vektorizácia</li>
-        <li>AI, EPS, SVG formáty</li>
-        <li>Vysoká presnosť</li>
-        <li>Dodanie: 2-4 dni</li>
-    </ul>
-    <button class="btn btn-primary service-cta">Vyžiadať ponuku</button>
-</div>
-
-<div class="card service-item" data-category="print">
-    <h3>Dizajn letákov a brožúr</h3>
-    <p>Pútavé letáky a profesionálne brožúry, ktoré efektívne komunikujú vaše posolstvo.</p>
-    <ul class="service-features">
-        <li>Kreatívny návrh</li>
-        <li>Viacstranové spracovanie</li>
-        <li>Príprava pre tlač</li>
-        <li>Dodanie: 5-7 dní</li>
-    </ul>
-    <button class="btn btn-primary service-cta">Vyžiadať ponuku</button>
-</div>
-
-<div class="card service-item" data-category="print">
-    <h3>Dizajn reklamných bannerov (roll-up)</h3>
-    <p>Vizuálne atraktívne bannery pre vaše eventy, konferencie alebo predajné miesta.</p>
-    <ul class="service-features">
-        <li>Originálny návrh</li>
-        <li>Veľkoformátová grafika</li>
-        <li>Príprava pre tlač</li>
-        <li>Dodanie: 4-6 dní</li>
-    </ul>
-    <button class="btn btn-primary service-cta">Vyžiadať ponuku</button>
-</div>
-            
-            <div class="card service-item" data-category="brand">
-                <h3>Dizajn firemného profilu</h3>
-                <p>Kompletný firemný profil v PDF formáte pre prezentáciu vašej spoločnosti.</p>
-                <ul class="service-features">
-                    <li>Profesionálny layout</li>
-                    <li>Infografiky a vizualizácie</li>
-                    <li>Print a digitálna verzia</li>
-                    <li>Dodanie: 7-10 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Dizajn social media postov</h3>
-                <p>Eye-catching posty pre Instagram, Facebook, LinkedIn s konzistentným vizuálnym štýlom.</p>
-                <ul class="service-features">
-                    <li>Všetky formáty (post, story, reel)</li>
-                    <li>Balíčky od 5 postov</li>
-                    <li>Upraviteľné šablóny</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Instagram Highlight ikony</h3>
-                <p>Vlastné ikony pre Instagram Highlights stories, ktoré doplnia váš brand.</p>
-                <ul class="service-features">
-                    <li>Sada 5-15 ikon</li>
-                    <li>Konzistentný štýl</li>
-                    <li>PNG s priesvitnosťou</li>
-                    <li>Dodanie: 2-3 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Reklamné kreativy FB/IG</h3>
-                <p>Reklamné kreativy optimalizované pre maximálnu konverziu vo vašich kampaniach.</p>
-                <ul class="service-features">
-                    <li>A/B testing varianty</li>
-                    <li>CTA optimalizácia</li>
-                    <li>Všetky rozmery</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Dizajn vstupných stránok</h3>
-                <p>Dizajn landing page s vysokou konverziou pre vaše produkty alebo služby.</p>
-                <ul class="service-features">
-                    <li>Responzívny dizajn</li>
-                    <li>UX optimalizovaný</li>
-                    <li>Figma/Adobe XD súbory</li>
-                    <li>Dodanie: 5-7 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Dizajn bannerov</h3>
-                <p>Webové a printové bannery pre reklamu, akcie a eventy.</p>
-                <ul class="service-features">
-                    <li>Rôzne formáty</li>
-                    <li>Animované verzie (voliteľné)</li>
-                    <li>Print a web kvalita</li>
-                    <li>Dodanie: 2-4 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="digital">
-                <h3>Dizajn prezentácií</h3>
-                <p>Profesionálne PowerPoint/Google Slides prezentácie, ktoré zaujmú publikum.</p>
-                <ul class="service-features">
-                    <li>Vlastný dizajn šablóny</li>
-                    <li>Infografiky a grafy</li>
-                    <li>Master slide nastavenie</li>
-                    <li>Dodanie: 5-7 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="print">
-                <h3>Letáky</h3>
-                <p>Atraktívne letáky, ktoré zaujmú dizajnom aj obsahom.</p>
-                <ul class="service-features">
-                    <li>A4, A5, DL formáty</li>
-                    <li>Aj obojstranný dizajn</li>
-                    <li>Tlačová predloha</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="print">
-                <h3>Brožúry</h3>
-                <p>Viacstranové brožúry pre prezentáciu produktov, služieb alebo firmy.</p>
-                <ul class="service-features">
-                    <li>Bi-fold, Tri-fold, Multi-page</li>
-                    <li>Profesionálny layout</li>
-                    <li>Tlačová predloha</li>
-                    <li>Dodanie: 5-7 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            
-            <div class="card service-item" data-category="print">
-                <h3>Dizajn preukazov</h3>
-                <p>Zamestnanecké alebo členské preukazy s profesionálnym dizajnom.</p>
-                <ul class="service-features">
-                    <li>Obojstranný dizajn</li>
-                    <li>Štandardné rozmery</li>
-                    <li>Tlačová predloha</li>
-                    <li>Dodanie: 2-3 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="print">
-                <h3>Dizajn menu</h3>
-                <p>Dizajn reštauračného menu, ktoré prilákne zákazníkov a zvýši predaj.</p>
-                <ul class="service-features">
-                    <li>Kompletné menu (full menu)</li>
-                    <li>Kategorizácia jedál</li>
-                    <li>Tlačový + digitálny formát</li>
-                    <li>Dodanie: 5-7 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="print">
-                <h3>Dizajn nálepiek</h3>
-                <p>Vlastné nálepky pre branding, balenie produktov alebo marketing.</p>
-                <ul class="service-features">
-                    <li>Rôzne tvary a veľkosti</li>
-                    <li>Die-cut pripravené</li>
-                    <li>Tlačová predloha</li>
-                    <li>Dodanie: 2-3 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="events">
-                <h3>Svadobné/narodeninové pozvánky</h3>
-                <p>Krásne svadobné, narodeninové a party pozvánky na mieru.</p>
-                <ul class="service-features">
-                    <li>Personalizovaný dizajn</li>
-                    <li>Print a digitálna verzia</li>
-                    <li>Rôzne formáty</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="events">
-                <h3>Dizajn pozvánok</h3>
-                <p>Pozvánky na firemné eventy, konferencie a špeciálne príležitosti.</p>
-                <ul class="service-features">
-                    <li>Profesionálny štýl</li>
-                    <li>Tlačový + digitálny</li>
-                    <li>E-invitation možnosť</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="events">
-                <h3>Vlastné ikony</h3>
-                <p>Vlastné ikony pre aplikácie, web alebo tlačové materiály.</p>
-                <ul class="service-features">
-                    <li>Vektorový formát</li>
-                    <li>Rôzne štýly (flat, 3D, line)</li>
-                    <li>Balíčky od 5 ikon</li>
-                    <li>Dodanie: 3-5 dní</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="creative">
-                <h3>Kreatívny dizajn</h3>
-                <p>Netradičné a kreatívne dizajnérske riešenia pre vaše projekty.</p>
-                <ul class="service-features">
-                    <li>Unikátne koncepty</li>
-                    <li>Rôzne štýly a techniky</li>
-                    <li>Individuálny prístup</li>
-                    <li>Dodanie: individuálne</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="creative">
-                <h3>Produktové fotky</h3>
-                <p>Produktové grafiky pre e-shopy s profesionálnym vzhľadom.</p>
-                <ul class="service-features">
-                    <li>Biele pozadie + lifestyle</li>
-                    <li>Infografika features</li>
-                    <li>Amazon/eshop ready</li>
-                    <li>Dodanie: 2-4 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-
-            <div class="card service-item" data-category="creative">
-                <h3>Retuš fotografií</h3>
-                <p>Profesionálna retuš a úprava fotografií modelov a produktov.</p>
-                <ul class="service-features">
-                    <li>Cena za fotografiu</li>
-                    <li>Korekcia farieb</li>
-                    <li>Background removal</li>
-                    <li>Dodanie: 1-2 dni</li>
-                </ul>
-                <a href="#contact-form" class="btn btn-primary service-cta">Vyžiadať ponuku</a>
-            </div>
-                            
-        </div>
-    </section>
-
-    <section class="container reveal" style="margin: 4rem auto;">
-        <h2 class="section-title">Naše práce</h2>
-        <p class="section-subtitle">Portfólio vybraných projektov</p>
-        
-        <div id="portfolio-gallery-slider" class="splide" aria-label="Galéria našich prác" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
-                          <div class="splide__track">
-                <ul class="splide__list">
+                <div class="relative h-[400px] w-full hidden lg:flex items-center justify-center animate-fade-up" style="animation-delay: 0.2s;">
+                    <div class="absolute w-40 h-40 bg-neon-purple/80 rounded-full mix-blend-screen filter blur-xl animate-pulse"></div>
+                    <div class="absolute w-40 h-40 bg-neon-pink/80 rounded-full mix-blend-screen filter blur-xl animate-pulse" style="animation-delay: 1s; transform: translateX(50px) translateY(50px);"></div>
+                    <div class="absolute w-40 h-40 bg-blue-500/80 rounded-full mix-blend-screen filter blur-xl animate-pulse" style="animation-delay: 2s; transform: translateX(-50px) translateY(20px);"></div>
                     
-                    <li class="splide__slide">
-                        <a href="logo_ombradoro.webp" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="logo_ombradoro.webp" alt="Grafický dizajn - Ombra D'oro" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf2.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf2.JPG" alt="Grafický dizajn - Projekt 2" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="od.jpg" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="od.jpg" alt="Grafický dizajn - Ombra Doro" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf3.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf3.JPG" alt="Grafický dizajn - Projekt 3" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf4.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf4.JPG" alt="Grafický dizajn - Projekt 4" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf5.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf5.JPG" alt="Grafický dizajn - Projekt 5" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf6.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf6.JPG" alt="Grafický dizajn - Projekt 6" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf7.jpg" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf7.jpg" alt="Grafický dizajn - Projekt 7" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf9.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf9.JPG" alt="Grafický dizajn - Projekt 9" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf8.JPG" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf8.JPG" alt="Grafický dizajn - Projekt 8" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-                    <li class="splide__slide">
-                        <a href="graf1.jpg" class="glightbox" data-gallery="portfolio-gallery">
-                            <img src="graf1.jpg" alt="Grafický dizajn - Projekt 1" style="height: 400px; object-fit: cover;">
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-        
-        <div style="text-align: center; margin-top: 3rem;">
-            <a href="#contact-form" class="btn btn-primary btn-large">Kontaktný formulár</a>
-        </div>
-    </section>
-
-   
-
-    <section id="contact-form" class="container reveal">
-        <h2 class="section-title">Vyžiadajte si cenovú ponuku</h2>
-        <p class="section-subtitle">Napíšte nám o vašom projekte a my vám do 24 hodín pripravíme nezáväznú cenovú ponuku.</p>
-        
-        <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form" style="max-width: 700px; margin: 3rem auto;">
-            <div class="input-group">
-                <label for="full-name">Vaše meno *</label>
-                <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
-            </div>
-            
-            <div class="input-group">
-                <label for="email-address">Váš email *</label>
-                <input type="email" id="email-address" name="email" placeholder="napr. jan@firma.sk" required>
-            </div>
-            
-            <div class="input-group">
-                <label for="phone-number">Telefónne číslo (nepovinné)</label>
-                <input type="tel" id="phone-number" name="telefon" placeholder="napr. 0905 123 456">
-            </div>
-            
-            <div class="input-group">
-                <label for="service-type">Typ služby *</label>
-                <select id="service-type" name="service" required style="width: 100%; padding: 0.875rem; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'Inter', sans-serif;">
-                    <option value="">Vyberte službu...</option>
-                    <option value="logo">Dizajn loga</option>
-                    <option value="brand-identita">Brand Identita (Logo, vizitky, profil firmy)</option>
-                    <option value="social-media">Grafika pre sociálne siete (Posty, Reklamy)</option>
-                    <option value="web-dizajn">Web dizajn (Bannery, Landing page, Prezentácie)</option>
-                    <option value="tlacoviny">Tlačoviny (Letáky, Brožúry, Plagáty)</option>
-                    <option value="restauracne-menu">Reštauračné menu</option>
-                    <option value="reklamne-bannery">Reklamné bannery (Roll-up, Online)</option>
-                    <option value="pozvanky">Dizajn pozvánok (Svadobné, Firemné)</option>
-                    <option value="retus-foto">Retuš a úprava fotografií</option>
-                    <option value="vektorizacia">Vektorizácia (Prevod loga/obrázku do kriviek)</option>
-                    <option value="ina-sluzba">Iná služba (Špecifikujte v správe)</option>
-                </select>
-            </div>
-            
-            <div class="input-group">
-                <label for="message">Popis projektu *</label>
-                <textarea id="message" name="message" placeholder="Stručne popíšte váš projekt, čo potrebujete, aké máte predstavy..." rows="6" required></textarea>
-            </div>
-            
-            <div class="input-group">
-                <label for="deadline">Preferovaná dodacia lehota (nepovinné)</label>
-                <input type="text" id="deadline" name="deadline" placeholder="napr. do 7 dní, alebo konkrétny dátum">
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">Odoslať nezáväznú dopyt</button>
-            
-            <p style="text-align: center; margin-top: 1.5rem; color: #666; font-size: 0.875rem;">
-                Odpovedáme do 24 hodín. Vaše údaje sú chránené a nebudú zdieľané s tretími stranami.
-            </p>
-        </form>
-    </section>
-
-  <section class="container subpage-content reveal">
-    <h2 class="section-title">Často kladené otázky</h2>
-    <p class="section-subtitle">Odpovede na najčastejšie otázky a obavy našich klientov</p>
-
-    <div class="faq-container">
-        <details class="faq-item">
-            <summary class="faq-question">Aké formáty súborov dostanem?</summary>
-            <div class="faq-answer">
-                <p>Dodávame súbory v najpoužívanejších formátoch ako JPG, PNG (s transparentným pozadím), SVG (pre vektorovú grafiku), PDF (pre tlač), a v prípade potreby aj zdrojové súbory AI alebo PSD.</p>
-            </div>
-        </details>
-        <details class="faq-item">
-            <summary class="faq-question">Môžem požiadať o revízie?</summary>
-            <div class="faq-answer">
-                <p>Áno, väčšina našich grafických balíčkov zahŕňa určitý počet revízií, aby sme zabezpečili Vašu maximálnu spokojnosť. Počet revízií je vždy uvedený v konkrétnej ponuke.</p>
-            </div>
-        </details>
-        <details class="faq-item">
-            <summary class="faq-question">Ako dlho trvá typický projekt?</summary>
-            <div class="faq-answer">
-                <p>Dĺžka projektu závisí od jeho komplexnosti a rozsahu. Menšie projekty (napr. vizitky) môžu trvať 3-5 dní, väčšie projekty (napr. dizajn loga) 5-10 dní. Presný časový rámec Vám vždy oznámime v ponuke.</p>
-            </div>
-        </details>
-        <details class="faq-item">
-            <summary class="faq-question">Ponúkate aj tlačové služby?</summary>
-            <div class="faq-answer">
-                <p>Priamo tlačové služby neposkytujeme, ale všetky naše grafické návrhy sú pripravené profesionálne a v požadovaných formátoch pre akúkoľvek tlačiareň. Radi Vám odporučíme osvedčených partnerov.</p>
-            </div>
-        </details>
-        <details class="faq-item">
-            <summary class="faq-question">Ako prebieha platba?</summary>
-            <div class="faq-answer">
-                <p>Obvykle vyžadujeme zálohovú platbu (50% z celkovej sumy) pred začatím práce a zvyšok po schválení finálneho návrhu a odovzdaní súborov. Detaily platby sú vždy dohodnuté individuálne.</p>
-            </div>
-        </details>
-    </div>
-</section>
-
-</main>
-
-<footer class="main-footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <a href="/" class="logo">
-                    <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
-                    <span>Unoneto</span>
-                </a>
-                <p>Váš rast, poháňaný výsledkami.</p>
-            </div>
-            
-            <div class="footer-col">
-                <h4>Kontakt</h4>
-                <p>Unoneto s. r. o.</p>
-                <p>IČO: 55530966</p>
-                <p>DIČ: 2122015522</p>
-                <p><a href="tel:+421905351100">+421 905 351 100</a></p>
-                <p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
-            </div>
-            
-            <div class="footer-col">
-                <h4>Rýchle odkazy</h4>
-                <a href="/#services">Naše riešenia</a>
-                <a href="/#process">Náš proces</a>
-                <a href="/#about">Kto sme</a>
-                <a href="#contact-form">Kontakt</a>
-            </div>
-
-            <div class="footer-col">
-                <h4>Sledujte nás</h4>
-                <div class="social-icons">
-                    <a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook" title="Facebook">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg>
-                    </a>
-                    <a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram" title="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-                    </a>
-                    <a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn" title="LinkedIn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
-                    </a>
+                    <div class="absolute w-64 h-80 glass-panel rounded-2xl z-20 border border-white/20 p-6 shadow-2xl" style="transform: rotate(5deg);">
+                        <div class="w-full h-32 rounded-xl bg-gradient-to-br from-neon-pink to-neon-purple mb-6"></div>
+                        <div class="h-4 w-3/4 bg-white/20 rounded mb-3"></div>
+                        <div class="h-4 w-1/2 bg-white/10 rounded mb-6"></div>
+                        <div class="flex gap-2">
+                            <div class="size-8 rounded-full bg-neon-pink/50"></div>
+                            <div class="size-8 rounded-full bg-neon-purple/50"></div>
+                            <div class="size-8 rounded-full bg-blue-500/50"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="copyright">
-            <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
-        </div>
-    </div>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-<script src="script.js"></script>
+        </section>
 
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+        <section class="py-20 relative">
+            <div class="max-w-[80rem] mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Naše grafické služby</h2>
+                    <p class="text-white/60">Vyberte si kategóriu alebo prehliadajte všetky služby</p>
+                </div>
 
+                <div class="flex flex-wrap justify-center gap-3 mb-16">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-neon-purple text-white bg-neon-purple/20 transition-all font-medium text-sm" data-filter="all">Všetky služby</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm" data-filter="brand">Brand & Logo</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm" data-filter="digital">Digital & Social</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm" data-filter="print">Print & Tlač</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm" data-filter="events">Eventy</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm" data-filter="creative">Kreatíva</button>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
+                    
+                    <div class="cyber-card service-item" data-category="brand">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Dizajn loga (2D)</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Vytvoríme jedinečné logo, ktoré dokonale vystihne vašu značku a bude fungovať vo všetkých formátoch.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> 3 koncepcie dizajnu</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Neobmedzené revízie</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Všetky formáty súborov</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-purple/50 text-center font-bold text-neon-purple hover:bg-neon-purple hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="brand">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Dizajn loga (3D)</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Moderné 3D logo s hĺbkou a objemom pre prémiový vzhľad vašej značky.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> 3D modelovanie</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Rôzne uhly pohľadu</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Vysoké rozlíšenie</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-purple/50 text-center font-bold text-neon-purple hover:bg-neon-purple hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="brand">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Dizajn vizitiek</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Profesionálne vizitky, ktoré zanechajú trvalý dojem a perfektne reprezentujú vašu firmu.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Obojstranný dizajn</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Tlačová predloha</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> 2-3 varianty</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-purple/50 text-center font-bold text-neon-purple hover:bg-neon-purple hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="brand">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Firemný profil</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Kompletný firemný profil v PDF formáte pre prezentáciu vašej spoločnosti (Brand manual).</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Profesionálny layout</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Infografiky</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Print aj digitál</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-purple/50 text-center font-bold text-neon-purple hover:bg-neon-purple hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="digital">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Social Media Posty</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Eye-catching posty pre Instagram, Facebook, LinkedIn s konzistentným vizuálnym štýlom.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Všetky formáty (post, story)</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Balíčky od 5 postov</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Upraviteľné šablóny</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-pink/50 text-center font-bold text-neon-pink hover:bg-neon-pink hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="digital">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Kreatívy FB/IG Ads</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Reklamné kreatívy optimalizované pre maximálnu konverziu vo vašich kampaniach.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> A/B testing varianty</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> CTA optimalizácia</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Všetky rozmery</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-pink/50 text-center font-bold text-neon-pink hover:bg-neon-pink hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="digital">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Dizajn Bannerov a UI</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Dizajn vstupných stránok (Landing pages) a bannerov s vysokou konverziou.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> UX optimalizácia</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Webové aj animované</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Figma / Adobe XD</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-pink/50 text-center font-bold text-neon-pink hover:bg-neon-pink hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="print">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Vektorizácia obrázkov</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Konverzia rastrových obrázkov a starých lôg na vektorové pre neobmedzenú škálovateľnosť.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Ručná vektorizácia</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> AI, EPS, SVG formáty</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Vysoká presnosť</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-white/30 text-center font-bold text-white hover:bg-white hover:text-black transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="print">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Letáky, Brožúry, Menu</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Pútavé letáky, viacstranové brožúry či dizajn reštauračných menu, ktoré komunikujú posolstvo.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Kreatívny návrh</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Tlačová predloha</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Akékoľvek rozmery</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-white/30 text-center font-bold text-white hover:bg-white hover:text-black transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="print">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Reklamné Roll-upy</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Vizuálne atraktívne bannery pre eventy, konferencie alebo predajné miesta.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Originálny návrh</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Veľkoformátová grafika</li>
+                                <li class="flex items-center gap-2"><div class="text-white">✓</div> Príprava pre tlač</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-white/30 text-center font-bold text-white hover:bg-white hover:text-black transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="events">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Dizajn pozvánok</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Svadobné, narodeninové či firemné pozvánky na eventy a špeciálne príležitosti.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Personalizovaný dizajn</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> Tlačový + digitálny</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-pink">✓</div> E-invitation možnosť</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-pink/50 text-center font-bold text-neon-pink hover:bg-neon-pink hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card service-item" data-category="creative">
+                        <div class="cyber-card-content p-8 flex flex-col h-full">
+                            <h3 class="text-xl font-bold mb-3 font-display">Produktové fotky & Retuš</h3>
+                            <p class="text-white/50 text-sm mb-6 flex-grow">Profesionálna retuš, background removal a infografiky pre Amazon či vlastný e-shop.</p>
+                            <ul class="space-y-2 mb-6 text-sm text-white/80">
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Korekcia farieb</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Lifestylové grafiky</li>
+                                <li class="flex items-center gap-2"><div class="text-neon-purple">✓</div> Rýchle dodanie</li>
+                            </ul>
+                            <a href="#contact-form" class="w-full py-3 rounded-xl border border-neon-purple/50 text-center font-bold text-neon-purple hover:bg-neon-purple hover:text-white transition-colors">Vyžiadať ponuku</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 relative border-t border-white/5 bg-black/20">
+            <div class="max-w-[80rem] mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-display text-4xl font-bold mb-4">Naše práce</h2>
+                    <p class="text-white/60">Portfólio vybraných projektov</p>
+                </div>
+                
+                <div class="glass-panel p-4 md:p-8 rounded-3xl border-neon-pink/20">
+                    <div id="portfolio-gallery-slider" class="splide" aria-label="Galéria našich prác">
+                        <div class="splide__track rounded-2xl overflow-hidden">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <a href="logo_ombradoro.webp" class="glightbox" data-gallery="portfolio-gallery">
+                                        <div class="h-[300px] md:h-[400px] w-full bg-white/5 bg-cover bg-center" style="background-image: url('logo_ombradoro.webp');"></div>
+                                    </a>
+                                </li>
+                                <li class="splide__slide">
+                                    <a href="graf2.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                                        <div class="h-[300px] md:h-[400px] w-full bg-white/5 bg-cover bg-center" style="background-image: url('graf2.JPG');"></div>
+                                    </a>
+                                </li>
+                                <li class="splide__slide">
+                                    <a href="od.jpg" class="glightbox" data-gallery="portfolio-gallery">
+                                        <div class="h-[300px] md:h-[400px] w-full bg-white/5 bg-cover bg-center" style="background-image: url('od.jpg');"></div>
+                                    </a>
+                                </li>
+                                <li class="splide__slide">
+                                    <a href="graf3.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                                        <div class="h-[300px] md:h-[400px] w-full bg-white/5 bg-cover bg-center" style="background-image: url('graf3.JPG');"></div>
+                                    </a>
+                                </li>
+                                <li class="splide__slide">
+                                    <a href="graf4.JPG" class="glightbox" data-gallery="portfolio-gallery">
+                                        <div class="h-[300px] md:h-[400px] w-full bg-white/5 bg-cover bg-center" style="background-image: url('graf4.JPG');"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 relative">
+            <div class="max-w-[48rem] mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-display text-4xl font-bold mb-4">Často kladené otázky</h2>
+                    <p class="text-white/60">Odpovede na obavy našich klientov</p>
+                </div>
+
+                <div class="space-y-4">
+                    <details class="glass-panel p-6 rounded-2xl group border-white/10 cursor-pointer">
+                        <summary class="font-display font-bold text-lg flex justify-between items-center text-white">
+                            Aké formáty súborov dostanem?
+                            <span class="text-neon-pink group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
+                        </summary>
+                        <p class="mt-4 text-white/60 text-sm leading-relaxed">Dodávame súbory v najpoužívanejších formátoch ako JPG, PNG (s transparentným pozadím), SVG (pre vektorovú grafiku), PDF (pre tlač), a v prípade potreby aj zdrojové súbory AI alebo PSD.</p>
+                    </details>
+
+                    <details class="glass-panel p-6 rounded-2xl group border-white/10 cursor-pointer">
+                        <summary class="font-display font-bold text-lg flex justify-between items-center text-white">
+                            Môžem požiadať o revízie?
+                            <span class="text-neon-pink group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
+                        </summary>
+                        <p class="mt-4 text-white/60 text-sm leading-relaxed">Áno, väčšina našich grafických balíčkov zahŕňa určitý počet revízií, aby sme zabezpečili Vašu maximálnu spokojnosť. Počet revízií je vždy uvedený v konkrétnej ponuke.</p>
+                    </details>
+
+                    <details class="glass-panel p-6 rounded-2xl group border-white/10 cursor-pointer">
+                        <summary class="font-display font-bold text-lg flex justify-between items-center text-white">
+                            Ako dlho trvá typický projekt?
+                            <span class="text-neon-pink group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
+                        </summary>
+                        <p class="mt-4 text-white/60 text-sm leading-relaxed">Dĺžka projektu závisí od jeho komplexnosti a rozsahu. Menšie projekty (napr. vizitky) môžu trvať 3-5 dní, väčšie projekty (napr. dizajn loga) 5-10 dní. Presný časový rámec Vám vždy oznámime v ponuke.</p>
+                    </details>
+
+                    <details class="glass-panel p-6 rounded-2xl group border-white/10 cursor-pointer">
+                        <summary class="font-display font-bold text-lg flex justify-between items-center text-white">
+                            Ponúkate aj tlačové služby?
+                            <span class="text-neon-pink group-open:rotate-45 transition-transform text-2xl leading-none">+</span>
+                        </summary>
+                        <p class="mt-4 text-white/60 text-sm leading-relaxed">Priamo tlačové služby neposkytujeme, ale všetky naše grafické návrhy sú pripravené profesionálne a v požadovaných formátoch pre akúkoľvek tlačiareň. Radi Vám odporučíme osvedčených partnerov.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-form" class="py-32 relative border-t border-white/5 bg-black/20">
+            <div class="max-w-[80rem] mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start">
+                <div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Vyžiadajte si cenovú ponuku</h2>
+                    <p class="text-white/60 mb-10 text-lg">Napíšte nám o vašom projekte a my vám do 24 hodín pripravíme nezáväznú cenovú ponuku pre váš dokonalý dizajn.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="size-10 rounded-full border border-neon-purple/30 bg-neon-purple/10 flex items-center justify-center text-neon-purple">@</div>
+                            <a href="mailto:info@unoneto.eu" class="text-white/80 hover:text-white font-medium transition-colors">info@unoneto.eu</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="size-10 rounded-full border border-neon-pink/30 bg-neon-pink/10 flex items-center justify-center text-neon-pink">
+                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </div>
+                            <a href="tel:+421905351100" class="text-white/80 hover:text-white font-medium transition-colors">+421 905 351 100</a>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="https://formspree.io/f/xyzjaepv" method="POST" class="glass-panel p-8 rounded-3xl">
+                    <div class="space-y-5">
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Meno *</label>
+                                <input type="text" name="name" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors" placeholder="Ján Vážny">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Telefón</label>
+                                <input type="tel" name="telefon" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors" placeholder="+421 905...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Váš email *</label>
+                            <input type="email" name="email" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-pink transition-colors" placeholder="jan@firma.sk">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Typ služby *</label>
+                            <select name="service" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors appearance-none">
+                                <option value="">Vyberte službu...</option>
+                                <option value="logo">Dizajn loga</option>
+                                <option value="brand-identita">Brand Identita (Logo, vizitky)</option>
+                                <option value="social-media">Grafika pre sociálne siete</option>
+                                <option value="web-dizajn">Web dizajn (Bannery, Landing page)</option>
+                                <option value="tlacoviny">Tlačoviny (Letáky, Brožúry)</option>
+                                <option value="ina-sluzba">Iná služba (Špecifikujte v správe)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Popis projektu *</label>
+                            <textarea name="message" rows="4" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors resize-none" placeholder="Aké máte predstavy a požiadavky?"></textarea>
+                        </div>
+                        <input type="text" name="_gotcha" style="display:none">
+                        
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink font-bold text-white hover:shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:scale-[1.02] transition-all">
+                            Odoslať nezáväzný dopyt
+                        </button>
+                        <p class="text-center text-white/40 text-xs mt-2">Odpovedáme do 24 hodín.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-8 bg-black/40">
+        <div class="max-w-[80rem] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
+                <img src="favicon.png" alt="Unoneto Logo" class="h-6 w-auto object-contain grayscale">
+                <span class="font-display font-bold text-white">Unoneto s.r.o.</span>
+            </div>
+            <div class="text-white/40 text-sm">
+                &copy; 2026 Všetky práva vyhradené.
+            </div>
+            <div class="flex gap-6 text-sm text-white/40">
+                <a href="mailto:info@unoneto.eu" class="hover:text-neon-pink transition-colors">info@unoneto.eu</a>
+                <a href="https://www.facebook.com/unonetostore/" target="_blank" class="hover:text-neon-pink transition-colors">Facebook</a>
+                <a href="https://www.instagram.com/unoneto.eu/" target="_blank" class="hover:text-neon-pink transition-colors">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script>
+        // Inicializácia Galérie (Splide)
+        document.addEventListener('DOMContentLoaded', function() {
+            if(document.getElementById('portfolio-gallery-slider')) {
+                new Splide('#portfolio-gallery-slider', {
+                    type   : 'loop',
+                    perPage: 3,
+                    gap    : '1rem',
+                    autoplay: true,
+                    interval: 3000,
+                    breakpoints: {
+                        1024: { perPage: 2 },
+                        768: { perPage: 1 }
+                    }
+                }).mount();
+            }
+            
+            // Inicializácia Lightboxu
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true
+            });
+        });
+
+        // Logika Filtrovania Služieb
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const serviceItems = document.querySelectorAll('.service-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Reset styling for all buttons
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-neon-purple/20', 'border-neon-purple', 'text-white');
+                    b.classList.add('border-white/10', 'bg-black/40', 'text-white/60');
+                });
+
+                // Set active styling for clicked button
+                btn.classList.add('bg-neon-purple/20', 'border-neon-purple', 'text-white');
+                btn.classList.remove('border-white/10', 'bg-black/40', 'text-white/60');
+
+                // Filter logic
+                const filter = btn.getAttribute('data-filter');
+                serviceItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        // Rýchla animácia pri zobrazení
+                        item.classList.add('animate-fade-up');
+                        setTimeout(() => item.classList.remove('animate-fade-up'), 800);
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
