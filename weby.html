@@ -431,27 +431,62 @@
                     </div>
                 </div>
 
-                <form action="https://formspree.io/f/xyzjaepv" method="POST" class="glass-panel p-8 rounded-3xl">
-                    <div class="space-y-5">
-                        <div>
-                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Subjekt</label>
-                            <input type="text" name="Meno" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors" placeholder="Meno alebo Firma">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Komunikačný kanál</label>
-                            <input type="email" name="Email" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-pink transition-colors" placeholder="E-mailová adresa">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Parametre projektu</label>
-                            <textarea id="project-details" name="Sprava" rows="4" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors resize-none" placeholder="O aký web máte záujem?"></textarea>
-                        </div>
-                        <input type="text" name="_gotcha" style="display:none">
-                        
-                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink font-bold text-white hover:shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:scale-[1.02] transition-all">
-                            Odoslať dopyt
-                        </button>
-                    </div>
-                </form>
+                <form action="https://formspree.io/f/xyzjaepv" method="POST" class="glass-panel p-6 sm:p-8 rounded-3xl text-left w-full shadow-2xl">
+    <div class="space-y-5">
+        <p class="text-xs text-white/40 mb-4">* označené polia sú povinné</p>
+
+        <div>
+            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Firma</label>
+            <input type="text" name="Firma" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors" placeholder="Názov vašej spoločnosti">
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Kontaktná osoba *</label>
+            <input type="text" name="Meno" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-pink transition-colors" placeholder="Meno a priezvisko">
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Telefonický kontakt *</label>
+                <input type="tel" name="Telefon" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors" placeholder="09xx xxx xxx">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-2">Email *</label>
+                <input type="email" name="Email" required class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-pink transition-colors" placeholder="vas@email.sk">
+            </div>
+        </div>
+
+        <div class="pt-2">
+            <label class="block text-xs font-bold text-white/50 uppercase tracking-wider mb-3">Správa</label>
+            
+            <div class="space-y-3">
+                <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="Typ_kontaktu" value="Nezavazny rozhovor" checked 
+                           class="size-5 border-2 border-white/20 bg-transparent checked:bg-neon-pink appearance-none rounded-full transition-all cursor-pointer"
+                           onclick="document.getElementById('custom-message-area').classList.add('hidden')">
+                    <span class="text-sm text-white/70 group-hover:text-white transition-colors">Chcem sa iba nezáväzne porozprávať</span>
+                </label>
+
+                <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="Typ_kontaktu" value="Vlastna sprava" 
+                           class="size-5 border-2 border-white/20 bg-transparent checked:bg-neon-purple appearance-none rounded-full transition-all cursor-pointer"
+                           onclick="document.getElementById('custom-message-area').classList.remove('hidden')">
+                    <span class="text-sm text-white/70 group-hover:text-white transition-colors">Napísať vlastnú správu</span>
+                </label>
+            </div>
+        </div>
+
+        <div id="custom-message-area" class="hidden animate-fade-up">
+            <textarea name="Sprava" rows="4" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-purple transition-colors resize-none" placeholder="Opíšte vašu predstavu..."></textarea>
+        </div>
+
+        <input type="text" name="_gotcha" style="display:none">
+        
+        <button type="submit" class="w-full py-4 mt-4 rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink font-bold text-white hover:shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:scale-[1.02] transition-all">
+            Odoslať dopyt
+        </button>
+    </div>
+</form>
             </div>
         </section>
     </main>
