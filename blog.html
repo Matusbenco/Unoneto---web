@@ -1,223 +1,296 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="sk" class="scroll-smooth">
 <head>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | Tipy, návody a prípadové štúdie | Unoneto</title>
-    <meta name="description" content="Prečítajte si najnovšie články zo sveta AI automatizácie, efektivity a moderných technológií pre Váš biznis.">
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
     
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
-    <link rel="icon" href="favicon.png" type="image/png">
-    <link rel="shortcut icon" href="favicon.png" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novinky & Inšpirácie | Unoneto</title>
+    <meta name="description" content="Prečítajte si najnovšie články zo sveta AI automatizácie, efektivity a moderných technológií pre váš biznis.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"/>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"DM Sans"', 'sans-serif'],
+              display: ['"Space Grotesk"', 'sans-serif'],
+            },
+            colors: {
+                neon: {
+                    purple: '#9333ea',
+                    pink: '#d946ef',
+                    dark: '#08021a'
+                }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+        body { background-color: #08021a; color: white; overflow-x: hidden; }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+        .glass-panel {
+            background: rgba(14, 6, 36, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 70, 239, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff, #c084fc, #d946ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigácia a Dropdown */
+        .nav-links li { position: relative; }
+        .dropdown-menu {
+            display: none; position: absolute; top: 100%; left: -1rem; min-width: 240px;
+            background: rgba(14, 6, 36, 0.95); backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 51, 234, 0.3); border-radius: 12px;
+            padding: 0.75rem 0; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 100;
+        }
+        .has-dropdown:hover .dropdown-menu { display: block; animation: fadeUp 0.2s ease-out forwards; }
+        .dropdown-menu a { display: block; padding: 0.6rem 1.5rem; color: rgba(255,255,255,0.7); font-size: 0.875rem; transition: all 0.2s; }
+        .dropdown-menu a:hover { color: #d946ef; background: rgba(217, 70, 239, 0.1); padding-left: 1.75rem; }
+
+        /* Kategórie filter */
+        .filter-btn.active { background: rgba(147, 51, 234, 0.2); border-color: #9333ea; color: white; }
+    </style>
 </head>
-<body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<div id="promo-banner" class="promo-banner">
-    <p>
-        <strong>AKCIA:</strong> Prezenčná webstránka so SEO nastavením len za <strong>290€</strong>! Predlžená akcia do konca septembra 2025!
-    </p>
-    <a href="/weby" class="btn btn-secondary btn-small">Zistiť viac</a>
-</div>
+<body class="antialiased selection:bg-neon-pink selection:text-white">
 
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
+    <div class="fixed inset-0 z-[-2] bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+    <div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(147,51,234,0.15),rgba(255,255,255,0))]"></div>
 
-    <div class="particle-container"></div>
-    <div class="background-shapes">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-    </div>
-
-<header class="main-header">
-        <nav class="container">
-            <a href="/" class="logo">
-                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+    <header class="fixed top-0 w-full z-50 glass-panel border-t-0 border-l-0 border-r-0 border-b border-white/5">
+        <nav class="max-w-[80rem] mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="font-display font-bold text-2xl tracking-wide flex items-center gap-3">
+                <img src="favicon.png" alt="Unoneto Logo" class="h-8 w-auto object-contain">
                 <span>Unoneto</span>
             </a>
-            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-            </button>
-          
-<ul class="nav-links" id="nav-menu">
-    <li class="has-dropdown">
-        <a href="#" id="nasa-ponuka-toggle">Naša ponuka</a>
-        <ul class="dropdown-menu">
-            <li><a href="weby">Prezentačné weby</a></li>
-                        <li><a href="eshopy">E-shopy na mieru</a></li>
-                        <li><a href="graficke-sluzby">Grafika na mieru</a></li>
-                        <li><a href="automatizacia">AI Automatizácia procesov</a></li>
-                        <li><a href="raynetcrm">RAYNET CRM</a></li>
-                        <li><a href="digitalnypodpis">DigiSign - Digitálny podpis</a></li>
-                        <li><a href="vexion">Vernostný systém VEXION</a></li>
-                        <li><a href="hugo">Informačný systém HUGO pre samosprávy</a></li>
-                        <li><a href="ozobot">Programovateľné roboty Ozobot</a></li>
-        </ul>
-    </li>
-    <li><a href="blog">Blog</a></li>
-    <li class="language-switcher">
-        <a href="/blog" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
-        <span class="lang-separator">|</span>
-        <a href="blog-en" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
-    </li>
-    <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Dohodnúť si konzultáciu</a></li>
-</ul>
+            
+            <ul class="nav-links hidden lg:flex gap-8 items-center text-sm font-medium text-white/70" id="nav-menu">
+                <li class="has-dropdown py-2">
+                    <a href="#" class="hover:text-white transition-colors flex items-center gap-1 text-white">
+                        Naša ponuka
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Tvorba webov a e-shopov</a></li>
+                        <li><a href="automatizacia">Digitalizácia a AI</a></li>
+                        <li><a href="graficke-sluzby">Grafika a dizajn</a></li>
+                        <li><a href="ppc-kampane">Marketing a PPC</a></li>
+                        <li><a href="apps/">Unoneto aplikácie</a></li>
+                    </ul>
+                </li>
+                <li><a href="blog" class="text-neon-pink font-bold hover:text-white transition-colors">Novinky</a></li>
+                <li class="language-switcher flex items-center gap-2">
+                    <a href="#" class="lang-link active opacity-100" title="Slovenčina"><span class="fi fi-sk rounded-sm shadow-sm"></span></a>
+                    <span class="lang-separator text-white/20">|</span>
+                    <a href="#" class="lang-link opacity-50 hover:opacity-100" title="English"><span class="fi fi-gb rounded-sm shadow-sm"></span></a>
+                </li>
+                <li>
+                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink hover:scale-105 border-none text-white text-sm font-bold transition-transform shadow-[0_0_20px_rgba(217,70,239,0.3)]">
+                        Bezplatná analýza
+                    </a>
+                </li>
+            </ul>
         </nav>
     </header>
 
-    <main class="main-content">
-        <section class="subpage-hero container reveal">
-            <h1 class="hero-title">Blog & Novinky</h1>
-            <p class="hero-description">Tipy, návody a prípadové štúdie zo sveta automatizácie a umelej inteligencie.</p>
+    <main class="pt-32">
+        <section class="relative py-20 overflow-hidden text-center">
+            <div class="max-w-[48rem] mx-auto px-6 relative z-10 animate-fade-up">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-neon-purple/30 bg-neon-purple/10 text-neon-purple text-xs font-bold uppercase tracking-widest mb-6">
+                    <span class="relative flex size-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-purple opacity-75"></span><span class="relative inline-flex rounded-full size-2 bg-neon-purple"></span></span>
+                    Knowledge Base
+                </div>
+                <h1 class="font-display text-5xl md:text-6xl font-bold mb-6 leading-[1.1]">
+                    Novinky zo sveta <br>
+                    <span class="gradient-text">AI & Digitalizácie</span>
+                </h1>
+                <p class="text-lg text-white/60 leading-relaxed mb-10">
+                    Tipy, návody a prípadové štúdie. Zistite, ako moderné technológie a autonómni agenti menia spôsob, akým dnes firmy fungujú.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-neon-purple text-white bg-neon-purple/20 transition-all font-medium text-sm">Všetky novinky</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm">AI Agenti</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm">Prípadové štúdie</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-white/60 bg-black/40 hover:bg-white/10 transition-all font-medium text-sm">Návody</button>
+                </div>
+            </div>
+            
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] bg-neon-purple/20 blur-[120px] rounded-full z-0 pointer-events-none"></div>
         </section>
 
-        <section class="container reveal">
-             <div class="blog-grid">
+        <section class="pb-32 relative z-10">
+            <div class="max-w-[80rem] mx-auto px-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <article class="glass-panel rounded-3xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col border border-white/10 hover:border-neon-purple/50 animate-fade-up" style="animation-delay: 0.1s;">
+                        <div class="h-56 relative overflow-hidden bg-black/50">
+                            <div class="absolute inset-0 bg-neon-dark/40 group-hover:bg-transparent transition-colors z-10"></div>
+                            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop" alt="AI Agent" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                            <div class="absolute top-4 left-4 z-20">
+                                <span class="px-3 py-1 rounded-full bg-neon-purple/80 backdrop-blur text-white text-xs font-bold uppercase tracking-wider">AI Agenti</span>
+                            </div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <div class="flex items-center gap-4 text-white/40 text-xs mb-4 font-medium uppercase tracking-wider">
+                                <span>24. Sep 2026</span>
+                                <span class="size-1 rounded-full bg-white/20"></span>
+                                <span>5 min. čítania</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-neon-pink transition-colors">Čo je to AI Agent a ako funguje?</h3>
+                            <p class="text-white/60 text-sm mb-8 flex-grow leading-relaxed">Aký je rozdiel medzi bežným chatbotom (ako ChatGPT) a skutočným AI agentom, ktorý dokáže pracovať a vykonávať úlohy priamo vo vašich systémoch.</p>
+                            <a href="/blog/co-je-to-ai-agent-a-ako-funguje" class="inline-flex items-center gap-2 text-neon-purple font-bold hover:text-neon-pink transition-colors">
+                                Čítať článok <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        </div>
+                    </article>
 
-                <div class="card article-card">
-                    <a href="clanok-ombra-doro">
-                        <img src="logo_ombradoro.webp" alt="Logo pre OMBRA DORO" class="article-image">
-                    </a>
-                    <div class="article-card-content">
-                        <p class="article-meta">Novinky | 31. október 2025</p>
-                        <h3><a href="clanok-ombra-doro">Ako sme premenili AI víziu na prémiové logo pre OMBRA D'ORO</a></h3>
-                        <p class="article-excerpt">Keď zadanie odradí (takmer) každého</p>
-                        <a href="clanok-ombra-doro" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
-                </div>
+                    <article class="glass-panel rounded-3xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col border border-white/10 hover:border-neon-pink/50 animate-fade-up" style="animation-delay: 0.2s;">
+                        <div class="h-56 relative overflow-hidden bg-black/50">
+                            <div class="absolute inset-0 bg-neon-dark/40 group-hover:bg-transparent transition-colors z-10"></div>
+                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="Bezpečnosť" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                            <div class="absolute top-4 left-4 z-20">
+                                <span class="px-3 py-1 rounded-full bg-neon-pink/80 backdrop-blur text-white text-xs font-bold uppercase tracking-wider">Bezpečnosť</span>
+                            </div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <div class="flex items-center gap-4 text-white/40 text-xs mb-4 font-medium uppercase tracking-wider">
+                                <span>18. Sep 2026</span>
+                                <span class="size-1 rounded-full bg-white/20"></span>
+                                <span>4 min. čítania</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-neon-pink transition-colors">Mýty o AI Agentoch: Prečo sú bezpečnejší než si myslíte</h3>
+                            <p class="text-white/60 text-sm mb-8 flex-grow leading-relaxed">Mnoho firiem sa bojí odovzdať prácu umelej inteligencii. Odhalíme, prečo je kontrolovaný AI agent (Agent Governance) bezpečnejší ako manuálna práca.</p>
+                            <a href="/blog/myty-o-ai-agentoch" class="inline-flex items-center gap-2 text-neon-purple font-bold hover:text-neon-pink transition-colors">
+                                Čítať článok <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        </div>
+                    </article>
 
-                 <div class="card article-card">
-                    <a href="raynet">
-                        <img src="raynet.jpg" alt="CRM od Raynet" class="article-image">
-                    </a>
-                    <div class="article-card-content">
-                        <p class="article-meta">Novinky | 20. september 2025</p>
-                        <h3><a href="raynet">RAYNET CRM je online software, ktorý pomáha.</a></h3>
-                        <p class="article-excerpt">Objavte inovatívne digitálne členské karty VEXiON pre fitness centrá, wellness a ďalšie prevádzky.</p>
-                        <a href="raynet" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
-                </div>
+                    <article class="glass-panel rounded-3xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col border border-white/10 hover:border-blue-500/50 animate-fade-up" style="animation-delay: 0.3s;">
+                        <div class="h-56 relative overflow-hidden bg-black/50">
+                            <div class="absolute inset-0 bg-neon-dark/40 group-hover:bg-transparent transition-colors z-10"></div>
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop" alt="Prípadová štúdia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100">
+                            <div class="absolute top-4 left-4 z-20">
+                                <span class="px-3 py-1 rounded-full bg-blue-500/80 backdrop-blur text-white text-xs font-bold uppercase tracking-wider">Prípadová štúdia</span>
+                            </div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <div class="flex items-center gap-4 text-white/40 text-xs mb-4 font-medium uppercase tracking-wider">
+                                <span>10. Sep 2026</span>
+                                <span class="size-1 rounded-full bg-white/20"></span>
+                                <span>7 min. čítania</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-neon-pink transition-colors">Ako AI asistent ušetril e-shopu 20 hodín týždenne</h3>
+                            <p class="text-white/60 text-sm mb-8 flex-grow leading-relaxed">Pozrite sa na konkrétne čísla a procesy, ktoré sme automatizovali v stredne veľkom e-shope od spracovania faktúr až po zákaznícku podporu.</p>
+                            <a href="/blog/pripadova-studia-eshop-ai-asistent" class="inline-flex items-center gap-2 text-neon-purple font-bold hover:text-neon-pink transition-colors">
+                                Čítať článok <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        </div>
+                    </article>
 
- <div class="card article-card">
-                    <a href="digisign">
-                        <img src="digisign1.webp" alt="V roku 2025 podpisujeme už digitálne" class="article-image">
-                    </a>
-                    <div class="article-card-content">
-                        <p class="article-meta">Novinky | 10. september 2025</p>
-                        <h3><a href="digisign">V roku 2025 podpisujeme už digitálne</a></h3>
-                        <p class="article-excerpt">Zrýchlite svoj biznis s digitálnym podpisom DigiSign</p>
-                        <a href="digisign" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
-                </div>
-                
-                <div class="card article-card">
-                    <a href="clanok-clenske-karty">
-                        <img src="permanentky.avif" alt="Členské karty Vexion" class="article-image">
-                    </a>
-                    <div class="article-card-content">
-                        <p class="article-meta">Novinky | 10. september 2025</p>
-                        <h3><a href="clanok-clenske-karty">Nové členské Karty: Využijete v správe vstupov a predplatného</a></h3>
-                        <p class="article-excerpt">Objavte inovatívne digitálne členské karty VEXiON pre fitness centrá, wellness a ďalšie prevádzky.</p>
-                        <a href="clanok-clenske-karty" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
-                </div>
+                    <article class="glass-panel rounded-3xl overflow-hidden flex flex-col border border-white/5 opacity-60 animate-fade-up" style="animation-delay: 0.4s;">
+                        <div class="p-8 flex flex-col h-full items-center justify-center text-center">
+                            <div class="size-16 rounded-full bg-white/5 flex items-center justify-center mb-6">
+                                <svg class="size-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold mb-3 text-white">Umelá inteligencia vs. Automatizácia</h3>
+                            <p class="text-white/50 text-sm mb-6">Aký je v tom rozdiel? A prečo potrebujete oboje.</p>
+                            <span class="px-4 py-2 rounded-full border border-white/10 text-white/40 text-xs font-bold uppercase tracking-wider">Už čoskoro</span>
+                        </div>
+                    </article>
 
-                <div class="card article-card">
-                    <a href="AI_agenti_v_2025">
-                        <img src="ai-agent-1.png" alt="Partnerstvo človeka a umelej inteligencie" class="article-image">
-                    </a>
-                    <div class="article-card-content">
-                        <p class="article-meta">Prípadová štúdia | 6. júl 2025</p>
-                        <h3><a href="AI_agenti_v_2025">AI Agenti v roku 2025</a></h3>
-                        <p class="article-excerpt">Ako automatizácia prestáva byť sci-fi a stáva sa vašou konkurenčnou výhodou.</p>
-                        <a href="AI_agenti_v_2025" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
+                    <article class="glass-panel rounded-3xl overflow-hidden flex flex-col border border-white/5 opacity-60 animate-fade-up" style="animation-delay: 0.5s;">
+                        <div class="p-8 flex flex-col h-full items-center justify-center text-center">
+                            <div class="size-16 rounded-full bg-white/5 flex items-center justify-center mb-6">
+                                <svg class="size-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold mb-3 text-white">Ako sa pripraviť na integráciu AI</h3>
+                            <p class="text-white/50 text-sm mb-6">Praktický návod pre firmy pred implementáciou nových technológií.</p>
+                            <span class="px-4 py-2 rounded-full border border-white/10 text-white/40 text-xs font-bold uppercase tracking-wider">Už čoskoro</span>
+                        </div>
+                    </article>
+                    
                 </div>
-
-                <div class="card article-card">
-                    <a href="tipy_na_ai_nastroje">
-                        <img src="AI-in-2025.webp" alt="Ilustračný obrázok k návodu na AI nástroje" class="article-image">
-                    </a>
-                     <div class="article-card-content">
-                        <p class="article-meta">Návod | 6. júl 2025</p>
-                        <h3><a href="tipy_na_ai_nastroje">Tipy pre skvelé AI nástroje, s ktorými si uľahčíte život</a></h3>
-                        <p class="article-excerpt">Praktické AI nástroje, ktoré môžete začať používať ešte dnes na zvýšenie svojej produktivity.</p>
-                        <a href="tipy_na_ai_nastroje" class="btn btn-secondary">Prečítať viac</a>
-                    </div>
-                </div>
-
             </div>
         </section>
 
+        <section class="py-20 relative border-t border-white/5 bg-black/20">
+            <div class="max-w-[80rem] mx-auto px-6">
+                <div class="bg-gradient-to-r from-neon-purple/20 to-neon-pink/20 border border-neon-pink/30 rounded-3xl p-10 lg:p-16 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-display text-3xl md:text-4xl font-bold mb-6 text-white">Nečítajte o budúcnosti. Žite ju.</h2>
+                        <p class="text-white/70 text-lg mb-10 max-w-2xl mx-auto">Využite bezplatnú konzultáciu. Zistíme, aké procesy vo vašej firme môžeme zautomatizovať a posunúť váš biznis vpred.</p>
+                        
+                        <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                            Rezervovať bezplatnú analýzu &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-    
-    <footer class="main-footer">
-        <div class="container">
-           <div class="footer-grid">
-			<div class="footer-col">
-				 <a href="/" class="logo">
-					 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
-					 <span>Unoneto</span>
-				 </a>
-				<p>Váš rast, poháňaný výsledkami.</p>
-			</div>
-			
-			<div class="footer-col">
-				<h4>Kontakt</h4>
-				<p>Unoneto s. r. o.</p>
-					 <p>IČO: 55530966</p>
-				<p>DIČ: 2122015522</p>
-				<p><a href="tel:+421905351100">+421 905 351 100</a></p>
-				<p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
-			</div>
-			
-			<div class="footer-col">
-				<h4>Rýchle odkazy</h4>
-				<a href="/#services">Naše riešenia</a>
-				<a href="/#process">Náš proces</a>
-				<a href="/#about">Kto sme</a>
-				<a href="/#contact" onclick="window.location.href='/#contact';">Kontakt</a>
-			</div>
 
-			<div class="footer-col">
-				<h4>Sledujte nás</h4>
-				<div class="social-icons">
-					<a href="https://www.facebook.com/unonetostore/" target="_blank" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V327.7H138.4V256H194.2V205.7C194.2 150.2 228.8 118.2 279.9 118.2C304.6 118.2 329 122.3 329 122.3V184.8H298.3C270.1 184.8 258.3 203.7 258.3 225.5V256H326.5L315.3 327.7H258.3V512C397.8 497.4 512 388.7 512 256z"/></svg></a>
-					<a href="https://www.instagram.com/unoneto.eu/" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
-					<a href="https://www.linkedin.com/company/101294763" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
-				</div>
-			</div>
-		</div>
-            <div class="copyright">
-                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
+    <footer class="border-t border-white/10 py-8 bg-black/40">
+        <div class="max-w-[80rem] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
+                <img src="favicon.png" alt="Unoneto Logo" class="h-6 w-auto object-contain grayscale">
+                <span class="font-display font-bold text-white">Unoneto s.r.o.</span>
+            </div>
+            <div class="text-white/40 text-sm">
+                &copy; 2026 Všetky práva vyhradené.
+            </div>
+            <div class="flex gap-6 text-sm text-white/40">
+                <a href="mailto:info@unoneto.eu" class="hover:text-neon-pink transition-colors">info@unoneto.eu</a>
+                <a href="tel:+421905351100" class="hover:text-neon-pink transition-colors">+421 905 351 100</a>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
+    <script>
+        // Jednoduchá logika pre vizuálne filtrovanie tlačidiel
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active classes
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-neon-purple/20', 'border-neon-purple', 'text-white');
+                    b.classList.add('border-white/10', 'bg-black/40', 'text-white/60');
+                });
+                // Add active to clicked
+                btn.classList.add('bg-neon-purple/20', 'border-neon-purple', 'text-white');
+                btn.classList.remove('border-white/10', 'bg-black/40', 'text-white/60');
+            });
+        });
     </script>
 </body>
-
 </html>
