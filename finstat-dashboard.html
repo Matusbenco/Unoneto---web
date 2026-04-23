@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINSTAT CONTACT CONVERTER</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #0f172a;
+            --bg-app: #f8fafc;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border-radius: 16px;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-app); color: var(--text-main); }
+        * { box-sizing: border-box; }
+
+        /* --- INTRO --- */
+        .intro-screen {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at top right, #4338ca, #0f172a 40%, #020617);
+            color: white; z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 0.6s ease;
+        }
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 40px; cursor: pointer; margin-top: 40px; transition: 0.3s;
+        }
+        .drop-zone:hover { border-color: #818cf8; transform: translateY(-5px); }
+        h1 { font-family: 'Outfit', sans-serif; font-size: 3.5rem; margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; letter-spacing: -1px; }
+
+        /* --- APP --- */
+        .app-screen { display: none; min-height: 100vh; padding-bottom: 50px; }
+
+        header {
+            background: white; padding: 15px 3%; border-bottom: 1px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 100;
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;
+            box-shadow: 0 4px 15px -5px rgba(0,0,0,0.05);
+        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; background: linear-gradient(90deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .search-bar input {
+            background: #f1f5f9; border: 1px solid #e2e8f0; padding: 10px 15px;
+            border-radius: 10px; width: 100%; min-width: 350px; font-family: 'Inter', sans-serif;
+            transition: 0.2s; font-size: 0.95rem;
+        }
+        .search-bar input:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+        .btn-reset { background: #fee2e2; color: var(--danger); border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: 0.2s; }
+        .btn-reset:hover { background: #fecaca; }
+
+        .container { max-width: 1600px; margin: 30px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; }
+
+        /* --- CARD --- */
+        .card {
+            background: white; border-radius: var(--border-radius); border: 1px solid #e2e8f0;
+            padding: 25px; display: flex; flex-direction: column; gap: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; z-index: 10; }
+
+        .card.done { background: #f8fafc; opacity: 0.6; filter: grayscale(1); border: 1px dashed #cbd5e1; }
+        .card.done .c-name { text-decoration: line-through; color: #94a3b8; }
+        .card.done::before {
+            content: "VYBAVENÉ"; position: absolute; top: 20px; right: -30px; background: #cbd5e1; color: white;
+            padding: 5px 40px; transform: rotate(45deg); font-size: 0.7rem; font-weight: bold; pointer-events: none;
+        }
+
+        .c-header h2 { margin: 0 0 10px 0; font-size: 1.3rem; color: var(--secondary); font-family: 'Outfit', sans-serif; line-height: 1.3; }
+        
+        .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 5px; }
+        .tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .t-loc { background: #f1f5f9; color: #636e72; }
+        .t-ico { background: #f1f5f9; color: #64748b; font-family: monospace; }
+        .t-seg { background: #e0e7ff; color: #4338ca; } 
+        .t-emp { background: #fff7ed; color: #c2410c; }
+
+        /* FINANCE */
+        .finance-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #e2e8f0;
+            border-radius: 10px; overflow: hidden; margin-bottom: 8px; border: 1px solid #e2e8f0;
+        }
+        .fin-item { background: #f8fafc; padding: 10px 15px; display: flex; flex-direction: column; gap: 2px; }
+        .fin-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .fin-val { font-weight: 700; font-size: 1rem; color: var(--secondary); white-space: nowrap; }
+        .fin-val.green { color: #166534; }
+        .fin-val.red { color: #dc2626; }
+
+        /* CONTACTS - STACKED LAYOUT */
+        .data-section { display: flex; flex-direction: column; gap: 5px; margin-top: 5px; }
+        
+        .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+        .row:last-child { border-bottom: none; }
+        
+        .row-left { display: flex; align-items: center; gap: 10px; overflow: hidden; flex: 1; }
+        .icon { color: #94a3b8; font-size: 1.1rem; min-width: 20px; text-align: center; }
+        .val { font-weight: 500; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .btn-copy { background: #f1f5f9; border: none; cursor: pointer; color: #2563eb; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; transition: 0.2s; }
+        .btn-copy:hover { background: #dbeafe; transform: scale(1.1); }
+
+        /* DROPDOWN AREA */
+        .hidden-stack { 
+            display: none; 
+            flex-direction: column; 
+            gap: 0px; 
+            background: #fdfdfd;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+        .hidden-stack.show { display: flex; }
+
+        .expand-btn {
+            width: 100%; background: none; border: none; color: var(--primary); font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; padding: 8px; text-align: center; border-top: 1px dashed #e2e8f0; margin-top: 2px; transition: 0.2s;
+        }
+        .expand-btn:hover { background: #eff6ff; }
+
+        /* NOTES */
+        .note-area { margin-top: 10px; }
+        .note-input {
+            width: 100%; border: 1px solid #e2e8f0; background: #fff;
+            border-radius: 8px; padding: 10px; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+            resize: vertical; min-height: 50px; transition: 0.2s; color: var(--text-main);
+        }
+        .note-input:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .note-label { font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; display: block; font-weight: 700; text-transform: uppercase; }
+
+        /* ACTIONS */
+        .actions { margin-top: auto; padding-top: 20px; border-top: 1px solid #f1f5f9; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-decoration: none; }
+        
+        .btn-check { background: white; border: 1px solid #cbd5e1; color: var(--text-main); }
+        .btn-check:hover { background: #f8fafc; border-color: var(--text-light); }
+        .card.done .btn-check { background: #dcfce7; color: #166534; border-color: #86efac; }
+
+        .btn-web { background: #eff6ff; color: var(--primary); }
+        .btn-web:hover { background: #e0e7ff; }
+        .btn-google { background: #fff7ed; color: #c2410c; }
+        .btn-google:hover { background: #ffedd5; }
+
+        #toast { visibility: hidden; background-color: #1e293b; color: #fff; text-align: center; border-radius: 8px; padding: 12px 24px; position: fixed; z-index: 999; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 0.95rem; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
+        @keyframes fadein { from {bottom: 10px; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 10px; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <div class="intro-screen" id="introScreen">
+        <div style="text-align:center; max-width:600px; padding:40px; animation: fadeIn 1s;">
+            <h1>FINSTAT CONTACT CONVERTER</h1>
+            <p style="color: #cbd5e1; margin-top: 15px; font-size: 1.1rem;">Vaše dáta sú bezpečne uložené v prehliadači.</p>
+            <div class="drop-zone" id="dropZone">
+                <div style="font-size: 3rem; margin-bottom: 10px;">📂</div>
+                <div style="font-weight: 600; font-size: 1.2rem;">Nahrajte export z Finstatu</div>
+                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">.xlsx alebo .csv</div>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx,.csv" style="display:none">
+        </div>
+        <div style="position:absolute; bottom:30px; font-size:0.8rem; color:rgba(255,255,255,0.3);">Vytvoril: Matúš Benčo, 2026</div>
+    </div>
+
+    <div class="app-screen" id="appScreen">
+        <header>
+            <div class="brand">FINSTAT <span>CONTACT CONVERTER</span></div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Hľadať firmu, konateľa, mesto, IČO...">
+            </div>
+            <div class="header-actions">
+                <div style="text-align:right; font-size:0.85rem; font-weight:600; color:#64748b; line-height:1.3;">
+                    <span style="color:var(--secondary); font-size:1rem;" id="count">0</span> firiem<br>
+                    <span style="color:var(--success);">Vybavené: <span id="doneCount">0</span></span>
+                </div>
+                <button class="btn-reset" onclick="resetApp()" title="Vymazať VŠETKY dáta a začať odznova">🗑️ Reset</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="grid" id="grid"></div>
+            <div style="text-align:center; padding:40px; color:#94a3b8; font-size:0.8rem;">Vytvoril: Matúš Benčo, 2026</div>
+        </div>
+    </div>
+
+    <div id="toast">Skopírované!</div>
+
+<script>
+    let allData = [];
+    let filteredData = [];
+    
+    const introScreen = document.getElementById('introScreen');
+    const appScreen = document.getElementById('appScreen');
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const grid = document.getElementById('grid');
+    const toast = document.getElementById('toast');
+
+    window.onload = function() {
+        const savedData = localStorage.getItem('finstatDataV13');
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData);
+                if (parsed && parsed.length > 0) {
+                    allData = parsed;
+                    initApp();
+                }
+            } catch (e) { console.error(e); }
+        }
+    };
+
+    function saveData() {
+        localStorage.setItem('finstatDataV13', JSON.stringify(allData));
+        updateStats();
+    }
+
+    // --- HLAVNÝ RESET (Vymaže aj dáta panelu) ---
+    function resetApp() {
+        if(confirm("Naozaj chcete vymazať VŠETKY dáta (súbor, počítadlá, poznámky)?")) {
+            // Vymaže dáta aplikácie
+            localStorage.removeItem('finstatDataV13');
+            // Vymaže dáta bočného panelu
+            localStorage.removeItem('moje_skore');
+            localStorage.removeItem('moje_poznamky');
+            localStorage.removeItem('moje_riadok');
+            
+            location.reload();
+        }
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = "rgba(255,255,255,0.15)"; });
+    dropZone.addEventListener('dragleave', e => { dropZone.style.background = "rgba(255,255,255,0.05)"; });
+    dropZone.addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+    function handleFile(file) {
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+            processData(json);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    // --- UTILS ---
+    function cleanPersonName(rawStr) {
+        if (!rawStr) return [];
+        let persons = rawStr.split(';'); 
+        return persons.map(p => p.split(',')[0].trim()).filter(n => n.length > 2);
+    }
+
+    function formatMoney(num) {
+        if (!num) return 'N/A';
+        let clean = String(num).replace(/\s/g, '').replace(',', '.');
+        let n = parseFloat(clean);
+        if (isNaN(n)) return num;
+        return n.toLocaleString('sk-SK').replace(/,/g, ' '); 
+    }
+
+    function formatPhone(str) {
+        if (!str) return '';
+        let clean = str.replace(/[^\d+]/g, '');
+        if (clean.length === 10 && clean.startsWith('02')) return clean.replace(/(\d{2})(\d{3})(\d{3})(\d{2})/, '$1 $2 $3 $4');
+        if (clean.length === 10 && clean.startsWith('0')) return clean.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4'); 
+        if (clean.length === 10 && clean.startsWith('09')) return clean.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+        if (clean.startsWith('+421')) return clean.replace(/(\+421)(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+        return str;
+    }
+
+    function isValidEmail(email) {
+        return email.includes('@') && email.length < 50 && !email.includes(' ');
+    }
+
+    function processData(json) {
+        allData = json.map((row, index) => {
+            const get = (k) => {
+                const found = Object.keys(row).find(key => key.toLowerCase().includes(k.toLowerCase()));
+                return found ? String(row[found]).trim() : "";
+            };
+
+            let phones = new Set();
+            let emails = new Set();
+            let webs = new Set();
+
+            Object.keys(row).forEach(key => {
+                const val = String(row[key]).trim();
+                const k = key.toLowerCase();
+                if(val.length < 3 || val.toLowerCase() === 'nie') return;
+
+                if (k.includes('tel') || k.includes('mobil')) {
+                    val.split(/[;,]+/).forEach(v => {
+                        const cleanV = v.trim();
+                        if(cleanV.length > 3) phones.add(cleanV);
+                    });
+                }
+                if (k.includes('mail')) { 
+                    val.split(/[;,]+/).forEach(v => {
+                        const cleanV = v.trim();
+                        if(isValidEmail(cleanV)) emails.add(cleanV);
+                    });
+                }
+                if (k.includes('web') || k.includes('url')) webs.add(val);
+            });
+
+            const name = get('názov') || get('obchodné meno') || "Neznáma firma";
+            const city = get('mesto') || get('obec') || "";
+            const district = get('okres') || "";
+            const segment = get('odvetvie') || get('nace') || get('činnosť') || "";
+            const employees = get('počet zamestnancov') || get('zamestnanci') || "";
+            const revenue = get('tržby') || get('obrat') || "";
+            const profit = get('zisk') || "";
+            const ico = get('ičo');
+            
+            const personRaw = get('štatutár') || get('konateľ') || get('osoba') || "";
+            const persons = cleanPersonName(personRaw);
+
+            let rawWebUrl = Array.from(webs)[0] || "";
+            let webUrl = rawWebUrl.split(/[;, ]+/)[0]; 
+            let hasWeb = false;
+            let googleLink = `https://www.google.com/search?q=${encodeURIComponent(name + " " + city + " kontakt")}`;
+
+            if (webUrl && !webUrl.includes('@') && webUrl.length > 3) {
+                if (!webUrl.startsWith('http')) webUrl = 'http://' + webUrl;
+                hasWeb = true;
+            }
+
+            return {
+                id: index, 
+                name, city, district, segment, employees, revenue, profit, 
+                persons, personRaw, ico,
+                phones: Array.from(phones), 
+                emails: Array.from(emails),
+                webUrl, hasWeb, googleLink,
+                isDone: false,
+                note: "" 
+            };
+        });
+
+        initApp();
+        saveData();
+    }
+
+    function initApp() {
+        filteredData = [...allData];
+        updateStats();
+        render();
+        introScreen.style.transform = "translateY(-100%)";
+        appScreen.style.display = "block";
+    }
+
+    function updateStats() {
+        const doneCount = allData.filter(x => x.isDone).length;
+        document.getElementById('count').textContent = filteredData.length;
+        document.getElementById('doneCount').textContent = doneCount;
+    }
+
+    window.updateNote = function(id, value) {
+        const item = allData.find(x => x.id === id);
+        if(item) { item.note = value; saveData(); }
+    }
+
+    // --- HTML GENERATORS ---
+    function createRowHtml(value, icon, formatter, copy = false) {
+        const displayVal = formatter ? formatter(value) : value;
+        return `
+            <div class="row">
+                <div class="row-left">
+                    <span class="icon">${icon}</span> 
+                    <span class="val">${displayVal}</span>
+                </div>
+                ${copy ? `<button class="btn-copy" onclick="copyText('${value}')" title="Kopírovať">📋</button>` : ''}
+            </div>
+        `;
+    }
+
+    function renderExpandableList(items, icon, formatter, copy = false) {
+        if (!items || items.length === 0) return '';
+        const VISIBLE_LIMIT = 4;
+        if (items.length <= VISIBLE_LIMIT) {
+            return items.map(item => createRowHtml(item, icon, formatter, copy)).join('');
+        }
+        const visibleItems = items.slice(0, VISIBLE_LIMIT).map(item => createRowHtml(item, icon, formatter, copy)).join('');
+        const hiddenItems = items.slice(VISIBLE_LIMIT).map(item => createRowHtml(item, icon, formatter, copy)).join('');
+        const uid = Math.random().toString(36).substr(2, 9);
+        return `
+            ${visibleItems}
+            <div id="hidden-${uid}" class="hidden-stack">
+                ${hiddenItems}
+            </div>
+            <button class="expand-btn" onclick="toggleStack('${uid}', this, ${items.length - VISIBLE_LIMIT})">
+                ⬇ Zobraziť ďalšie (${items.length - VISIBLE_LIMIT})
+            </button>
+        `;
+    }
+
+    window.toggleStack = function(uid, btn, count) {
+        const div = document.getElementById('hidden-' + uid);
+        if (div.classList.contains('show')) {
+            div.classList.remove('show');
+            btn.innerHTML = `⬇ Zobraziť ďalšie (${count})`;
+        } else {
+            div.classList.add('show');
+            btn.innerHTML = `⬆ Skryť`;
+        }
+    };
+
+    function render() {
+        grid.innerHTML = "";
+        const visible = filteredData.slice(0, 300);
+
+        visible.forEach(item => {
+            const card = document.createElement('div');
+            card.className = `card ${item.isDone ? 'done' : ''}`;
+            
+            const isProfitPos = item.profit && !String(item.profit).includes('-');
+            const prettyRev = formatMoney(item.revenue);
+            const prettyProf = formatMoney(item.profit);
+
+            const personsHtml = renderExpandableList(item.persons, '👤', null, false);
+            const phonesHtml = renderExpandableList(item.phones, '📞', formatPhone, true);
+            const emailsHtml = renderExpandableList(item.emails, '✉️', null, true);
+
+            card.innerHTML = `
+                <div class="c-header">
+                    <h2 class="c-name">${item.name}</h2>
+                    <div class="badges">
+                        <span class="tag t-loc">📍 ${item.city}${item.district ? ', ' + item.district : ''}</span>
+                        ${item.ico ? `<span class="tag t-ico">IČO: ${item.ico}</span>` : ''}
+                        ${item.segment ? `<span class="tag t-seg">🏭 ${item.segment.substring(0,30)}...</span>` : ''}
+                        ${item.employees ? `<span class="tag t-emp">👥 ${item.employees}</span>` : ''}
+                    </div>
+                </div>
+
+                <div class="finance-grid">
+                    <div class="fin-item">
+                        <span class="fin-label">Tržby</span>
+                        <span class="fin-val">${prettyRev} €</span>
+                    </div>
+                    <div class="fin-item">
+                        <span class="fin-label">Zisk</span>
+                        <span class="fin-val ${isProfitPos ? 'green' : 'red'}">${prettyProf} €</span>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    ${personsHtml}
+                    ${phonesHtml}
+                    ${emailsHtml}
+                </div>
+
+                <div class="note-area">
+                    <span class="note-label">Poznámka</span>
+                    <textarea class="note-input" placeholder="..." oninput="updateNote(${item.id}, this.value)">${item.note}</textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-check" onclick="toggleStatus(${item.id})">
+                        ${item.isDone ? '↩️ Vrátiť' : '📞 Vybaviť'}
+                    </button>
+                    
+                    <a href="${item.hasWeb ? item.webUrl : item.googleLink}" target="_blank" 
+                       class="btn ${item.hasWeb ? 'btn-web' : 'btn-google'}">
+                       ${item.hasWeb ? '🌐 Web' : '🔍 Google'}
+                    </a>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    window.copyText = function(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            toast.className = "show";
+            setTimeout(() => toast.className = "", 2000);
+        });
+    };
+
+    window.toggleStatus = function(id) {
+        const index = allData.findIndex(x => x.id === id);
+        if (index !== -1) {
+            allData[index].isDone = !allData[index].isDone;
+            saveData();
+            
+            const fIndex = filteredData.findIndex(x => x.id === id);
+            if(fIndex !== -1) filteredData[fIndex].isDone = allData[index].isDone;
+            
+            render();
+            updateStats();
+        }
+    };
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        filteredData = allData.filter(d => 
+            d.name.toLowerCase().includes(val) || 
+            d.city.toLowerCase().includes(val) || 
+            d.personRaw.toLowerCase().includes(val) ||
+            (d.ico && d.ico.toString().includes(val))
+        );
+        updateStats();
+        render();
+    });
+
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`;
+    document.head.appendChild(styleSheet);
+
+/* --- ZMENENÝ SIDEBAR (BEZ RIADKU A BEZ TLAČIDLA RESET) --- */
+(function() {
+
+    // 1. DATABÁZA HLÁŠOK
+    const hlasky = [
+"Zákazník má vždy pravdu. (Ale my vieme svoje).",
+"Ďalší hovor, ďalšia šanca... pokaziť to.",
+"Prosím, nech to dvihne sekretárka, tá je aspoň milá.",
+"Keby som dostal euro za každé 'nemám záujem', píšem vám z Bahám.",
+"Moja trpezlivosť s klientmi je ako batéria v iPhone. Rýchlo sa míňa.",
+"Dnes predávam s entuziazmom mŕtveho chrobáka.",
+"Viete, ako sa volá had, ktorý rozpráva vtipy? Hahad.",
+"Viete, prečo policajti nechodia na ryby? Lebo by zatkli prvú, čo by otvorila ústa.",
+"Rozprávajú sa dve planéty: 'Cítim sa zle.' 'Prečo?' 'Mám ľudí.' 'Neboj, to prejde.'",
+"Aký je najrýchlejší spôsob, ako zarobiť peniaze? Predať budík.",
+"Viete, čo robí hluchý matematik? Počíta s tým, že nič nebude počuť.",
+"Prečo má datateľka studené ruky? Lebo má Windows otvorený dokorán.",
+"Viete, ako sa hovorí človeku, ktorý všade vidí tváre? Facebook.",
+"Príde kostlivec k lekárovi. Lekár: 'No, to idete pekne skoro!'",
+"Viete, čo vznikne skrížením ježa a dážďovky? Ostnatý drôt.",
+"Jeden vtáčik hovorí druhému: 'Prepáč, ponáhľam sa, musím si ísť dobiť baterky.' (Konšpiračná teória).",
+"Umelá inteligencia nemá šancu proti prirodzenej hlúposti.",
+"Káva nie je droga. Je to vitamín C(offee).",
+"Nekrič na mňa, kým nemám v ruke kávu. A potom už vôbec nie, lebo mám zbraň.",
+"Dnes fungujem na nízkom napätí.",
+"Môj mozog má dnes 'Blue Screen of Death'.",
+"Zívnutie je tichý výkrik po kofeíne.",
+"Dnes by som potreboval kávu veľkosti vedra.",
+"V mojom tele je 70% vody a 30% zúfalstva.",
+"Práca ma baví. Dokážem sa na ňu pozerať celé hodiny.",
+"Môj šéf mi povedal, aby som mal pekný deň. Tak som išiel domov.",
+"Tímová práca je dôležitá. Umožňuje ti zvaliť vinu na niekoho iného.",
+"Dnes mám náladu 'Error 404'.",
+"E-mail odoslaný. Teraz čakám na potlesk.",
+"Moja úroveň stresu je momentálne: 'Nepýtaj sa'.",
+"Prepáčte, že meškám, ale nechcelo sa mi prísť.",
+"Mám to v 'TO-DO' liste. Hneď za 'ovládnuť svet' a 'kúpiť mlieko'.",
+"Všetko sa dá urobiť zajtra. Aj to, čo sa malo urobiť včera.",
+"Som taký zaneprázdnený, že neviem, čo skôr nerobiť.",
+"Moja kariéra je ako horská dráha. Lenže ideme len dole.",
+"Viete, ako sa hovorí bumerangu, ktorý sa nevráti? Palica.",
+"Prečo sa potápači hádžu do vody dozadu? Lebo dopredu by spadli do lode.",
+"Pesimista vidí tmu. Optimista vidí svetlo. Realista vidí, že horí.",
+"Viete, čo má spoločné programátor a kúzelník? Obaja robia triky, ktorým nikto nerozumie.",
+"Manželka hovorí mužovi: 'Drahý, tie lieky ti vôbec nepomáhajú.' Muž: 'Aké lieky?' Manželka: 'Tie, čo ti predpísali proti skleróze.' Muž: 'Mne niekto niečo predpísal?'",
+"Viete, prečo blondínka polieva počítač? Chce surfovať na nete.",
+"Idú dve paradajky cez cestu. Jednu prejde auto a druhá hovorí: 'Poď, kečup, ideme ďalej.'",
+"Aký je rozdiel medzi vedomosťou a múdrosťou? Vedomosť je vedieť, že paradajka je ovocie. Múdrosť je nedať si ju do ovocného šalátu.",
+"Hovorí sa, že peniaze nie sú všetko. A je to pravda. Ešte sú tu aj nehnuteľnosti a akcie.",
+"Trpezlivosť ruže prináša. Ale nervy nosia whisky.",
+"Nič nerobenie je veľmi ťažká vec. Nikdy nevieš, kedy si skončil.",
+"Dnes sa mi nechce nič. A zajtra si to asi zopakujem.",
+"Excel neodpovedá. Ja tiež nie.",
+"Vesmír má nekonečne veľa dimenzií, ale Excel má len 1 048 576 riadkov.",
+"Neboj sa, AI ťa nenahradí. Nahradí ťa kolega, ktorý vie používať AI.",
+"Reštartoval si to? Nie? Tak neotravuj.",
+"Klávesnica nie je na mlátenie, ale niekedy si to pýta.",
+"Uložil si to? Určite? Ulož to radšej ešte raz.",
+"Ctrl+Z je najväčší vynález ľudstva.",
+"Môj počítač si myslí, že mám čas čakať.",
+"Kofeín v krvi: 98%. Chuť pracovať: 2%.",
+"Moja krvná skupina je Káva pozitív.",
+"Najskôr káva, potom diplomacia.",
+"Dnes fungujem na kofeíne a sarkazme.",
+"Ak ma vidíš bez kávy, radšej predstieraj, že si mŕtvy.",
+"Zívnutie je tichý výkrik po káve.",
+"Dnes to vyzerá na troj-kávový problém.",
+"ASAP je len skratka pre 'Zabudol som na to a teraz horí'.",
+"Tento meeting mohol byť e-mailom. A ten e-mail som mohol vymazať.",
+"Kolegovia sú ako vianočné svetielka. Polovica nesvieti a druhá je zamotaná.",
+"Teamwork: To znamená, že to pokazíme viacerí naraz.",
+"Štvrtok je len malý piatok.",
+"Moja motivácia práve odišla na obed. Asi sa už nevráti.",
+"Tvár sa inteligentne, šéf sa pozerá.",
+"Moja superschopnosť? Viem posielať pasívne-agresívne maily.",
+"Nie som lenivý. Som v úspornom režime.",
+"Práca šľachtí človeka, ale dnešok by som radšej preskočil.",
+"Dvíhaj to! Peniaze na druhej strane čakajú.",
+"Každé 'nie' je len krok k 'áno'. Alebo k infarktu.",
+"Haló? Nie, nevolám vám kvôli predĺženej záruke na auto.",
+"Dnes mám hlas ako z reklamy na whisky. Využi to.",
+"Náš zákazník, náš pán. Aj keď niekedy je ten pán trochu mimo.",
+"Úsmev počuť aj cez telefón. Tak sa neškľab!",
+"Volám, teda som.",
+"Ak nedvihneš do 5 sekúnd, automaticky súhlasíš s objednávkou.",
+"Prosím, nech to nie je odkazová schránka...",
+"Dnes predám aj piesok na Sahare.",
+"Nie som neodbytný, som len cieľavedomý.",
+        "Dnes pracujem na 10%. Zvyšných 90% sa načítava...",
+        "Moja práca je prísne tajná. Ani ja neviem, čo robím.",
+        "Môj stôl nie je bordel. To je 'organizovaný chaos'.",
+        "Trpezlivosť nie je moja silná stránka... a už ma to začína štvať!",
+        "Deadline je moment, kedy ťa napadnú tie najlepšie výhovorky.",
+        "Ak to funguje, nechytaj to!",
+        "Plán na dnes: 1. Káva, 2. Káva, 3. Prežiť.",
+        "Mám to pod kontrolou... (asi).",
+        "Meeting mohol byť e-mailom.",
+        "Skúsil si to vypnúť a zapnúť?",
+        "To nie je chyba (bug), to je nečakaná funkcia (feature).",
+        "Ctrl+C a Ctrl+V sú moji najlepší kolegovia.",
+        "Error 404: Motivácia not found.",
+        "Volaný účastník sa momentálne venuje pitiu kávy.",
+        "Tento hovor sa nenahráva, takže si môžem uľaviť.",
+        "Život je krátky. Usmievaj sa, kým máš zuby.",
+        "Svetlo na konci tunela je len prichádzajúci vlak.",
+        "Peniaze ťa šťastným neurobia. Ale radšej budem plakať v Ferrari.",
+        "Všetko sa raz vyrieši. Väčšinou samo."
+    ];
+
+    // 2. HTML KÓD
+    const bubbleHTML = `
+        <div id="sb-bubble" style="
+            display: none; position: fixed; 
+            top: 350px; left: 160px; 
+            background: #fff; color: #333; padding: 15px; 
+            border-radius: 0 10px 10px 10px; 
+            box-shadow: 2px 5px 20px rgba(0,0,0,0.4); 
+            width: 220px; font-family: 'Segoe UI', sans-serif;
+            font-size: 13px; line-height: 1.4; text-align: left; 
+            z-index: 2147483647; border: 1px solid #ddd; cursor: pointer;
+        ">
+            <div style="position: absolute; left: -10px; top: 10px; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid #fff;"></div>
+            <span id="sb-bubble-text" style="font-weight: 500;"></span>
+            <div style="margin-top:8px; font-size:10px; color:#999; text-align:right;">(Klikni pre ďalší)</div>
+        </div>
+    `;
+
+    const sidebarHTML = `
+        <div id="sb-restore-btn" style="
+            display: none; position: fixed; top: 20px; left: 0;
+            background: #2c3e50; color: white; padding: 10px 15px 10px 10px;
+            border-radius: 0 8px 8px 0; cursor: pointer; z-index: 99998;
+            font-family: sans-serif; font-weight: bold; font-size: 18px;
+        ">»</div>
+
+        <div id="sidebar-container" style="
+            position: fixed; top: 0; left: 0;
+            width: 150px; height: 100vh;
+            background: #2c3e50; color: #ecf0f1;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 15px 10px; box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif; z-index: 99999;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        ">
+            <button id="sb-close-btn" style="align-self: flex-end; background: none; border: none; color: #7f8c8d; cursor: pointer; font-size: 14px; margin-bottom: 5px;">✖</button>
+
+            <div style="text-align: center; margin-bottom: 15px;">
+                <div id="sb-date" style="font-size: 11px; opacity: 0.7;">--.--.</div>
+                <div id="sb-clock" style="font-size: 24px; font-weight: bold; color: #fff;">00:00</div>
+            </div>
+
+            <hr style="width: 80%; border: 0; border-top: 1px solid #465a6e; margin-bottom: 15px;">
+
+            <div style="text-align: center; width: 100%; margin-bottom: 15px;">
+                <div style="font-size: 10px; text-transform: uppercase; opacity: 0.5; margin-bottom: 2px;">Čas hovoru</div>
+                <div id="sb-stopwatch" style="font-family: monospace; font-size: 20px; color: #3498db; margin-bottom: 5px; font-weight: bold;">00:00</div>
+                <div style="display: flex; gap: 5px;">
+                    <button id="sb-btn-action" style="flex: 1; background: #27ae60; border: none; color: white; border-radius: 4px; padding: 5px; cursor: pointer; font-weight: bold; font-size: 11px;">ŠTART</button>
+                    <button id="sb-btn-reset" style="flex: 1; background: transparent; border: 1px solid #7f8c8d; color: #bdc3c7; border-radius: 4px; padding: 5px; cursor: pointer; font-size: 11px;">Rst</button>
+                </div>
+            </div>
+
+            <div style="width: 100%; text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #465a6e;">
+                <button id="sb-mood-btn" title="Vylepšiť náladu" style="
+                    background: none; border: 2px solid #8e44ad; color: #8e44ad; 
+                    border-radius: 50%; width: 40px; height: 40px; 
+                    cursor: pointer; font-size: 20px; transition: all 0.2s;
+                ">🍀</button>
+                <div style="font-size: 10px; color: #8e44ad; margin-top: 5px;">Vylepšovák</div>
+            </div>
+
+            <div style="text-align: center; width: 100%; margin-bottom: 20px; background: #34495e; padding: 10px; border-radius: 8px; border: 1px solid #465a6e;">
+                <div style="font-size: 10px; text-transform: uppercase; margin-bottom: 5px; color: #f1c40f; font-weight: bold;">🏆 Úspešné</div>
+                <div id="sb-counter" style="font-size: 28px; font-weight: bold; color: #fff; line-height: 1;">0</div>
+                <div style="margin-top: 8px; display: flex; justify-content: center; gap: 10px;">
+                    <button id="sb-cnt-minus" style="background: #c0392b; border: none; color: white; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold;">-</button>
+                    <button id="sb-cnt-plus" style="background: #27ae60; border: none; color: white; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold;">+</button>
+                </div>
+            </div>
+
+            <div style="width: 100%; margin-bottom: 15px; flex-grow: 1; display: flex; flex-direction: column;">
+                <div style="font-size: 10px; text-transform: uppercase; opacity: 0.5; margin-bottom: 4px; padding-left: 2px;">Rýchla poznámka</div>
+                <textarea id="sb-notepad" placeholder="Píš sem..." style="
+                    width: 100%; flex-grow: 1; 
+                    background: #34495e; /* Tmavá farba ladiaca s panelom */
+                    border: 1px solid #465a6e; /* Jemný okraj */
+                    border-radius: 6px; 
+                    padding: 10px; 
+                    font-family: 'Segoe UI', sans-serif; font-size: 12px; 
+                    color: #ecf0f1; /* Svetlé písmo */
+                    resize: none; outline: none; box-sizing: border-box;
+                    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); /* Jemný tieň do vnútra */
+                    line-height: 1.4;
+                "></textarea>
+            </div>
+        </div>
+    `;
+
+    // Vloženie
+    const divPanel = document.createElement('div'); divPanel.innerHTML = sidebarHTML; document.body.appendChild(divPanel);
+    const divBubble = document.createElement('div'); divBubble.innerHTML = bubbleHTML; document.body.appendChild(divBubble);
+
+    // --- LOGIKA ---
+    const sidebar = document.getElementById('sidebar-container');
+    const restoreBtn = document.getElementById('sb-restore-btn');
+    const closeBtn = document.getElementById('sb-close-btn');
+    
+    // Otváranie / Zatváranie
+    restoreBtn.onclick = () => { sidebar.style.left = "0"; restoreBtn.style.display = "none"; };
+    closeBtn.onclick = () => { sidebar.style.left = "-170px"; restoreBtn.style.display = "block"; };
+
+    // Hodiny
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('sb-clock').innerText = now.toLocaleTimeString('sk-SK', {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('sb-date').innerText = now.toLocaleDateString('sk-SK', {day:'2-digit', month:'2-digit'});
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // Stopky
+    let seconds = 0, interval = null, isRunning = false;
+    const dispStopwatch = document.getElementById('sb-stopwatch');
+    const btnAction = document.getElementById('sb-btn-action');
+    function fmt(s) { let m = Math.floor(s/60), sec = s%60; return (m<10?"0"+m:m) + ":" + (sec<10?"0"+sec:sec); }
+    btnAction.onclick = function() {
+        if (!isRunning) {
+            isRunning = true; btnAction.innerText = "STOP"; btnAction.style.background = "#c0392b";
+            interval = setInterval(() => { seconds++; dispStopwatch.innerText = fmt(seconds); if(seconds>300) dispStopwatch.style.color = "#e74c3c"; }, 1000);
+        } else {
+            isRunning = false; btnAction.innerText = "ŠTART"; btnAction.style.background = "#27ae60"; clearInterval(interval);
+        }
+    };
+    document.getElementById('sb-btn-reset').onclick = function() {
+        if(isRunning) { isRunning = false; clearInterval(interval); btnAction.innerText = "ŠTART"; btnAction.style.background = "#27ae60"; }
+        seconds = 0; dispStopwatch.innerText = "00:00"; dispStopwatch.style.color = "#3498db";
+    };
+
+    // Počítadlo
+    let count = 0; const dispCounter = document.getElementById('sb-counter');
+    if(localStorage.getItem('moje_skore')) { count = parseInt(localStorage.getItem('moje_skore')); dispCounter.innerText = count; }
+    document.getElementById('sb-cnt-plus').onclick = () => { count++; dispCounter.innerText = count; localStorage.setItem('moje_skore', count); };
+    document.getElementById('sb-cnt-minus').onclick = () => { if(count>0) count--; dispCounter.innerText = count; localStorage.setItem('moje_skore', count); };
+
+    // Poznámky
+    const notepad = document.getElementById('sb-notepad');
+    if(localStorage.getItem('moje_poznamky')) { notepad.value = localStorage.getItem('moje_poznamky'); }
+    notepad.oninput = function() { localStorage.setItem('moje_poznamky', notepad.value); };
+
+    // Vtipy
+    const moodBtn = document.getElementById('sb-mood-btn');
+    const bubble = document.getElementById('sb-bubble');
+    const bubbleText = document.getElementById('sb-bubble-text');
+    function showNewJoke(e) {
+        if(e) e.stopPropagation(); 
+        moodBtn.style.transform = "rotate(360deg)"; setTimeout(() => moodBtn.style.transform = "rotate(0deg)", 300);
+        bubbleText.innerText = hlasky[Math.floor(Math.random() * hlasky.length)];
+        bubble.style.display = "block";
+    }
+    moodBtn.onclick = showNewJoke;
+    bubble.onclick = showNewJoke;
+    document.addEventListener('click', function(event) {
+        if (!bubble.contains(event.target) && !moodBtn.contains(event.target)) { bubble.style.display = "none"; }
+    });
+
+})();
+/* --- KONIEC --- */
+</script>
+</body>
+</html>
