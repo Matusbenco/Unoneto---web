@@ -1,524 +1,838 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-DX3DQMKG');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeden partner pre všetky technológie vo Vašej firme | Unoneto</title>
     <meta name="description" content="Zanalyzujeme vašu firmu a odporučíme technológie, ktoré vám skutočne ušetria čas a peniaze.">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Work+Sans:wght@300;500;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
+
     <style>
-        /* Úpravy pro Unoneto dizajn v štruktúre VisiLess */
+        /* --- 1. ZÁKLADNÉ PREMENNÉ A RESET --- */
         :root {
-            --unoneto-cyan: #22d3ee;
-            --unoneto-purple: #a855f7;
-            --unoneto-dark: #0f172a;
-            --unoneto-slate: #1e293b;
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --error-red: #ef4444; 
+            --success-green: #10b981;
+        }
+        
+        /* --- 2. POHYBLIVÝ BANER (MARQUEE) --- */
+        .promo-banner {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+            height: 44px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            z-index: 100;
+        }
+        .marquee-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee-scroll 30s linear infinite;
+        }
+        .marquee-item {
+            white-space: nowrap;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-item strong { color: var(--cyan); margin-right: 5px; }
+        
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .promo-banner:hover .marquee-content { animation-play-state: paused; }
+
+        /* --- 3. SLIDER (Jeden baner) --- */
+        #banner-slider .splide__slide {
+            display: flex;
+            justify-content: center;
+        }
+        #banner-slider .slide-caption {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--cyan);
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #banner-slider img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 16px;
+            filter: brightness(0.7);
+        }
+        .splide__pagination { bottom: -30px !important; }
+        .splide__pagination__page { background: rgba(255, 255, 255, 0.3); height: 8px; width: 8px; margin: 0 5px; }
+        .splide__pagination__page.is-active { background: var(--cyan); transform: scale(1.2); }
+
+        /* --- 4. PROCESS GRID (Karty) --- */
+        .process-grid-fixed { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+        @media (min-width: 700px) { .process-grid-fixed { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1200px) { .process-grid-fixed { grid-template-columns: repeat(4, 1fr); } }
+
+        .process-card-anim {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 16px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+            text-align: center; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; transform: translateY(30px) scale(0.9);
+        }
+        .process-card-anim.pop-in { animation: cardPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cardPopIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .process-card-anim:hover {
+            transform: translateY(-10px) !important; border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15); background: rgba(30, 41, 59, 0.7);
+        }
+        .process-number-bg {
+            position: absolute; top: -10px; right: 10px; font-size: 5rem; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); line-height: 1; pointer-events: none; transition: transform 0.5s ease;
+        }
+        .process-card-anim:hover .process-number-bg { transform: scale(1.2) rotate(-10deg); color: rgba(34, 211, 238, 0.1); }
+        .process-icon {
+            font-size: 2.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, var(--cyan), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block;
+        }
+        .process-content h3 { font-size: 1.3rem; color: white; margin-bottom: 1rem; font-weight: 700; }
+        .process-content p { font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.6; }
+
+        /* --- 5. OSTATNÉ ŠTÝLY --- */
+        .particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
+        .ping-particle { position: absolute; border-radius: 50%; opacity: 0.3; background: radial-gradient(circle, var(--cyan) 0%, transparent 70%); animation: particleMove infinite linear; }
+        @keyframes particleMove { 0% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-100px) scale(1.2); opacity: 0.1; } 100% { transform: translateY(0) scale(1); opacity: 0.3; } }
+        
+        .hero-section { padding: 10rem 0 5rem; text-align: center; }
+        .contact-form-container { max-width: 700px; margin: 0 auto; padding: 3rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 20px; backdrop-filter: blur(15px); }
+        .form-input { width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.8); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: white; font-size: 1rem; transition: all 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+
+        /* --- MOBILNÉ MENU FIX --- */
+        #hamburger-btn { display: none; }
+        @media (max-width: 768px) {
+            #hamburger-btn {
+                display: flex; flex-direction: column; justify-content: space-between;
+                width: 30px; height: 21px; background: transparent; border: none; cursor: pointer; z-index: 3000; position: relative;
+            }
+            .hamburger-bar { width: 100%; height: 3px; background-color: white; border-radius: 3px; transition: all 0.3s ease; }
+            #hamburger-btn.active .hamburger-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            #hamburger-btn.active .hamburger-bar:nth-child(2) { opacity: 0; }
+            #hamburger-btn.active .hamburger-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+            .nav-links {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+                background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(10px);
+                display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 2999; margin: 0; padding: 0; list-style: none;
+            }
+            .nav-links.active { transform: translateX(0); }
+            .dropdown-menu { display: none; }
+            .has-dropdown.active .dropdown-menu { display: block; }
         }
 
-        body {
-            font-family: 'Work Sans', sans-serif;
-            background-color: var(--unoneto-dark);
-            color: #cbd5e1;
-            overflow-x: hidden;
+        /* =================================================================
+           ŠPECIÁLNE STYLY PRE KARTY "PROBLÉM vs RIEŠENIE" (DO OČÍ)
+           ================================================================= */
+        .ps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .ps-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ps-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(34, 211, 238, 0.3);
         }
 
-        .brand-font, h1, h2, h3, h4 {
-            font-family: 'Inter', sans-serif !important;
+        /* Horná polovica - PROBLÉM (Elegantná tlmená sivá/bridlicová) */
+        .ps-problem {
+            background: rgba(30, 41, 59, 0.5); /* Tlmené pozadie bez červenej */
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Iba veľmi jemný predel */
+            position: relative;
+        }
+        
+        .ps-problem-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--slate-400); /* Elegantná sivomodrá namiesto agresívnej červenej */
             font-weight: 800;
-        }
-        
-        h2 { font-size: 2.5rem; color: #fff; }
-        
-        .text-cyan { color: var(--unoneto-cyan) !important; }
-        .text-purple { color: var(--unoneto-purple) !important; }
-        .container_bg__a { background-color: var(--unoneto-slate) !important; }
-        .container_bg__b { background-color: var(--unoneto-dark) !important; }
-        .border-cyan { border-color: var(--unoneto-cyan) !important; }
-
-        /* Tlačidlá VisiLess štýl aplikovaný pre Unoneto */
-        .btn-custom {
-            background-color: var(--unoneto-cyan) !important;
-            border: 2px solid var(--unoneto-cyan) !important;
-            color: var(--unoneto-dark) !important;
-            padding: 12px 35px;
-            text-transform: uppercase;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
             font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.4);
-            border-radius: 4px;
         }
-        .btn-custom:hover {
-            background-color: transparent !important;
-            border-color: var(--unoneto-cyan) !important;
-            color: var(--unoneto-cyan) !important;
-            box-shadow: none;
-        }
-
-        .btn-primary-custom { border: 2px solid var(--unoneto-cyan) !important; background: var(--unoneto-cyan) !important; color: var(--unoneto-dark) !important; text-transform: uppercase; font-weight: bold; transition: 0.3s; }
-        .btn-primary-custom:hover { background: transparent !important; color: var(--unoneto-cyan) !important; }
-
-        /* Fixace obrázků - layout Visiless */
-        .c_x_bg { position: absolute; top: 0; width: 50%; height: 100%; background-size: cover; background-position: center center !important; }
-        .c_x_bg_left { left: 0; }
-        .c_x_bg_right { right: 0; }
-        .text_wrapper { position: relative; padding: 100px 0; }
-        .text_container { padding: 80px; z-index: 2; position: relative; }
         
-        /* Odstránenie prekrývajúcich čiar (VisiLess fix) */
-        .text_wrapper::before, .text_wrapper::after, .c_x_bg::before, .c_x_bg::after { display: none !important; border: none !important; }
+        .ps-problem p {
+            color: var(--slate-300);
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin: 0;
+        }
 
-        /* Unoneto Marquee Banner */
-        .promo-banner { background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(34, 211, 238, 0.3); height: 44px; display: flex; align-items: center; overflow: hidden; position: relative; z-index: 1001; }
-        .marquee-wrapper { display: flex; width: 100%; overflow: hidden; text-decoration: none; }
-        .marquee-content { display: flex; animation: marquee-scroll 30s linear infinite; }
-        .marquee-item { white-space: nowrap; color: white; font-size: 0.9rem; padding: 0 40px; display: flex; align-items: center; }
-        @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* Dolná polovica - RIEŠENIE (Tyrkysová/Fialová) */
+        .ps-solution {
+            background: linear-gradient(to bottom, rgba(34, 211, 238, 0.05), rgba(168, 85, 247, 0.1));
+            padding: 2rem;
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .ps-solution-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--cyan);
+            font-weight: 900;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-        /* Unoneto Side Banners */
-        .side-banner { position: fixed; right: 0; z-index: 9999; background: rgba(15, 23, 42, 0.98); border: 2px solid var(--unoneto-purple); border-right: none; padding: 10px 15px; border-radius: 8px 0 0 8px; display: flex; align-items: center; gap: 10px; }
-        .side-banner a { color: white; text-decoration: none; display: flex; flex-direction: column; }
-        .side-banner .close-banner { background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; }
-
-        /* Fullscreen Menu VisiLess Style */
-        .header { position: absolute; z-index: 1000; width: 100%; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .hamburger { cursor: pointer; color: #fff; font-size: 24px; z-index: 1200; position: relative; }
-        #ddfullscreenmenu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.98); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; }
-        #ddfullscreenmenu a { color: #fff; font-size: 2rem; text-decoration: none; margin: 15px 0; font-family: 'Inter', sans-serif; font-weight: 700; transition: 0.3s; }
-        #ddfullscreenmenu a:hover { color: var(--unoneto-cyan); }
-        #closex { position: absolute; top: 30px; right: 50px; font-size: 40px; }
-
-        /* Responzivita */
-        @media screen and (max-width: 767px) {
-            .c_x_bg { position: relative !important; width: 100% !important; height: 300px !important; left: 0 !important; right: 0 !important; }
-            .text_wrapper { padding: 0 !important; }
-            .text_container { padding: 40px 20px !important; text-align: center; }
-            .rslider_title { font-size: 2.2rem !important; }
-            .side-banner { display: none !important; }
+        .ps-solution p {
+            color: white;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0;
         }
     </style>
 </head>
+
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-DX3DQMKG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-   <div id="cookie-bar">
-        <p>
-            Tento web používa súbory cookies na zlepšenie používateľského zážitku a analýzu návštevnosti. 
-            Súhlasíte s ich používaním? 
-            <a href="ochrana-osobnych-udajov" style="color: var(--unoneto-cyan); text-decoration: underline; margin-left: 5px;">Viac informácií a nastavenia</a>
-        </p>
-        <div class="cookie-btns">
-            <button class="btn-cookie" onclick="this.parentElement.parentElement.style.display='none'">Súhlasím</button>
+<div id="ppc-banner" class="side-banner pulsed-banner">
+    <a href="ppc-kampane" class="banner-link-content pc-banner-layout">
+        <div class="pc-banner-icons-group">
+           <i class="fa-brands fa-google"></i>
+           <i class="fa-brands fa-meta"></i>
         </div>
+        <div class="pc-banner-text">
+            <span class="pc-banner-headline">Zarába vaša reklama?</span>
+            <span class="pc-banner-subline">AUDIT ZDARMA <i class="fa-solid fa-arrow-right" style="font-size: 0.8em;"></i></span>
+        </div>
+    </a>
+    <button class="close-banner" aria-label="Zatvoriť banner" onclick="document.getElementById('ppc-banner').style.display='none';">&times;</button>
+</div>
+
+<div id="apps-banner" class="side-banner pulsed-banner" style="top: calc(50% - 160px);">
+    <a href="apps/" class="banner-link-content pc-banner-layout">
+        <div class="pc-banner-icons-group" style="color: #a855f7;">
+           <i class="fa-solid fa-file-pdf"></i>
+           <i class="fa-solid fa-image"></i>
+           <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <div class="pc-banner-text">
+            <span class="pc-banner-headline">Užitočné nástroje</span>
+            <span class="pc-banner-subline" style="color: #a855f7;">
+                Vyskúšať ZADARMO <i class="fa-solid fa-arrow-right" style="font-size: 0.8em;"></i>
+            </span>
+        </div>
+    </a>
+    <button class="close-banner" aria-label="Zatvoriť banner" onclick="document.getElementById('apps-banner').style.display='none';">&times;</button>
+</div>
+
+<div id="promo-banner" class="promo-banner">
+    <a href="weby" class="marquee-wrapper">
+        <div class="marquee-content">
+            <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
+            <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
+            <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
+            <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
+        </div>
+    </a>
+</div>
+
+    <div class="particle-container">
+        <div class="ping-particle" style="top: 20%; left: 15%; animation-duration: 4s;"></div>
+        <div class="ping-particle" style="top: 50%; left: 50%; animation-duration: 5s; animation-delay: 1s;"></div>
+        <div class="ping-particle" style="top: 80%; left: 85%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
+    </div>
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
     </div>
 
-
-
-    <div id="promo-banner" class="promo-banner">
-        <a href="weby" class="marquee-wrapper">
-            <div class="marquee-content">
-                <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
-                <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
-                <span class="marquee-item"><i class="fa-solid fa-bolt" style="color:#22d3ee; margin-right:8px;"></i><strong>NOVINKA:</strong> Profesionálny web bez vstupných investícií. Už od 39 € mesačne.</span>
-            </div>
-        </a>
-    </div>
-
-    <div id="ppc-banner" class="side-banner" style="top: calc(50% - 60px); border-color: var(--unoneto-cyan);">
-        <a href="ppc-kampane">
-            <span style="font-size: 0.8rem; color: var(--unoneto-cyan); font-weight: bold;">Zarába vaša reklama?</span>
-            <span style="font-size: 1rem; font-weight: bold;">AUDIT ZDARMA <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-        <button class="close-banner" onclick="document.getElementById('ppc-banner').style.display='none';">&times;</button>
-    </div>
-    <div id="apps-banner" class="side-banner" style="top: calc(50% - 160px);">
-        <a href="apps/">
-            <span style="font-size: 0.8rem; color: var(--unoneto-purple); font-weight: bold;">Užitočné nástroje</span>
-            <span style="font-size: 1rem; font-weight: bold;">Vyskúšať ZADARMO <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-        <button class="close-banner" onclick="document.getElementById('apps-banner').style.display='none';">&times;</button>
-    </div>
-
-    <nav id="ddfullscreenmenu">
-        <a href="#" id="closex" onclick="document.getElementById('ddfullscreenmenu').style.display='none'; return false;">&times;</a>
-        <a href="weby">Tvorba webov a e-shopov</a>
-        <a href="automatizacia">Digitalizácia a AI</a>
-        <a href="graficke-sluzby">Grafika a dizajn</a>
-              <a href="ppc-kampane">Marketing a PPC</a>
-        <a href="apps/">Unoneto aplikácie</a>
-                <a href="blog">Články</a>
-        
-        
-    </nav>
-
-    <header class="header w-100">
-        <div class="container-fluid px-4 px-md-5 d-flex justify-content-between align-items-center">
-            <a href="/" class="text-decoration-none d-flex align-items-center">
-                <img src="favicon.png" alt="Unoneto Logo" style="height: 40px; margin-right: 10px;">
-                <span class="brand-font text-white" style="font-size: 1.8rem; letter-spacing: 1px;">Unoneto</span>
+    <header class="main-header">
+        <nav class="container">
+            <a href="/" class="logo">
+                <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+                <span>Unoneto</span>
             </a>
-            
-            <nav class="d-flex align-items-center">
-                <div class="d-none d-lg-block mr-4">
-                    <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="text-center d-inline-block btn-primary-custom px-4 py-2 text-decoration-none rounded">Bezplatná analýza</a>
-                </div>
-                <div class="hamburger ml-3" onclick="document.getElementById('ddfullscreenmenu').style.display='flex';">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
-        </div>
+            <button id="hamburger-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+          
+            <ul class="nav-links" id="nav-menu">
+                <li class="has-dropdown">
+                    <a href="#" id="nasa-ponuka-toggle">Naše služby</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="weby">Tvorba webov a e-shopov</a></li>
+                        <li><a href="automatizacia">Digitalizácia a AI</a></li>
+                        <li><a href="graficke-sluzby">Grafika a dizajn</a></li>
+                        <li><a href="platby">Platobné systémy a eKasa</a></li>
+                        <li><a href="ppc-kampane">Marketing a PPC</a></li>
+                        <li><a href="apps/">Unoneto aplikácie</a></li>
+                    </ul>
+                </li>
+                <li><a href="#partneri">Naši partneri</a></li>
+                <li><a href="blog">Novinky</a></li>
+                <li class="language-switcher">
+                    <a href="/" class="lang-link active" title="Slovenčina"><span class="fi fi-sk"></span></a>
+                    <span class="lang-separator">|</span>
+                    <a href="/en" class="lang-link" title="English"><span class="fi fi-gb"></span></a>
+                </li>
+                <li><a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary">Bezplatná analýza</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <section class="position-relative overflow-hidden" style="height: 100vh; background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80') center/cover;">
-        <div class="container h-100 d-flex align-items-center position-relative z-index-10">
-            <div class="row w-100">
-                <div class="col-lg-8 wow fadeInDown">
-                    <h1 class="rslider_title text-white mb-4" style="font-size: 4.5rem; line-height: 1.1;">Jeden partner pre všetky technológie</h1>
-                    <h3 class="text-cyan mb-4 font-weight-normal" style="font-size: 1.5rem;">Zanalyzujeme vašu firmu a odporučíme technológie, ktoré vám skutočne ušetria čas a peniaze.</h3>
-                    <div class="d-flex flex-wrap mt-5">
-                        <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-custom mr-3 mb-3">Získať bezplatnú analýzu</a>
-                    </div>
-                </div>
+    <main>
+        <section class="hero container reveal" style="padding-bottom: 2rem;">
+            <h1 class="hero-title">Nestrácajte čas hľadaním ideálneho systému.<br><span class="gradient-text">My ho nájdeme za vás.</span></h1>
+            <p class="hero-description">Zanalyzujeme vašu firmu a odporučíme technológie, ktoré vám skutočne ušetria čas a peniaze. Neponúkame konkrétny systém, ale doporučíme ideálne riešenie presne pre Vás.</p>
+            <div class="hero-buttons">
+                <a href="https://calendar.app.google/Q8ctgM9CbGs7YAdj6" target="_blank" class="btn btn-primary btn-large">Mám záujem o nezávislú analýzu</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="text_wrapper text_wrapper__a">
-        <div class="c_x_bg c_x_bg_left" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80');"></div>
-        <div class="container-fluid p-0">
-            <div class="row m-0">
-                <div class="col-lg-6 offset-lg-6 p-0">
-                    <div class="text_container container_bg__a text-white h-100 d-flex flex-column justify-content-center wow fadeInRight">
-                        <div class="mb-4">
-                            <span class="text-uppercase text-cyan font-weight-bold" style="letter-spacing: 2px;"><i class="fa-solid fa-hands-bound mr-2"></i> Problém</span>
-                            <h2 class="mt-2 mb-3">Stratili ste sa v exceloch a tabuľkách?</h2>
-                        </div>
-                        <p class="mb-4" style="font-size: 1.1rem; line-height: 1.8;">Dáta máte roztrúsené vo viacerých súboroch, procesy sú neprehľadné a vy strácate kontrolu nad tým, čo sa vo firme reálne deje? Brzdí vás manuálna práca a ručné prepisovanie údajov z jedného systému do druhého?</p>
-                        <blockquote class="blockquote pl-4 py-2" style="border-left: 4px solid var(--unoneto-cyan); background: rgba(34, 211, 238, 0.05);">
-                            <h4 class="text-cyan mb-2"><i class="fa-solid fa-robot mr-2"></i> Naše riešenie</h4>
-                            <p class="mb-0 text-white" style="font-size: 1.05rem;">Vymeníme chaos za poriadok. Zautomatizujeme vašu rutinu, prepojíme systémy a nasadíme AI agentov. Ušetríme vám mesiace slepých uličiek a odovzdáme hotové know-how.</p>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="text_wrapper text_wrapper__b">
-        <div class="c_x_bg c_x_bg_right" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&q=80');"></div>
-        <div class="container-fluid p-0">
-            <div class="row m-0">
-                <div class="col-lg-6 p-0">
-                    <div class="text_container container_bg__b text-white h-100 d-flex flex-column justify-content-center wow fadeInLeft">
-                        <div class="mb-4">
-                            <span class="text-uppercase text-purple font-weight-bold" style="letter-spacing: 2px;"><i class="fa-solid fa-laptop-code mr-2"></i> Problém</span>
-                            <h2 class="mt-2 mb-3">Webstránka, ktorá nepredáva?</h2>
-                        </div>
-                        <p class="mb-4" style="font-size: 1.1rem; line-height: 1.8;">Máte zastaralý web, alebo hľadáte moderné riešenie, ktoré návštevníkov skutočne premení na platiacich zákazníkov? Zákazníci odchádzajú a vás to stojí peniaze.</p>
-                        <blockquote class="blockquote pl-4 py-2" style="border-left: 4px solid var(--unoneto-purple); background: rgba(168, 85, 247, 0.05);">
-                            <h4 class="text-purple mb-2"><i class="fa-solid fa-code mr-2"></i> Naše riešenie</h4>
-                            <p class="mb-0 text-white" style="font-size: 1.05rem;">Staviame weby, ktoré pracujú za vás. Vytvoríme interaktívne cenové ponuky, automatické notifikácie a prepojíme to s CRM a s čímkoľvek ďalším čo potrebujete.</p>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container-fluid py-5 container_bg__a advantage_wrapper" style="padding: 100px 5%;">
-        <div class="text-center mb-5 wow fadeInDown">
-            <h2 class="brand-font">Ako prebieha spolupráca?</h2>
-            <p class="text-muted" style="font-size: 1.1rem;">V prvom kroku poradíme, v druhom navrhneme, v treťom implementujeme, v štvrtom sme tu stále pre vás.</p>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-lg-3 mb-4 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="p-5 border border-cyan container_bg__b h-100 text-center">
-                    <h1 class="text-cyan mb-3" style="opacity: 0.3; font-size: 4rem;">01</h1>
-                    <i class="fas fa-comments mb-4 text-white" style="font-size: 2.5rem;"></i>
-                    <h3 class="text-white font-weight-bold mb-3">Poradíme</h3>
-                    <p class="text-muted">Vypočujeme si vás, urobíme nezávislú analýzu a povieme vám *prečo áno* a *prečo nie*.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 mb-4 wow fadeInUp" data-wow-delay="0.2s">
-                <div class="p-5 border border-cyan h-100 text-center">
-                    <h1 class="text-cyan mb-3" style="opacity: 0.3; font-size: 4rem;">02</h1>
-                    <i class="fas fa-lightbulb mb-4 text-cyan" style="font-size: 2.5rem;"></i>
-                    <h3 class="text-white font-weight-bold mb-3">Navrhneme</h3>
-                    <p class="text-muted">Vyberieme ideálnu kombináciu systémov a technológií presne pre vašu veľkosť firmy.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 mb-4 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="p-5 border border-cyan container_bg__b h-100 text-center">
-                    <h1 class="text-cyan mb-3" style="opacity: 0.3; font-size: 4rem;">03</h1>
-                    <i class="fas fa-code mb-4 text-white" style="font-size: 2.5rem;"></i>
-                    <h3 class="text-white font-weight-bold mb-3">Implementujeme</h3>
-                    <p class="text-muted">Všetko nastavíme, prepojíme a váš tím zaškolíme. Odovzdáme vám hotové riešenie.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 mb-4 wow fadeInUp" data-wow-delay="0.4s">
-                <div class="p-5 border border-cyan h-100 text-center">
-                    <h1 class="text-cyan mb-3" style="opacity: 0.3; font-size: 4rem;">04</h1>
-                    <i class="fas fa-rocket mb-4 text-cyan" style="font-size: 2.5rem;"></i>
-                    <h3 class="text-white font-weight-bold mb-3">Podporíme</h3>
-                    <p class="text-muted">Spustením to nekončí. Sme stále k dispozícii pre údržbu a dlhodobú podporu.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="produkty" class="container-fluid py-5 container_bg__a pt-5 pb-5">
-        <div class="title_box mb-5 text-center text-white wow fadeInDown">
-            <h2>Naše hotové balíky a služby</h2>
-            <p class="text-light">Zjednodušte si podnikanie s našimi prémiovými riešeniami</p>
-        </div>
-        <div class="row">
+        <section id="problemy-riesenia" class="container reveal" style="padding-top: 2rem; padding-bottom: 5rem;">
+            <h2 class="section-title" style="text-align: center;">S čím vám reálne pomôžeme?</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 4rem;">Poznáme úskalia podnikania. Povedzte nám, čo vás brzdí, a my nasadíme technológiu, ktorá to vyrieši.</p>
             
-            <div class="col-md-4 mb-4 wow zoomIn">
-                <div class="card border-0 rounded-0 bg-transparent h-100 text-white">
-                    
-                    <div style="height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.02);">
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80" 
-                             style="max-height: 100%; max-width: 100%; object-fit: scale-down;" 
-                             alt="Web bez starostí">
+            <div class="ps-grid">
+                
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-triangle-exclamation"></i> Problém</div>
+                        <p><strong>Strácate sa v Exceloch a tabuľkách?</strong> Dáta máte roztrúsené vo viacerých súboroch, procesy sú neprehľadné a vy strácate kontrolu nad tým, čo sa vo firme reálne deje?</p>
                     </div>
-                    
-                    <div class="card-body p-4 title_box container_bg__b" style="border-top: 3px solid var(--unoneto-cyan);">
-                        <span class="badge mb-2" style="background: rgba(34,211,238,0.2); color: var(--unoneto-cyan);"><i class="fa-solid fa-star"></i> Bestseller</span>
-                        <h3 class="font-weight-bold text-white" style="font-size: 1.5rem;">Web bez starostí</h3>
-                        <p class="text-muted">Zabudnite na jednorazové investície. Získajte profesionálny web s kompletnou správou formou mesačného paušálu.</p>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-circle-check"></i> Naše riešenie</div>
+                        <p>Vymeníme chaos za poriadok. Otestovali sme desiatky systémov a vieme, ktoré riešenia firmám skutočne fungujú. Ušetríme vám mesiace slepých uličiek a odovzdáme vám hotové know-how.</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-4 mb-4 wow zoomIn" data-wow-delay="0.1s">
-                <div class="card border-0 rounded-0 bg-transparent h-100 text-white">
-                    
-                    <div style="height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.02);">
-                        <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&q=80" 
-                             style="max-height: 100%; max-width: 100%; object-fit: scale-down;" 
-                             alt="PPC & Online Reklama">
+
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-hands-bound"></i> Problém</div>
+                        <p><strong>Brzdí vás manuálna práca?</strong> Všade počúvate o digitalizácii, no vaši zamestnanci stále trávia hodiny ručným prepisovaním údajov z jedného systému do druhého?</p>
                     </div>
-                    
-                    <div class="card-body p-4 title_box container_bg__b" style="border-top: 3px solid var(--unoneto-purple);">
-                        <span class="badge mb-2" style="background: rgba(168,85,247,0.2); color: var(--unoneto-purple);"><i class="fa-solid fa-chart-line"></i> Ziskový marketing</span>
-                        <h3 class="font-weight-bold text-white" style="font-size: 1.5rem;">PPC & Online Reklama</h3>
-                        <p class="text-muted">Google a Meta Ads kampane nastavené na výkon. Prestaňte páliť rozpočet, začnite zarábať skutočné peniaze.</p>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-robot"></i> Naše riešenie</div>
+                        <p>Zautomatizujeme vašu rutinu. Prepojíme systémy do jedného celku a nasadíme AI agentov, ktorí prevezmú nudnú prácu za vás. Vaša firma zrýchli s minimálnymi nákladmi.</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-4 mb-4 wow zoomIn" data-wow-delay="0.2s">
-                <div class="card border-0 rounded-0 bg-transparent h-100 text-white">
-                    
-                    <div style="height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.02);">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80" 
-                             style="max-height: 100%; max-width: 100%; object-fit: scale-down;" 
-                             alt="Automatizácia & CRM">
+
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-laptop-code"></i> Problém</div>
+                        <p><strong>Webstránka, ktorá nepredáva?</strong> Máte zastaralý web, alebo hľadáte moderné riešenie, ktoré návštevníkov skutočne premení na platiacich zákazníkov, no neviete ako na to?</p>
                     </div>
-                    
-                    <div class="card-body p-4 title_box container_bg__b" style="border-top: 3px solid var(--unoneto-cyan);">
-                        <span class="badge mb-2" style="background: rgba(34,211,238,0.2); color: var(--unoneto-cyan);"><i class="fa-solid fa-robot"></i> Úspora času</span>
-                        <h3 class="font-weight-bold text-white" style="font-size: 1.5rem;">Automatizácia & CRM</h3>
-                        <p class="text-muted">Prepojíme vaše systémy (RAYNET CRM, e-shop, sklad), aby pracovali automaticky za vás.</p>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-code"></i> Naše riešenie</div>
+                        <p>Staviame weby, ktoré pracujú za vás. Namiesto obyčajného kontaktného formulára vám vytvoríme interaktívne cenové ponuky, automatické notifikácie a všetko priamo prepojíme s vaším CRM.</p>
                     </div>
                 </div>
+
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-cart-shopping"></i> Problém</div>
+                        <p><strong>Prerástol vám e-shop cez hlavu?</strong> Potrebujete spustiť nový e-shop, no nemáte na to čas? Alebo ten súčasný už technicky a vizuálne nestíha vášmu rastu?</p>
+                    </div>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-box-open"></i> Naše riešenie</div>
+                        <p>Prevezmeme technickú záťaž na seba. Máme bohaté skúsenosti s vývojom a optimalizáciou na overených platformách ako Upgates či WordPress. Získate e-shop pripravený na výkon.</p>
+                    </div>
+                </div>
+
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-file-signature"></i> Problém</div>
+                        <p><strong>Pomalé papierovačky a uzatváranie zmlúv?</strong> Čakanie na fyzický podpis zdržuje vaše obchody, fakturáciu a zbytočne predlžuje čas, kým je objednávka reálne potvrdená?</p>
+                    </div>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-fingerprint"></i> Naše riešenie</div>
+                        <p>Prepnite do modernej doby. Nasadíme vám právne záväzný digitálny podpis – cez smartfón, tablet, e-mail či občiansky preukaz. Funguje to okamžite a napojíme to na akýkoľvek váš systém.</p>
+                    </div>
+                </div>
+
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <div class="ps-problem-header"><i class="fa-solid fa-id-card"></i> Problém</div>
+                        <p><strong>Zákazníci nakúpia iba raz?</strong> Trápite sa so získavaním nových klientov, no tí súčasní sa k vám nevracajú, pretože ich k opakovanému nákupu nič nemotivuje?</p>
+                    </div>
+                    <div class="ps-solution">
+                        <div class="ps-solution-header"><i class="fa-solid fa-gift"></i> Naše riešenie</div>
+                        <p>Zmeníme náhodných kupujúcich na lojálnych klientov. Navrhneme a nastavíme vernostný systém presne pre váš B2B predaj, služby či e-shop. Pre gastro a retail dokonale integrujeme systém Vexion.</p>
+                    </div>
+                </div>
+
             </div>
-            
-        </div>
-    </section>
-        </div>
-    </section>
-
-        <style>
-    /* CSS pre rolovací pás partnerov */
-    .partners-marquee-wrapper {
-        width: 100%;
-        max-width: 100vw; /* Zabráni roztiahnutiu na celú šírku */
-        overflow-x: hidden !important; /* Dôležité: natvrdo zakáže horizontálne scrollovanie */
-        position: relative;
-        padding: 1rem 0;
-        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    }
-
-    .partners-marquee-track {
-        display: flex;
-        gap: 1.5rem;
-        width: max-content;
-        animation: marquee-scroll 40s linear infinite;
-    }
-
-    /* Zastavenie rolovania pri prejdení myšou (len pre PC) */
-    .partners-marquee-track:hover {
-        animation-play-state: paused;
-    }
-
-    .partners-marquee-track .card {
-        width: 180px; 
-        flex-shrink: 0;
-        padding: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        background: rgba(15, 23, 42, 0.5);
-        text-align: center;
-        border-radius: 8px;
-    }
-
-    @keyframes marquee-scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(calc(-50% - 0.75rem)); } 
-    }
-
-    /* Responzivita špeciálne pre mobily */
-    @media (max-width: 768px) {
-        .partners-marquee-track .card {
-            width: 140px; /* Užšie karty na mobiloch */
-            padding: 1rem;
-        }
-        .partners-marquee-track .card img {
-            max-height: 35px !important; /* Menšie logá */
-            margin-bottom: 0.5rem !important;
-        }
-        .partners-marquee-track .card h3 {
-            font-size: 0.9rem !important; /* Menší text */
-        }
-        .partners-marquee-wrapper {
-            /* Jemnejšie orezanie na okrajoch pre malé displeje */
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        }
-    }
-
-
-    /* Cookie Lišta */
-        #cookie-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--unoneto-slate);
-            color: #fff; padding: 20px; z-index: 10000; border-top: 2px solid var(--unoneto-cyan);
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
-        }
-        #cookie-bar p { margin: 0 20px 0 0; font-size: 0.9rem; flex: 1; min-width: 300px; }
-        .cookie-btns { display: flex; gap: 10px; }
-        .btn-cookie { background: var(--unoneto-cyan); color: var(--unoneto-dark); border: none; padding: 8px 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-
-        @media screen and (max-width: 767px) {
-            #cookie-bar { flex-direction: column; text-align: center; }
-            #cookie-bar p { margin-bottom: 15px; min-width: 100%; }
-        }
-</style>
-
-<section id="partneri" class="container reveal" style="padding-top: 5rem; padding-bottom: 2rem;">
-    <h2 class="section-title" style="text-align: center;">Naši partneri</h2>
-    <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Nepracujeme len s jedným systémom. Sme certifikovanými partnermi a integrátormi špičkových technológií.</p>
+        </section>
     
-    <div class="partners-marquee-wrapper">
-        <div class="partners-marquee-track">
-            
-            <div class="card"><img src="raynet.png" alt="RAYNET CRM" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">RAYNET CRM</h3></div>
-            <div class="card"><img src="asseco.jfif" alt="Asseco Solutions" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Asseco Solutions</h3></div>
-            <div class="card"><img src="global.png" alt="Global Payments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Global Payments</h3></div>
-            <div class="card"><img src="flowii.jfif" alt="Flowii" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Flowii</h3></div>
-            <div class="card"><img src="digisigh.webp" alt="DigiSign" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">DigiSign</h3></div>
-            <div class="card"><img src="vexion.png" alt="Vexion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Vexion</h3></div>
-            <div class="card"><img src="talabot.svg" alt="Talabot" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Talabot</h3></div>
-            <div class="card"><img src="modulario_logo.jfif" alt="Modulario" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Modulario</h3></div>
-            <div class="card"><img src="cloudtalk.png" alt="CloudTalk" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">CloudTalk</h3></div>
-            <div class="card"><img src="make.png" alt="Make" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Make</h3></div>
-            <div class="card"><img src="notion.webp" alt="Notion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Notion</h3></div>
-            <div class="card"><img src="novapayments.webp" alt="Novapayments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Novapayments</h3></div>
-            <div class="card"><img src="Tabidoo_logo.png" alt="Tabidoo" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Tabidoo</h3></div>
-            <div class="card"><img src="CloseRocket.png" alt="CloseRocket" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">CloseRocket</h3></div>
-
-            <div class="card"><img src="raynet.png" alt="RAYNET CRM" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">RAYNET CRM</h3></div>
-            <div class="card"><img src="asseco.jfif" alt="Asseco Solutions" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Asseco Solutions</h3></div>
-            <div class="card"><img src="global.png" alt="Global Payments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Global Payments</h3></div>
-            <div class="card"><img src="flowii.jfif" alt="Flowii" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Flowii</h3></div>
-            <div class="card"><img src="digisigh.webp" alt="DigiSign" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">DigiSign</h3></div>
-            <div class="card"><img src="vexion.png" alt="Vexion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Vexion</h3></div>
-            <div class="card"><img src="talabot.svg" alt="Talabot" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Talabot</h3></div>
-            <div class="card"><img src="modulario_logo.jfif" alt="Modulario" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Modulario</h3></div>
-            <div class="card"><img src="cloudtalk.png" alt="CloudTalk" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">CloudTalk</h3></div>
-            <div class="card"><img src="make.png" alt="Make" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Make</h3></div>
-            <div class="card"><img src="notion.webp" alt="Notion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Notion</h3></div>
-            <div class="card"><img src="novapayments.webp" alt="Novapayments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Novapayments</h3></div>
-            <div class="card"><img src="Tabidoo_logo.png" alt="Tabidoo" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">Tabidoo</h3></div>
-            <div class="card"><img src="CloseRocket.png" alt="CloseRocket" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;"><h3 style="font-size: 1rem; margin: 0; color: white;">CloseRocket</h3></div>
-
-        </div>
-    </div>
-</section>
-
-    <section class="container-fluid py-5 container_bg__b" style="padding: 80px 5%;">
-        <div class="row align-items-center">
-            <div class="col-lg-5 mb-5 mb-lg-0 pr-lg-5 wow fadeInRight">
-                <h2 class="mb-4">Kontaktujte nás</h2>
-                <p class="text-muted mb-5" style="font-size: 1.1rem;">Nechajte nám kontakt a my sa vám ozveme kvôli nezáväznej konzultácii. Prvý krok k digitalizácii je ten najdôležitejší.</p>
-                <div class="d-flex align-items-center mb-3">
-                    <i class="fas fa-envelope text-cyan mr-3" style="font-size: 1.5rem;"></i>
-                    <span class="text-white" style="font-size: 1.1rem;">info@unoneto.eu</span>
+        <section id="projects-slider" class="container reveal">
+            <h2 class="section-title" style="text-align: center;">Naše hotové balíky a služby</h2>
+            <div id="banner-slider" class="splide" aria-label="Ukážky projektov">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag"><i class="fa-solid fa-star"></i> Bestseller</span>
+                                    <h2>Web bez starostí</h2>
+                                    <p>Zabudnite na jednorazové investície. Získajte profesionálny web s kompletnou správou formou mesačného paušálu.</p>
+                                    <a href="weby" class="btn btn-primary btn-sm">Pozrieť balíky</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="december.jpg" alt="Web bez starostí">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag" style="border-color: #a855f7; color: #a855f7;"><i class="fa-solid fa-chart-line"></i> Ziskový marketing</span>
+                                    <h2>PPC & Online Reklama</h2>
+                                    <p>Google a Meta Ads kampane nastavené na výkon. Prestaňte páliť rozpočet, začnite zarábať.</p>
+                                    <a href="ppc-kampane" class="btn btn-primary btn-sm" style="background: #a855f7; border-color: #a855f7;">Chcem audit zdarma</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="ppc.jpg" alt="PPC Kampane">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag" style="border-color: #3b82f6; color: #3b82f6;"><i class="fa-solid fa-pen-ruler"></i> Web na mieru</span>
+                                    <h2>Moderné weby a E-shopy</h2>
+                                    <p>Profesionálny dizajn a funkčnosť. Webstránky, ktoré sú vašim 100% majetkom. Žiadne mesačné poplatky.</p>
+                                    <a href="weby.html#view-onetime" class="btn btn-secondary btn-sm" onclick="switchMode('onetime')">Konfigurátor webu</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="weby1.webp" alt="Tvorba webstránok">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag" style="border-color: #a855f7; color: #a855f7;"><i class="fa-solid fa-users"></i> CRM Systém</span>
+                                    <h2>CRM od RAYNET</h2>
+                                    <p>Urobte si poriadok v obchode. Evidencia klientov, obchodných prípadov a kalendár v jednom prehľadnom nástroji.</p>
+                                    <a href="raynetcrm" class="btn btn-secondary btn-sm">Vyskúšať Raynet</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="raynet.jpg" alt="Raynet CRM">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag" style="border-color: #22d3ee; color: #22d3ee;"><i class="fa-solid fa-wallet"></i> Vernostný systém</span>
+                                    <h2>VEXION Karty</h2>
+                                    <p>Zákaznícke karty v mobile. Motivujte zákazníkov k návratu bez nutnosti tlačiť plastové kartičky.</p>
+                                    <a href="vexion" class="btn btn-primary btn-sm">Viac o Vexion</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="karty.png" alt="Vexion">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="modern-slide-card">
+                                <div class="slide-content">
+                                    <span class="slide-tag"><i class="fa-solid fa-robot"></i> AI & Automatizácia</span>
+                                    <h2>Automatizácia procesov</h2>
+                                    <p>Prepojíme vaše nástroje do jedného celku. Nechajte robotov robiť nudnú prácu za vás.</p>
+                                    <a href="automatizacia" class="btn btn-secondary btn-sm">Zistiť viac</a>
+                                </div>
+                                <div class="slide-image">
+                                    <img src="image_0588b6.webp" alt="Automatizácia">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="col-lg-7 wow fadeInLeft">
-                <div class="p-4 p-md-5" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(34, 211, 238, 0.4);">
-                    <form class="form">
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label class="text-muted small text-uppercase">Meno a priezvisko *</label>
-                                <input type="text" class="form-control bg-transparent text-white border-secondary rounded-0 p-4" required>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <label class="text-muted small text-uppercase">E-mail *</label>
-                                <input type="email" class="form-control bg-transparent text-white border-secondary rounded-0 p-4" required>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted small text-uppercase">Váš projekt / Otázka *</label>
-                            <textarea class="form-control bg-transparent text-white border-secondary rounded-0 p-4" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary-custom w-100 py-3">Odoslať dopyt</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="py-5" style="background-color: #050505; border-top: 2px solid var(--unoneto-cyan);">
-        <div class="container text-center">
-            <div class="row text-left mb-4">
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-cyan brand-font">Unoneto s. r. o.</h5>
-                    <p class="small text-muted">Váš partner pre digitalizáciu a rast firmy.</p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h6 class="text-white font-weight-bold">Fakturačné údaje</h6>
-                    <p class="small text-muted mb-1">IČO: 55530966</p>
-                    <p class="small text-muted mb-1">DIČ: 2122015522</p>
-                    <p class="small text-muted mb-3">IČ DPH: SK2122015522</p>
-                    
-                    <div class="mt-2">
-                        <a href="obchodne-podmienky" class="d-block small text-cyan mb-1" style="text-decoration: none;">Obchodné podmienky (VOP)</a>
-                        <a href="ochrana-osobnych-udajov" class="d-block small text-cyan" style="text-decoration: none;">Ochrana osobných údajov (GDPR)</a>
+        <section id="process" class="container reveal">
+            <h2 class="section-title">Ako prebieha spolupráca?</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">V prvom kroku poradíme, v druhom navrhneme, v treťom implementujeme, v štvrtom sme tu stále pre vás.</p>
+            
+            <div class="process-grid-fixed">
+                <div class="process-card-anim" style="animation-delay: 0s;">
+                    <div class="process-number-bg">01</div>
+                    <div class="process-icon"><i class="fa-solid fa-comments"></i></div>
+                    <div class="process-content">
+                        <h3>Poradíme</h3>
+                        <p>Vypočujeme si vás, urobíme nezávislú analýzu a povieme vám *prečo áno* a *prečo nie*.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h6 class="text-white font-weight-bold">Sídlo</h6>
-                    <p class="small text-muted mb-1">Unoneto s. r. o.</p>
-                    <p class="small text-muted mb-1">Bidovce 404, 044 45 KOŠICE</p>
-                    <p class="small text-muted">Slovenská republika</p>
+
+                <div class="process-card-anim" style="animation-delay: 0.15s;">
+                    <div class="process-number-bg">02</div>
+                    <div class="process-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="process-content">
+                        <h3>Navrhneme</h3>
+                        <p>Vyberieme ideálnu kombináciu systémov a technológií presne pre vašu veľkosť firmy.</p>
+                    </div>
+                </div>
+
+                <div class="process-card-anim" style="animation-delay: 0.3s;">
+                    <div class="process-number-bg">03</div>
+                    <div class="process-icon"><i class="fa-solid fa-code"></i></div>
+                    <div class="process-content">
+                        <h3>Implementujeme</h3>
+                        <p>Všetko nastavíme, prepojíme a váš tím zaškolíme. Odovzdáme vám hotové riešenie.</p>
+                    </div>
+                </div>
+
+                <div class="process-card-anim" style="animation-delay: 0.45s;">
+                    <div class="process-number-bg">04</div>
+                    <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="process-content">
+                        <h3>Podporíme</h3>
+                        <p>Spustením to nekončí. Sme stále k dispozícii pre údržbu a dlhodobú podporu.</p>
+                    </div>
                 </div>
             </div>
-            <hr style="border-color: rgba(255,255,255,0.1);">
-            <p class="mb-0 text-muted small">&copy; 2023 Unoneto s. r. o. Všetky práva vyhradené.</p>
+        </section>
+
+       <section id="partneri" class="container reveal" style="padding-top: 5rem; padding-bottom: 2rem;">
+            <h2 class="section-title" style="text-align: center;">Naši technologickí partneri</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Nepracujeme len s jedným systémom. Sme certifikovanými partnermi a integrátormi špičkových technológií.</p>
+            
+            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; text-align: center;">
+                
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="raynet.png" alt="RAYNET CRM" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">RAYNET CRM</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="asseco.jfif" alt="Asseco Solutions" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Asseco Solutions</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="global.png" alt="Global Payments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Global Payments</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="flowii.jfif" alt="Flowii" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Flowii</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="digisigh.webp" alt="DigiSign" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">DigiSign</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="vexion.png" alt="Vexion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Vexion</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="talabot.svg" alt="Talabot" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Talabot</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="modulario_logo.jfif" alt="Modulario" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Modulario</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="cloudtalk.png" alt="CloudTalk" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">CloudTalk</h3>
+                </div>
+
+                <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="make.png" alt="Make" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Make</h3>
+                </div>
+ <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="notion.webp" alt="Notion" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Notion</h3>
+                </div>
+             <div class="card" style="padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(15, 23, 42, 0.5);">
+                    <img src="novapayments.webp" alt="Novapayments" style="max-height: 45px; max-width: 100%; object-fit: contain; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1rem; margin: 0; color: white;">Novapayments</h3>
+                </div>
+            
+            </div>
+        </section>
+		
+        <section id="about" class="container reveal">
+            <h2 class="section-title">Všetko pre moderné podnikanie</h2>
+            
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://raw.githubusercontent.com/Matusbenco/Unoneto---web/refs/heads/main/1701295455694%20(1).jpg?raw=true" alt="Matúš Benčo - CEO Unoneto">
+                    
+                    <div style="text-align: center; margin-top: 1.5rem; background: rgba(30, 41, 59, 0.6); padding: 1rem; border-radius: 12px; border: 1px solid rgba(34, 211, 238, 0.2);">
+                        <h3 style="color: white; margin-bottom: 0.2rem; font-size: 1.4rem;">Matúš Benčo</h3>
+                        <span style="color: var(--cyan); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">CEO | Digitálny expert</span>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 0;">
+                            "Nájdeme vám efektívne riešenia s najlepším pomerom cena/výkon."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="about-text">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.8rem; line-height: 1.3;">
+                        Technológie, ktoré pracujú za vás.<br>
+                        <span class="gradient-text">Pod jednou strechou.</span>
+                    </h3>
+                    
+                    <div class="flyer-features-list">
+                        <div class="flyer-item">
+                            <div class="flyer-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                            <div>
+                                <strong style="color: var(--white); font-size: 1.1rem; display: block; margin-bottom: 5px;">Weby & Marketing</strong>
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--slate-300);">
+                                    Moderné webstránky a e-shopy, grafika, tvorba loga, PPC kampane a SEO optimalizácia na mieru.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flyer-item">
+                            <div class="flyer-icon"><i class="fa-solid fa-cogs"></i></div>
+                            <div>
+                                <strong style="color: var(--white); font-size: 1.1rem; display: block; margin-bottom: 5px;">Automatizácia & CRM</strong>
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--slate-300);">
+                                    Prepojíme vaše systémy (RAYNET CRM, e-shop, sklad), aby pracovali automaticky za vás.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flyer-item">
+                            <div class="flyer-icon"><i class="fa-solid fa-file-signature"></i></div>
+                            <div>
+                                <strong style="color: var(--white); font-size: 1.1rem; display: block; margin-bottom: 5px;">Digitálna kancelária</strong>
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--slate-300);">
+                                    Podpisujte zmluvy elektronicky (DigiSign) a ušetrite hodiny administratívy.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flyer-item">
+                            <div class="flyer-icon"><i class="fa-solid fa-credit-card"></i></div>
+                            <div>
+                                <strong style="color: var(--white); font-size: 1.1rem; display: block; margin-bottom: 5px;">Platobné riešenia</strong>
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--slate-300);">
+                                    Platobné terminály a brány. Terminál v mobile. <span style="color: var(--cyan); font-weight: bold;">12 mesiacov zadarmo.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="container reveal">
+            <h2 class="section-title">Nechajte si poradiť</h2>
+            <p class="section-subtitle">Dohodnite si bezplatnú úvodnú konzultáciu.</p>
+            <form action="https://formspree.io/f/xyzjaepv" method="POST" class="contact-form">
+                <div class="input-group">
+                    <label for="full-name">Vaše meno</label>
+                    <input type="text" id="full-name" name="name" placeholder="napr. Ján Vážny" required>
+                </div>
+				<div class="input-group">
+					<label for="phone-number">Telefón (nepovinné)</label>
+					<input type="tel" id="phone-number" name="telefon" placeholder="napr. 0905 123 456">
+				</div>
+                <div class="input-group">
+                    <label for="email-address">Váš email</label>
+                    <input type="email" id="email-address" name="email" placeholder="napr. jan.vazny@firma.sk" required>
+                </div>
+                <div class="input-group">
+                    <label for="message">Správa</label>
+                    <textarea id="message" name="message" placeholder="S čím potrebujete pomôcť?" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-large">Odoslať správu</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+           <div class="footer-grid">
+			<div class="footer-col">
+				 <a href="/" class="logo">
+					 <img src="favicon.png" alt="Unoneto Logo" class="logo-icon-img">
+					 <span>Unoneto</span>
+				 </a>
+				<p>Váš rast, poháňaný výsledkami.</p>
+			</div>
+			
+			<div class="footer-col">
+				<h4>Kontakt</h4>
+				<p>Unoneto s. r. o.</p>
+				<p>IČO: 55530966</p>
+				<p><a href="tel:+421905351100">+421 905 351 100</a></p>
+				<p><a href="mailto:info@unoneto.eu">info@unoneto.eu</a></p>
+			</div>
+			
+			<div class="footer-col">
+				<h4>Rýchle odkazy</h4>
+				<a href="/#services">Riešenia</a>
+				<a href="/#process">Proces</a>
+				<a href="/#about">O nás</a>
+				<a href="#contact">Kontakt</a>
+			</div>
+
+			<div class="footer-col">
+				<h4>Sledujte nás</h4>
+				<div class="social-icons">
+					<a href="https://www.facebook.com/unonetostore/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+					<a href="https://www.instagram.com/unoneto.eu/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+					<a href="https://www.linkedin.com/company/101294763" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+				</div>
+			</div>
+		</div>
+            <div class="copyright">
+                <p>© 2025 Unoneto | Vytvorené s cieľom prinášať hodnotu.</p>
+            </div>
         </div>
     </footer>
-        
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6874ce1631d036190b698d63/1j044a2bk';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Popup Banner Logic
+            const banner = document.getElementById('december-banner');
+            const closeBtn = banner ? banner.querySelector('.close-banner') : null;
+            if(banner && closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    banner.classList.add('hidden');
+                });
+            }
+
+            // Process Animation
+            const observerOptions = { threshold: 0.2 };
+            const processObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const cards = entry.target.querySelectorAll('.process-card-anim');
+                        cards.forEach(card => card.classList.add('pop-in'));
+                        processObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const processSection = document.querySelector('#process');
+            if (processSection) {
+                processObserver.observe(processSection);
+            }
+            
+            // Slider Init - JEDEN BANER (Per Page 1)
+            new Splide('#banner-slider', {
+                type   : 'loop', 
+                perPage: 1, 
+                gap    : '2rem', 
+                autoplay: true, 
+                interval: 5000,
+                padding: '0',
+                pagination: true,
+                arrows: true
+            }).mount();
+            
+            // --- MOBILNÉ MENU (PRESNE PODĽA WEBY.HTML) ---
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const navLinks = document.getElementById('nav-menu');
+            const dropdownToggle = document.getElementById('nasa-ponuka-toggle');
+
+            if (hamburgerBtn && navLinks) {
+                hamburgerBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    hamburgerBtn.classList.toggle('active');
+                    const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true' || false;
+                    hamburgerBtn.setAttribute('aria-expanded', !expanded);
+                });
+            }
+
+            if (dropdownToggle && window.innerWidth <= 768) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.parentElement.classList.toggle('active');
+                });
+            }
+        });
     </script>
 </body>
 </html>
