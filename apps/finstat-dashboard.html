@@ -165,10 +165,10 @@
             <p style="color: #cbd5e1; margin-top: 15px; font-size: 1.1rem;">Vaše dáta sú bezpečne uložené v prehliadači.</p>
             <div class="drop-zone" id="dropZone">
                 <div style="font-size: 3rem; margin-bottom: 10px;">📂</div>
-                <div style="font-weight: 600; font-size: 1.2rem;">Nahrajte export z Finstatu</div>
-                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">.xlsx alebo .csv</div>
+                <div style="font-weight: 600; font-size: 1.2rem;">Nahrajte export z Finstatu (alebo .json zálohu)</div>
+                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">Môžete vybrať aj viacero súborov naraz</div>
             </div>
-            <input type="file" id="fileInput" accept=".xlsx,.csv" style="display:none">
+            <input type="file" id="fileInput" accept=".xlsx,.csv,.json" multiple style="display:none">
         </div>
         <div style="position:absolute; bottom:30px; font-size:0.8rem; color:rgba(255,255,255,0.3);">Vytvoril: Matúš Benčo, 2026</div>
     </div>
@@ -179,12 +179,32 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="🔍 Hľadať firmu, konateľa, mesto, IČO...">
             </div>
-            <div class="header-actions">
-                <div style="text-align:right; font-size:0.85rem; font-weight:600; color:#64748b; line-height:1.3;">
+            
+            <div class="header-actions" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: flex-end;">
+                <div style="display: flex; gap: 10px; align-items: center; background: #f8fafc; padding: 5px 15px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <select id="sortSelect" onchange="applyFilters()" style="border: none; background: transparent; font-size: 0.85rem; font-weight: 600; color: var(--secondary); cursor: pointer; outline: none;">
+                        <option value="">↕️ Zoradiť (Predvolené)</option>
+                        <option value="rev-desc">💰 Tržby (Najvyššie)</option>
+                        <option value="prof-desc">📈 Zisk (Najvyšší)</option>
+                    </select>
+                    <div style="width: 1px; height: 20px; background: #cbd5e1;"></div>
+                    <label style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="checkbox" id="filterPhone" onchange="applyFilters()"> 📞 Má telefón
+                    </label>
+                    <label style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="checkbox" id="filterEmail" onchange="applyFilters()"> ✉️ Má e-mail
+                    </label>
+                </div>
+                <div style="text-align:right; font-size:0.85rem; font-weight:600; color:#64748b; line-height:1.3; margin-left: 10px;">
                     <span style="color:var(--secondary); font-size:1rem;" id="count">0</span> firiem<br>
                     <span style="color:var(--success);">Vybavené: <span id="doneCount">0</span></span>
                 </div>
-                <button class="btn-reset" onclick="resetApp()" title="Vymazať VŠETKY dáta a začať odznova">🗑️ Reset</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-check" onclick="exportToCSV()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem; background: white;" title="Stiahnuť poznámky a stavy ako Excel tabuľku">📊 Do Excelu</button>
+                    
+                    <button class="btn-web" onclick="exportState()" style="padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem;" title="Uložiť zálohu pre apku">💾 Zálohovať pre Appku</button>
+                    <button class="btn-reset" onclick="resetApp()" title="Vymazať VŠETKY dáta a začať odznova">🗑️ Reset</button>
+                </div>
             </div>
         </header>
 
@@ -228,33 +248,53 @@
     // --- HLAVNÝ RESET (Vymaže aj dáta panelu) ---
     function resetApp() {
         if(confirm("Naozaj chcete vymazať VŠETKY dáta (súbor, počítadlá, poznámky)?")) {
-            // Vymaže dáta aplikácie
             localStorage.removeItem('finstatDataV13');
-            // Vymaže dáta bočného panelu
             localStorage.removeItem('moje_skore');
             localStorage.removeItem('moje_poznamky');
             localStorage.removeItem('moje_riadok');
-            
             location.reload();
         }
     }
 
+    // ZMENA: Podpora viacerých súborov (Drag & Drop + kliknutie)
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = "rgba(255,255,255,0.15)"; });
     dropZone.addEventListener('dragleave', e => { dropZone.style.background = "rgba(255,255,255,0.05)"; });
-    dropZone.addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
-    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    dropZone.addEventListener('drop', e => { e.preventDefault(); handleFiles(e.dataTransfer.files); });
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
 
-    function handleFile(file) {
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-            processData(json);
-        };
-        reader.readAsArrayBuffer(file);
+    function handleFiles(files) {
+        if(!files || files.length === 0) return;
+        
+        let filePromises = Array.from(files).map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (file.name.endsWith('.json')) {
+                        try {
+                            const parsedData = JSON.parse(e.target.result);
+                            allData = parsedData; // Obnovíme zálohu
+                            initApp();
+                            saveData();
+                            resolve(null);
+                        } catch(err) { alert("Chybný súbor zálohy!"); resolve(null); }
+                    } else {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        resolve(json);
+                    }
+                };
+                if(file.name.endsWith('.json')) reader.readAsText(file);
+                else reader.readAsArrayBuffer(file);
+            });
+        });
+
+        Promise.all(filePromises).then(results => {
+            let combinedExcelData = [];
+            results.forEach(res => { if(res) combinedExcelData = combinedExcelData.concat(res); });
+            if(combinedExcelData.length > 0) processData(combinedExcelData);
+        });
     }
 
     // --- UTILS ---
@@ -286,8 +326,19 @@
         return email.includes('@') && email.length < 50 && !email.includes(' ');
     }
 
+    // Pomocná funkcia na prevod peňazí späť na číslo kvôli zoraďovaniu
+    function parseMoneyForSort(str) {
+        if (!str) return -999999999;
+        let clean = String(str).replace(/\s/g, '').replace(',', '.');
+        let n = parseFloat(clean);
+        return isNaN(n) ? -999999999 : n;
+    }
+
     function processData(json) {
-        allData = json.map((row, index) => {
+        // ZMENA: Zachovanie pôvodných dát pri prikladaní ďalších excelov
+        let startIndex = allData.length > 0 ? Math.max(...allData.map(d => d.id)) + 1 : 0;
+
+        const newData = json.map((row, index) => {
             const get = (k) => {
                 const found = Object.keys(row).find(key => key.toLowerCase().includes(k.toLowerCase()));
                 return found ? String(row[found]).trim() : "";
@@ -340,7 +391,7 @@
             }
 
             return {
-                id: index, 
+                id: startIndex + index, // ZMENA: ID pokračuje ďalej
                 name, city, district, segment, employees, revenue, profit, 
                 persons, personRaw, ico,
                 phones: Array.from(phones), 
@@ -351,14 +402,43 @@
             };
         });
 
+        // ZMENA: Spojenie starých a nových dát
+        allData = [...allData, ...newData]; 
         initApp();
         saveData();
     }
 
-    function initApp() {
-        filteredData = [...allData];
+    // ZMENA: Centrálny systém filtrovania, vyhľadávania a radenia
+    window.applyFilters = function() {
+        const searchVal = document.getElementById('searchInput').value.toLowerCase();
+        const needPhone = document.getElementById('filterPhone').checked;
+        const needEmail = document.getElementById('filterEmail').checked;
+        const sortMethod = document.getElementById('sortSelect').value;
+
+        filteredData = allData.filter(d => {
+            const matchSearch = d.name.toLowerCase().includes(searchVal) || 
+                                d.city.toLowerCase().includes(searchVal) || 
+                                d.personRaw.toLowerCase().includes(searchVal) ||
+                                (d.ico && d.ico.toString().includes(searchVal));
+            
+            const matchPhone = needPhone ? d.phones && d.phones.length > 0 : true;
+            const matchEmail = needEmail ? d.emails && d.emails.length > 0 : true;
+
+            return matchSearch && matchPhone && matchEmail;
+        });
+
+        if (sortMethod === 'rev-desc') {
+            filteredData.sort((a, b) => parseMoneyForSort(b.revenue) - parseMoneyForSort(a.revenue));
+        } else if (sortMethod === 'prof-desc') {
+            filteredData.sort((a, b) => parseMoneyForSort(b.profit) - parseMoneyForSort(a.profit));
+        }
+
         updateStats();
         render();
+    };
+
+    function initApp() {
+        applyFilters(); // Aplikuje filtre hneď pri načítaní dát
         introScreen.style.transform = "translateY(-100%)";
         appScreen.style.display = "block";
     }
@@ -495,119 +575,159 @@
         if (index !== -1) {
             allData[index].isDone = !allData[index].isDone;
             saveData();
-            
-            const fIndex = filteredData.findIndex(x => x.id === id);
-            if(fIndex !== -1) filteredData[fIndex].isDone = allData[index].isDone;
-            
-            render();
-            updateStats();
+            applyFilters(); // Aplikujeme radenie a skrytie po kliknutí
         }
     };
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
-        filteredData = allData.filter(d => 
-            d.name.toLowerCase().includes(val) || 
-            d.city.toLowerCase().includes(val) || 
-            d.personRaw.toLowerCase().includes(val) ||
-            (d.ico && d.ico.toString().includes(val))
-        );
-        updateStats();
-        render();
-    });
+    // Naviazanie inputu hľadania na centrálnu filter funkciu
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+    // 1. Vylepšená záloha (JSON) - už bude formátovaná do riadkov, nie jeden dlhý text
+    window.exportState = function() {
+        if (allData.length === 0) { alert("Nemáte žiadne dáta na exportovanie."); return; }
+        
+        // Pridali sme "null, 4", čo urobí súbor pekne čitateľným s odsadením
+        const dataStr = JSON.stringify(allData, null, 4); 
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'finstat_zaloha_appky_' + new Date().toISOString().slice(0,10) + '.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
+    // 2. NOVÁ FUNKCIA: Export do prehľadnej Excel/CSV tabuľky
+    window.exportToCSV = function() {
+        if (allData.length === 0) { alert("Nemáte žiadne dáta na exportovanie."); return; }
+        
+        // Hlavička tabuľky (oddelovač je bodkočiarka pre správne zobrazenie v SK/CZ Exceli)
+        let csvContent = "Názov firmy;Mesto;Tržby;Zisk;Telefóny;E-maily;Štatutári;Moja Poznámka;Vybavené\n";
+        
+        allData.forEach(row => {
+            // Ošetrenie textov, aby Excelu nevadili úvodzovky a prázdne znaky
+            let name = `"${(row.name || "").replace(/"/g, '""')}"`;
+            let city = `"${(row.city || "").replace(/"/g, '""')}"`;
+            let rev = `"${row.revenue || ""}"`;
+            let prof = `"${row.profit || ""}"`;
+            let phones = `"${row.phones.join(', ')}"`;
+            let emails = `"${row.emails.join(', ')}"`;
+            let persons = `"${(row.persons || []).join(', ')}"`;
+            let note = `"${(row.note || "").replace(/"/g, '""')}"`;
+            let done = row.isDone ? "ÁNO" : "NIE";
+            
+            // Spojenie do jedného riadku
+            csvContent += `${name};${city};${rev};${prof};${phones};${emails};${persons};${note};${done}\n`;
+        });
+        
+        // Pridanie BOM hlavičky (\uFEFF), aby Excel správne prečítal dĺžne a mäkčene
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Prehlad_Firiem_a_Poznamok_' + new Date().toISOString().slice(0,10) + '.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
 
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`;
     document.head.appendChild(styleSheet);
 
-/* --- ZMENENÝ SIDEBAR (BEZ RIADKU A BEZ TLAČIDLA RESET) --- */
+/* --- ZMENENÝ SIDEBAR --- */
 (function() {
 
     // 1. DATABÁZA HLÁŠOK
     const hlasky = [
-"Zákazník má vždy pravdu. (Ale my vieme svoje).",
-"Ďalší hovor, ďalšia šanca... pokaziť to.",
-"Prosím, nech to dvihne sekretárka, tá je aspoň milá.",
-"Keby som dostal euro za každé 'nemám záujem', píšem vám z Bahám.",
-"Moja trpezlivosť s klientmi je ako batéria v iPhone. Rýchlo sa míňa.",
-"Dnes predávam s entuziazmom mŕtveho chrobáka.",
-"Viete, ako sa volá had, ktorý rozpráva vtipy? Hahad.",
-"Viete, prečo policajti nechodia na ryby? Lebo by zatkli prvú, čo by otvorila ústa.",
-"Rozprávajú sa dve planéty: 'Cítim sa zle.' 'Prečo?' 'Mám ľudí.' 'Neboj, to prejde.'",
-"Aký je najrýchlejší spôsob, ako zarobiť peniaze? Predať budík.",
-"Viete, čo robí hluchý matematik? Počíta s tým, že nič nebude počuť.",
-"Prečo má datateľka studené ruky? Lebo má Windows otvorený dokorán.",
-"Viete, ako sa hovorí človeku, ktorý všade vidí tváre? Facebook.",
-"Príde kostlivec k lekárovi. Lekár: 'No, to idete pekne skoro!'",
-"Viete, čo vznikne skrížením ježa a dážďovky? Ostnatý drôt.",
-"Jeden vtáčik hovorí druhému: 'Prepáč, ponáhľam sa, musím si ísť dobiť baterky.' (Konšpiračná teória).",
-"Umelá inteligencia nemá šancu proti prirodzenej hlúposti.",
-"Káva nie je droga. Je to vitamín C(offee).",
-"Nekrič na mňa, kým nemám v ruke kávu. A potom už vôbec nie, lebo mám zbraň.",
-"Dnes fungujem na nízkom napätí.",
-"Môj mozog má dnes 'Blue Screen of Death'.",
-"Zívnutie je tichý výkrik po kofeíne.",
-"Dnes by som potreboval kávu veľkosti vedra.",
-"V mojom tele je 70% vody a 30% zúfalstva.",
-"Práca ma baví. Dokážem sa na ňu pozerať celé hodiny.",
-"Môj šéf mi povedal, aby som mal pekný deň. Tak som išiel domov.",
-"Tímová práca je dôležitá. Umožňuje ti zvaliť vinu na niekoho iného.",
-"Dnes mám náladu 'Error 404'.",
-"E-mail odoslaný. Teraz čakám na potlesk.",
-"Moja úroveň stresu je momentálne: 'Nepýtaj sa'.",
-"Prepáčte, že meškám, ale nechcelo sa mi prísť.",
-"Mám to v 'TO-DO' liste. Hneď za 'ovládnuť svet' a 'kúpiť mlieko'.",
-"Všetko sa dá urobiť zajtra. Aj to, čo sa malo urobiť včera.",
-"Som taký zaneprázdnený, že neviem, čo skôr nerobiť.",
-"Moja kariéra je ako horská dráha. Lenže ideme len dole.",
-"Viete, ako sa hovorí bumerangu, ktorý sa nevráti? Palica.",
-"Prečo sa potápači hádžu do vody dozadu? Lebo dopredu by spadli do lode.",
-"Pesimista vidí tmu. Optimista vidí svetlo. Realista vidí, že horí.",
-"Viete, čo má spoločné programátor a kúzelník? Obaja robia triky, ktorým nikto nerozumie.",
-"Manželka hovorí mužovi: 'Drahý, tie lieky ti vôbec nepomáhajú.' Muž: 'Aké lieky?' Manželka: 'Tie, čo ti predpísali proti skleróze.' Muž: 'Mne niekto niečo predpísal?'",
-"Viete, prečo blondínka polieva počítač? Chce surfovať na nete.",
-"Idú dve paradajky cez cestu. Jednu prejde auto a druhá hovorí: 'Poď, kečup, ideme ďalej.'",
-"Aký je rozdiel medzi vedomosťou a múdrosťou? Vedomosť je vedieť, že paradajka je ovocie. Múdrosť je nedať si ju do ovocného šalátu.",
-"Hovorí sa, že peniaze nie sú všetko. A je to pravda. Ešte sú tu aj nehnuteľnosti a akcie.",
-"Trpezlivosť ruže prináša. Ale nervy nosia whisky.",
-"Nič nerobenie je veľmi ťažká vec. Nikdy nevieš, kedy si skončil.",
-"Dnes sa mi nechce nič. A zajtra si to asi zopakujem.",
-"Excel neodpovedá. Ja tiež nie.",
-"Vesmír má nekonečne veľa dimenzií, ale Excel má len 1 048 576 riadkov.",
-"Neboj sa, AI ťa nenahradí. Nahradí ťa kolega, ktorý vie používať AI.",
-"Reštartoval si to? Nie? Tak neotravuj.",
-"Klávesnica nie je na mlátenie, ale niekedy si to pýta.",
-"Uložil si to? Určite? Ulož to radšej ešte raz.",
-"Ctrl+Z je najväčší vynález ľudstva.",
-"Môj počítač si myslí, že mám čas čakať.",
-"Kofeín v krvi: 98%. Chuť pracovať: 2%.",
-"Moja krvná skupina je Káva pozitív.",
-"Najskôr káva, potom diplomacia.",
-"Dnes fungujem na kofeíne a sarkazme.",
-"Ak ma vidíš bez kávy, radšej predstieraj, že si mŕtvy.",
-"Zívnutie je tichý výkrik po káve.",
-"Dnes to vyzerá na troj-kávový problém.",
-"ASAP je len skratka pre 'Zabudol som na to a teraz horí'.",
-"Tento meeting mohol byť e-mailom. A ten e-mail som mohol vymazať.",
-"Kolegovia sú ako vianočné svetielka. Polovica nesvieti a druhá je zamotaná.",
-"Teamwork: To znamená, že to pokazíme viacerí naraz.",
-"Štvrtok je len malý piatok.",
-"Moja motivácia práve odišla na obed. Asi sa už nevráti.",
-"Tvár sa inteligentne, šéf sa pozerá.",
-"Moja superschopnosť? Viem posielať pasívne-agresívne maily.",
-"Nie som lenivý. Som v úspornom režime.",
-"Práca šľachtí človeka, ale dnešok by som radšej preskočil.",
-"Dvíhaj to! Peniaze na druhej strane čakajú.",
-"Každé 'nie' je len krok k 'áno'. Alebo k infarktu.",
-"Haló? Nie, nevolám vám kvôli predĺženej záruke na auto.",
-"Dnes mám hlas ako z reklamy na whisky. Využi to.",
-"Náš zákazník, náš pán. Aj keď niekedy je ten pán trochu mimo.",
-"Úsmev počuť aj cez telefón. Tak sa neškľab!",
-"Volám, teda som.",
-"Ak nedvihneš do 5 sekúnd, automaticky súhlasíš s objednávkou.",
-"Prosím, nech to nie je odkazová schránka...",
-"Dnes predám aj piesok na Sahare.",
-"Nie som neodbytný, som len cieľavedomý.",
+        "Zákazník má vždy pravdu. (Ale my vieme svoje).",
+        "Ďalší hovor, ďalšia šanca... pokaziť to.",
+        "Prosím, nech to dvihne sekretárka, tá je aspoň milá.",
+        "Keby som dostal euro za každé 'nemám záujem', píšem vám z Bahám.",
+        "Moja trpezlivosť s klientmi je ako batéria v iPhone. Rýchlo sa míňa.",
+        "Dnes predávam s entuziazmom mŕtveho chrobáka.",
+        "Viete, ako sa volá had, ktorý rozpráva vtipy? Hahad.",
+        "Viete, prečo policajti nechodia na ryby? Lebo by zatkli prvú, čo by otvorila ústa.",
+        "Rozprávajú sa dve planéty: 'Cítim sa zle.' 'Prečo?' 'Mám ľudí.' 'Neboj, to prejde.'",
+        "Aký je najrýchlejší spôsob, ako zarobiť peniaze? Predať budík.",
+        "Viete, čo robí hluchý matematik? Počíta s tým, že nič nebude počuť.",
+        "Prečo má datateľka studené ruky? Lebo má Windows otvorený dokorán.",
+        "Viete, ako sa hovorí človeku, ktorý všade vidí tváre? Facebook.",
+        "Príde kostlivec k lekárovi. Lekár: 'No, to idete pekne skoro!'",
+        "Viete, čo vznikne skrížením ježa a dážďovky? Ostnatý drôt.",
+        "Jeden vtáčik hovorí druhému: 'Prepáč, ponáhľam sa, musím si ísť dobiť baterky.' (Konšpiračná teória).",
+        "Umelá inteligencia nemá šancu proti prirodzenej hlúposti.",
+        "Káva nie je droga. Je to vitamín C(offee).",
+        "Nekrič na mňa, kým nemám v ruke kávu. A potom už vôbec nie, lebo mám zbraň.",
+        "Dnes fungujem na nízkom napätí.",
+        "Môj mozog má dnes 'Blue Screen of Death'.",
+        "Zívnutie je tichý výkrik po kofeíne.",
+        "Dnes by som potreboval kávu veľkosti vedra.",
+        "V mojom tele je 70% vody a 30% zúfalstva.",
+        "Práca ma baví. Dokážem sa na ňu pozerať celé hodiny.",
+        "Môj šéf mi povedal, aby som mal pekný deň. Tak som išiel domov.",
+        "Tímová práca je dôležitá. Umožňuje ti zvaliť vinu na niekoho iného.",
+        "Dnes mám náladu 'Error 404'.",
+        "E-mail odoslaný. Teraz čakám na potlesk.",
+        "Moja úroveň stresu je momentálne: 'Nepýtaj sa'.",
+        "Prepáčte, že meškám, ale nechcelo sa mi prísť.",
+        "Mám to v 'TO-DO' liste. Hneď za 'ovládnuť svet' a 'kúpiť mlieko'.",
+        "Všetko sa dá urobiť zajtra. Aj to, čo sa malo urobiť včera.",
+        "Som taký zaneprázdnený, že neviem, čo skôr nerobiť.",
+        "Moja kariéra je ako horská dráha. Lenže ideme len dole.",
+        "Viete, ako sa hovorí bumerangu, ktorý sa nevráti? Palica.",
+        "Prečo sa potápači hádžu do vody dozadu? Lebo dopredu by spadli do lode.",
+        "Pesimista vidí tmu. Optimista vidí svetlo. Realista vidí, že horí.",
+        "Viete, čo má spoločné programátor a kúzelník? Obaja robia triky, ktorým nikto nerozumie.",
+        "Manželka hovorí mužovi: 'Drahý, tie lieky ti vôbec nepomáhajú.' Muž: 'Aké lieky?' Manželka: 'Tie, čo ti predpísali proti skleróze.' Muž: 'Mne niekto niečo predpísal?'",
+        "Viete, prečo blondínka polieva počítač? Chce surfovať na nete.",
+        "Idú dve paradajky cez cestu. Jednu prejde auto a druhá hovorí: 'Poď, kečup, ideme ďalej.'",
+        "Aký je rozdiel medzi vedomosťou a múdrosťou? Vedomosť je vedieť, že paradajka je ovocie. Múdrosť je nedať si ju do ovocného šalátu.",
+        "Hovorí sa, že peniaze nie sú všetko. A je to pravda. Ešte sú tu aj nehnuteľnosti a akcie.",
+        "Trpezlivosť ruže prináša. Ale nervy nosia whisky.",
+        "Nič nerobenie je veľmi ťažká vec. Nikdy nevieš, kedy si skončil.",
+        "Dnes sa mi nechce nič. A zajtra si to asi zopakujem.",
+        "Excel neodpovedá. Ja tiež nie.",
+        "Vesmír má nekonečne veľa dimenzií, ale Excel má len 1 048 576 riadkov.",
+        "Neboj sa, AI ťa nenahradí. Nahradí ťa kolega, ktorý vie používať AI.",
+        "Reštartoval si to? Nie? Tak neotravuj.",
+        "Klávesnica nie je na mlátenie, ale niekedy si to pýta.",
+        "Uložil si to? Určite? Ulož to radšej ešte raz.",
+        "Ctrl+Z je najväčší vynález ľudstva.",
+        "Môj počítač si myslí, že mám čas čakať.",
+        "Kofeín v krvi: 98%. Chuť pracovať: 2%.",
+        "Moja krvná skupina je Káva pozitív.",
+        "Najskôr káva, potom diplomacia.",
+        "Dnes fungujem na kofeíne a sarkazme.",
+        "Ak ma vidíš bez kávy, radšej predstieraj, že si mŕtvy.",
+        "Zívnutie je tichý výkrik po káve.",
+        "Dnes to vyzerá na troj-kávový problém.",
+        "ASAP je len skratka pre 'Zabudol som na to a teraz horí'.",
+        "Tento meeting mohol byť e-mailom. A ten e-mail som mohol vymazať.",
+        "Kolegovia sú ako vianočné svetielka. Polovica nesvieti a druhá je zamotaná.",
+        "Teamwork: To znamená, že to pokazíme viacerí naraz.",
+        "Štvrtok je len malý piatok.",
+        "Moja motivácia práve odišla na obed. Asi sa už nevráti.",
+        "Tvár sa inteligentne, šéf sa pozerá.",
+        "Moja superschopnosť? Viem posielať pasívne-agresívne maily.",
+        "Nie som lenivý. Som v úspornom režime.",
+        "Práca šľachtí človeka, ale dnešok by som radšej preskočil.",
+        "Dvíhaj to! Peniaze na druhej strane čakajú.",
+        "Každé 'nie' je len krok k 'áno'. Alebo k infarktu.",
+        "Haló? Nie, nevolám vám kvôli predĺženej záruke na auto.",
+        "Dnes mám hlas ako z reklamy na whisky. Využi to.",
+        "Náš zákazník, náš pán. Aj keď niekedy je ten pán trochu mimo.",
+        "Úsmev počuť aj cez telefón. Tak sa neškľab!",
+        "Volám, teda som.",
+        "Ak nedvihneš do 5 sekúnd, automaticky súhlasíš s objednávkou.",
+        "Prosím, nech to nie je odkazová schránka...",
+        "Dnes predám aj piesok na Sahare.",
+        "Nie som neodbytný, som len cieľavedomý.",
         "Dnes pracujem na 10%. Zvyšných 90% sa načítava...",
         "Moja práca je prísne tajná. Ani ja neviem, čo robím.",
         "Môj stôl nie je bordel. To je 'organizovaný chaos'.",
